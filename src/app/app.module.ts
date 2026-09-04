@@ -156,7 +156,6 @@ import { MenuComponent } from '@app/components/menu/menu.component';
 import { AgGridModule } from 'ag-grid-angular';
 import { NgxJsonViewerModule } from 'ngx-json-viewer';
 // import { AceModule, ACE_CONFIG, AceConfigInterface } from 'ngx-ace-wrapper';
-import { MatColorFormats, MAT_COLOR_FORMATS, NgxMatColorPickerModule } from '@angular-material-components/color-picker';
 // import { AceEditorModule } from 'ng2-ace-editor';
 import { GridsterModule } from 'angular-gridster2';
 import { QRCodeModule } from 'angularx-qrcode';
@@ -167,11 +166,6 @@ import { NgxDaterangepickerMd } from './components/controls/daterangepicker';
 import { MultiSelectFieldModule } from './components/widgets/protosearch-widget/ps-fields/multi-select-field/multi-select-field.module';
 import { UpdateAlertComponent } from './components/controls/update-alert/update-alert.component';
 import { APP_BASE_HREF } from '@angular/common';
-import {
-    NgxMatDatetimePickerModule,
-    NgxMatNativeDateModule,
-    NgxMatTimepickerModule,
-} from '@angular-material-components/datetime-picker';
 import {
     DialogExportComponent,
     DialogImportComponent
@@ -208,11 +202,7 @@ import { NgxCodejarModule } from 'ngx-codejar';
 export function HttpLoaderFactory(http: HttpClient) {
     return new TranslateHttpLoader(http, 'assets/i18n/', '.json');
 }
-export const CUSTOM_MAT_COLOR_FORMATS: MatColorFormats = {
-    display: {
-        colorInput: 'hex'
-    }
-};
+
 @NgModule({
     declarations: [
         AppComponent,
@@ -367,12 +357,8 @@ export const CUSTOM_MAT_COLOR_FORMATS: MatColorFormats = {
         }),
         NgxDaterangepickerMd.forRoot(),
         MultiSelectFieldModule,
-        NgxMatColorPickerModule,
         AgChartsAngularModule,
         //  VirtualScrollerModule,
-        NgxMatDatetimePickerModule,
-        NgxMatTimepickerModule,
-        NgxMatNativeDateModule,
         HepTooltipModule,
         TabFlowModule,
         TabEventsModule,
@@ -414,7 +400,6 @@ export const CUSTOM_MAT_COLOR_FORMATS: MatColorFormats = {
         { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true },
         { provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true },
         // { provide: ACE_CONFIG, useValue: DEFAULT_ACE_CONFIG },
-        { provide: MAT_COLOR_FORMATS, useValue: CUSTOM_MAT_COLOR_FORMATS },
         { provide: PreferencesContentMapping, useClass: PreferencesContentMapping },
         { provide: APP_BASE_HREF, useValue: window['base-href'] },
         TransactionFilterService
