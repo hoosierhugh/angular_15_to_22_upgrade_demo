@@ -6,9 +6,9 @@
 </mat-toolbar>
 <mat-sidenav-container class="mat-sidenav-container" [hasBackdrop]="false">
     <mat-sidenav-content>
-        <ag-charts-angular *ngIf="chartReady && options" style="position: absolute; top: 0; right: 0; bottom: 0; left: 0;"
+        <ag-charts *ngIf="chartReady && options" style="position: absolute; top: 0; right: 0; bottom: 0; left: 0;"
             [options]="options">
-        </ag-charts-angular>
+        </ag-charts>
     </mat-sidenav-content>
     <mat-sidenav #sidenav mode="side" position="end">
         <mat-tab-group mat-align-tabs="start">

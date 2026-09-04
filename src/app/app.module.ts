@@ -47,7 +47,7 @@ import { FontAwesomeModule, FaIconLibrary } from '@fortawesome/angular-fontaweso
 import { fas } from '@fortawesome/free-solid-svg-icons';
 import { fab } from '@fortawesome/free-brands-svg-icons';
 import { far } from '@fortawesome/free-regular-svg-icons';
-import { AgChartsAngularModule } from 'ag-charts-angular';
+import { AgChartsModule } from 'ag-charts-angular';
 import { NgSelectModule } from '@ng-select/ng-select';
 import { NgSelectFormFieldControlDirective } from './helpers/ng-multiselect.directive';
 import { CodeJarWrapperComponent } from './components/controls/codejar-wrapper/codejar-wrapper.component';
@@ -161,7 +161,7 @@ import { GridsterModule } from 'angular-gridster2';
 import { QRCodeModule } from 'angularx-qrcode';
 import { DynamicModule } from 'ng-dynamic-component';
 import { NgChartsModule } from 'ng2-charts';
-import { MarkdownModule, MarkedOptions } from 'ngx-markdown';
+import { MarkdownModule, MARKED_OPTIONS } from 'ngx-markdown';
 import { NgxDaterangepickerMd } from './components/controls/daterangepicker';
 import { MultiSelectFieldModule } from './components/widgets/protosearch-widget/ps-fields/multi-select-field/multi-select-field.module';
 import { UpdateAlertComponent } from './components/controls/update-alert/update-alert.component';
@@ -351,13 +351,13 @@ export function HttpLoaderFactory(http: HttpClient) {
         FontAwesomeModule,
         MarkdownModule.forRoot({
             markedOptions: {
-                provide: MarkedOptions,
+                provide: MARKED_OPTIONS,
                 useValue: { headerIds: false }
             }
         }),
         NgxDaterangepickerMd.forRoot(),
         MultiSelectFieldModule,
-        AgChartsAngularModule,
+        AgChartsModule,
         //  VirtualScrollerModule,
         HepTooltipModule,
         TabFlowModule,
