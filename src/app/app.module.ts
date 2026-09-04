@@ -43,7 +43,6 @@ import { ColorOffsetModule } from '@app/pipes/colorOffset.module';
 import { HtmlPipe } from '@app/pipes/html.pipe';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HomerMaterialModule } from '@app/app.material-module';
-import { Ng2SearchPipeModule } from 'ng2-search-filter';
 import { FontAwesomeModule, FaIconLibrary } from '@fortawesome/angular-fontawesome';
 import { fas } from '@fortawesome/free-solid-svg-icons';
 import { fab } from '@fortawesome/free-brands-svg-icons';
@@ -160,11 +159,12 @@ import { NgxJsonViewerModule } from 'ngx-json-viewer';
 import { MatColorFormats, MAT_COLOR_FORMATS, NgxMatColorPickerModule } from '@angular-material-components/color-picker';
 // import { AceEditorModule } from 'ng2-ace-editor';
 import { GridsterModule } from 'angular-gridster2';
-import { NgxQRCodeModule } from '@techiediaries/ngx-qrcode';
+import { QRCodeModule } from 'angularx-qrcode';
 import { DynamicModule } from 'ng-dynamic-component';
-import { ChartsModule } from '@xirenec/ng2-charts';
-import { MarkdownModule } from 'ngx-markdown';
+import { NgChartsModule } from 'ng2-charts';
+import { MarkdownModule, MarkedOptions } from 'ngx-markdown';
 import { NgxDaterangepickerMd } from './components/controls/daterangepicker';
+import { MultiSelectFieldModule } from './components/widgets/protosearch-widget/ps-fields/multi-select-field/multi-select-field.module';
 import { UpdateAlertComponent } from './components/controls/update-alert/update-alert.component';
 import { APP_BASE_HREF } from '@angular/common';
 import {
@@ -345,23 +345,28 @@ export const CUSTOM_MAT_COLOR_FORMATS: MatColorFormats = {
         ReactiveFormsModule,
         HttpClientJsonpModule,
         GridsterModule,
-        ChartsModule,
+        NgChartsModule,
         DynamicModule,
         routing,
         AppRoutingModule,
         HomerMaterialModule,
-        Ng2SearchPipeModule,
         NgSelectModule,
         OverlayModule,
         NoopAnimationsModule,
         AgGridModule,
         NgxJsonViewerModule,
-        NgxQRCodeModule,
+        QRCodeModule,
         // AceModule,
         // AceEditorModule,
         FontAwesomeModule,
-        MarkdownModule.forRoot(),
+        MarkdownModule.forRoot({
+            markedOptions: {
+                provide: MarkedOptions,
+                useValue: { headerIds: false }
+            }
+        }),
         NgxDaterangepickerMd.forRoot(),
+        MultiSelectFieldModule,
         NgxMatColorPickerModule,
         AgChartsAngularModule,
         //  VirtualScrollerModule,

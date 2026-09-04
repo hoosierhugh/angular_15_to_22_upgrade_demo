@@ -731,6 +731,12 @@ TODO(mdc-migration): The following rule targets internal classes of select that 
     }
 }
 
+.timezone-select-label {
+    display: block;
+    margin-bottom: 4px;
+    font-size: 0.75rem;
+}
+
 // @media (min-width: 564px) {
 //     .md-drppicker {
 //         width: auto;

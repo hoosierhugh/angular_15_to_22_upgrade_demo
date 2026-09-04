@@ -1,5 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { environment } from '@environments/environment';
+import { MOCK_MODE } from '@app/runtime-mode';
 import { SwaggerUIBundle } from 'swagger-ui-dist';
 
 // declare const SwaggerUIBundle: any;
@@ -13,11 +14,15 @@ import { SwaggerUIBundle } from 'swagger-ui-dist';
 export class PageApiDocComponent implements OnInit {
     @Input() page: string;
     @Input() pageID: string;
-    private url = new URL(environment.apiUrl);
-    constructor() {
+    readonly isMockMode = MOCK_MODE;
 
-    }
     ngOnInit(): void {
+        // The local demo intentionally has no Swagger endpoint or real API.
+        if (this.isMockMode) {
+            return;
+        }
+
+        const url = new URL(environment.apiUrl, document.baseURI);
         const ui = SwaggerUIBundle({
             dom_id: '#swagger-ui',
             layout: 'BaseLayout',
@@ -25,7 +30,7 @@ export class PageApiDocComponent implements OnInit {
                 SwaggerUIBundle.presets.apis,
                 SwaggerUIBundle.SwaggerUIStandalonePreset
             ],
-            url: this.url.origin + '/doc/api/json',
+            url: url.origin + '/doc/api/json',
             docExpansion: 'none',
             operationsSorter: 'alpha'
         });

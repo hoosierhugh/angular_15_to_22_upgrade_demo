@@ -3,8 +3,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { IWidget } from '../IWidget';
 import { Component, Input, Output, EventEmitter, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
-import { ChartType, ChartDataSets } from 'chart.js';
-import { Label } from '@xirenec/ng2-charts';
+import { ChartDataset, ChartType } from 'chart.js';
 import { StatisticService } from '../../../services/statistic.service';
 import { DateTimeRangeService, DateTimeTick, Timestamp } from '../../../services/data-time-range.service';
 import { Subscription } from 'rxjs';
@@ -53,12 +52,12 @@ export class InfluxdbchartWidgetComponent implements IWidget {
     };
 
     timeRange: Timestamp;
-    public chartLabels: Label[] = [];
+    public chartLabels: string[] = [];
     public chartType: ChartType = 'line';
     public chartLegend = true;
     public chartPlugins = [];
 
-    public chartData: ChartDataSets[] = [{
+    public chartData: ChartDataset[] = [{
         fill: false,
         data: [],
         label: ''

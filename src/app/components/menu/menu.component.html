@@ -54,7 +54,7 @@
                 </button>
                 <mat-form-field style="margin-left: 1rem;">
                     <mat-label>{{'menu.filterDashboards'|translate}}</mat-label>
-                    <input matInput [(ngModel)]="searchText" (click)="$event.stopPropagation();">
+                    <input id="dashboard-filter" name="dashboard-filter" matInput [(ngModel)]="searchText" (click)="$event.stopPropagation();">
                 </mat-form-field>
 
                 <div *ngFor="let dashboardItem of dashboards | filter : searchText"
@@ -94,7 +94,7 @@
                 <fa-icon icon="clock"></fa-icon>
             </span>
             <span style="color: white;">
-                <input type="button" class="mat-button" ngxDaterangepickerMd [showCustomRangeLabel]="true"
+                <input id="dashboard-time-range" name="dashboard-time-range" type="button" class="mat-button" ngxDaterangepickerMd [showCustomRangeLabel]="true"
                     [matTooltip]="('menu.changeTimeRange'|translate)"
                     [alwaysShowCalendars]="true" [ranges]="ranges" [linkedCalendars]="true" [showClearButton]="false"
                     [autoApply]="false" [opens]="'left'" [timePicker]="true" [timeInput]="true" [timeZone]="true"

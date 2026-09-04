@@ -8,14 +8,14 @@
     Dashboard <span style="color:green;">SHARED</span>
   </div>
   <div class="qr-container" [ngClass]="{'unshare':!shared}">
-    <ngx-qrcode
+    <qrcode
     style="text-align:center;padding:20px;"
 
     [elementType]="elementType"
     [errorCorrectionLevel]="correctionLevel"
-    [value]="value"
+    [qrdata]="value"
     cssClass="bshadow">
-  </ngx-qrcode>
+  </qrcode>
   <div class="image-code"></div>
   <div class="homer-logo">
     <img src="/assets/images/homer_qr_logo.png" width="75px" class="qr-logo"/>

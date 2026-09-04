@@ -40,7 +40,9 @@ const compiled = ts.transpileModule(fs.readFileSync(require.resolve('../src/app/
     compilerOptions: { module: ts.ModuleKind.CommonJS, experimentalDecorators: true, target: ts.ScriptTarget.ES2022 }
 }).outputText;
 const sandbox = {
-    exports: {}, URL, window: { location: { href: 'http://127.0.0.1:4200/dashboard/home', origin: 'http://127.0.0.1:4200' } },
+    exports: {}, URL,
+    window: { location: { href: 'http://127.0.0.1:4200/dashboard/home', origin: 'http://127.0.0.1:4200' } },
+    document: { baseURI: 'http://127.0.0.1:4200/' },
     require: name => {
         if (name === '@angular/core') return { Injectable: () => target => target };
         if (name === '@angular/common/http') return { HttpResponse, HttpErrorResponse };

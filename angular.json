@@ -55,8 +55,9 @@
                                 { "replace": "src/app/runtime-mode.ts", "with": "src/app/mock/runtime-mode.mock.ts" }
                             ],
                             "outputPath": "dist/homer-ui-mock",
+                            "baseHref": "/",
                             "optimization": false,
-                            "sourceMap": true,
+                            "sourceMap": false,
                             "aot": false,
                             "extractLicenses": false,
                             "buildOptimizer": false

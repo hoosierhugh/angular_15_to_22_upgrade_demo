@@ -3,11 +3,10 @@ import { Component, OnInit, Input, Output, EventEmitter, OnDestroy, AfterViewIni
 import { SettingPrometheusWidgetComponent } from './setting-prometheus-widget.component';
 import { PrometheusService } from '@app/services/prometheus.service';
 import { MatDialog } from '@angular/material/dialog';
-import { ChartType, ChartDataSets } from 'chart.js';
+import { ChartDataset, ChartType } from 'chart.js';
 import { Widget, WidgetArrayInstance } from '@app/helpers/widget';
 import { IWidget } from '../IWidget';
 import { Subscription } from 'rxjs';
-import { Label } from '@xirenec/ng2-charts';
 import  moment from 'moment';
 import { TranslateService } from '@ngx-translate/core';
 @Component({
@@ -51,12 +50,12 @@ export class PrometheusWidgetComponent implements IWidget {
         legend: { position: 'bottom' }
     };
     timeRange: Timestamp;
-    public chartLabels: Label[] = [];
+    public chartLabels: string[] = [];
     public chartType: ChartType = 'line';
     public chartLegend = true;
     public chartPlugins = [];
 
-    public chartData: ChartDataSets[] = [{
+    public chartData: ChartDataset[] = [{
         fill: false,
         data: [],
         label: ''

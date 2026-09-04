@@ -16,8 +16,8 @@ import {
   ElementRef
 } from '@angular/core';
 import { PreferenceAdvancedService } from '@app/services';
-import { Chart, ChartType, ChartDataSets, ChartColor } from 'chart.js';
-import { Label, Color, BaseChartDirective } from '@xirenec/ng2-charts';
+import { Chart, ChartDataset, ChartType } from 'chart.js';
+import { BaseChartDirective } from 'ng2-charts';
 import  moment from 'moment';
 
 import { Functions } from '@app/helpers/functions';
@@ -65,9 +65,9 @@ export class TabQosComponent implements OnInit, AfterViewInit {
   isNoDataRTP = false;
   isNoDataRTCP = false;
   aliases: Array<string>;
-  public chartDataRTP: ChartDataSets[] = [];
+  public chartDataRTP: ChartDataset[] = [];
 
-  public chartLabelsRTP: Label[] = [];
+  public chartLabelsRTP: string[] = [];
 
 
   public chartOptions: any = {
@@ -99,11 +99,11 @@ export class TabQosComponent implements OnInit, AfterViewInit {
     }
   };
 
-  public chartLabelsRTCP: Label[] = [];
+  public chartLabelsRTCP: string[] = [];
   public chartType: ChartType = 'bar';
   public chartLegend = true;
 
-  public chartDataRTCP: ChartDataSets[] = [];
+  public chartDataRTCP: ChartDataset[] = [];
 
   public listRTP = [];
 
@@ -174,15 +174,15 @@ export class TabQosComponent implements OnInit, AfterViewInit {
       this.isRTP = outData.isRTP as boolean;
       this.isNoDataRTP = outData.isNoDataRTP as boolean;
       this.isNoDataRTCP = outData.isNoDataRTCP as boolean;
-      this.chartDataRTP = outData.chartDataRTP as ChartDataSets[];
-      this.chartLabelsRTP = outData.chartLabelsRTP as Label[];
+      this.chartDataRTP = outData.chartDataRTP as ChartDataset[];
+      this.chartLabelsRTP = outData.chartLabelsRTP as string[];
 
-      this.chartLabelsRTCP = outData.chartLabelsRTCP as Label[];
+      this.chartLabelsRTCP = outData.chartLabelsRTCP as string[];
 
       this.chartType = outData.chartType as ChartType;
       this.chartLegend = outData.chartLegend as boolean;
 
-      this.chartDataRTCP = outData.chartDataRTCP as ChartDataSets[];
+      this.chartDataRTCP = outData.chartDataRTCP as ChartDataset[];
       this.listRTP = outData.listRTP as Array<any>;
       this.listRTCP = outData.listRTCP as Array<any>;
       this.hideLabelsFlag = outData.hideLabelsFlag as boolean;
@@ -205,15 +205,15 @@ export class TabQosComponent implements OnInit, AfterViewInit {
       /** for RTCP */
       this.isRTCP = outData.isRTCP as boolean;
       this.isNoDataRTCP = outData.isNoDataRTCP as boolean;
-      this.chartLabelsRTCP = outData.chartLabelsRTCP as Label[];
-      this.chartDataRTCP = outData.chartDataRTCP as ChartDataSets[];
+      this.chartLabelsRTCP = outData.chartLabelsRTCP as string[];
+      this.chartDataRTCP = outData.chartDataRTCP as ChartDataset[];
       this.streamsRTCP = outData.streamsRTCP as Array<any>;
 
       /** for RTP */
       this.isRTP = outData.isRTP as boolean;
       this.isNoDataRTP = outData.isNoDataRTP as boolean;
-      this.chartLabelsRTP = outData.chartLabelsRTP as Label[];
-      this.chartDataRTP = outData.chartDataRTP as ChartDataSets[];
+      this.chartLabelsRTP = outData.chartLabelsRTP as string[];
+      this.chartDataRTP = outData.chartDataRTP as ChartDataset[];
       this.streamsRTP = outData.streamsRTP as Array<any>;
 
       this._isLoaded = true;

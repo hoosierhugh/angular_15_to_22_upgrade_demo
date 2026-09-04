@@ -9,7 +9,9 @@ export class MockBackendInterceptor implements HttpInterceptor {
     private readonly api = new MockApi();
 
     intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
-        const url = new URL(request.url, window.location.href);
+        // HttpClient accepts relative URLs. Resolve those using Angular's base href,
+        // not the current routed URL (for example, /dashboard/home).
+        const url = new URL(request.url, document.baseURI);
         if (url.origin === window.location.origin && url.pathname.startsWith(MOCK_API_BASE + '/')) {
             const reply = this.api.handle(request.method, url.pathname.slice(MOCK_API_BASE.length), request.body);
             return reply.status < 400

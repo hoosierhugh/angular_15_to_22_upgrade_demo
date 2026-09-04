@@ -51,7 +51,7 @@
     <hr class="hr-or">
     <form>
       <div class="file-upload-container">
-      <label for="fileSelect" [className]="'fileselect' + (idDrugOver ? ' drugOver' : '')"></label>
+      <label for="dashboard-import-file" [className]="'fileselect' + (idDrugOver ? ' drugOver' : '')"></label>
       <div *ngIf="fileNames" class="file-list">
         <div *ngFor="let fn of fileNames" class="file-item">
           {{fn}}
@@ -59,7 +59,7 @@
       </div>
         <input placeholder=""
         (change)="onJsonChange($event)"
-        value="" type="file" id="fileSelect" #fileSelect>
+        value="" type="file" id="dashboard-import-file" #fileSelect>
 
       </div>
     </form>

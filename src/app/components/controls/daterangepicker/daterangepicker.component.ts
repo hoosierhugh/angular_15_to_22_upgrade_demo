@@ -546,6 +546,11 @@ export class DaterangepickerComponent implements OnInit {
         this.timepickerVariables[side].selectedHour = this.formatTwoDigitTimeValue(selected.hours());
         this.timepickerVariables[side].selectedMinute = this.formatTwoDigitTimeValue(selected.minutes());
         this.timepickerVariables[side].selectedSecond = this.formatTwoDigitTimeValue(selected.seconds());
+        this.form.patchValue({
+            [`hour${side}`]: this.timepickerVariables[side].selectedHour,
+            [`minute${side}`]: this.timepickerVariables[side].selectedMinute,
+            [`second${side}`]: this.timepickerVariables[side].selectedSecond
+        }, { emitEvent: false });
 
     }
     renderCalendar(side: SideEnum) { // side enum

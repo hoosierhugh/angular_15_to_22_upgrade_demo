@@ -32,11 +32,11 @@
       </mat-select>
     </mat-form-field>
     <div *ngIf="proto">
-      <app-drag-drop-list
+      <app-protosearch-drag-drop-list
         [sortlistactive]="data.config.fields"
         [list]="proto.fields_mapping"
         (change)="onUpdateProto($event)"
-      ></app-drag-drop-list>
+      ></app-protosearch-drag-drop-list>
     </div>
   </div>
 </div>

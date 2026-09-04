@@ -10,8 +10,8 @@ import { WorkerCommands } from '@app/models/worker-commands.module';
 import { DateTimeRangeService, DateTimeTick, Timestamp } from '@app/services';
 import { ClickhouseSerivce } from '@app/services/clickhouse.service';
 import { WorkerService } from '@app/services/worker.service';
-import { ChartDataSets, ChartType } from 'chart.js';
-import { BaseChartDirective, Label } from '@xirenec/ng2-charts';
+import { Chart, ChartDataset, ChartType } from 'chart.js';
+import { BaseChartDirective } from 'ng2-charts';
 import { Subscription } from 'rxjs';
 import { TranslateService } from '@ngx-translate/core';
 import { IWidget } from '../IWidget';
@@ -42,11 +42,11 @@ export class ClickhouseChartWidgetComponent implements IWidget, OnInit, OnDestro
     @Output() changeSettings = new EventEmitter<any>();
 
     timeRange: Timestamp;
-    public chartLabels: Label[] = [];
+    public chartLabels: string[] = [];
     public chartType: ChartType = 'line';
     public chartLegend = true;
     public chartPlugins = [];
-    public chartData: ChartDataSets[] = [{
+    public chartData: ChartDataset[] = [{
         fill: false,
         data: [],
         label: ''
@@ -175,7 +175,7 @@ export class ClickhouseChartWidgetComponent implements IWidget, OnInit, OnDestro
     }
     generateLegend() {
         if (typeof this._chart !== 'undefined' && typeof this._chart.chart !== 'undefined') {
-            this.legendItems = this._chart.chart.generateLegend();
+            this.legendItems = Chart.defaults.plugins.legend.labels.generateLabels(this._chart.chart);
             this.legendItems.forEach((item: any) => {
 
                 const wordRegex = "[a-zA-Z]+_*[a-zA-Z]*";

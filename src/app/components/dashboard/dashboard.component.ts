@@ -36,7 +36,6 @@ import { ConstValue, UserConstValue } from '../../models/const-value.model';
 import { DateTimeRangeService, DateTimeTick, Timestamp } from '@app/services/data-time-range.service';
 import { UserSecurityService } from '@app/services/user-security.service';
 import { AuthenticationService } from '@app/services/authentication.service';
-import { NgxQrcodeElementTypes, NgxQrcodeErrorCorrectionLevels } from '@techiediaries/ngx-qrcode';
 import { environment } from '@environments/environment';
 import { TranslateService } from '@ngx-translate/core'
 
@@ -104,8 +103,8 @@ export class DashboardComponent implements OnInit, OnDestroy, AfterViewInit {
   prevWidgArray: any;
   tabsObj: any;
   isQrShare = true;
-  qrElementType = NgxQrcodeElementTypes.URL;
-  qrCorrectionLevel = NgxQrcodeErrorCorrectionLevels.HIGH;
+  qrElementType = 'url';
+  qrCorrectionLevel = 'H';
   qrValue = '';
   isLoaded = false;
   isFirstLoadOfDashboard = true;

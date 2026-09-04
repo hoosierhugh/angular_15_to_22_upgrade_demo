@@ -2,7 +2,7 @@ import { Component, Input, Output, EventEmitter, OnInit, ChangeDetectionStrategy
 import {CdkDragDrop, moveItemInArray, transferArrayItem} from '@angular/cdk/drag-drop';
 
 @Component({
-    selector: 'app-drag-drop-list',
+    selector: 'app-protosearch-drag-drop-list',
     templateUrl: './drag-drop-list.component.html',
     styleUrls: ['./drag-drop-list.component.scss'],
     changeDetection: ChangeDetectionStrategy.OnPush
