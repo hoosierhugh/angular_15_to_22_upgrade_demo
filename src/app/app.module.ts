@@ -403,61 +403,6 @@ export const CUSTOM_MAT_COLOR_FORMATS: MatColorFormats = {
         // ColorChromeModule
         NgxCodejarModule
     ],
-    entryComponents: [
-        MenuComponent,
-
-        /** dialogs */
-        DialogAdvancedComponent,
-        DialogAgentsubComponent,
-        DialogAliasComponent,
-        DialogAuthKeyComponent,
-        DialogAuthTokenDisplayComponent,
-        DialogDeleteAlertComponent,
-        DialogHepsubComponent,
-        DialogMappingComponent,
-        DialogUserSettingsComponent,
-        DialogUsersComponent,
-        DialogScriptsComponent,
-        DialogDBSelectorComponent,
-
-        /** widgets */
-        AceEditorWidgetComponent,
-        ClockWidgetComponent,
-        CodeStylePrometheusFieldComponent,
-        CodeStyleSmartInputFieldComponent,
-        CodeProtoSelectorComponent,
-        DialogAlarmComponent,
-        DragDropListComponent,
-        GeneralIframeWidgetComponent,
-        IframeWidgetComponent,
-        InfluxdbchartWidgetComponent,
-        ClickhouseChartWidgetComponent,
-        PrometheusWidgetComponent,
-        ProtosearchWidgetComponent,
-        ResultChartWidgetComponent,
-        ResultWidgetComponent,
-        RsearchWidgetComponent,
-        SmartInputWidgetComponent,
-        PcapUploaderWidgetComponent,
-        SettingClockWidgetComponent,
-        SettingGeneralIframeWidgetComponent,
-        SettingIframeWidgetComponent,
-        SettingInfluxdbchartWidgetComponent,
-        SettingClickhouseChartWidgetComponent,
-        SettingPrometheusWidgetComponent,
-        SettingProtosearchWidgetComponent,
-        SettingResultChartWidgetComponent,
-        SettingResultWidgetComponent,
-        SettingsAceEditorWidgetComponent,
-        SettingSmartInputWidgetComponent,
-        AlertWidgetComponent,
-        /** dashboard */
-        AddDashboardDialogComponent,
-        AddDialogComponent,
-        DeleteDialogComponent,
-        EditDialogComponent
-        // SettingAlertWidgetComponent
-    ],
     schemas: [CUSTOM_ELEMENTS_SCHEMA],
     providers: [
         ...MOCK_PROVIDERS,
