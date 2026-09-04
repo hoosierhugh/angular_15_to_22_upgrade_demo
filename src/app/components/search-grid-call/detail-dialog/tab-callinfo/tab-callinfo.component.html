@@ -63,9 +63,9 @@
         </tr>
         <tr>
             <td>{{ secFormatter(trans.Duration) }}</td>
-            <td colspan="2"> {{ trans.from_user }}@{{trans.from_domain}} </td>
+            <td colspan="2"> {{ trans.from_user }}&#64;{{trans.from_domain}} </td>
             <td colspan="2">
-                {{ trans.ruri_user || trans.to_user }}@{{trans.ruri_domain || ""}}
+                {{ trans.ruri_user || trans.to_user }}&#64;{{trans.ruri_domain || ""}}
             </td>
             <td colspan="2">
                 {{trans.source_ip + ":" + trans.source_port }}
