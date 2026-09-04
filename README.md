@@ -1,4 +1,7 @@
 # Upgrading Angular from 15 to 22 demo
+I will have separate branches for each version of Angular so that the viewer can see the changes.
+For example: `upgrade/angular-16, upgrade/angular-18, etch`
+
 
 ## Local demo (no backend or login)
 
