@@ -18,10 +18,9 @@
           <mat-form-field style="padding-right: 1rem">
             <mat-label>{{ 'preference.scripts.dialog.profile' | translate }}</mat-label>
             <input matInput
-              [(ngModel)]="data.data.profile"
               [formControl]="profile"
               autocomplete="off"
-              [disabled]="!isAdmin" />
+            />
             <mat-error *ngIf="profile?.errors?.['required']">{{'validators.required' | translate }}</mat-error>
             <mat-error *ngIf="profile?.errors?.['minlength']">
               {{ profile?.errors?.['minlength']?.requiredLength }} {{'validators.minChars' | translate }}
@@ -33,10 +32,9 @@
           <mat-form-field style="padding-right: 1rem">
             <mat-label>{{ 'preference.scripts.dialog.hepAlias' | translate }}</mat-label>
             <input matInput
-              [(ngModel)]="data.data.hep_alias"
               [formControl]="hep_alias"
               autocomplete="off"
-              [disabled]="!isAdmin" />
+            />
             <mat-error *ngIf="hep_alias?.errors?.['required']">{{'validators.required' | translate }}</mat-error>
             <mat-error *ngIf="hep_alias?.errors?.['minlength']">
               {{ hep_alias?.errors?.['minlength']?.requiredLength }} {{'validators.minChars' | translate }}
@@ -54,10 +52,9 @@
           <mat-form-field style="padding-right: 1rem">
             <mat-label>{{ 'preference.scripts.dialog.hepId' | translate }}</mat-label>
             <input matInput
-              [(ngModel)]="data.data.hepid"
               [formControl]="hepid"
               autocomplete="off"
-              [disabled]="!isAdmin" />
+            />
             <mat-error *ngIf="hepid?.errors?.['required']">{{'validators.required' | translate }}</mat-error>
             <mat-error *ngIf="hepid?.errors?.['min']">{{'validators.minNumber' | translate }} 1</mat-error>
             <mat-error *ngIf="hepid?.errors?.['max']">{{'validators.maxNumber' | translate }} 10000</mat-error>
@@ -71,10 +68,9 @@
           <mat-form-field style="padding-right: 1rem">
             <mat-label>{{ 'preference.scripts.dialog.type' | translate }}</mat-label>
             <input matInput
-              [(ngModel)]="data.data.type"
               [formControl]="type"
               autocomplete="off"
-              [disabled]="!isAdmin" />
+            />
             <mat-error *ngIf="type?.errors?.['required']">{{'validators.required' | translate }}</mat-error>
             <mat-error *ngIf="type?.errors?.['minlength']">
               {{ type?.errors?.['minlength']?.requiredLength }} {{'validators.minChars' | translate }}
@@ -94,10 +90,9 @@
             <mat-label>{{ 'preference.scripts.dialog.partition' | translate }}</mat-label>
             <input matInput
               type="number"
-              [(ngModel)]="data.data.partid"
               [formControl]="partid"
               autocomplete="off"
-              [disabled]="!isAdmin" />
+            />
             <mat-error *ngIf="partid?.errors?.required">{{'validators.required' | translate }}</mat-error>
             <mat-error *ngIf="partid?.errors?.min">{{'validators.minNumber' | translate }} 1</mat-error>
             <mat-error *ngIf="partid?.errors?.max">{{'validators.maxNumber' | translate }} 100</mat-error>
@@ -120,15 +115,13 @@
       <full-screen (fullPage)='disableClose($event)'
                     (import)='import($event)'
                     [data]='{json:data.data.data, title: "Script " +  data.data.hep_alias + " " + data.data.profile, type: "js"}'>
-        <ace-editor [mode]="'javascript'"
+        <app-codejar-wrapper [mode]="'javascript'"
           [theme]="'monokai'"
-          [readOnly]="false"
+          [readOnly]="!isAdmin"
           [(text)]="data.data.data"
-          #data_view
           [style.min-height.%]="100"
           style="padding: 5px"
-          [disabled]="!isAdmin"
-        ></ace-editor>
+        ></app-codejar-wrapper>
       </full-screen>
     </mat-tab>
   </mat-tab-group>

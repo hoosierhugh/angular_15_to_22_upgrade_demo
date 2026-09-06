@@ -132,7 +132,6 @@ class="profile-body mat-elevation-z8"
     <input matInput
         autocomplete="off"
         [formControl]="username"
-        [disabled]="!isAdmin"
         required />
 
     <mat-error *ngIf="username?.errors?.['required']">{{'validators.required' | translate }}</mat-error>
@@ -152,8 +151,7 @@ class="profile-body mat-elevation-z8"
 
     <mat-form-field>
     <mat-label>{{ 'preference.users.dialog.group' | translate }}</mat-label>
-    <mat-select [formControl]="usergroup" [disabled]="!isAdmin"
-    (selectionChange)='usergroup.setValue($event.value)' required>
+    <mat-select [formControl]="usergroup" required>
         <mat-option *ngFor="let item of groupList"  [value]='item'>
                 {{item}}
         </mat-option>

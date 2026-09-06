@@ -917,7 +917,12 @@ export class DaterangepickerComponent implements OnInit {
 
         */
 
-        this.datesUpdated.emit({ startDate: this.startDate, endDate: this.endDate, timezone: this.startDate.tz() });
+        this.datesUpdated.emit({
+            startDate: this.startDate,
+            endDate: this.endDate,
+            timezone: this.startDate.tz(),
+            label: this.chosenRange
+        });
         if (e || (this.closeOnAutoApply && !e)) {
             this.hide();
         }

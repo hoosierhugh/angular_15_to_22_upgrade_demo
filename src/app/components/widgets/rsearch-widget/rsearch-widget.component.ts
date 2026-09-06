@@ -29,6 +29,7 @@ import { TranslateService } from '@ngx-translate/core'
 })
 export class RsearchWidgetComponent implements IWidget {
   @Input() id: string;
+  @Input() config: unknown;
 
   lokiQuery: string;
   limit = 100;

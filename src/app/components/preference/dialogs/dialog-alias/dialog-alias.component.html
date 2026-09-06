@@ -35,7 +35,6 @@
           }}</mat-label>
           <input
             matInput
-            [(ngModel)]="data.data.ip"
             [formControl]="ip"
             autocomplete="off"
           />
@@ -71,7 +70,6 @@
           <input
             matInput
             type="number"
-            [(ngModel)]="data.data.mask"
             autocomplete="off"
             [formControl]="mask"
           />
@@ -99,7 +97,6 @@
           <input
             matInput
             type="number"
-            [(ngModel)]="data.data.port"
             autocomplete="off"
             [formControl]="port"
           />
@@ -130,8 +127,7 @@
             matInput
             autocomplete="off"
             [ngClass]="isCopy && isNotChanged ? 'input-copy-warning' : ''"
-            [ngModel]="isCopy && isNotChanged ? data.data.alias + '-COPY' : data.data.alias"
-            (ngModelChange)="data.data.alias = $event; isNotChanged = false"
+            (input)="isNotChanged = false"
             [formControl]="alias"
           />
           <mat-error *ngIf="alias?.errors?.['required']">{{
@@ -161,7 +157,6 @@
           }}</mat-label>
           <input
             matInput
-            [(ngModel)]="data.data.captureID"
             autocomplete="off"
             [formControl]="captureID"
           />

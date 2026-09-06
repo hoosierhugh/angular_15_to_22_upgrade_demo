@@ -76,6 +76,11 @@ export class DialogHepsubComponent {
             this.profile.setValue(d.profile);
 
         })(data.data);
+        if (!this.isAdmin) {
+            this.hep_alias.disable({ emitEvent: false });
+            this.hepid.disable({ emitEvent: false });
+            this.profile.disable({ emitEvent: false });
+        }
         this.isValidForm = true;
     }
 

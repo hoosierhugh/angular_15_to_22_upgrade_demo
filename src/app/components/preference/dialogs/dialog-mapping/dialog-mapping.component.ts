@@ -114,6 +114,12 @@ export class DialogMappingComponent {
       this.profile.setValue(d.profile);
 
     })(data.data);
+    if (!this.isAdmin) {
+      this.retention.disable({ emitEvent: false });
+      this.hep_alias.disable({ emitEvent: false });
+      this.hepid.disable({ emitEvent: false });
+      this.profile.disable({ emitEvent: false });
+    }
     if (data.data.fields_mapping) {
       try {
         this.fieldsTasbleColumns = [

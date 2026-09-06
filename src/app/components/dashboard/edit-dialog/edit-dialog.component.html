@@ -10,7 +10,7 @@
 
   <mat-form-field>
     <mat-label>{{'dashboard.editDialog.dashboardSettingsSection.dashboardName' | translate}}</mat-label>
-    <input matInput [(ngModel)]="data.name" (ngModelChange)='validate($event)' [formControl]="name">
+    <input matInput [formControl]="name" (input)="validate(name.value)">
     <mat-error *ngIf="name?.errors?.['required']">{{'validators.required' | translate }}</mat-error>
     <mat-error *ngIf="name?.errors?.['minlength']">
       {{ name?.errors?.['minlength']?.requiredLength }} {{'validators.minChars' | translate }}

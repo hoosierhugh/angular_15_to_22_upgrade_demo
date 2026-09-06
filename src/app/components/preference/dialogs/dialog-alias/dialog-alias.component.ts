@@ -82,6 +82,15 @@ export class DialogAliasComponent {
                 data.data.captureID : String(data.data.captureID)
             );
 
+        this.isCopy = data.isCopy;
+        this.isNotChanged = this.isCopy;
+        this.actionType = data.data.actionType;
+        this.ip.setValue(data.data.ip);
+        this.mask.setValue(data.data.mask);
+        this.port.setValue(data.data.port);
+        this.alias.setValue(this.isCopy ? `${data.data.alias}-COPY` : data.data.alias);
+        this.captureID.setValue(data.data.captureID);
+
     }
 
     disableClose(e) {

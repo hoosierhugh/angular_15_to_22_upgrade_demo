@@ -131,6 +131,8 @@ export class DialogUsersComponent implements OnInit {
     if (this.isAdmin) {
       this.username.enable();
       this.partid.enable();
+    } else {
+      this.usergroup.disable({ emitEvent: false });
     }
     this.isCopy = data.isCopy;
     if (this.isCopy) {

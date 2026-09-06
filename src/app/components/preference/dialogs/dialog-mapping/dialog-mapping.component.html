@@ -17,10 +17,8 @@
                     }}</mat-label>
                     <input
                         matInput
-                        [(ngModel)]="data.data.hep_alias"
                         [formControl]="hep_alias"
                         autocomplete="off"
-                        [disabled]="!isAdmin"
                     />
                     <mat-error *ngIf="hep_alias?.errors?.['required']">{{
                         "validators.required" | translate
@@ -46,10 +44,8 @@
                     }}</mat-label>
                     <input
                         matInput
-                        [(ngModel)]="data.data.hepid"
                         [formControl]="hepid"
                         autocomplete="off"
-                        [disabled]="!isAdmin"
                     />
                     <mat-error *ngIf="hepid?.errors?.['required']">{{
                         "validators.required" | translate
@@ -73,10 +69,8 @@
                     }}</mat-label>
                     <input
                         matInput
-                        [(ngModel)]="data.data.profile"
                         [formControl]="profile"
                         autocomplete="off"
-                        [disabled]="!isAdmin"
                     />
                     <mat-error *ngIf="profile?.errors?.['required']">{{
                         "validators.required" | translate
@@ -92,10 +86,8 @@
                     }}</mat-label>
                     <input
                         matInput
-                        [(ngModel)]="data.data.retention"
                         [formControl]="retention"
                         autocomplete="off"
-                        [disabled]="!isAdmin"
                     />
                     <mat-error *ngIf="retention?.errors?.['required']">{{
                         "validators.required" | translate

@@ -1,4 +1,4 @@
-import { Component, Inject, ChangeDetectionStrategy, ViewChild, AfterViewInit, ChangeDetectorRef } from '@angular/core';
+import { Component, Inject, ChangeDetectionStrategy } from '@angular/core';
 import { FormControl, Validators } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 // import 'brace';
@@ -12,13 +12,12 @@ import { TranslateService } from '@ngx-translate/core'
     changeDetection: ChangeDetectionStrategy.OnPush
 })
 
-export class DialogScriptsComponent implements AfterViewInit {
+export class DialogScriptsComponent {
     isValidForm = false;
     isAdmin = false;
     regNum = /^[0-9]+$/;
     regString = /^[a-zA-Z0-9\-\_]+$/;
 
-    @ViewChild('data_view', { static: false }) editor;
     partid = new FormControl('', [
         Validators.required,
         Validators.minLength(1),
@@ -56,7 +55,6 @@ export class DialogScriptsComponent implements AfterViewInit {
     constructor(
         public dialogRef: MatDialogRef<DialogScriptsComponent>,
         public translateService: TranslateService,
-        private cdr: ChangeDetectorRef,
         @Inject(MAT_DIALOG_DATA) public data: any
     ) {
         translateService.addLangs(['en'])
@@ -86,29 +84,15 @@ export class DialogScriptsComponent implements AfterViewInit {
             this.profile.setValue(d.profile);
             this.type.setValue(d.type);
         })(data.data);
-        this.isValidForm = true;
-            // const test = this.editor.getEditor().getSession().getAnnotations().filter(annotation => annotation.raw !== `['{a}'] is better written in dot notation.`);
 
-    }
-    ngAfterViewInit() {
-        const options = {
-            esnext: true,
-            moz: true,
-            devel: true,
-            browser: true,
-            node: true,
-            laxcomma: true,
-            laxbreak: true,
-            lastsemic: true,
-            onevar: false,
-            passfail: false,
-            maxerr: 10000,
-            expr: true,
-            multistr: true,
-            globalstrict: true
-        };
-        this.editor.getEditor().getSession().$worker.call("setOptions", [options]);
-        this.cdr.detectChanges();
+        if (!this.isAdmin) {
+            this.partid.disable({ emitEvent: false });
+            this.hep_alias.disable({ emitEvent: false });
+            this.hepid.disable({ emitEvent: false });
+            this.profile.disable({ emitEvent: false });
+            this.type.disable({ emitEvent: false });
+        }
+        this.isValidForm = true;
     }
     disableClose(e) {
         this.dialogRef.disableClose = e;

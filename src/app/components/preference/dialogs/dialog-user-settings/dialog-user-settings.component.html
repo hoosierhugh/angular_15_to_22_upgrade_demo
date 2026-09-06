@@ -15,7 +15,7 @@
       <div>
         <mat-form-field style="padding-right: 1rem;">
           <mat-label>{{ 'preference.userSettings.dialog.username' | translate }}</mat-label>
-          <input matInput [formControl]="username" [placeholder]="currentUser" [matAutocomplete]="auto" [disabled]="!isAdmin">
+          <input matInput [formControl]="username" [placeholder]="currentUser" [matAutocomplete]="auto">
           <mat-autocomplete #auto="matAutocomplete">
             <mat-option *ngFor="let user of userList | async" [value]="user">
               {{user}}
@@ -37,7 +37,7 @@
         </mat-form-field>
         <mat-form-field style="padding-right: 1rem;">
           <mat-label>{{ 'preference.userSettings.dialog.category' | translate }}</mat-label>
-          <input matInput [(ngModel)]="data.data.category" [formControl]="category" autocomplete="off" [disabled]="!isAdmin">
+          <input matInput [formControl]="category" autocomplete="off">
           <mat-error *ngIf="category?.errors?.['required']">{{'validators.required' | translate }}</mat-error>
           <mat-error *ngIf="category?.errors?.['minlength']">
             {{ category?.errors?.['minlength']?.requiredLength }} {{'validators.minChars' | translate }}
@@ -53,7 +53,7 @@
       <div>
         <mat-form-field style="padding-right: 1rem;">
           <mat-label>{{ 'preference.userSettings.dialog.param' | translate }}</mat-label>
-          <input matInput [(ngModel)]="data.data.param" [formControl]="param" autocomplete="off" [disabled]="!isAdmin">
+          <input matInput [formControl]="param" autocomplete="off">
           <mat-error *ngIf="param?.errors?.['required']">{{'validators.required' | translate }}</mat-error>
           <mat-error *ngIf="param?.errors?.['minlength']">
             {{ param?.errors?.['minlength']?.requiredLength }} {{'validators.minChars' | translate }}
@@ -61,7 +61,7 @@
         </mat-form-field>
         <!-- <mat-form-field style="padding-right: 1rem;">
           <mat-label>{{ 'preference.userSettings.dialog.partition' | translate }}</mat-label>
-          <input matInput [(ngModel)]="data.data.partid" [formControl]="partid" autocomplete="off" [disabled]="!isAdmin">
+          <input matInput [formControl]="partid" autocomplete="off">
           <mat-error *ngIf="partid?.errors?.required">{{'validators.required' | translate }}</mat-error>
           <mat-error *ngIf="partid?.errors?.min">{{'validators.minNumber' | translate }} 1</mat-error>
           <mat-error *ngIf="partid?.errors?.max">{{'validators.maxNumber' | translate }} 99</mat-error>
@@ -122,7 +122,7 @@
             <div>
               <mat-form-field style="padding-right: 1rem;">
                 <mat-label>{{ 'preference.userSettings.dialog.username' | translate }}</mat-label>
-                <input matInput [formControl]="username" [placeholder]="currentUser" [matAutocomplete]="auto" [disabled]="true">
+                <input matInput [value]="username.value" [placeholder]="currentUser" disabled>
                 <mat-autocomplete #auto="matAutocomplete">
                   <mat-option *ngFor="let user of userList | async" [value]="user">
                     {{user}}
@@ -131,17 +131,17 @@
               </mat-form-field>
               <mat-form-field style="padding-right: 1rem;">
                 <mat-label>{{ 'preference.userSettings.dialog.category' | translate }}</mat-label>
-                <input matInput [(ngModel)]="data.data.category" [formControl]="category" autocomplete="off" [disabled]="true">
+                <input matInput [value]="category.value" autocomplete="off" disabled>
               </mat-form-field>
             </div>
             <div>
               <mat-form-field style="padding-right: 1rem;">
                 <mat-label>{{ 'preference.userSettings.dialog.param' | translate }}</mat-label>
-                <input matInput [(ngModel)]="data.data.param" [formControl]="param" autocomplete="off" [disabled]="true">
+                <input matInput [value]="param.value" autocomplete="off" disabled>
               </mat-form-field>
               <mat-form-field style="padding-right: 1rem;">
                 <mat-label>{{ 'preference.userSettings.dialog.partition' | translate }}</mat-label>
-                <input matInput [(ngModel)]="data.data.partid" [formControl]="partid" autocomplete="off" [disabled]="true">
+                <input matInput [value]="partid.value" autocomplete="off" disabled>
               </mat-form-field>
             </div>
           </mat-tab>

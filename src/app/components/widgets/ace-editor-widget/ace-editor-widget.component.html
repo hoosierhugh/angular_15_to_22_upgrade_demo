@@ -1,6 +1,10 @@
 <markdown *ngIf="isConfig" class="scrollable" [data]="_config.text"></markdown>
 <div *ngIf="!isConfig">
-    <button mat-raised-button class="setting-btn-ok" (click)="openDialog()">
+    <button
+        mat-raised-button
+        class="setting-btn-ok no-drag"
+        (mousedown)="$event.stopPropagation()"
+        (click)="$event.stopPropagation(); openDialog()">
         <fa-icon icon="cog"></fa-icon> {{'LINK.buttons.widgetSettings' | translate}}
     </button>
 </div>

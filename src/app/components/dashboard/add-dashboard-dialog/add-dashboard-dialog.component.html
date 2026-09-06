@@ -7,7 +7,7 @@
   <div mat-dialog-content style="display: flex; flex-direction: column">
     <mat-form-field>
       <mat-label>{{ 'dashboard.addDashboardDialog.dashboardName' |translate }}</mat-label>
-      <input matInput (ngModelChange)="validate($event)" [formControl]="nameNewPanel" >
+      <input matInput (input)="validate(nameNewPanel.value)" [formControl]="nameNewPanel" >
 
         <mat-error *ngIf="nameNewPanel?.errors?.['required']">{{'validators.required' | translate }}</mat-error>
         <mat-error *ngIf="nameNewPanel?.errors?.['minlength']">

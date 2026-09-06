@@ -21,16 +21,15 @@
   </mat-form-field>
 </div>
 
-<ace-editor #editor
+<app-codejar-wrapper
   [theme]="data.theme"
   [(text)]="data.text"
   [mode]="'markdown'"
-  [readOnly]="false"
-  [autoUpdateContent]="true"
-  (textChanged)="scriptValidate()"
+  [readOnly]="readOnly"
+  (textChange)="scriptValidate()"
   [durationBeforeCallback]="200"
   style="min-height: 300px; width:100%; overflow: auto;"
-></ace-editor>
+></app-codejar-wrapper>
 
 <div mat-dialog-actions style="float: right; margin-bottom: 0rem;">
   <button mat-raised-button (click)="onNoClick()">{{'LINK.buttons.cancel' | translate}}</button>

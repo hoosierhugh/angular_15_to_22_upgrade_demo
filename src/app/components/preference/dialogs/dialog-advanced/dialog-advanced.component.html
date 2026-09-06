@@ -17,7 +17,7 @@
     </mat-form-field> -->
     <mat-form-field style="padding-right: 1rem;">
       <mat-label>{{ 'preference.advanced.dialog.category' | translate }}</mat-label>
-      <input matInput [(ngModel)]="data.data.category" autocomplete="off" [formControl]="category" [disabled]="!isAdmin">
+      <input matInput autocomplete="off" [formControl]="category">
       <mat-error *ngIf="category?.errors?.['required']">{{'validators.required' | translate }}</mat-error>
       <mat-error *ngIf="category?.errors?.['minlength']">
         {{ category?.errors?.['minlength']?.requiredLength }} {{'validators.minChars' | translate }}
@@ -31,7 +31,7 @@
     </mat-form-field>
     <mat-form-field style="padding-right: 1rem;">
       <mat-label>{{ 'preference.advanced.dialog.param' | translate }}</mat-label>
-      <input matInput [(ngModel)]="data.data.param" autocomplete="off" [formControl]="param" [disabled]="!isAdmin">
+      <input matInput autocomplete="off" [formControl]="param">
       <mat-error *ngIf="param?.errors?.['required']">{{'validators.required' | translate }}</mat-error>
       <mat-error *ngIf="param?.errors?.['minlength']">
         {{ param?.errors?.['minlength']?.requiredLength }} {{'validators.minChars' | translate }}

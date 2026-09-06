@@ -14,7 +14,7 @@
   <div>
     <mat-form-field style="padding-right: 1rem;">
       <mat-label>{{ 'preference.hepsub.settings.hepAlias' | translate }}</mat-label>
-      <input matInput [(ngModel)]="data.data.hep_alias" autocomplete="off" [formControl]="hep_alias" [disabled]="!isAdmin">
+      <input matInput autocomplete="off" [formControl]="hep_alias">
       <mat-error *ngIf="hep_alias?.errors?.['required']">{{'validators.required' | translate }}</mat-error>
       <mat-error *ngIf="hep_alias?.errors?.['minlength']">
         {{ hep_alias?.errors?.['minlength']?.requiredLength }} {{'validators.minChars' | translate }}
@@ -28,7 +28,7 @@
     </mat-form-field>
     <mat-form-field style="padding-right: 1rem;">
       <mat-label>{{ 'preference.hepsub.settings.hepId' | translate }}</mat-label>
-      <input matInput [(ngModel)]="data.data.hepid" autocomplete="off" [formControl]="hepid" [disabled]="!isAdmin">
+      <input matInput autocomplete="off" [formControl]="hepid">
       <mat-error *ngIf="hepid?.errors?.['required']">{{'validators.required' | translate }}</mat-error>
       <mat-error *ngIf="hepid?.errors?.['min']">{{'validators.minNumber' | translate }} 1</mat-error>
       <mat-error *ngIf="hepid?.errors?.['max']">{{'validators.maxNumber' | translate }} 10000</mat-error>
@@ -36,7 +36,7 @@
     </mat-form-field>
     <mat-form-field style="padding-right: 1rem;">
       <mat-label>{{ 'preference.hepsub.settings.profile' | translate }}</mat-label>
-      <input matInput [(ngModel)]="data.data.profile" autocomplete="off" [formControl]="profile" [disabled]="!isAdmin">
+      <input matInput autocomplete="off" [formControl]="profile">
       <mat-error *ngIf="profile?.errors?.['required']">{{'validators.required' | translate }}</mat-error>
       <mat-error *ngIf="profile?.errors?.['minlength']">
         {{ profile?.errors?.['minlength']?.requiredLength }} {{'validators.minChars' | translate }}

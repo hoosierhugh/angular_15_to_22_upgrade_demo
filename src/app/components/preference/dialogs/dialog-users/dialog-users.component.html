@@ -18,7 +18,6 @@
           <input matInput
             autocomplete="off"
             [formControl]="username"
-            [disabled]="!isAdmin"
             (change)="isNotChanged=false"
             required />
 
@@ -39,8 +38,7 @@
 
         <mat-form-field>
           <mat-label>{{ 'preference.users.dialog.group' | translate }}</mat-label>
-          <mat-select [formControl]="usergroup" [disabled]="!isAdmin"
-        (selectionChange)='usergroup.setValue($event.value)' required>
+          <mat-select [formControl]="usergroup" required>
               <mat-option *ngFor="let item of groupList"  [value]='item'>
                     {{item}}
               </mat-option>
@@ -61,7 +59,6 @@
           <input matInput
             autocomplete="off"
             [formControl]="partid"
-            [disabled]="!isAdmin"
             required />
           <mat-error *ngIf="partid?.errors?.required">{{'validators.required' | translate }}</mat-error>
           <mat-error *ngIf="partid?.errors?.min">{{'validators.minNumber' | translate }} 1</mat-error>

@@ -96,7 +96,6 @@ export class MenuComponent implements OnInit, OnDestroy {
         user: '',
         favorites: [],
     };
-    isRangeClicked = false;
     public get ranges() {
         return this._dtrs.getRangeByLabel(null, true);
     }
@@ -441,18 +440,15 @@ export class MenuComponent implements OnInit, OnDestroy {
         return fav.some((f) => f.id === item.id);
     }
     onRangeClicked(event: any) {
-        this.isRangeClicked = true;
         this.selectedDateTimeRangeTitle = event.label;
     }
     onDatesUpdated(event: any) {
         this.selectedDateTimeRange = [event.startDate, event.endDate];
         this.selectedDateTimeRangeZone = event.timezone;
-        if (this.isRangeClicked) {
-            this.isRangeClicked = false;
-        } else {
-            this.selectedDateTimeRangeTitle = this.selectedDateTimeRange
-                .map((i) => i.format(this.dateFormat)).join(' - ');
-        }
+        const isPreset = Object.prototype.hasOwnProperty.call(this.ranges, event.label);
+        this.selectedDateTimeRangeTitle = isPreset
+            ? event.label
+            : this.selectedDateTimeRange.map((i) => i.format(this.dateFormat)).join(' - ');
         this._dtrs.updateDataRange({
             title: this.selectedDateTimeRangeTitle,
             timezone: this.selectedDateTimeRangeZone,

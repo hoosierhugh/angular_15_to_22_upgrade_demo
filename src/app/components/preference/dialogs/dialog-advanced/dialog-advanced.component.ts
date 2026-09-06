@@ -72,6 +72,11 @@ export class DialogAdvancedComponent {
             this.param.setValue(d.param);
             this.partid.setValue(d.partid);
         })(data.data);
+        if (!this.isAdmin) {
+            this.category.disable({ emitEvent: false });
+            this.param.disable({ emitEvent: false });
+            this.partid.disable({ emitEvent: false });
+        }
         this.isValidForm = true;
     }
 
