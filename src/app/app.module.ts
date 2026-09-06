@@ -23,7 +23,7 @@ import { TabCallinfoModule } from './components/search-grid-call/detail-dialog/t
 import { TabEventsModule } from './components/search-grid-call/detail-dialog/tab-events/tab-events.module';
 // import { VirtualScrollerModule } from 'ngx-virtual-scroller';
 /* @angular */
-import { HttpClientModule, HTTP_INTERCEPTORS, HttpClientJsonpModule, HttpClient } from '@angular/common/http';
+import { HTTP_INTERCEPTORS, HttpClient, provideHttpClient, withInterceptorsFromDi, withJsonpSupport } from '@angular/common/http';
 import { NgModule, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { BrowserModule } from '@angular/platform-browser';
@@ -203,8 +203,7 @@ export function HttpLoaderFactory(http: HttpClient) {
     return new TranslateHttpLoader(http, 'assets/i18n/', '.json');
 }
 
-@NgModule({
-    declarations: [
+@NgModule({ declarations: [
         AppComponent,
         MenuComponent,
         FilterPipe,
@@ -218,7 +217,6 @@ export function HttpLoaderFactory(http: HttpClient) {
         LoginComponent,
         PreferenceComponent,
         SearchGridCallComponent,
-
         /** dashboard */
         AddDashboardDialogComponent,
         AddDialogComponent,
@@ -226,7 +224,6 @@ export function HttpLoaderFactory(http: HttpClient) {
         EditDialogComponent,
         ShareQrDialogComponent,
         UrlWarningDialog,
-
         /** searchGridCall */
         DialogSettingsGridDialog,
         ExportDialogComponent,
@@ -244,7 +241,6 @@ export function HttpLoaderFactory(http: HttpClient) {
         GenericCellRenderer,
         TabExportComponent,
         StatusFilterComponent,
-
         /** widgets */
         AceEditorWidgetComponent,
         ClockWidgetComponent,
@@ -276,7 +272,6 @@ export function HttpLoaderFactory(http: HttpClient) {
         SettingResultWidgetComponent,
         SettingsAceEditorWidgetComponent,
         SettingSmartInputWidgetComponent,
-
         /** dialogs */
         DialogAdvancedComponent,
         DialogAgentsubComponent,
@@ -295,8 +290,6 @@ export function HttpLoaderFactory(http: HttpClient) {
         DialogImportComponent,
         FullScreenComponent,
         SettingAlertWidgetComponent,
-
-
         /**Cell types */
         GenericCellComponent,
         ToolCellComponent,
@@ -325,15 +318,12 @@ export function HttpLoaderFactory(http: HttpClient) {
         AlertWidgetComponent,
         PageProfileComponent
     ],
-
-    imports: [
-        CommonModule,
+    schemas: [CUSTOM_ELEMENTS_SCHEMA],
+    bootstrap: [AppComponent], imports: [CommonModule,
         BrowserModule,
         BrowserAnimationsModule,
         FormsModule,
-        HttpClientModule,
         ReactiveFormsModule,
-        HttpClientJsonpModule,
         GridsterModule,
         NgChartsModule,
         DynamicModule,
@@ -392,20 +382,16 @@ export function HttpLoaderFactory(http: HttpClient) {
             }
         }),
         // ColorChromeModule
-        NgxCodejarModule
-    ],
-    schemas: [CUSTOM_ELEMENTS_SCHEMA],
-    providers: [
+        NgxCodejarModule], providers: [
         ...MOCK_PROVIDERS,
         { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true },
         { provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true },
         // { provide: ACE_CONFIG, useValue: DEFAULT_ACE_CONFIG },
         { provide: PreferencesContentMapping, useClass: PreferencesContentMapping },
         { provide: APP_BASE_HREF, useValue: window['base-href'] },
-        TransactionFilterService
-    ],
-    bootstrap: [AppComponent]
-})
+        TransactionFilterService,
+        provideHttpClient(withInterceptorsFromDi(), withJsonpSupport())
+    ] })
 
 export class AppModule {
     constructor(library: FaIconLibrary) {
