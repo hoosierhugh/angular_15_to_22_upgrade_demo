@@ -1,7 +1,8 @@
 # Upgrading Angular from 15 to 22 demo
 
-## Local demo (no backend or login)
+## Local demo (no backend or login needed)
 
+This branch can run on Node.js 22.22.3
 After installing dependencies with `npm install`, run:
 
 ```sh
