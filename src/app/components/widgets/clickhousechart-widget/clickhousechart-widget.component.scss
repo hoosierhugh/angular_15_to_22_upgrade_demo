@@ -15,8 +15,8 @@
 // TODO(v17): Please move these @include statements to the preferred place in your Sass, and pass
 // your theme to them. This will ensure the correct values for your app are included.
 @import '../../../../theme.scss';
-$primary: mat.define-palette($homerprimary);
-$accent:  mat.define-palette($homeraccent);
+$primary: mat.m2-define-palette($homerprimary);
+$accent:  mat.m2-define-palette($homeraccent);
 .chart-container {
     height: 100%;
     .fold {

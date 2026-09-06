@@ -114,9 +114,8 @@ export class PageProfileComponent implements OnInit {
     userData.user.isExternal &&
     userData.user.isExternal === true;
 
-    if (this.isAdmin) {
-      this.username.enable({ emitEvent: false });
-    } else {
+    this.username.disable({ emitEvent: false });
+    if (!this.isAdmin) {
       this.usergroup.disable({ emitEvent: false });
     }
   }

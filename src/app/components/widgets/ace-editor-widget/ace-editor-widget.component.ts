@@ -88,5 +88,12 @@ export class AceEditorWidgetComponent implements IWidget {
         }
         this.cdr.detectChanges();
     }
+
+    openPlaceholderSettings(event: PointerEvent): void {
+        event.preventDefault();
+        event.stopPropagation();
+        void this.openDialog();
+    }
+
     ngOnDestroy() { }
 }

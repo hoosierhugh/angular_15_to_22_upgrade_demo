@@ -130,12 +130,12 @@ button:focus {
 }
 
 // using deeppurple-amber color combo: https://github.com/angular/material2/blob/master/src/lib/core/theming/prebuilt/deeppurple-amber.scss
-$primary: mat.define-palette($homerprimary);
-$accent: mat.define-palette($homeraccent);
-$checkboxprimary: mat.define-palette($checkbox-color);
+$primary: mat.m2-define-palette($homerprimary);
+$accent: mat.m2-define-palette($homeraccent);
+$checkboxprimary: mat.m2-define-palette($checkbox-color);
 
 // $theme: mat.define-light-theme($primary, $accent, $checkboxprimary);
-$theme: mat.define-light-theme(
+$theme: mat.m2-define-light-theme(
     (
         color: (
             primary: $primary,
@@ -219,13 +219,13 @@ span.mat-option-text {
 
 @import "~ag-grid-community/styles/ag-grid.css";
 
-$ag-mat-primary: mat.get-color-from-palette($homerprimary);
-$ag-mat-accent: mat.get-color-from-palette($homeraccent);
+$ag-mat-primary: mat.m2-get-color-from-palette($homerprimary);
+$ag-mat-accent: mat.m2-get-color-from-palette($homeraccent);
 
 // @import "~ag-grid-community/dist/styles/ag-theme-balham.css";
 @import "~ag-grid-community/styles/ag-theme-material.css";
 
-$flow-checkbox-color: mat.get-color-from-palette($checkbox-color);
+$flow-checkbox-color: mat.m2-get-color-from-palette($checkbox-color);
 
 .material-icons.md-18 {
     font-size: 18px;
