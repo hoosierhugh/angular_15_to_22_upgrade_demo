@@ -50,7 +50,7 @@ export class NgSelectErrorStateMatcher {
     ],
 })
 export class NgSelectFormFieldControlDirective
-    implements MatFormFieldControl<any>, OnDestroy, DoCheck {
+    implements MatFormFieldControl<unknown>, OnDestroy, DoCheck {
     get empty(): boolean {
 
         return (
@@ -58,7 +58,9 @@ export class NgSelectFormFieldControlDirective
             this._value === null ||
             this._value instanceof Array ||
             typeof this._value === 'object' ||
-            (this.host.multiple && this._value.length === 0)
+            (this.host.multiple &&
+                typeof this._value === 'string' &&
+                this._value.length === 0)
         );
     }
     get focused(): boolean {
@@ -104,10 +106,10 @@ export class NgSelectFormFieldControlDirective
     }
 
     @Input()
-    get value(): any {
+    get value(): unknown {
         return this._value;
     }
-    set value(v: any) {
+    set value(v: unknown) {
         this._value = v;
 
         this.stateChanges.next();
@@ -184,7 +186,7 @@ export class NgSelectFormFieldControlDirective
     private _placeholder: string;
     private _required = false;
     private _disabled = false;
-    private _value: any;
+    private _value: unknown;
 
     ngOnInit() {}
     ngOnDestroy() {
@@ -224,4 +226,3 @@ export class NgSelectFormFieldControlDirective
             this.host.open();
         }
     }
-

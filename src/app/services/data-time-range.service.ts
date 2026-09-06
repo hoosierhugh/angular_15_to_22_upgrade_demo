@@ -2,17 +2,26 @@ import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 import { SessionStorageService, UserSettings } from './session-storage.service';
 import moment from 'moment-timezone';
-// const moment: any = _moment;
+
+export type DateRange = Array<moment.Moment | string>;
+
+export interface DateTimeRangeState {
+    title: string;
+    timezone: string;
+    dates: DateRange;
+}
+
+export interface DateTimeRangeUpdate {
+    title: string;
+    timezone?: string;
+    dates: DateRange;
+}
 
 
 export interface DateTimeTick {
     _id?: number;
     isImportant?: boolean;
-    range: {
-        title: string;
-        timezone: string;
-        dates: any;
-    };
+    range: DateTimeRangeState;
 }
 
 export interface Timestamp {
@@ -23,7 +32,7 @@ export interface Timestamp {
     providedIn: 'root'
 })
 export class DateTimeRangeService {
-    public static dateTimeRangr: any = {
+    public static dateTimeRangr: DateTimeRangeState = {
         title: '',
         timezone: '',
         dates: []
@@ -40,7 +49,7 @@ export class DateTimeRangeService {
 
     delayRefresher = 0;
 
-    _interval: any;
+    _interval: ReturnType<typeof setInterval> | undefined;
 
     constructor(
         private _sss: SessionStorageService
@@ -85,15 +94,9 @@ export class DateTimeRangeService {
     }
     getDatesForQuery(isUnixFormat = false): Timestamp {
         const _dates = (this.getRangeByLabel(DateTimeRangeService.dateTimeRangr.title) ||
-            DateTimeRangeService.dateTimeRangr.dates).map(d => {
-                if (typeof d === 'string') {
-                  d = moment(d)
-                }
-                d = d.unix() * 1;
-                if (isUnixFormat) {
-                    d *= 1000;
-                }
-                return d;
+            DateTimeRangeService.dateTimeRangr.dates).map(date => {
+                const unixTime = moment(date).unix();
+                return isUnixFormat ? unixTime * 1000 : unixTime;
             });
 
         return {
@@ -106,11 +109,13 @@ export class DateTimeRangeService {
         return (DateTimeRangeService.dateTimeRangr.timezone || moment.tz.guess());
     }
 
-    getRangeByLabel(label: string, isAll = false) {
+    getRangeByLabel(label: string, isAll: true): Record<string, DateRange>;
+    getRangeByLabel(label: string, isAll?: false): DateRange | undefined;
+    getRangeByLabel(label: string, isAll = false): DateRange | Record<string, DateRange> | undefined {
         if (!label || label === '') {
             label = 'Today';
         }
-        const arr = {
+        const arr: Record<string, DateRange> = {
             'Last 5 minutes': [moment().subtract(5, 'minutes'), moment()],
             'Last 15 minutes': [moment().subtract(15, 'minutes'), moment()],
             'Last 30 minutes': [moment().subtract(30, 'minutes'), moment()],
@@ -136,9 +141,10 @@ export class DateTimeRangeService {
      * ReNew DataRange
      * @param dtr object = {lable, datas[date1, date2]}
      */
-    updateDataRange(dtr: any) {
+    updateDataRange(dtr: DateTimeRangeUpdate) {
         DateTimeRangeService.dateTimeRangr.title = dtr.title;
-        DateTimeRangeService.dateTimeRangr.timezone = dtr.timezone;
+        DateTimeRangeService.dateTimeRangr.timezone =
+            dtr.timezone || DateTimeRangeService.dateTimeRangr.timezone;
 
         DateTimeRangeService.dateTimeRangr.dates = this.getRangeByLabel(dtr.title) || dtr.dates;
         this._sss.saveDateTimeRange({

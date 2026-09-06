@@ -14,7 +14,7 @@ export class DialogExportComponent {
 
 
     constructor(
-        @Inject(MAT_DIALOG_DATA) public data: any){
+        @Inject(MAT_DIALOG_DATA) public data: { pageId: string }){
             this.pageId = data.pageId;
     }
 }

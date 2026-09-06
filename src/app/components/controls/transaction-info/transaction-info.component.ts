@@ -103,7 +103,7 @@ export class TransactionInfoComponent implements OnInit {
     }
 
     @HostListener('document:click', ['$event.target'])
-    public onClick(targetElement: any) {
+    public onClick(targetElement: Node) {
         if (this.filterContainer && this.filterContainer.nativeElement) {
             const clickedInside = this.filterContainer.nativeElement.contains(targetElement);
             if (!clickedInside && this.isInfoOpened) {

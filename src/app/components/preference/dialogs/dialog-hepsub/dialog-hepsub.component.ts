@@ -4,6 +4,15 @@ import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { AuthenticationService } from '@app/services';
 import { TranslateService } from '@ngx-translate/core';
 import { Observable } from 'rxjs';
+import { CrudDialogData } from '@app/models';
+
+interface HepSubscriptionDialogRecord {
+    hep_alias: string;
+    hepid: number | string;
+    profile: string;
+    mapping: unknown;
+    type?: string;
+}
 
 @Component({
     selector: 'app-dialog-hepsub',
@@ -32,7 +41,7 @@ export class DialogHepsubComponent {
         Validators.minLength(1),
         Validators.pattern(this.regString)
     ]);
-    hepid = new FormControl('', [
+    hepid = new FormControl<string | number>('', [
         Validators.required,
         Validators.minLength(1),
         Validators.maxLength(4),
@@ -45,7 +54,7 @@ export class DialogHepsubComponent {
         public translateService: TranslateService,
         public dialogRef: MatDialogRef<DialogHepsubComponent>,
         public cdr: ChangeDetectorRef,
-        @Inject(MAT_DIALOG_DATA) public data: any) {
+        @Inject(MAT_DIALOG_DATA) public data: CrudDialogData<HepSubscriptionDialogRecord>) {
         
         translateService.addLangs(['en'])
         translateService.setDefaultLang('en')

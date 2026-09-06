@@ -8,7 +8,7 @@ import { MockApi, MOCK_API_BASE } from './mock-api';
 export class MockBackendInterceptor implements HttpInterceptor {
     private readonly api = new MockApi();
 
-    intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
+    intercept(request: HttpRequest<unknown>, next: HttpHandler): Observable<HttpEvent<unknown>> {
         // HttpClient accepts relative URLs. Resolve those using Angular's base href,
         // not the current routed URL (for example, /dashboard/home).
         const url = new URL(request.url, document.baseURI);

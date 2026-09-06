@@ -5,6 +5,7 @@ import { environment } from '@environments/environment';
 import { map } from 'rxjs/operators';
 import { WorkerService } from '../worker.service';
 import { WorkerCommands } from '../../models/worker-commands.module';
+import { ApiResponse } from '@app/models';
 
 @Injectable({
   providedIn: 'root'
@@ -15,9 +16,9 @@ export class CallReportService {
     constructor(private http: HttpClient) { }
 
     // Return call report qos
-    postQOS(postData: any): Observable<any> {
-        return this.http.post<any>(`${this.url}/qos`, postData).pipe(map(
-            async qosData => qosData && qosData.data ? await WorkerService.doOnce(WorkerCommands.TRANSACTION_SERVICE_QOS, qosData) : qosData
+    postQOS(postData: unknown): Observable<unknown> {
+        return this.http.post<ApiResponse<unknown>>(`${this.url}/qos`, postData).pipe(map(
+            async qosData => qosData?.data ? await WorkerService.doOnce(WorkerCommands.TRANSACTION_SERVICE_QOS, qosData) : qosData
         ));
     }
 }

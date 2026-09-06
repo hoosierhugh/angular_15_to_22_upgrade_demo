@@ -1,8 +1,8 @@
 export interface AlertMessage {
     isTranslation?: boolean;
     message: string;
-    fullObject?: string | Object;
-    translationParams?: Object;
+    fullObject?: unknown;
+    translationParams?: Record<string, unknown>;
 }
 export interface AlertSubject {
     type: 'success' | 'error' | 'warning' | 'notice';
@@ -12,11 +12,5 @@ export interface AlertSubject {
 export interface AlertProper extends AlertSubject {
     timeout: ReturnType<typeof setTimeout>;
     isOpen: boolean;
-}
-export interface AlertMessage {
-    isTranslation?: boolean;
-    message: string;
-    fullObject?: string | Object;
-    translationParams?: Object;
 }
 export const MessageTimer = 5000; // 5 seconds

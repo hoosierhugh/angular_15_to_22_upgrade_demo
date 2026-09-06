@@ -11,11 +11,10 @@ export class UrlWarningDialog {
 
     constructor(
         public dialogRef: MatDialogRef<UrlWarningDialog>,
-        @Inject(MAT_DIALOG_DATA) public data: any) {}
+        @Inject(MAT_DIALOG_DATA) public data: unknown) {}
 
     onNoClick(): void {
         this.dialogRef.close();
     }
 }
-
 

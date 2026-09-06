@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { environment } from '@environments/environment';
-import { ConstValue, PreferenceMapping, UserConstValue } from '@app/models';
+import { ApiResponse, ConstValue, FormDefault, PreferenceMapping, UserConstValue } from '@app/models';
 import { Functions, getStorage } from '@app/helpers/functions';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
@@ -14,7 +14,7 @@ export class PreferenceMappingProtocolService {
     static actualMapping: PreferenceMapping[];
     static margedMapping: PreferenceMapping[];
     static httpObserver: Observable<PreferenceMapping[]>;
-    static protocol_id;
+    static protocol_id: string | string[] | null;
     private pmps = PreferenceMappingProtocolService;
     private url = `${environment.apiUrl}/mapping/protocol`;
 
@@ -30,8 +30,8 @@ export class PreferenceMappingProtocolService {
         this.pmps.httpObserver = this.pmps.httpObserver || new Observable<PreferenceMapping[]>(observer => {
             if (!this.actualMapping) {
                 this.actualMapping = [];
-                this.http.get<PreferenceMapping[]>(this.url).toPromise().then(
-                    ({ data }: any) => {
+                this.http.get<ApiResponse<PreferenceMapping[]>>(this.url).toPromise().then(
+                    ({ data }) => {
                         if (data) {
                             this.actualMapping = data;
                             observer.next(data);
@@ -69,22 +69,24 @@ export class PreferenceMappingProtocolService {
         return this.pmps.httpObserver.pipe(map(data => this.margedCustomAndBaseMapping()));
     }
 
-    getCurrentMapping(custom_protocol_id?): Array<any> {
+    getCurrentMapping(customProtocolId?: string | string[]): FormDefault[] {
         if (!this.pmps.protocol_id) {
             const { protocol_id } =
-                getStorage(UserConstValue.SEARCH_QUERY) ||
-                getStorage(ConstValue.SEARCH_QUERY) || {};
+                getStorage<{ protocol_id?: string | string[] }>(UserConstValue.SEARCH_QUERY) ||
+                getStorage<{ protocol_id?: string | string[] }>(ConstValue.SEARCH_QUERY) || {};
             this.pmps.protocol_id = protocol_id || [];
             setTimeout(() => {
                 this.pmps.protocol_id = null;
             }, 1000);
         }
-        const _protocol_id = custom_protocol_id || this.pmps.protocol_id;
-        const { fields_mapping }: any = this.margedCustomAndBaseMapping()?.find(
-            ({ hepid, profile }) => `${hepid}_${profile}` === _protocol_id
+        const protocolId = customProtocolId || this.pmps.protocol_id;
+        const { fields_mapping } = this.margedCustomAndBaseMapping()?.find(
+            ({ hepid, profile }) => `${hepid}_${profile}` === protocolId
         ) || { fields_mapping: [] };
-        const mappingStatusItem: any = fields_mapping?.find(f => f.id === 'status') || { form_default: [] };
-        return mappingStatusItem?.form_default;
+        const mappingStatusItem = fields_mapping?.find(field => field.id === 'status');
+        return Array.isArray(mappingStatusItem?.form_default)
+            ? mappingStatusItem.form_default
+            : [];
     }
     private margedCustomAndBaseMapping() {
         if (!this.actualMapping) {
@@ -104,31 +106,31 @@ export class PreferenceMappingProtocolService {
     /**
      * Key: 'TableMappingSchema.Version' Error:Field validation for 'Version' failed on the 'required' tag"
      */
-    add(pmp: PreferenceMapping): Observable<any> {
+    add(pmp: PreferenceMapping): Observable<unknown> {
         pmp.guid = Functions.newGuid();
         pmp.version = 1;
         this.actualMapping = null; // for update actual data
         return this.http.post(`${this.url}`, pmp);
     }
 
-    update(pmp: PreferenceMapping): Observable<any> {
+    update(pmp: PreferenceMapping): Observable<unknown> {
         this.actualMapping = null; // for update actual data
         return this.http.put(`${this.url}/${pmp.guid}`, pmp);
     }
 
-    delete(guid): Observable<any> {
+    delete(guid: string): Observable<unknown> {
         this.actualMapping = null; // for update actual data
         return this.http.delete(`${this.url}/${guid}`);
     }
 
-    reset(uuid): Observable<any> {
+    reset(uuid: string): Observable<unknown> {
         this.actualMapping = null; // for update actual data
         return this.http.get(`${this.url}/reset/${uuid}`);
     }
 
-    getListByUrl(urlList: string): Observable<any> {
+    getListByUrl<T = unknown>(urlList: string): Observable<T> {
         // this.actualMapping = null; // for update actual data
-        return this.http.get<any>(`${environment.apiUrl}${urlList}`);
+        return this.http.get<T>(`${environment.apiUrl}${urlList}`);
     }
     resetMapping() {
         this.actualMapping = null; // for update actual datas

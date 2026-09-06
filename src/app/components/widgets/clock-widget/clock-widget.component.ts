@@ -12,7 +12,7 @@ enum ConstTime {
     TIME_PATTERN = 'HH:mm:ss'
 }
 export interface TimeZone {
-    offset: string;
+    offset: string | number;
     name: string;
     desc: string;
 }

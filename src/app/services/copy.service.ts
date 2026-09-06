@@ -7,14 +7,19 @@ import { AlertMessage } from '.';
 })
 export class CopyService {
 
-    private subject = new Subject<any>();
+    private subject = new Subject<CopyEvent>();
     constructor() { }
 
-    copy(data: any, notification: AlertMessage) {
+    copy(data: unknown, notification: AlertMessage) {
         this.subject.next({data:data, notification: notification});
     }
 
-    getData(): Observable<any> {
+    getData(): Observable<CopyEvent> {
         return this.subject.asObservable();
     }
+}
+
+export interface CopyEvent {
+    data: unknown;
+    notification: AlertMessage;
 }

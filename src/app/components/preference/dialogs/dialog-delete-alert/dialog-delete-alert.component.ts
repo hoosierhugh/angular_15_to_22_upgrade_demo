@@ -3,6 +3,14 @@ import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { AlertService } from '@app/services';
 import { TranslateService } from '@ngx-translate/core'
 
+interface DeleteAlertDialogData {
+    data: {
+        message: string;
+        page: string;
+        isToken?: boolean;
+    };
+}
+
 @Component({
     selector: 'app-dialog-delete-alert',
     templateUrl: './dialog-delete-alert.component.html',
@@ -10,14 +18,14 @@ import { TranslateService } from '@ngx-translate/core'
     changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class DialogDeleteAlertComponent {
-    message: any;
-    page: any;
+    message: string;
+    page: string;
     isToken: boolean;
     constructor(
         public dialogRef: MatDialogRef<DialogDeleteAlertComponent>,
         public translateService: TranslateService,
         public alertService: AlertService,
-        @Inject(MAT_DIALOG_DATA) public data: any) {
+        @Inject(MAT_DIALOG_DATA) public data: DeleteAlertDialogData) {
         translateService.addLangs(['en'])
         translateService.setDefaultLang('en')
         this.message = data.data.message;
@@ -32,5 +40,4 @@ export class DialogDeleteAlertComponent {
         this.dialogRef.close();
     }
 }
-
 

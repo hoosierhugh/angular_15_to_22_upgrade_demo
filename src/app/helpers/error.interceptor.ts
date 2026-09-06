@@ -19,7 +19,7 @@ export class ErrorInterceptor implements HttpInterceptor {
         private translateService: TranslateService
     ) { }
         errMessages = []
-    intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
+    intercept(request: HttpRequest<unknown>, next: HttpHandler): Observable<HttpEvent<unknown>> {
         return next.handle(request).pipe(catchError(err => {
             if(err instanceof HttpErrorResponse){
                 if(err.status === 404 && err.message.match(/api/)) {

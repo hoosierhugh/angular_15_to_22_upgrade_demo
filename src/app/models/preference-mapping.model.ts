@@ -1,3 +1,5 @@
+import { PreferenceMappingFieldModel } from './preference-mapping-field.model';
+
 export interface PreferenceMapping {
     guid: string;
     profile: string;
@@ -9,11 +11,15 @@ export interface PreferenceMapping {
     table_name: string;
     apply_ttl_all: boolean;
     partition_step: number;
-    create_index: any;
+    create_index: unknown;
     create_table: string;
-    correlation_mapping: any;
-    fields_mapping: any;
-    fields_settings: any;
-    schema_mapping: any;
-    schema_settings: any;
+    correlation_mapping: Array<{
+        uuid_field?: { profile?: string };
+        [key: string]: unknown;
+    }>;
+    fields_mapping: PreferenceMappingFieldModel[];
+    user_mapping?: PreferenceMappingFieldModel[];
+    fields_settings: unknown;
+    schema_mapping: unknown;
+    schema_settings: unknown;
 }

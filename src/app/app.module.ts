@@ -44,6 +44,7 @@ import { HtmlPipe } from '@app/pipes/html.pipe';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HomerMaterialModule } from '@app/app.material-module';
 import { FontAwesomeModule, FaIconLibrary } from '@fortawesome/angular-fontawesome';
+import type { IconPack } from '@fortawesome/fontawesome-svg-core';
 import { fas } from '@fortawesome/free-solid-svg-icons';
 import { fab } from '@fortawesome/free-brands-svg-icons';
 import { far } from '@fortawesome/free-regular-svg-icons';
@@ -395,6 +396,6 @@ export function HttpLoaderFactory(http: HttpClient) {
 
 export class AppModule {
     constructor(library: FaIconLibrary) {
-        library.addIconPacks(fas as any, fab as any, far as any);
+        library.addIconPacks(fas as IconPack, fab as IconPack, far as IconPack);
     }
 }

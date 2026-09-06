@@ -1,7 +1,7 @@
 
-interface FormDefault {
+export interface FormDefault {
     name:string
-    value:any;
+    value: unknown;
     color?:string
 }
 //fields with default options
@@ -24,6 +24,9 @@ export interface PreferenceMappingFieldModel {
     virtual?:boolean;
     parent?:string;
     _form_default?:Array<FormDefault>;
+    form_default?: Array<FormDefault> | string;
+    selected?: boolean;
+    disabled?: boolean;
     form_api?:string;
     system_param?:string;
     mapping?:string;

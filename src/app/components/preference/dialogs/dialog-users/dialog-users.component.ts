@@ -8,6 +8,7 @@ import { emailValidator } from '@app/helpers/email-validator.directive';
 import { TranslateService } from '@ngx-translate/core'
 import moment from 'moment';
 import { lastValueFrom } from 'rxjs';
+import { ApiResponse, CrudDialogData, PreferenceUsers } from '@app/models';
 @Component({
   selector: 'app-dialog-users',
   templateUrl: './dialog-users.component.html',
@@ -26,7 +27,7 @@ export class DialogUsersComponent implements OnInit {
   isCopy = false;
   isNotChanged = true;
   bufferName: string;
-  timeout: any;
+  timeout: ReturnType<typeof setTimeout> | undefined;
   lastPasswordChange: string;
   lastLogin: string;
   isDisabled: boolean = true;
@@ -52,7 +53,7 @@ export class DialogUsersComponent implements OnInit {
       Validators.pattern(this.regString)
   ]); */
   usergroup = new FormControl('');
-  partid = new FormControl(
+  partid = new FormControl<string | number>(
     { value: '', disabled: true }, [
     Validators.required,
     Validators.minLength(1),
@@ -96,7 +97,6 @@ export class DialogUsersComponent implements OnInit {
   ]);
 
   groupList: Array<string>;
-  bufferGroupList: any;
   dateFormat: string;
   hasStatistics = false;
   constructor(
@@ -107,7 +107,7 @@ export class DialogUsersComponent implements OnInit {
     public translateService: TranslateService,
     private _pas: PreferenceAdvancedService,
     private cdr: ChangeDetectorRef,
-    @Inject(MAT_DIALOG_DATA) public data: any) {
+    @Inject(MAT_DIALOG_DATA) public data: CrudDialogData<PreferenceUsers>) {
     translateService.addLangs(['en'])
     translateService.setDefaultLang('en')
     if (data.isnew) {
@@ -163,7 +163,7 @@ export class DialogUsersComponent implements OnInit {
   async ngOnInit() {
     await lastValueFrom(this.userService
       .getAllGroups())
-      .then((groups: any) => {
+      .then((groups: ApiResponse<string[]>) => {
         this.groupList = groups.data;
       });
     await this.getFormat();
@@ -184,7 +184,7 @@ export class DialogUsersComponent implements OnInit {
     if (!this.username?.invalid &&
       !this.usergroup?.invalid &&
       !this.partid?.invalid &&
-      (this.data?.isNew || this.isCopy ? !this.password?.invalid : true) &&
+      (this.data?.isnew || this.isCopy ? !this.password?.invalid : true) &&
       !this.firstname?.invalid &&
       !this.email?.invalid &&
       !this.lastname?.invalid &&
@@ -193,7 +193,7 @@ export class DialogUsersComponent implements OnInit {
       (d => {
         d.username = this.username?.value;
         d.usergroup = this.usergroup?.value;
-        d.partid = this.partid?.value;
+        d.partid = Number(this.partid?.value);
         d.password = this.password?.value;
         d.firstname = this.firstname?.value;
         d.email = this.email?.value;
@@ -243,7 +243,7 @@ export class DialogUsersComponent implements OnInit {
       this.firstname?.invalid ||
       this.email?.invalid ||
       this.lastname?.invalid ||
-      (this.data?.isNew || this.isCopy || this.password.value !== ''
+      (this.data?.isnew || this.isCopy || this.password.value !== ''
         ? this.password?.invalid
         : false) ||
       this.department?.invalid
@@ -268,15 +268,15 @@ export class DialogUsersComponent implements OnInit {
       }, 500);
     });
   }
-  async isTaken(user) {
-    return this.userService.getAll().toPromise().then((users: any) => {
+  async isTaken(user: string): Promise<boolean> {
+    return this.userService.getAll().toPromise().then((users) => {
       return ([].concat(users?.data?.map?.(m => m?.username) || [])).includes(user) && user !== this.originalUser;
     });
   }
-  disableClose(e) {
-    this.dialogRef.disableClose = e;
+  disableClose(disabled: boolean) {
+    this.dialogRef.disableClose = disabled;
   }
-  import(text) {
+  import(text: string) {
     this.data.data.setting = text;
   }
 }

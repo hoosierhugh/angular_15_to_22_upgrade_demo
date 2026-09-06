@@ -3,6 +3,25 @@ import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { Functions } from '@app/helpers/functions';
 import { PreferenceAdvancedService } from '@app/services';
 import { TranslateService } from '@ngx-translate/core'
+
+interface ProtocolIdentity {
+    name: string;
+    value: number;
+}
+
+interface AlarmSearchConfig {
+    profile: string;
+    protocol_id: ProtocolIdentity;
+}
+
+interface AlarmPreset {
+    active?: boolean;
+    data: { config: AlarmSearchConfig };
+}
+
+interface AlarmDialogData {
+    config: AlarmSearchConfig | AlarmPreset;
+}
 @Component({
     selector: 'app-dialog-alarm',
     templateUrl: './dialog-alarm.component.html',
@@ -10,14 +29,14 @@ import { TranslateService } from '@ngx-translate/core'
     changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class DialogAlarmComponent {
-    presetList: Array<any> = [];
-    selectedPreset: any;
+    presetList: AlarmPreset[] = [];
+    selectedPreset: AlarmPreset;
     isSearch = false;
     constructor(
         private _pas: PreferenceAdvancedService,
         public translateService: TranslateService,
         public dialogRef: MatDialogRef<DialogAlarmComponent>,
-        @Inject(MAT_DIALOG_DATA) public data: any) {
+        @Inject(MAT_DIALOG_DATA) public data: AlarmDialogData) {
         translateService.addLangs(['en'])
         translateService.setDefaultLang('en')
         this.isSearch = data ? true : false;
@@ -28,11 +47,12 @@ export class DialogAlarmComponent {
         if (this.isSearch) {
             const [custom] = advanced.data
                 .filter((f) => f.category === 'custom-widget')
-                .map((d) => (Object.values(d.data)))
+                .map((d) => (Object.values(d.data) as AlarmPreset[]))
                 .map(m => m.filter(f => !!f.active));
             this.presetList = Functions.cloneObject(custom);
-            const profile = this.data.config.profile;
-            const protocol_id = this.data.config.protocol_id;
+            const currentConfig = this.data.config as AlarmSearchConfig;
+            const profile = currentConfig.profile;
+            const protocol_id = currentConfig.protocol_id;
             this.selectedPreset = this.presetList.find(preset => preset.data.config.profile === profile &&
                 preset.data.config.protocol_id.value === protocol_id.value &&
                 preset.data.config.protocol_id.name === protocol_id.name

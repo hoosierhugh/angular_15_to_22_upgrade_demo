@@ -15,6 +15,20 @@ import { BaseChartDirective } from 'ng2-charts';
 import { Subscription } from 'rxjs';
 import { TranslateService } from '@ngx-translate/core';
 import { IWidget } from '../IWidget';
+
+interface ClickhouseParsedDatum {
+    tags: string[];
+    data: Record<string, unknown>;
+    value: unknown;
+    operator: string;
+}
+
+interface ClickhouseChartResult {
+    labels: string[];
+    chartType: ChartType;
+    data: ChartDataset[];
+    noChartData: boolean;
+}
 @Component({
     selector: 'app-clickhousechart-widget',
     templateUrl: './clickhousechart-widget.component.html',
@@ -53,7 +67,7 @@ export class ClickhouseChartWidgetComponent implements IWidget, OnInit, OnDestro
     }];
     requestData: any;
     noChartData = true;
-    multiDataArr: Array<any> = [];
+    multiDataArr: ClickhouseParsedDatum[] = [];
     isConfig = true;
     private subscription: Subscription;
     legendItems: any;
@@ -340,7 +354,7 @@ export class ClickhouseChartWidgetComponent implements IWidget, OnInit, OnDestro
                 async (res: any) => {
 
                     if (res && res.data) {
-                        let s = await WorkerService.doOnce(WorkerCommands.CLICKHOUSE_PARSE_DATA, Functions.cloneObject(
+                        const s = await WorkerService.doOnce<ClickhouseParsedDatum[]>(WorkerCommands.CLICKHOUSE_PARSE_DATA, Functions.cloneObject(
                             {
                                 data: res.data,
                                 chartType: chartType
@@ -363,7 +377,7 @@ export class ClickhouseChartWidgetComponent implements IWidget, OnInit, OnDestro
         this.cdr.detectChanges();
     }
     async renderingChart(data, chartType) {
-        const workerResults = await WorkerService.doOnce(WorkerCommands.CLICKHOUSE_PREPARE_RENDER_DATA, Functions.cloneObject(
+        const workerResults = await WorkerService.doOnce<ClickhouseChartResult>(WorkerCommands.CLICKHOUSE_PREPARE_RENDER_DATA, Functions.cloneObject(
             {
                 data: data,
                 chartType: chartType,

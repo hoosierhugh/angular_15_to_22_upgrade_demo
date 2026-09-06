@@ -25,6 +25,7 @@ import {
 import { AlertService, AuthenticationService } from '@app/services';
 import { PreferencesComponentMapping } from '@app/models/preferences-component-mapping';
 import { Functions } from '@app/helpers/functions';
+import { ComponentType } from '@angular/cdk/portal';
 @Component({
   selector: 'app-page-advanced-settings',
   templateUrl: './page-advanced-settings.component.html',
@@ -42,7 +43,7 @@ export class PageAdvancedSettingsComponent implements OnInit, AfterViewInit, OnD
     @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
     columns = [];
     specialColumns = [];
-    isAccess: any;
+    isAccess: Record<string, boolean>;
     filter = '';
 
     constructor(
@@ -107,7 +108,7 @@ export class PageAdvancedSettingsComponent implements OnInit, AfterViewInit, OnD
     ngOnDestroy() {
 
     }
-    settingDialog(item: any = null, type?: string) {
+    settingDialog(item: PreferenceAdvanced | null = null, type?: string) {
         const isCopy = type === 'copy';
         let _result;
         const onOpenDialog = (result) => {
@@ -130,7 +131,7 @@ export class PageAdvancedSettingsComponent implements OnInit, AfterViewInit, OnD
         } 
         this.openDialog(DialogAdvancedComponent, Functions.cloneObject(item), onOpenDialog, isCopy);
     }
-    async openDialog(dialog, data: any = null, cb: Function = null, isCopy = false) {
+    async openDialog(dialog: ComponentType<unknown>, data: unknown = null, cb: ((result: unknown) => void) | null = null, isCopy = false) {
         const result = await this.dialog
             .open(dialog, {
                 width: '800px',
@@ -146,12 +147,12 @@ export class PageAdvancedSettingsComponent implements OnInit, AfterViewInit, OnD
             this.cdr.detectChanges();
         }
     }
-    deleteDialog(item: any = null) {
+    deleteDialog(item: PreferenceAdvanced | null = null) {
         const data = { page: this.page, message: 'delete'};
         this.openDialog(
             DialogDeleteAlertComponent,
             data,
-            (result) => result && this.service.delete(item.uuid || item.guid)
+            (result) => result && this.service.delete(item.guid)
                 .toPromise()
                 .then(this.updateData.bind(this)));
     }

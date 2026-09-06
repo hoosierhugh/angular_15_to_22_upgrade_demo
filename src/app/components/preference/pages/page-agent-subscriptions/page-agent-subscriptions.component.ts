@@ -25,6 +25,7 @@ import {
 
 import { AlertService, AuthenticationService, TimeFormattingService } from '@app/services';
 import { PreferencesComponentMapping } from '@app/models/preferences-component-mapping';
+import { ComponentType } from '@angular/cdk/portal';
 
 @Component({
   selector: 'app-page-agent-subscriptions',
@@ -42,7 +43,7 @@ export class PageAgentSubscriptionsComponent implements OnInit, AfterViewInit, O
     @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
     columns = [];
     specialColumns = [];
-    isAccess: any;
+    isAccess: Record<string, boolean>;
     filter = '';
     dateFormat: string;
 
@@ -112,7 +113,7 @@ export class PageAgentSubscriptionsComponent implements OnInit, AfterViewInit, O
     ngOnDestroy() {
 
     }
-    settingDialog(item: any = null, type?: string) {
+    settingDialog(item: PreferenceAgentsub | null = null, type?: string) {
         const isCopy = type === 'copy';
         let _result;
         const onOpenDialog = (result) => {
@@ -133,7 +134,7 @@ export class PageAgentSubscriptionsComponent implements OnInit, AfterViewInit, O
 
         this.openDialog(DialogAgentsubComponent, item, onOpenDialog, isCopy);
     }
-    async openDialog(dialog, data: any = null, cb: Function = null, isCopy = false) {
+    async openDialog(dialog: ComponentType<unknown>, data: unknown = null, cb: ((result: unknown) => void) | null = null, isCopy = false) {
         const result = await this.dialog
             .open(dialog, {
                 width: '800px',
@@ -149,12 +150,12 @@ export class PageAgentSubscriptionsComponent implements OnInit, AfterViewInit, O
             this.cdr.detectChanges();
         }
     }
-    deleteDialog(item: any = null) {
+    deleteDialog(item: PreferenceAgentsub | null = null) {
         const data = { page: this.page, message: 'delete'};
         this.openDialog(
             DialogDeleteAlertComponent,
             data,
-            (result) => result && this.service.delete(item.uuid || item.guid)
+            (result) => result && this.service.delete(item.uuid)
                 .toPromise()
                 .then(this.updateData.bind(this)));
     }

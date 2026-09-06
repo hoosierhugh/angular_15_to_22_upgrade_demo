@@ -19,14 +19,14 @@ export class PageAdminComponent {
 
   public async download() {
     const data: HttpResponse<Blob> = await this.adminService.getFile();
-    const { headers, body }: { headers: any, body: Blob } = data;
+    const { headers, body } = data;
     const fName = headers.get('content-disposition') ||
       `logs-${(new Date()).toISOString()}.zip`;
     Functions.saveToFile(<Blob>body, fName);
   }
   public async dumpRequest(streamName: StreamType) {
     try {
-      const { data }: any = await this.adminService.dumpRequest(streamName);
+      const { data } = await this.adminService.dumpRequest(streamName);
       this.alertService.success(data?.message);
     } catch (err) {
       this.alertService.error(err);

@@ -7,6 +7,7 @@ import { AlertService, AuthenticationService, DashboardService, PreferenceMappin
 import { MatDialog } from '@angular/material/dialog';
 import { TranslateService } from '@ngx-translate/core';
 import { HttpGetBuffer } from '@app/helpers/http-get-buffer';
+import { ComponentType } from '@angular/cdk/portal';
 
 @Component({
     selector: 'app-page-reset',
@@ -19,7 +20,10 @@ export class PageResetComponent implements OnInit {
     isResetMapping = true;
     @Input() page: string;
     @Input() pageID: string;
-    localDictionary;
+    localDictionary: {
+        success: Record<string, string>;
+        error: Record<string, string>;
+    };
     constructor(
         private authenticationService: AuthenticationService,
         private alertService: AlertService,
@@ -63,7 +67,12 @@ export class PageResetComponent implements OnInit {
         });
         this.cdr.detectChanges();
     }
-    async openDialog(type: any, data: any = null, cb: Function = null, isCopy = false) {
+    async openDialog(
+        type: ComponentType<unknown>,
+        data: Record<string, unknown> | null = null,
+        cb: ((result: boolean) => void) | null = null,
+        isCopy = false
+    ) {
         const result = await this.dialog
             .open(type, {
                 width: '800px',
@@ -71,25 +80,10 @@ export class PageResetComponent implements OnInit {
             })
             .afterClosed()
             .toPromise();
-        if (cb && result) {
-            if (result?.data) {
-                result.data = this.jsonValidateAndForrmatted(result.data);
-            }
+        if (cb && typeof result === 'boolean') {
             cb(result);
             this.cdr.detectChanges();
         }
-    }
-    private jsonValidateAndForrmatted(data) {
-        Object.keys(data).forEach((item) => {
-            if (typeof data[item] === 'string') {
-                // data[item] = Functions.JSON_parse(data[item]);
-                try {
-                    data[item] = JSON.parse(data[item]);
-                } catch (e) { }
-            }
-        });
-        this.cdr.detectChanges();
-        return data;
     }
     onResetDashboard() {
         const data = { page: 'Dashboard', message: 'reset' };
@@ -115,7 +109,7 @@ export class PageResetComponent implements OnInit {
         const data = { page: 'Mappings', message: 'reset' };
         this.openDialog(DialogDeleteAlertComponent, data, (result) => {
             if (result && result === true) {
-                const resData: any = this._pmps.resetMapping().toPromise();
+                this._pmps.resetMapping().toPromise();
                 this.alertService.success(this.localDictionary.success.mappingsReset);
             } else {
                 this.alertService.error(this.localDictionary.error.mappingsReset);

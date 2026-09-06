@@ -2,6 +2,17 @@ import { Component, Inject, ChangeDetectionStrategy, ViewChild } from '@angular/
 import { AbstractControl, FormControl, Validators } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { TranslateService } from '@ngx-translate/core'
+import { CrudDialogData } from '@app/models';
+
+interface AliasDialogRecord {
+    alias: string;
+    ip: string;
+    port: number | string;
+    mask: number | string;
+    captureID: number | string;
+    status: boolean;
+    actionType?: string;
+}
 
 @Component({
     selector: 'app-dialog-alias',
@@ -27,7 +38,7 @@ export class DialogAliasComponent {
         Validators.pattern(this.regAliasString)],
     );
 
-    mask = new FormControl('', [
+    mask = new FormControl<string | number>('', [
         Validators.required,
         Validators.minLength(1),
         Validators.maxLength(100),
@@ -36,7 +47,7 @@ export class DialogAliasComponent {
         Validators.pattern(this.regNum)
     ]);
 
-    port = new FormControl('', [
+    port = new FormControl<string | number>('', [
         Validators.required,
         Validators.minLength(1),
         Validators.maxLength(100),
@@ -53,7 +64,7 @@ export class DialogAliasComponent {
         this.cannotContainSpace
     ]);
 
-    captureID = new FormControl('',[
+    captureID = new FormControl<string | number>('',[
         Validators.required,
         Validators.minLength(1),
         Validators.maxLength(100)
@@ -62,7 +73,7 @@ export class DialogAliasComponent {
     constructor(
         public dialogRef: MatDialogRef<DialogAliasComponent>,
         public translateService: TranslateService,
-        @Inject(MAT_DIALOG_DATA) public data: any) {
+        @Inject(MAT_DIALOG_DATA) public data: CrudDialogData<AliasDialogRecord>) {
         translateService.addLangs(['en'])
         translateService.setDefaultLang('en')
         if (data.isnew) {

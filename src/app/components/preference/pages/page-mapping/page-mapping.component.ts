@@ -26,6 +26,7 @@ import {
 import { AlertService, AuthenticationService } from '@app/services';
 import { PreferencesComponentMapping } from '@app/models/preferences-component-mapping';
 import { Functions } from '@app/helpers/functions';
+import { ComponentType } from '@angular/cdk/portal';
 
 @Component({
   selector: 'app-page-mapping',
@@ -43,7 +44,7 @@ export class PageMappingComponent implements OnInit, AfterViewInit, OnDestroy {
     @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
     columns = [];
     specialColumns = [];
-    isAccess: any;
+    isAccess: Record<string, boolean>;
     filter = '';
 
     constructor(
@@ -110,7 +111,7 @@ export class PageMappingComponent implements OnInit, AfterViewInit, OnDestroy {
     ngOnDestroy() {
 
     }
-    settingDialog(item: any = null, type?: string) {
+    settingDialog(item: PreferenceMapping | null = null, type?: string) {
         const isCopy = type === 'copy';
         let _result;
         const onOpenDialog = (result) => {
@@ -132,17 +133,17 @@ export class PageMappingComponent implements OnInit, AfterViewInit, OnDestroy {
 
         this.openDialog(DialogMappingComponent, Functions.cloneObject(item), onOpenDialog, isCopy);
     }
-    resetDialog(item: any) {
+    resetDialog(item: PreferenceMapping) {
 
         const data = { page: this.page, message: 'reset' };
         this.openDialog(
             DialogDeleteAlertComponent,
             data,
-            (result) => result && this.service.reset(item.uuid || item.guid).toPromise()
+            (result) => result && this.service.reset(item.guid).toPromise()
                 .then(this.updateData.bind(this)));
     }
 
-    async openDialog(dialog, data: any = null, cb: Function = null, isCopy = false) {
+    async openDialog(dialog: ComponentType<unknown>, data: unknown = null, cb: ((result: unknown) => void) | null = null, isCopy = false) {
         const result = await this.dialog
             .open(dialog, {
                 width: '800px',
@@ -158,12 +159,12 @@ export class PageMappingComponent implements OnInit, AfterViewInit, OnDestroy {
             this.cdr.detectChanges();
         }
     }
-    deleteDialog(item: any = null) {
+    deleteDialog(item: PreferenceMapping | null = null) {
         const data = { page: this.page, message: 'delete'};
         this.openDialog(
             DialogDeleteAlertComponent,
             data,
-            (result) => result && this.service.delete(item.uuid || item.guid)
+            (result) => result && item && this.service.delete(item.guid)
                 .toPromise()
                 .then(this.updateData.bind(this)));
     }

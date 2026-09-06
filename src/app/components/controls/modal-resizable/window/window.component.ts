@@ -13,6 +13,11 @@ import {
   SimpleChanges
 } from '@angular/core';
 
+type ChildWindow = Window & { objectData?: unknown };
+type WindowWithCollection = Window & {
+  windowCollection?: Record<string, ChildWindow>;
+};
+
 @Component({
   selector: 'app-window',
   templateUrl: './window.component.html',
@@ -26,7 +31,7 @@ export class WindowComponent implements OnInit, OnDestroy {
   @Input() minWidth = 300;
   @Input() minHeight = 300;
   @Input() sharedUrl: string;
-  @Input() objectData: any;
+  @Input() objectData: unknown;
   winId: string;
   _isWindow = false;
   watcherInterval;
@@ -42,9 +47,9 @@ export class WindowComponent implements OnInit, OnDestroy {
     }
   }
 
-  @Output() close: EventEmitter<any> = new EventEmitter();
+  @Output() close = new EventEmitter<void>();
 
-  private externalWindow = null;
+  private externalWindow: ChildWindow | null = null;
 
   constructor(
     private windowService: WindowService,
@@ -88,24 +93,25 @@ export class WindowComponent implements OnInit, OnDestroy {
         setTimeout(() => {
 
           this._isWindow = false;
-          this.close.emit({});
+          this.close.emit();
           this.cdr.detectChanges();
 
         })
       };
     } catch (e) {
       this._isWindow = false;
-      this.close.emit({});
+      this.close.emit();
       this.cdr.detectChanges();
     }
 
     if (this.sharedUrl) {
       // (this.objectData)
-      this.externalWindow['objectData'] = this.objectData;
-      if (!window['windowCollection']) {
-        window['windowCollection'] = {};
+      this.externalWindow.objectData = this.objectData;
+      const parentWindow = window as WindowWithCollection;
+      if (!parentWindow.windowCollection) {
+        parentWindow.windowCollection = {};
       }
-      window['windowCollection'][this.winId] = this.externalWindow;
+      parentWindow.windowCollection[this.winId] = this.externalWindow;
       this.externalWindow.onload = e => {
         this.externalWindow.onbeforeunload = evt => {
           evt.preventDefault();
@@ -113,7 +119,7 @@ export class WindowComponent implements OnInit, OnDestroy {
           setTimeout(() => {
 
             this._isWindow = false;
-            this.close.emit({});
+            this.close.emit();
             this.cdr.detectChanges();
 
           })
@@ -191,7 +197,7 @@ export class WindowComponent implements OnInit, OnDestroy {
   ngOnDestroy() {
     if (this.externalWindow) {
       this.externalWindow.close();
-      this.close.emit({});
+      this.close.emit();
       this.cdr.detectChanges();
     }
     if (this.watcherInterval) {

@@ -1,8 +1,7 @@
 import { WindowService } from '@app/components/controls/modal-resizable/window/window.service';
 import { Component, OnInit, OnDestroy, ChangeDetectionStrategy, ChangeDetectorRef, ElementRef, ViewChild, Input } from '@angular/core';
 import { Subscription } from 'rxjs';
-import { TooltipService } from '@app/services/tooltip.service';
-import { style } from '@angular/animations';
+import { TooltipService, TooltipDetails } from '@app/services/tooltip.service';
 
 @Component({
     selector: 'tooltip',
@@ -13,13 +12,13 @@ import { style } from '@angular/animations';
 })
 export class FlowTooltipComponent implements OnInit, OnDestroy {
     private subscription: Subscription;
-    isMessage: any;
-    messageTable: any;
+    isMessage: boolean;
+    messageTable: Array<{ name: string; value: unknown }>;
     messageString: string;
     messageChart:  string;
     type = 'string';
     messageBuffer = '';
-    point: any = {
+    point: { left: number; top: number } = {
         left: 0,
         top: 0
     };
@@ -32,10 +31,10 @@ export class FlowTooltipComponent implements OnInit, OnDestroy {
         private cdr: ChangeDetectorRef
     ) { }
 
-    onMouseMove(evt) {
-        const getParentBody = el => {
+    onMouseMove(evt: MouseEvent) {
+        const getParentBody = (el: HTMLElement | null): HTMLElement | null => {
             if (!el) {
-                return { id: '' };
+                return null;
             }
             if (el?.tagName === 'BODY') {
                 return el;
@@ -45,8 +44,8 @@ export class FlowTooltipComponent implements OnInit, OnDestroy {
 
         const parentBody = getParentBody(this.tooltipContainer.nativeElement);
         this.tooltipContainer.nativeElement.style.opacity =
-            evt.view?.document?.body?.id === parentBody.id ? (
-                this.isForPopup && parentBody.id === '' ? 0 : 1
+            evt.view?.document?.body?.id === parentBody?.id ? (
+                this.isForPopup && parentBody?.id === '' ? 0 : 1
             ) : 0;
         const tcHeight = this.tooltipContainer.nativeElement.offsetHeight;
         this.point.left = Math.min(evt.clientX + 10, evt.view?.innerWidth - 250);
@@ -67,29 +66,34 @@ export class FlowTooltipComponent implements OnInit, OnDestroy {
                 this.cdr.detectChanges();
                 return;
             }
+            if (!message) {
+                this.cdr.detectChanges();
+                return;
+            }
             this.type = 'object';
-            if (message?.custom === true && this.messageBuffer !== JSON.stringify(message) && this.type !== 'chart') {
-                this.messageBuffer = JSON.stringify(message);
-                message.custom = null;
-                this.messageTable = Object.entries(message).filter(i => !!i[1]).map(i => {
+            const details: TooltipDetails = message;
+            if (details.custom === true && this.messageBuffer !== JSON.stringify(details) && this.type !== 'chart') {
+                this.messageBuffer = JSON.stringify(details);
+                details.custom = null;
+                this.messageTable = Object.entries(details).filter(i => !!i[1]).map(i => {
                     const [name, value] = i;
                     return { name, value };
                 });
-            } else if (message && this.messageBuffer !== JSON.stringify(message)) {
-                this.messageBuffer = JSON.stringify(message);
+            } else if (details && this.messageBuffer !== JSON.stringify(details)) {
+                this.messageBuffer = JSON.stringify(details);
 
-                message = Object.assign({
+                const sortedDetails: TooltipDetails = Object.assign({
                     image: null,
                     agent: null,
                     dns: null,
                     alias: null
-                }, message); // sort by name
-                message.position = null;
-                message.hidden = null;
-                message.isIPv4 = null;
-                message.ip_array = null;
-                this.isLinkImg = message.isLinkImg;
-                this.messageTable = Object.entries(message).filter(i => !!i[1] && typeof i[1] !== 'object').map(i => {
+                }, details); // sort by name
+                sortedDetails.position = null;
+                sortedDetails.hidden = null;
+                sortedDetails.isIPv4 = null;
+                sortedDetails.ip_array = null;
+                this.isLinkImg = sortedDetails.isLinkImg;
+                this.messageTable = Object.entries(sortedDetails).filter(i => !!i[1] && typeof i[1] !== 'object').map(i => {
                     const [name, value] = i;
                     return { name, value };
                 });

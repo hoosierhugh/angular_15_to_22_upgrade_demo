@@ -12,7 +12,7 @@ export class SettingResultChartWidgetComponent {
     constructor(
         public dialogRef: MatDialogRef<SettingResultChartWidgetComponent>,
 public translateService: TranslateService,
-        @Inject(MAT_DIALOG_DATA) public data: any
+        @Inject(MAT_DIALOG_DATA) public data: { title: string }
     ) {
         translateService.addLangs(['en'])
         translateService.setDefaultLang('en')

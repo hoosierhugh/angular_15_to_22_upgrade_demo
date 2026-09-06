@@ -17,6 +17,11 @@ import { Widget, WidgetArrayInstance } from '@app/helpers/widget';
 import { DashboardService } from '@app/services';
 import { IWidget } from '../IWidget';
 import { SettingResultWidgetComponent } from './setting-result-widget.component';
+import { WidgetSettingsChange } from '@app/models';
+
+interface ResultWidgetConfig {
+    title?: string;
+}
 
 @Component({
     selector: 'app-result-widget',
@@ -36,8 +41,8 @@ import { SettingResultWidgetComponent } from './setting-result-widget.component'
 })
 export class ResultWidgetComponent implements IWidget, OnInit, AfterViewInit, OnDestroy {
     @Input() id: string;
-    @Input() config: any;
-    @Output() changeSettings: EventEmitter<any> = new EventEmitter();
+    @Input() config: ResultWidgetConfig;
+    @Output() changeSettings = new EventEmitter<WidgetSettingsChange<ResultWidgetConfig>>();
 
     @ViewChild('searchGridCall') searchGridCall: SearchGridCallComponent;
 
@@ -45,7 +50,7 @@ export class ResultWidgetComponent implements IWidget, OnInit, AfterViewInit, On
     title: string;
     isAutoRefrasher = true;
     isLoaded = false;
-    dashboard: any;
+    dashboard: unknown;
     source = 'widget';
 
     constructor(

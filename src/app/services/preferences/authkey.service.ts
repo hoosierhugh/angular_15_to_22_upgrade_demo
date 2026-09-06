@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { environment } from '@environments/environment';
-import { PreferenceAuthKey } from '@app/models';
+import { ApiResponse, PreferenceAuthKey } from '@app/models';
 import { Observable } from 'rxjs';
 import { Functions } from '@app/helpers/functions';
 
@@ -24,8 +24,8 @@ export class PreferenceAuthKeyService {
         this.paks.httpObserver = this.paks.httpObserver || new Observable<PreferenceAuthKey[]>(observer => {
             if (!this.actualToken) {
                 this.actualToken = [];
-                this.http.get(this.url).toPromise().then(
-                    ({ data }: any) => {
+                this.http.get<ApiResponse<PreferenceAuthKey[]>>(this.url).toPromise().then(
+                    ({ data }) => {
                         if (data) {
                             this.actualToken = data;
                             observer.next(data);
@@ -56,26 +56,26 @@ export class PreferenceAuthKeyService {
             }
         });
     }
-    getAll(): Observable<PreferenceAuthKey[]> {
-        return this.http.get<PreferenceAuthKey[]>(`${this.url}`);
+    getAll(): Observable<ApiResponse<PreferenceAuthKey[]>> {
+        return this.http.get<ApiResponse<PreferenceAuthKey[]>>(`${this.url}`);
     }
 
-    add(pa: PreferenceAuthKey): Observable<any> {
+    add(pa: PreferenceAuthKey): Observable<ApiResponse<unknown>> {
         this.actualToken = null;
-        return this.http.post(`${this.url}`, pa);
+        return this.http.post<ApiResponse<unknown>>(`${this.url}`, pa);
     }
 
-    update(pa: PreferenceAuthKey): Observable<any> {
+    update(pa: PreferenceAuthKey): Observable<ApiResponse<unknown>> {
 
         const guid = pa.guid;
         delete pa.guid;
         this.actualToken = null;
-        return this.http.put(`${this.url}/${guid}`, pa);
+        return this.http.put<ApiResponse<unknown>>(`${this.url}/${guid}`, pa);
     }
 
-    delete(guid: string): Observable<any> {
+    delete(guid: string): Observable<unknown> {
         this.actualToken = null;
-        return this.http.delete(`${this.url}/${guid}`);
+        return this.http.delete<unknown>(`${this.url}/${guid}`);
     }
 
 }

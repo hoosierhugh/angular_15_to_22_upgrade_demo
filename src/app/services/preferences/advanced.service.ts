@@ -2,7 +2,7 @@ import { HttpGetBuffer } from '@app/helpers/http-get-buffer';
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { environment } from '@environments/environment';
-import { PreferenceAdvanced } from '@app/models';
+import { ApiResponse, PreferenceAdvanced } from '@app/models';
 import { Functions } from '@app/helpers/functions';
 
 @Injectable({
@@ -17,7 +17,7 @@ export class PreferenceAdvancedService {
     ) { }
 
     getAll(delayBuffer = 1000 * 30) {
-        return this.httpGetBuffer.get<PreferenceAdvanced>(this.url, delayBuffer);
+        return this.httpGetBuffer.get<ApiResponse<PreferenceAdvanced[]>>(this.url, delayBuffer);
     }
 
     getSetting(param, category, delayBuffer = 1000 * 30) {
@@ -27,7 +27,7 @@ export class PreferenceAdvancedService {
                 if (setting.data) {
                     return setting.data.filter(f => f.param === param && f.category === category).map(m => m.data);
                 }
-                return;
+                return undefined;
             });
     }
     getFullSetting(param) {
@@ -37,7 +37,7 @@ export class PreferenceAdvancedService {
                 if (setting.data) {
                     return setting.data.filter(f => f.param === param);
                 }
-                return;
+                return undefined;
             });
     }
 

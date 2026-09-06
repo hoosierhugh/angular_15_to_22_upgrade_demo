@@ -3,6 +3,17 @@ import { AbstractControl, FormControl, Validators } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { AuthenticationService, PreferenceUserService } from '@app/services';
 import { TranslateService } from '@ngx-translate/core'
+import { CrudDialogData } from '@app/models';
+
+interface UserSettingsDialogValue {
+    category: string;
+    data: unknown;
+    setting: unknown;
+    param: string;
+    partid: number;
+    username: string;
+    type?: string;
+}
 @Component({
     selector: 'app-dialog-user-settings',
     templateUrl: './dialog-user-settings.component.html',
@@ -15,7 +26,7 @@ export class DialogUserSettingsComponent {
     regNum = /^[0-9]+$/;
     regString = /^[a-zA-Z0-9\-\_\.]+$/;
     currentUser = '';
-    userList: any;
+    userList: Promise<string[]>;
     type: string;
     json;
     settingJSON;
@@ -30,7 +41,7 @@ export class DialogUserSettingsComponent {
         Validators.required,
         Validators.minLength(3)
     ]);
-    partid = new FormControl('', [
+    partid = new FormControl<string | number>('', [
         Validators.required,
         Validators.minLength(1),
         Validators.maxLength(3),
@@ -52,7 +63,7 @@ export class DialogUserSettingsComponent {
         public translateService: TranslateService,
         private userService: PreferenceUserService,
         private authService: AuthenticationService,
-        @Inject(MAT_DIALOG_DATA) public data: any) {
+        @Inject(MAT_DIALOG_DATA) public data: CrudDialogData<UserSettingsDialogValue>) {
         translateService.addLangs(['en'])
         translateService.setDefaultLang('en')
         if (data.isnew) {
@@ -72,7 +83,7 @@ export class DialogUserSettingsComponent {
                 this.hasSettings = typeof data?.data?.setting === 'object' && !!Object.keys(data?.data?.setting)?.length;
             }
         }
-        const userData: any = this.authService.currentUserValue;
+        const userData = this.authService.currentUserValue;
 
 
         this.currentUser = userData?.user?.username;
@@ -103,7 +114,8 @@ export class DialogUserSettingsComponent {
         this.isValidForm = true;
     }
     ngAfterContentInit() {
-        this.userList = this.userService.getAll().toPromise().then(({ data }: any) => data?.map(m => m?.username));
+        this.userList = this.userService.getAll().toPromise()
+            .then(({ data }) => data?.map(user => user.username) || []);
     }
     onNoClick(): void {
         this.dialogRef.close();
@@ -118,7 +130,7 @@ export class DialogUserSettingsComponent {
                 d.username = this.username?.value;
                 d.category = this.category?.value;
                 d.param = this.param?.value;
-                d.partid = this.partid?.value;
+                d.partid = Number(this.partid?.value);
             })(this.data.data);
             this.dialogRef.close(this.data);
         } else {
@@ -144,16 +156,16 @@ export class DialogUserSettingsComponent {
         });
     }
 
-    async isUser(user) {
-        return this.userService.getAll().toPromise().then((users: any) => {
+    async isUser(user: string): Promise<boolean> {
+        return this.userService.getAll().toPromise().then((users) => {
             return ([].concat(users?.data?.map?.(m => m?.username) || []).includes(user));
         });
     }
 
-    disableClose(e) {
-        this.dialogRef.disableClose = e;
+    disableClose(disabled: boolean) {
+        this.dialogRef.disableClose = disabled;
     }
-    import(text, type) {
+    import(text: string, type: 'data' | 'setting') {
         this.data.data[type] = text;
     }
 }

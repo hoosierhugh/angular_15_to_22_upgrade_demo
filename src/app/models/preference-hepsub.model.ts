@@ -4,5 +4,6 @@ export interface PreferenceHepsub {
     hepid: number;
     hep_alias: string;
     version: number;
-    mapping: any;
+    mapping: unknown;
+    type?: string;
 }

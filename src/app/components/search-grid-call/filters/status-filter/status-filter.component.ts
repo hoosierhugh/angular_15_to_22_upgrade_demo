@@ -9,10 +9,11 @@ import {
 import { IFilterAngularComp } from 'ag-grid-angular';
 import { PreferenceMappingProtocolService } from '@app/services';
 import { Functions } from '@app/helpers/functions';
-import { ConstValue, UserConstValue } from '@app/models';
+import { ConstValue, PreferenceMapping, UserConstValue } from '@app/models';
 
-type valueGetter = (rowNode: IRowNode | ValueGetterParams) => any
+type valueGetter = (rowNode: IRowNode | ValueGetterParams) => unknown
 type FilterParams = Omit<IFilterParams, 'valueGetter'> & { valueGetter: valueGetter };
+interface StatusFilterModel { value: string; }
 @Component({
     selector: 'app-status-filter',
     templateUrl: 'status-filter.component.html',
@@ -29,7 +30,7 @@ export class StatusFilterComponent implements IFilterAngularComp {
         private _pmps: PreferenceMappingProtocolService) {
     }
     async agInit(params: IFilterParams) {
-        const mappings: Array<any> = await this._pmps.getMerged().toPromise();
+        const mappings: PreferenceMapping[] = await this._pmps.getMerged().toPromise();
         const ls = Functions.JSON_parse(localStorage.getItem(UserConstValue.SEARCH_QUERY)) ||
             Functions.JSON_parse(localStorage.getItem(ConstValue.SEARCH_QUERY));
 
@@ -57,11 +58,11 @@ export class StatusFilterComponent implements IFilterAngularComp {
       return false;
     }
 
-    getModel(): any {
+    getModel(): StatusFilterModel {
         return { value: this.text };
     }
 
-    setModel(model: any): void {
+    setModel(model: StatusFilterModel | null): void {
         this.text = model ? model.value : '';
     }
 

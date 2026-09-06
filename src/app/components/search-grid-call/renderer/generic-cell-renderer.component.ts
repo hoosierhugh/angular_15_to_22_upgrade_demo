@@ -1,5 +1,6 @@
 import { Component, ChangeDetectionStrategy } from '@angular/core';
 import {ICellRendererAngularComp} from 'ag-grid-angular';
+import { SearchGridCellParams } from './search-grid-renderer.types';
 
 @Component({
     selector: 'app-generic-cell-renderer',
@@ -43,13 +44,13 @@ import {ICellRendererAngularComp} from 'ag-grid-angular';
     `]
 })
 export class GenericCellRenderer implements ICellRendererAngularComp {
-    public params: any;
+    public params: SearchGridCellParams;
     selected = false;
     timeout;
     copyTimer: number;
     value;
     
-    agInit(params: any): void {
+    agInit(params: SearchGridCellParams): void {
         this.params = params;
         this.value = params.valueFormatted ? params.valueFormatted : params.value;
     }

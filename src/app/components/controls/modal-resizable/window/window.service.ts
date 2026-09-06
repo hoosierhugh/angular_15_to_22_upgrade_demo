@@ -1,16 +1,16 @@
-import { Observable, BehaviorSubject } from 'rxjs';
+import { Observable, Subject } from 'rxjs';
 import { Injectable } from '@angular/core';
 
 @Injectable({
     providedIn: 'root'
 })
 export class WindowService {
-    subject = new BehaviorSubject<any>({});
+    subject = new Subject<MouseEvent>();
     constructor() { }
-    get listen(): Observable<any> {
+    get listen(): Observable<MouseEvent> {
         return this.subject.asObservable();
     }
-    setMousePosition(evt) {
+    setMousePosition(evt: MouseEvent) {
         this.subject.next(evt);
     }
 }

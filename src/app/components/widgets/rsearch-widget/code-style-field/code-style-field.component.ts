@@ -13,6 +13,13 @@ import {
 import { MatMenuTrigger } from '@angular/material/menu';
 import { SearchRemoteService, PreferenceAdvancedService } from '@app/services';
 
+export interface LokiCodeData {
+    text: string;
+    serverLoki: string;
+    obj: Record<string, string | null>;
+    rxText: string;
+}
+
 @Component({
     selector: 'app-code-style-field',
     templateUrl: './code-style-field.component.html',
@@ -40,8 +47,8 @@ export class CodeStyleFieldComponent implements OnInit, AfterViewInit, OnChanges
     get queryText() {
         return this._queryText;
     }
-    @Output() updateData: EventEmitter<any> = new EventEmitter();
-    @Output() keyEnter: EventEmitter<any> = new EventEmitter();
+    @Output() updateData = new EventEmitter<LokiCodeData>();
+    @Output() keyEnter = new EventEmitter<void>();
     @ViewChild('divContainer', { static: false }) divContainer;
     @ViewChild(MatMenuTrigger, { static: false }) trigger: MatMenuTrigger;
 
@@ -286,7 +293,7 @@ export class CodeStyleFieldComponent implements OnInit, AfterViewInit, OnChanges
     getRegExpString(str) {
         return str.split(/\{.*\}\s*/g)[1] || '';
     }
-    onMenuMessage(item, event: any = null) {
+    onMenuMessage(item: string, event: KeyboardEvent | null = null) {
         if (!event || (event.keyCode === 13 || event.keyCode === 32)) {
             if (this.isLabel) {
                 this.typeInTextarea(item + '=');

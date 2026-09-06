@@ -1,7 +1,7 @@
 import { environment } from "@environments/environment";
 import { isSameHost, Functions } from "./functions";
 
-export function getUriJson(): any {
+export function getUriJson(): unknown {
     if (location.search) {
         try {
             return JSON.parse(
@@ -28,7 +28,7 @@ export function getUriJson(): any {
         return null;
     }
 }
-export function getUriParams(): any {
+export function getUriParams(): string | Record<string, string | null> {
     if (!!location.hash) {
         return location.hash.replace('#', '');
     }
@@ -50,14 +50,16 @@ export function emitWindowResize(): void {
         } catch (e) { }
     });
 }
-export function getJsonFileDataByLink(name: string): Promise<any> {
+export function getJsonFileDataByLink(name: string): Promise<unknown> {
     return new Promise((resolve) => {
-        resolve(window[`file__json_data_${name}`] || {});
+        resolve(Reflect.get(window, `file__json_data_${name}`) || {});
     });
 }
-export function saveToFile(data, filename, type = 'application/octet-stream') {
+export function saveToFile(data: BlobPart, filename: string, type = 'application/octet-stream') {
     const file = new Blob([data], { type: type });
-    const nav: any = window.navigator as any;
+    const nav = window.navigator as Navigator & {
+        msSaveOrOpenBlob?: (blob: Blob, defaultName?: string) => void;
+    };
     if (nav.msSaveOrOpenBlob) {
         // IE10+
         nav.msSaveOrOpenBlob(file, filename);
@@ -76,7 +78,7 @@ export function saveToFile(data, filename, type = 'application/octet-stream') {
         }, 0);
     }
 }
-export function console2file(data, filename) {
+export function console2file(data: unknown, filename?: string) {
     if (!data) {
         console.error('Console.save: No data');
         return;
@@ -90,37 +92,20 @@ export function console2file(data, filename) {
         data = JSON.stringify(data, undefined, 4);
     }
 
-    saveToFile(data, filename, 'txt/json');
+    saveToFile(String(data), filename, 'txt/json');
 }
-export function setStorage(key: string, value: any): void {
+export function setStorage(key: string, value: unknown): void {
     // saving JSON from object data
     // log('setStorage >>>', key, value);
     return localStorage.setItem(key, JSON.stringify(value));
 }
-export function getStorage(key: string): any {
+export function getStorage<T = unknown>(key: string): T | null {
     // log('getStorage <<<', key, Functions.JSON_parse(localStorage.getItem(key)));
-    return Functions.JSON_parse(localStorage.getItem(key));
+    return Functions.JSON_parse(localStorage.getItem(key)) as T | null;
 }
 
 export function getSelectedText() {
-    let selectedText: any = '';
-
-    // window.getSelection
-    if (window.getSelection) {
-        selectedText = window.getSelection();
-    }
-    // document.getSelection
-    else if (document.getSelection) {
-        selectedText = document.getSelection();
-    }
-    // document.selection
-    else if (document['selection']) {
-        selectedText = document['selection']?.createRange()?.text;
-    } else {
-        return '';
-    }
-    // To write the selected text into the textarea
-    return selectedText + '';
+    return window.getSelection()?.toString() || document.getSelection()?.toString() || '';
 }
 
 export function isCurrentHost(host: string): boolean {

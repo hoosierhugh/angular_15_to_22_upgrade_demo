@@ -1,10 +1,10 @@
 import { Pipe, PipeTransform } from '@angular/core';
 import * as _moment from 'moment-timezone';
-const moment: any = _moment;
+const moment = _moment;
 
 @Pipe({name: 'timeZone'})
 export class TimeZonePipe implements PipeTransform {
-  transform(value, type) {
+  transform(value: string, type: 'region' | 'location' | 'offset'): string {
     if (type === 'region') {
       value = value.substr(0, value.indexOf('/'));
     } else if (type === 'location'){

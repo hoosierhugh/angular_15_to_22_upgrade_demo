@@ -1,11 +1,11 @@
-import { OnInit, OnDestroy, EventEmitter } from '@angular/core';
+import { OnInit, OnDestroy, EventEmitter, Type } from '@angular/core';
 
 export interface IWidget extends OnInit, OnDestroy {
     id: string;
-    config?: any;
-    changeSettings?: EventEmitter<any>;
+    config?: unknown;
+    changeSettings?: EventEmitter<unknown>;
     openDialog(): void;
-    setConfig?(config: any): void;
+    setConfig?(config: unknown): void;
     refresh?(): void;
     doSearchResult?(): void;
 }
@@ -19,7 +19,7 @@ export interface IWidgetMetaData {
     advancedName?: string;
     subCategory?: string;
     enable?: boolean;
-    componentClass?: any;
+    componentClass?: Type<unknown>;
     settingWindow?: boolean;
     className?: string;
     submit?: boolean;

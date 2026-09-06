@@ -4,6 +4,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { IWidget } from '../IWidget';
 import { Widget, WidgetArrayInstance } from '@app/helpers/widget';
 import { TranslateService } from '@ngx-translate/core';
+import { WidgetSettingsChange } from '@app/models';
 
 // to use theme "eclipse"
 // with angular-cli add "../node_modules/ace-builds/src-min/ace.js"
@@ -33,8 +34,8 @@ export interface AceEditorConfig {
 export class AceEditorWidgetComponent implements IWidget {
     @Input() config: AceEditorConfig;
     @Input() id: string;
-    @Output() changeSettings = new EventEmitter<any>();
-    options: any = { maxLines: 1000, printMargin: false };
+    @Output() changeSettings = new EventEmitter<WidgetSettingsChange<AceEditorConfig>>();
+    options: { maxLines: number; printMargin: boolean } = { maxLines: 1000, printMargin: false };
     isConfig = false;
     _config: AceEditorConfig;
 

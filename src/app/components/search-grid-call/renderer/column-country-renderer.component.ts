@@ -1,5 +1,6 @@
 import { Component, ChangeDetectionStrategy } from '@angular/core';
 import {ICellRendererAngularComp} from 'ag-grid-angular';
+import { SearchGridCellParams } from './search-grid-renderer.types';
 
 @Component({
     selector: 'app-child-cell',
@@ -43,15 +44,15 @@ import {ICellRendererAngularComp} from 'ag-grid-angular';
 })
 export class ColumnCountryRenderer implements ICellRendererAngularComp {
     selected = false;
-    public params: any;
+    public params: SearchGridCellParams;
     method: string;
     imagepath: string;
     country: string;
     copyTimer: number;
-    agInit(params: any): void {
+    agInit(params: SearchGridCellParams): void {
         this.params = params;
-        this.country = this.params.value;
-        this.imagepath = (this.params.value && this.params.value !== '') ? `assets/flags/${this.params.value}.gif` : null;
+        this.country = this.params.value == null ? '' : String(this.params.value);
+        this.imagepath = this.country ? `assets/flags/${this.country}.gif` : null;
 
     }
     startCopy() {

@@ -4,6 +4,12 @@ import { IWidget } from '../IWidget';
 import { Functions } from '@app/helpers/functions';
 import { MatDialog } from '@angular/material/dialog';
 import { SettingResultChartWidgetComponent } from './setting-result-chart-widget.component';
+import { WidgetSettingsChange } from '@app/models';
+
+interface ResultChartConfig {
+    chartConfig?: unknown;
+    title?: string;
+}
 
 @Component({
     selector: 'app-result-chart-widget',
@@ -23,8 +29,8 @@ import { SettingResultChartWidgetComponent } from './setting-result-chart-widget
 })
 export class ResultChartWidgetComponent implements IWidget, OnInit, OnDestroy {
     @Input() id: string;
-    @Input() config: any;
-    @Output() changeSettings: EventEmitter<any> = new EventEmitter();
+    @Input() config: ResultChartConfig;
+    @Output() changeSettings = new EventEmitter<WidgetSettingsChange<ResultChartConfig>>();
     source = 'widget';
     title: string;
     constructor(

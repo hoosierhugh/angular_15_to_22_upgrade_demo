@@ -1,10 +1,11 @@
 import { Component, OnInit, ViewEncapsulation, ChangeDetectorRef, ChangeDetectionStrategy, ViewChild, ElementRef } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { AbstractControl, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { first } from 'rxjs/operators';
 import { Title } from '@angular/platform-browser';
 
 import { AlertService, AuthenticationService, PreferenceUserService } from '@app/services';
+import { AuthType, AuthTypeCollection } from '@app/services/authentication.service';
 import { UserSecurityService } from '@app/services/user-security.service';
 import { MatDialog } from '@angular/material/dialog';
 
@@ -12,6 +13,7 @@ import { ConstValue } from '@app/models/const-value.model';
 import { Functions, setStorage } from '@app/helpers/functions';
 
 import { TranslateService } from '@ngx-translate/core';
+
 @Component({
     selector: 'login-layout',
     templateUrl: './login.component.html',
@@ -22,21 +24,20 @@ import { TranslateService } from '@ngx-translate/core';
 export class LoginComponent implements OnInit {
     @ViewChild('oAuthButton', { static: false }) oAuthButton;
     loginForm: FormGroup;
-    authTypes: any;
     loading = false;
     submitted = false;
     returnUrl: string;
     title = 'homer';
-    type: any;
-    types: any;
+    type: string;
+    types: AuthType[];
     typesError = false;
     translateError = false;
-    enabledTypes = [];
+    enabledTypes: string[] = [];
     error: string;
     caps_lock = false;
     isReady = false;
     localDictionary;
-    oAuthTypes;
+    oAuthTypes: AuthType[] = [];
     oAuthToken: string;
     isDirect = false;
     // authentication;
@@ -101,7 +102,8 @@ export class LoginComponent implements OnInit {
         const { data } = authTypes || {
             data: {}
         };
-        this.types = Object.values(data);
+        this.types = Object.values(data as AuthTypeCollection)
+            .filter((item): item is AuthType => !!item && !Array.isArray(item));
         this.oAuthTypes = data?.oauth2?.filter(type => type.enable)
         const autoRedirect = this.oAuthTypes?.find(type => type.auto_redirect === true);
         if (autoRedirect && !this.isDirect && !this.oAuthToken) {
@@ -120,12 +122,13 @@ export class LoginComponent implements OnInit {
         this.isReady = true;
         this.cdr.detectChanges();
     }
-    getEnabledTypes(types: object) {
+    getEnabledTypes(types: AuthTypeCollection) {
         return Object.values(types)
+            .filter((item): item is AuthType => !!item && !Array.isArray(item))
             .filter((f) => f.enable === true)
             .map((m) => m.type);
     }
-    goOauth(type) {
+    goOauth(type: AuthType) {
         this.router.navigate([]).then((result) => {
             window.location.href = `${type.url}`;
         });
@@ -139,7 +142,7 @@ export class LoginComponent implements OnInit {
     }
 
     // convenience getter for easy access to form fields
-    get f(): any {
+    get f(): Record<string, AbstractControl> {
         return this.loginForm.controls;
     }
 

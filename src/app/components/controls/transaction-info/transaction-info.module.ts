@@ -10,6 +10,7 @@ import { MatBadgeModule } from '@angular/material/badge';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { FormsModule } from '@angular/forms';
 import { FontAwesomeModule, FaIconLibrary } from '@fortawesome/angular-fontawesome';
+import type { IconPack } from '@fortawesome/fontawesome-svg-core';
 import { fas } from '@fortawesome/free-solid-svg-icons';
 import { fab } from '@fortawesome/free-brands-svg-icons';
 import { far } from '@fortawesome/free-regular-svg-icons';
@@ -37,6 +38,6 @@ import { TranslateModule } from '@ngx-translate/core';
 })
 export class TransactionInfoModule {
     constructor(library: FaIconLibrary) {
-        library.addIconPacks(fas as any, fab as any, far as any);
+        library.addIconPacks(fas as IconPack, fab as IconPack, far as IconPack);
     }
 }

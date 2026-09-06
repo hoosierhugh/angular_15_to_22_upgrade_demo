@@ -4,6 +4,7 @@ import { WidgetArray, WidgetArrayInstance } from '@app/helpers/widget';
 import { PreferenceAdvancedService } from '@app/services';
 import { ProxyService } from '@app/services/proxy.service';
 import { lastValueFrom } from 'rxjs';
+import { PreferenceAdvanced } from '@app/models';
 
 @Component({
     selector: 'app-add-dialog',
@@ -49,7 +50,7 @@ export class AddDialogComponent {
         public dialogRef: MatDialogRef<AddDialogComponent>,
         private cdr: ChangeDetectorRef,
         private proxy: ProxyService,
-        @Inject(MAT_DIALOG_DATA) public data: any
+        @Inject(MAT_DIALOG_DATA) public data: unknown
     ) {
         this.init();
     }
@@ -66,7 +67,7 @@ export class AddDialogComponent {
             })
 
 
-        let custom = advanced.data
+        let custom: Array<Pick<PreferenceAdvanced, 'data'>> = advanced.data
             .filter((f) => f.category === 'custom-widget');
         if (custom.length === 0) {
             custom = [{
@@ -168,7 +169,7 @@ export class AddDialogComponent {
                 }
             }]
         }
-        const customW = custom.map((d) => (Object.values(d.data)))
+        const customW = custom.map((d) => (Object.values(d.data) as Array<Record<string, unknown>>))
             .map(m => m.filter(f => !!f.active));
         const [firstCustomW = []] = customW || [];
         this.customWidgets = [...firstCustomW];

@@ -25,7 +25,7 @@ import {
     selector: '[hepTooltip]',
 })
 export class HepTooltipDirective implements OnInit {
-    @Input('hepTooltip') tooltipContent: TemplateRef<any> | ComponentType<any>;
+    @Input('hepTooltip') tooltipContent: TemplateRef<unknown> | ComponentType<unknown>;
 
     private _overlayRef: OverlayRef;
     constructor(
@@ -69,7 +69,7 @@ export class HepTooltipDirective implements OnInit {
     @HostListener('mouseover')
     private _show(): void {
         if (this._overlayRef) {
-            let containerPortal: TemplatePortal<any> | ComponentPortal<any>;
+            let containerPortal: TemplatePortal<unknown> | ComponentPortal<unknown>;
             if (this.tooltipContent instanceof TemplateRef) {
                 containerPortal = new TemplatePortal(
                     this.tooltipContent,

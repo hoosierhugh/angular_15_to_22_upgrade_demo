@@ -436,14 +436,14 @@ export function log(...arg) {
   return Functions.log(...arg);
 }
 
-export function setStorage(key: string, value: any): void { // saving JSON from object data
+export function setStorage(key: string, value: unknown): void { // saving JSON from object data
   // log('setStorage >>>', key, value);
   localStorage.setItem(key, JSON.stringify(value));
 }
 
-export function getStorage(key: string): any {
+export function getStorage<T = unknown>(key: string): T | null {
   // log('getStorage <<<', key, Functions.JSON_parse(localStorage.getItem(key)));
-  return Functions.JSON_parse(localStorage.getItem(key));
+  return Functions.JSON_parse(localStorage.getItem(key)) as T | null;
 }
 
 export function isSameHost(host1: string, host2: string): boolean {

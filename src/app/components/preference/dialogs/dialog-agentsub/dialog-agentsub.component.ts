@@ -1,6 +1,11 @@
 import { Component, Inject, ChangeDetectionStrategy, ViewChild } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { TranslateService } from '@ngx-translate/core'
+import { CrudDialogData } from '@app/models';
+
+interface AgentSubscriptionDialogRecord {
+    mapping?: unknown;
+}
 @Component({
     selector: 'app-dialog-agentsub',
     templateUrl: './dialog-agentsub.component.html',
@@ -16,7 +21,7 @@ export class DialogAgentsubComponent {
     constructor(
         public dialogRef: MatDialogRef<DialogAgentsubComponent>,
         public translateService: TranslateService,
-        @Inject(MAT_DIALOG_DATA) public data: any) {
+        @Inject(MAT_DIALOG_DATA) public data: CrudDialogData<AgentSubscriptionDialogRecord>) {
         translateService.addLangs(['en'])
         translateService.setDefaultLang('en')
         if (data.isnew) {

@@ -109,8 +109,7 @@ class ClickhouseProcessor {
       .map(item => moment(item.data.t, 'x').format('HH:mm'))
       .sort((a, b) => a - b)
       .filter((item, index, array) => item !== array[index - 1]);
-    let formattedData: Array<any>;
-    formattedData = data.map(item => {
+    const formattedSeries: Array<{ label: string; value: unknown[]; tags: string }> = data.map(item => {
       const array = [];
       for (let i = 0; i < chartLabels.indexOf(moment(item.data.t, 'x').format('HH:mm')); i++) {
         array.push(null);
@@ -123,7 +122,7 @@ class ClickhouseProcessor {
       };
     });
     let fillKey = 0;
-    formattedData = formattedData.reduce((a, b) => {
+    const formattedData = formattedSeries.reduce<Record<string, { tags: string; value: unknown[] }>>((a, b) => {
       if (!a[b.label]) {
         a[b.label] = {
           tags: '',
@@ -140,7 +139,7 @@ class ClickhouseProcessor {
       return a;
 
     }, {})
-    const chartData: Array<any> = [];
+    const chartData: Array<Record<string, unknown>> = [];
     Object.keys(formattedData).forEach(key => {
       const value = formattedData[key];
       const backgroundColor = Functions.getColorByString(value.tags, 50, 50, chartType === 'bar' ? 1 : 0.4)

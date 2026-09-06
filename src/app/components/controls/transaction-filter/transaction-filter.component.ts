@@ -21,6 +21,7 @@ interface FilterItem {
     color?: string;
 }
 export interface FlowFilter {
+    channel?: string;
     isSimplify: boolean;
     isSimplifyPort: boolean;
     isCombineByAlias: boolean;
@@ -28,6 +29,14 @@ export interface FlowFilter {
     filterIP: Array<FilterItem>;
     filterAlias: Array<FilterItem>;
     CallId: Array<FilterItem>;
+}
+
+interface StoredFlowFilterState {
+    isSimplify: boolean;
+    isSimplifyPort: boolean;
+    isCombineByAlias: boolean;
+    combineType: string;
+    flowFilters: Partial<FlowFilter>;
 }
 @Component({
     selector: 'app-filter',
@@ -37,7 +46,7 @@ export interface FlowFilter {
 export class TransactionFilterComponent implements OnInit {
     flowFilters;
     isAdvancedDefaultFilter = false;
-    filterSettings: any = {};
+    filterSettings: Record<string, unknown> = {};
 
     isSimplify = true;
     isSimplifyPort = true;
@@ -297,12 +306,12 @@ export class TransactionFilterComponent implements OnInit {
     getPayloadFromLocalStorage(type: string = 'RTP') {
         const defaultReturn =
             type === FlowItemType.SIP || type === FlowItemType.SDP;
-        let localFilterState: any =
+        const serializedFilterState =
             localStorage.getItem(UserConstValue.LOCAL_FILTER_STATE) ||
             localStorage.getItem(ConstValue.LOCAL_FILTER_STATE);
-        if (localFilterState) {
+        if (serializedFilterState) {
             try {
-                localFilterState = Functions.JSON_parse(localFilterState);
+                const localFilterState = Functions.JSON_parse(serializedFilterState) as StoredFlowFilterState;
                 const { PayloadType } = localFilterState.flowFilters;
                 if (PayloadType) {
                     return (
@@ -322,12 +331,12 @@ export class TransactionFilterComponent implements OnInit {
     }
     restoreFiltersFromLocalStorage() {
         /** restore from localStorage */
-        let localFilterState: any =
+        const serializedFilterState =
             localStorage.getItem(UserConstValue.LOCAL_FILTER_STATE) ||
             localStorage.getItem(ConstValue.LOCAL_FILTER_STATE);
-        if (localFilterState) {
+        if (serializedFilterState) {
             try {
-                localFilterState = Functions.JSON_parse(localFilterState);
+                const localFilterState = Functions.JSON_parse(serializedFilterState) as StoredFlowFilterState;
                 this.combineType = !this._isSingleIP
                     ? localFilterState.combineType
                     : '1none';
@@ -371,7 +380,7 @@ export class TransactionFilterComponent implements OnInit {
     }
 
     @HostListener('document:click', ['$event.target'])
-    public onClick(targetElement: any) {
+    public onClick(targetElement: Node) {
         if (this.filterContainer && this.filterContainer.nativeElement) {
             const clickedInside =
                 this.filterContainer.nativeElement.contains(targetElement);

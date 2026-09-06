@@ -1,17 +1,18 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
+import type { FlowFilter } from './transaction-filter.component';
 
 @Injectable({
     providedIn: 'root'
 })
 export class TransactionFilterService {
-    subject = new BehaviorSubject<any>({});
+    subject = new BehaviorSubject<Partial<FlowFilter>>({});
     constructor() {
     }
-    get listen(): Observable<any> {
+    get listen(): Observable<Partial<FlowFilter>> {
         return this.subject.asObservable();
     }
-    setFilter(filterData) {
+    setFilter(filterData: FlowFilter) {
         this.subject.next(filterData);
     }
 }

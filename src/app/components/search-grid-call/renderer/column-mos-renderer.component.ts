@@ -1,6 +1,11 @@
 import { Component, ChangeDetectionStrategy } from '@angular/core';
 import {ICellRendererAngularComp} from 'ag-grid-angular';
 import { Functions } from '@app/helpers/functions';
+import { ICellRendererParams } from 'ag-grid-community';
+import { SearchGridRendererParent, SearchGridRow } from './search-grid-renderer.types';
+
+type MosCellParams = ICellRendererParams<SearchGridRow, number | string,
+    { componentParent: SearchGridRendererParent }>;
 @Component({
     selector: 'app-child-cell',
     template: `
@@ -54,19 +59,19 @@ import { Functions } from '@app/helpers/functions';
 })
 export class ColumnMOSRenderer implements ICellRendererAngularComp {
     // backup for circle in mos
-    public params: any;
+    public params: MosCellParams;
     method: string;
-    mos: any;
+    mos: number | null;
     mosColor: string;
     isEmpty: boolean;
-    displayedValue: any;
+    displayedValue: number | string;
     copyTimer: number;
-    agInit(params: any): void {
+    agInit(params: MosCellParams): void {
         this.params = params;
         this.isEmpty = this.params.value === 0 || this.params.value === '';
         this.displayedValue = this.isEmpty ? this.params.value : '';
-        this.mos = this.params.value ? this.params.value : '';
-        if (this.mos !== '') {
+        this.mos = this.params.value ? Number(this.params.value) : null;
+        if (this.mos !== null) {
             this.mosColor = Functions.MOSColorGradient(this.mos, 100, 60);
         } else {
             this.mosColor = 'transparent';

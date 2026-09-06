@@ -4,7 +4,7 @@ import { BehaviorSubject, Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 
 import { environment } from '@environments/environment';
-import { User, UserJWT } from '@app/models';
+import { ApiResponse, User, UserJWT, UserSettings } from '@app/models';
 import { PreferenceUserSettingsService } from './preferences/user-settings.service';
 import moment from 'moment';
 import { ConstValue } from '../models/const-value.model';
@@ -14,7 +14,21 @@ import { TranslateService } from '@ngx-translate/core';
 import jwt_decode from 'jwt-decode';
 import { MOCK_MODE, createMockUser } from '../runtime-mode';
 
-// // const moment: any = _moment;
+export interface AuthType {
+    enable: boolean;
+    type: string;
+    name: string;
+    auto_redirect?: boolean;
+    url?: string;
+    color?: string;
+    provider_name?: string;
+    provider_image?: string;
+}
+
+export interface AuthTypeCollection {
+    oauth2?: AuthType[];
+    [key: string]: AuthType | AuthType[] | undefined;
+}
 
 @Injectable({ providedIn: 'root' })
 export class AuthenticationService {
@@ -27,16 +41,16 @@ export class AuthenticationService {
         private alertService: AlertService,
         private translateService: TranslateService
     ) {
-        let ls: any;
+        let ls: User | null = null;
         if (MOCK_MODE) {
             localStorage.setItem(ConstValue.CURRENT_USER, JSON.stringify(createMockUser()));
         }
         try {
-            ls = JSON.parse(localStorage.getItem(ConstValue.CURRENT_USER));
+            ls = JSON.parse(localStorage.getItem(ConstValue.CURRENT_USER)) as User | null;
             if (ls) {
                 const decodedToken = jwt_decode<UserJWT>(ls.token);
                 if (moment().unix() > decodedToken?.exp) {
-                    throw 'Expired JWT';
+                    throw new Error('Expired JWT');
                 }
             }
         } catch (err) {
@@ -58,10 +72,10 @@ export class AuthenticationService {
         return Functions.JSON_parse(localStorage.getItem(ConstValue.CURRENT_USER))?.user?.username;
     }
     getAuthList() {
-        return this.http.get<any>(`${environment.apiUrl}/auth/type/list`);
+        return this.http.get<ApiResponse<AuthTypeCollection>>(`${environment.apiUrl}/auth/type/list`);
     }
     loginOAuth(token: string) {
-        return this.http.post<any>(`${environment.apiUrl}/oauth2/token`, { token })
+        return this.http.post<User>(`${environment.apiUrl}/oauth2/token`, { token })
             .pipe(map(user => {
                 // login successful if there's a jwt token in the response
                 if (user?.token ) {
@@ -84,10 +98,10 @@ export class AuthenticationService {
             }));
     }
     login(username: string, password: string, type: string) {
-        return this.http.post<any>(`${environment.apiUrl}/auth`, { username, password, type })
+        return this.http.post<User | ApiResponse<User>>(`${environment.apiUrl}/auth`, { username, password, type })
             .pipe(map(response => {
                 // homer-core v11+ wraps response in {data: {...}, success: true}
-                const user = response?.data || response;
+                const user = 'data' in response ? response.data : response;
                 // login successful if there's a jwt token in the response
                 if (user?.token) {
                     if (user.user) {
@@ -111,9 +125,10 @@ export class AuthenticationService {
                 return user;
             }));
     }
-    async getUserSettingTimeZone(user, username) {
+    async getUserSettingTimeZone(user: User, username: string) {
         try {
-            const userSettingsData: any = await this.preferenceUserSettingsService.getCategory('system').toPromise();
+            const userSettingsData: ApiResponse<UserSettings[]> =
+                await this.preferenceUserSettingsService.getCategory('system').toPromise();
             const timezoneItem = userSettingsData.data.filter(i =>
                 i.category === 'system' &&
                 i.username === username &&

@@ -23,6 +23,27 @@ import  moment from 'moment';
 import { Functions } from '@app/helpers/functions';
 import { WorkerService } from '@services/worker.service';
 
+interface QosWorkerResult {
+  isError?: boolean;
+  labels?: unknown[];
+  isRTCP?: boolean;
+  isRTP?: boolean;
+  isNoDataRTP?: boolean;
+  isNoDataRTCP?: boolean;
+  chartDataRTP?: ChartDataset[];
+  chartLabelsRTP?: string[];
+  chartLabelsRTCP?: string[];
+  chartType?: ChartType;
+  chartLegend?: boolean;
+  chartDataRTCP?: ChartDataset[];
+  listRTP?: unknown[];
+  listRTCP?: unknown[];
+  hideLabelsFlag?: boolean;
+  hideLabelsFlagRTP?: boolean;
+  streamsRTCP?: unknown[];
+  streamsRTP?: unknown[];
+}
+
 @Component({
   selector: 'app-tab-qos',
   templateUrl: './tab-qos.component.html',
@@ -163,7 +184,7 @@ export class TabQosComponent implements OnInit, AfterViewInit {
   }
   async update(workerCommand: string, mosFraction: boolean, data: any) {
 
-    const outData = await this.worker.getParseData({ workerCommand, mosFraction }, data);
+    const outData = await this.worker.getParseData<QosWorkerResult>({ workerCommand, mosFraction }, data);
 
 
 

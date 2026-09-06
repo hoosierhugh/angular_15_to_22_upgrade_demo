@@ -1,5 +1,9 @@
 import { TranslateCompiler } from '@ngx-translate/core';
 
+interface TranslationMap {
+    [key: string]: string | TranslationMap | null;
+}
+
 export class TranslateLinkCompiler extends TranslateCompiler {
 
     /*
@@ -14,7 +18,7 @@ export class TranslateLinkCompiler extends TranslateCompiler {
     * Initiates recurive this.parseReferencePointers()
     * Returns modified translations object for ngx-translate to process
     */
-    public compileTranslations(translations: any, lang: string) {
+    public compileTranslations(translations: TranslationMap, lang: string): TranslationMap {
         this.parseReferencePointers(translations, translations);
         return translations;
     }

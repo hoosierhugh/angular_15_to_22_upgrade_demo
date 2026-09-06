@@ -1,5 +1,6 @@
 import { Component, ChangeDetectionStrategy } from '@angular/core';
 import {ICellRendererAngularComp} from 'ag-grid-angular';
+import { SearchGridCellParams } from './search-grid-renderer.types';
 
 @Component({
     selector: 'app-uuid-cell',
@@ -42,14 +43,14 @@ import {ICellRendererAngularComp} from 'ag-grid-angular';
     changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ColumnUuidRenderer implements ICellRendererAngularComp {
-    public params: any;
+    public params: SearchGridCellParams;
     uuid: string;
     copyTimer: number;
     selected: boolean;
     timeout;
-    agInit(params: any): void {
+    agInit(params: SearchGridCellParams): void {
         this.params = params;
-        this.uuid = this.params.value || null;
+        this.uuid = this.params.value == null ? '' : String(this.params.value);
     }
 
     public openTransactionPopup(event) {

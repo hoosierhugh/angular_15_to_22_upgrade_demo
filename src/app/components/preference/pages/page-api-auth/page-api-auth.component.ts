@@ -26,6 +26,7 @@ import {
 
 import { AlertService, AuthenticationService, TimeFormattingService } from '@app/services';
 import { PreferencesComponentMapping } from '@app/models/preferences-component-mapping';
+import { ComponentType } from '@angular/cdk/portal';
 
 @Component({
   selector: 'app-page-api-auth',
@@ -43,7 +44,7 @@ export class PageApiAuthComponent implements OnInit, AfterViewInit, OnDestroy {
     @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
     columns = [];
     specialColumns = [];
-    isAccess: any;
+    isAccess: Record<string, boolean>;
     filter = '';
     dateFormat: string;
 
@@ -113,13 +114,13 @@ export class PageApiAuthComponent implements OnInit, AfterViewInit, OnDestroy {
     ngOnDestroy() {
 
     }
-    settingDialog(item: any = null, type?: string) {
+    settingDialog(item: PreferenceAuthKey | null = null, type?: string) {
         const isCopy = type === 'copy';
         let _result;
         const onOpenDialogAuth = (result2) =>
             result2 &&
             this.service
-                .delete(item.uuid)
+                .delete(item.guid)
                 .toPromise()
                 .then(this.updateData.bind(this));
 
@@ -154,7 +155,7 @@ export class PageApiAuthComponent implements OnInit, AfterViewInit, OnDestroy {
         this.openDialog(DialogAuthKeyComponent, item, onOpenDialog, isCopy);
     }
 
-    async openDialog(dialog, data: any = null, cb: Function = null, isCopy = false) {
+    async openDialog(dialog: ComponentType<unknown>, data: unknown = null, cb: ((result: unknown) => void) | null = null, isCopy = false) {
         const result = await this.dialog
             .open(dialog, {
                 width: '800px',
@@ -170,12 +171,12 @@ export class PageApiAuthComponent implements OnInit, AfterViewInit, OnDestroy {
             this.cdr.detectChanges();
         }
     }
-    deleteDialog(item: any = null) {
+    deleteDialog(item: PreferenceAuthKey | null = null) {
         const data = { page: this.page, message: 'delete'};
         this.openDialog(
             DialogDeleteAlertComponent,
             data,
-            (result) => result && this.service.delete(item.uuid || item.guid)
+            (result) => result && this.service.delete(item.guid)
                 .toPromise()
                 .then(this.updateData.bind(this)));
     }

@@ -18,6 +18,11 @@ export interface GeneralIframeConfig {
     refresh: boolean;
 }
 
+interface GeneralIframeSettingsChange {
+    config: GeneralIframeConfig;
+    id: string;
+}
+
 @Component({
     selector: 'app-general-iframe-widget',
     templateUrl: './general-iframe-widget.component.html',
@@ -37,7 +42,7 @@ export interface GeneralIframeConfig {
 export class GeneralIframeWidgetComponent implements IWidget {
     @Input() config: GeneralIframeConfig;
     @Input() id: string;
-    @Output() changeSettings = new EventEmitter<any>();
+    @Output() changeSettings = new EventEmitter<GeneralIframeSettingsChange>();
 
     url: string;
     _config: GeneralIframeConfig;

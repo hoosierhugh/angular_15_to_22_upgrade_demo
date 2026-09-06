@@ -9,5 +9,10 @@ export interface PreferenceUsers {
     usergroup: string;
     guid: string;
     version?: number;
-    params?: any;
+    setting?: string | Record<string, unknown>;
+    params?: {
+        last_login?: string;
+        last_loogin?: string;
+        timestamp_change_password?: string;
+    };
 }

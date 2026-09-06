@@ -7,18 +7,18 @@ import { environment } from '@environments/environment';
 export class PreferenceVersionService {
     apiUrl = environment.apiUrl;
     constructor(private http: HttpClient) {}
-    async getApiVersion() {
+    async getApiVersion(): Promise<string | undefined> {
         try {
-            let data: any = await this.http
-                .get(`${this.apiUrl}/version/api/info`)
+            const data = await this.http
+                .get<{ data?: { version?: string } }>(`${this.apiUrl}/version/api/info`)
                 .toPromise();
             if (data?.data?.version) {
                 return data.data?.version;
             }
-            return;
+            return undefined;
         } catch (err) {
             // console.log(err);
-            return;
+            return undefined;
         }
     }
     getUiVersion() {

@@ -11,7 +11,7 @@ import { VERSION } from 'src/VERSION';
 })
 export class PageAboutComponent implements OnInit {
     uiVersion = VERSION;
-    apiVersion: any;
+    apiVersion: Promise<string | undefined>;
     constructor(private _pvs: PreferenceVersionService) { }
 
     async ngOnInit() {

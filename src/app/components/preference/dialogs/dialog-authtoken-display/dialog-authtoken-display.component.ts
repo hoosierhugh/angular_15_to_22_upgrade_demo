@@ -11,13 +11,13 @@ import { TranslateService } from '@ngx-translate/core'
 })
 
 export class DialogAuthTokenDisplayComponent {
-    token: 'empty';
+    token: string;
     isAdmin = false;
     constructor(
         private authService: AuthenticationService,
         public translateService: TranslateService,
         public dialogRef: MatDialogRef<DialogAuthTokenDisplayComponent>,
-        @Inject(MAT_DIALOG_DATA) public data: any) {
+        @Inject(MAT_DIALOG_DATA) public data: { data: { token: string } }) {
         translateService.addLangs(['en'])
         translateService.setDefaultLang('en')
         this.token = data.data.token;
@@ -29,5 +29,4 @@ export class DialogAuthTokenDisplayComponent {
         this.dialogRef.close();
     }
 }
-
 

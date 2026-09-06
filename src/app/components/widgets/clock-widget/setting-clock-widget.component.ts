@@ -2,9 +2,17 @@ import { Component, Inject, ChangeDetectionStrategy, ChangeDetectorRef } from '@
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 
 import { TranslateService } from '@ngx-translate/core'
+import { ClockConfig, TimeZone } from './clock-widget.component';
 
-import * as _moment from 'moment';
-const moment: any = _moment;
+import * as _moment from 'moment-timezone';
+const moment = _moment;
+
+interface ClockSettingsData extends Pick<ClockConfig,
+    'title' | 'location' | 'showDate' | 'fontSizeClock' | 'fontSizeDate' | 'showAnalog'> {
+    name: string;
+    desc: string;
+    offset?: number;
+}
 @Component({
     selector: 'app-setting-clock-widget-component',
     templateUrl: 'setting-clock-widget.component.html',
@@ -21,17 +29,17 @@ export class SettingClockWidgetComponent {
         private cdr: ChangeDetectorRef,
         public translateService: TranslateService,
         public dialogRef: MatDialogRef<SettingClockWidgetComponent>,
-        @Inject(MAT_DIALOG_DATA) public data: any
+        @Inject(MAT_DIALOG_DATA) public data: ClockSettingsData
     ) {
         translateService.addLangs(['en'])
         translateService.setDefaultLang('en')
         this.arrayTimeZones = moment.tz.names();
     }
     onSelectTimeZone(timeZone) {
-        this.data.offset = moment.tz(timeZone)._offset;
+        this.data.offset = moment.tz(timeZone).utcOffset();
         this.data.name = timeZone;
         this.data.desc = timeZone;
-        this.data.location.offset = moment.tz(timeZone)._offset;
+        this.data.location.offset = moment.tz(timeZone).utcOffset();
         this.data.location.name = timeZone;
         this.data.location.desc = timeZone;
         this.cdr.detectChanges();

@@ -4,11 +4,21 @@ import { HttpClient } from '@angular/common/http';
 import { ConstValue } from '@app/models';
 import { Functions } from './functions';
 
+interface BufferedRequest<T> {
+    url: string;
+    delay: number;
+    data: T | null;
+    hash: string;
+    lastTime: number;
+    isItWasRequest: boolean;
+    observable: Observable<T>;
+}
+
 @Injectable({
     providedIn: 'root',
 })
 export class HttpGetBuffer {
-    static _buffer: any[] = [];
+    static _buffer: BufferedRequest<unknown>[] = [];
     static delay = 1000 * 30; // 30 sec buffering
 
     get username() {
@@ -18,9 +28,12 @@ export class HttpGetBuffer {
 
     constructor(private _http: HttpClient) { }
 
-    private getBufferItem(url: string) {
-        const f = (i: any) => i.hash === this.hash(url);
-        const recordItem = HttpGetBuffer._buffer?.find(f) || {};
+    private getBufferItem<T>(url: string): Partial<BufferedRequest<T>> {
+        const f = (i: BufferedRequest<unknown>) => i.hash === this.hash(url);
+        const recordItem = HttpGetBuffer._buffer?.find(f) as BufferedRequest<T> | undefined;
+        if (!recordItem) {
+            return {};
+        }
         const { delay, lastTime } = recordItem;
         if (delay && lastTime && delay + lastTime < Date.now()) {
             const index = HttpGetBuffer._buffer.findIndex(f);
@@ -48,12 +61,12 @@ export class HttpGetBuffer {
         if (delay === 0) {
             return this._http.get<T>(url);
         }
-        const { observable } = this.getBufferItem(url);
+        const { observable } = this.getBufferItem<T>(url);
         if (observable) {
             return observable;
         }
 
-        const bufferItem: any = {
+        const bufferItem: BufferedRequest<T> = {
             url,
             delay,
             data: null,
@@ -90,7 +103,7 @@ export class HttpGetBuffer {
             }),
         };
 
-        HttpGetBuffer._buffer.push(bufferItem);
+        HttpGetBuffer._buffer.push(bufferItem as BufferedRequest<unknown>);
         return bufferItem.observable;
     }
 }

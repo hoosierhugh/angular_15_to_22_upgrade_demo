@@ -13,16 +13,50 @@ export const MetricsMap = {
   'bytes': 'TL_BYTE',
 };
 
+export interface TooltipDetails {
+  custom?: boolean | null;
+  isLinkImg?: boolean;
+  position?: unknown;
+  hidden?: unknown;
+  isIPv4?: unknown;
+  ip_array?: unknown;
+  [key: string]: unknown;
+}
+
+export type TooltipMessage = string | TooltipDetails | null;
+
+interface TooltipModel {
+  dataPoints?: Array<{ index: number; datasetIndex: number }>;
+}
+
+interface TooltipSourceItem {
+  id?: string | number;
+  srcAlias?: string;
+  dstAlias?: string;
+  source_port?: string | number;
+  destination_port?: string | number;
+  source_ip?: string;
+  destination_ip?: string;
+  callid?: string;
+  create_ts?: string | number;
+  messageType?: string;
+  message: Record<string, unknown>;
+}
+
+interface TooltipDataset {
+  uuids: Array<string | number>;
+}
+
 @Injectable({ providedIn: 'root' })
 export class TooltipService {
-  private subject = new Subject<any>();
+  private subject = new Subject<TooltipMessage>();
   messageBuffer: string;
   hide() {
     this.messageBuffer = '';
     this.subject.next(null);
   }
 
-  show(message: any) {
+  show(message: string | TooltipDetails) {
     if (this.messageBuffer === JSON.stringify(message)) {
       return;
     }
@@ -30,11 +64,11 @@ export class TooltipService {
     this.subject.next(message);
   }
 
-  getMessage(): Observable<any> {
+  getMessage(): Observable<TooltipMessage> {
     return this.subject.asObservable();
   }
 
-  public getTooltip(tooltipModel, source: any, metric: string | string[]) {
+  public getTooltip(tooltipModel: TooltipModel, source: TooltipSourceItem[], metric: string | string[]) {
     if (tooltipModel.dataPoints && tooltipModel.dataPoints.length > 0) {
       const [dataPoint] = tooltipModel.dataPoints;
       const item = Functions.cloneObject(source[dataPoint.index]);
@@ -70,7 +104,7 @@ export class TooltipService {
     }
     return metricsMap;
   }
-  public getTooltipMediaChart(tooltipModel, source: any, datasets: any, metric: string | string[]) {
+  public getTooltipMediaChart(tooltipModel: TooltipModel, source: TooltipSourceItem[], datasets: TooltipDataset[], metric: string | string[]) {
     if (tooltipModel.dataPoints && tooltipModel.dataPoints.length > 0) {
       const [dataPoint] = tooltipModel.dataPoints;
       const index = datasets[dataPoint.datasetIndex].uuids[dataPoint.index];

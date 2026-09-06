@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { AuthenticationService } from './authentication.service';
 import { PreferenceUserSettingsService } from './preferences/user-settings.service';
+import { ApiResponse } from '@app/models';
 
 enum Security {
     CATEGORY = 'security',
@@ -12,13 +13,24 @@ export enum DashboardFlag {
     UPDATE = 'update',
     DELETE = 'delete'
 }
+
+interface SecurityUserSettings {
+    username: string;
+    category: string;
+    param: string;
+    data: {
+        support?: {
+            dashboard?: Partial<Record<DashboardFlag, boolean>>;
+        };
+    };
+}
 @Injectable({
     providedIn: 'root'
 })
 export class UserSecurityService {
 
     private isAdmin = false;
-    private userSettings: any;
+    private userSettings: SecurityUserSettings | undefined;
 
     constructor(
         private authenticationService: AuthenticationService,
@@ -30,12 +42,12 @@ export class UserSecurityService {
         const userData = this.authenticationService.currentUserValue;
         this.isAdmin = userData && userData.user && userData.user.admin && userData.user.admin === true;
     }
-    private getUserSettings() {
-        let output: any;
+    private getUserSettings(): Promise<SecurityUserSettings> {
+        let output: SecurityUserSettings;
         const username = this.authenticationService.getUserName()
-        return new Promise((resolve, reject) => {
+        return new Promise<SecurityUserSettings>((resolve, reject) => {
             if (!this.userSettings || this.userSettings.username !== username) {
-                this.preferenceUserSettingsService.getAll().toPromise().then((userSettings: any) => {
+                this.preferenceUserSettingsService.getAll<SecurityUserSettings>().toPromise().then((userSettings: ApiResponse<SecurityUserSettings[]>) => {
                     const { data } = userSettings || {};
                     if (data) {
                         this.userSettings = data.find(i =>

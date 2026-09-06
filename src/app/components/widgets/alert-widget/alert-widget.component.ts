@@ -8,6 +8,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { IWidget } from '../IWidget';
 import { Functions } from '@app/helpers/functions';
 import { TranslateService } from '@ngx-translate/core';
+import { WidgetSettingsChange } from '@app/models';
 
 
 export interface AlertConfig {
@@ -54,7 +55,7 @@ export class AlertWidgetComponent implements IWidget {
 
     @Input() config: AlertConfig;
     @Input() id: string;
-    @Output() changeSettings = new EventEmitter<any>();
+    @Output() changeSettings = new EventEmitter<WidgetSettingsChange<AlertConfig>>();
 
     displayMessage: string;
     private _interval;
@@ -131,13 +132,13 @@ export class AlertWidgetComponent implements IWidget {
     }
     makeRequest() {
         if (this._config.requestType === 'GET') {
-            this.http.get<any>(this._config.alertUrl).subscribe(data => {
+            this.http.get<unknown>(this._config.alertUrl).subscribe(data => {
                 for (let i = 0; i < this._config.expectedList.length; i++) {
                     if (this._config.expectedList[i] === data) {
                         this._config.alertState = true;
                     }
                 }
-                this.displayMessage = data;
+                this.displayMessage = String(data ?? '');
             })
         } else if (this._config.requestType === 'POST') {
             let body = {};
@@ -148,14 +149,14 @@ export class AlertWidgetComponent implements IWidget {
                 })
             };
             body = Functions.JSON_parse(this._config.postData);
-            this.http.post<any>(this._config.alertUrl, body, httpOptions).subscribe(data => {
+            this.http.post<unknown>(this._config.alertUrl, body, httpOptions).subscribe(data => {
                 for (let i = 0; i < this._config.keyList.length; i++) {
                     if (data != null) {
                         this.displayMessage = JSON.stringify(data, null, 4);
                         if (this._config.comparsionLogic == 'AND') {
-                            comparsionResult.push(this.compare(i, data));
+                            comparsionResult.push(this.compare(i, isRecord(data) ? data : {}));
                         } else {
-                            if (this.compare(i, data)) {
+                            if (this.compare(i, isRecord(data) ? data : {})) {
                                 this._config.alertState = true;
                             }
                         }
@@ -192,10 +193,23 @@ export class AlertWidgetComponent implements IWidget {
         });
     }
 
-    compare(i, data) {
+    compare(i: number, data: Record<string, unknown>) {
         const { keyList, expectedList, comparsionTypeList } = this._config || {};
         const [a, b, type] = [data[keyList[i]], expectedList[i], comparsionTypeList[i]];
-        const out = { '>': a > b, '<': a < b, '>=': a >= b, '<=': a <= b, '==': a == b, '!=': a != b };
+        const numericA = Number(a);
+        const numericB = Number(b);
+        const bothNumeric = Number.isFinite(numericA) && Number.isFinite(numericB);
+        const equal = bothNumeric ? numericA === numericB : String(a) === String(b);
+        const greater = bothNumeric ? numericA > numericB : String(a) > String(b);
+        const less = bothNumeric ? numericA < numericB : String(a) < String(b);
+        const out = {
+            '>': greater,
+            '<': less,
+            '>=': greater || equal,
+            '<=': less || equal,
+            '==': equal,
+            '!=': !equal
+        };
         this.cdr.detectChanges();
         return out[type];
     }
@@ -234,4 +248,8 @@ export class AlertWidgetComponent implements IWidget {
         clearInterval(this._interval);
     }
 
+}
+
+function isRecord(value: unknown): value is Record<string, unknown> {
+    return typeof value === 'object' && value !== null;
 }

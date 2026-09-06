@@ -6,6 +6,7 @@ import { AuthenticationService, ProxyService } from '@app/services';
 import { TranslateService } from '@ngx-translate/core';
 import { Subscription, lastValueFrom } from 'rxjs';
 import { IWidget } from '../IWidget';
+import { WidgetSettingsChange } from '@app/models';
 import { Widget, WidgetArrayInstance } from '@app/helpers/widget';
 
 import { environment } from '@environments/environment';
@@ -51,7 +52,7 @@ export interface IframeConfig {
 export class IframeWidgetComponent implements IWidget, OnInit, OnDestroy {
     @Input() config: IframeConfig;
     @Input() id: string;
-    @Output() changeSettings = new EventEmitter<any>();
+    @Output() changeSettings = new EventEmitter<WidgetSettingsChange<IframeConfig>>();
 
     @ViewChild('frame', { static: true }) frame: ElementRef;
     private envUrl = `${environment.apiUrl.replace('/api/v3', '')}`;
@@ -67,7 +68,6 @@ export class IframeWidgetComponent implements IWidget, OnInit, OnDestroy {
     subscription: Subscription;
     timeRange: Timestamp;
     iframeLoaded = true;
-    _interval: any;
 
     isSameOrigin: boolean = false;
     grafanaVariables: string = '';
@@ -223,7 +223,7 @@ export class IframeWidgetComponent implements IWidget, OnInit, OnDestroy {
             }
         });
 
-        dialogRef.afterClosed().toPromise().then((data: any) => {
+        dialogRef.afterClosed().toPromise().then((data: IframeConfig | undefined) => {
             if (data) {
                 this._config.desc = data.desc;
                 this._config.dashboardSource = this.dashboardSource = data.dashboardSource;

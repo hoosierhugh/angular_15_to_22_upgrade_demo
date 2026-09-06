@@ -8,12 +8,12 @@ import { Functions } from '@app/helpers/functions';
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class TabLogsComponent implements OnInit, AfterViewInit {
-    _data: any;
+    _data: LogEntry[] = [];
 
     get data() {
         return this._data;
     }
-    @Input('data') set data(val) {
+    @Input('data') set data(val: LogEntry[]) {
         if (!val) {
             return;
         }
@@ -22,21 +22,24 @@ export class TabLogsComponent implements OnInit, AfterViewInit {
         // Compact Objects
         this._data.forEach(i => {
             try {
-                i.payload.raw = Functions.JSON_parse(i.payload.raw);
+                i.payload.raw = Functions.JSON_parse(String(i.payload.raw));
             } catch (e) { }
 
             try {
+                const originalPayload = i.payload;
                 i.payload = {
-                    message: i.payload.raw,
-                    timestamp: new Date(i.payload.create_date),
-                    raw: i.payload
+                    message: originalPayload.raw,
+                    timestamp: new Date(originalPayload.create_date),
+                    raw: originalPayload
                 };
-                delete i.payload.raw.raw;
+                if (isRecord(i.payload.raw)) {
+                    delete i.payload.raw.raw;
+                }
             } catch (e) { }
         });
         this.cdr.detectChanges();
     }
-    @Output() ready: EventEmitter<any> = new EventEmitter();
+    @Output() ready = new EventEmitter<void>();
     constructor(private cdr: ChangeDetectorRef) { }
 
     ngOnInit() {
@@ -44,9 +47,24 @@ export class TabLogsComponent implements OnInit, AfterViewInit {
     ngAfterViewInit() {
 
         setTimeout(() => {
-            this.ready.emit({});
+            this.ready.emit();
         }, 100)
     }
 
 
+}
+
+interface LogPayload {
+    raw: unknown;
+    create_date?: string | number | Date;
+    message?: unknown;
+    timestamp?: Date;
+}
+
+interface LogEntry {
+    payload: LogPayload;
+}
+
+function isRecord(value: unknown): value is Record<string, unknown> {
+    return typeof value === 'object' && value !== null;
 }

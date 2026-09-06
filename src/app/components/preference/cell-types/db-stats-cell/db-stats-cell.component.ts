@@ -10,7 +10,7 @@ export class DbStatsCellComponent implements OnInit {
     @Input() column;
     @ViewChild(MatColumnDef) columnDef: MatColumnDef;
 
-    constructor(public table: MatTable<any>,  private cdr: ChangeDetectorRef) { }
+    constructor(public table: MatTable<unknown>,  private cdr: ChangeDetectorRef) { }
 
     ngOnInit() {
         if (this.table) {

@@ -9,6 +9,12 @@ enum Stream {
 }
 export type StreamType = keyof typeof Stream;
 
+interface AdminActionResponse {
+  data?: {
+    message?: string;
+  };
+}
+
 @Injectable({
   providedIn: 'root'
 })
@@ -27,8 +33,8 @@ export class AdminService {
   }
 
   // /export/action/active
-  dumpRequest(type: StreamType) {
-    return this.http.get(`${this.url}${type}`).toPromise();
+  dumpRequest(type: StreamType): Promise<AdminActionResponse | undefined> {
+    return this.http.get<AdminActionResponse>(`${this.url}${type}`).toPromise();
   }
 
   checkIsActive() {

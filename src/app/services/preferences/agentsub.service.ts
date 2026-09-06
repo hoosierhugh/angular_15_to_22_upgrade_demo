@@ -5,6 +5,12 @@ import { PreferenceAgentsub } from '@app/models';
 import { AuthenticationService } from '@app/services';
 import { Observable } from 'rxjs';
 
+interface AgentLookupRequest {
+  uuid: string;
+  type: string;
+  data: unknown;
+}
+
 @Injectable({
   providedIn: 'root'
 })
@@ -23,8 +29,8 @@ export class PreferenceAgentsubService {
   }
 
   // perform lookup against an agent session
-  getHepsubElements({uuid, type, data}): Observable<any> {
-    return this.http.post<any>(`${this.url}/search/${uuid}/${type}`, data);
+  getHepsubElements({uuid, type, data}: AgentLookupRequest): Observable<unknown> {
+    return this.http.post<unknown>(`${this.url}/search/${uuid}/${type}`, data);
   }
 
   // retrieve all active agent sessions

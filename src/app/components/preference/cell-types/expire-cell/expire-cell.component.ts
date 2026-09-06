@@ -20,7 +20,7 @@ export class ExpireCellComponent implements OnInit {
   @ViewChild(MatCellDef) cellDef: MatCellDef;
   dateFormat;
   constructor(
-    public table: MatTable<any>,
+    public table: MatTable<unknown>,
     private cdr: ChangeDetectorRef
   ) { }
 

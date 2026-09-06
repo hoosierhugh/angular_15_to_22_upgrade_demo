@@ -17,18 +17,18 @@ import { Functions } from '@app/helpers/functions';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class FlowItemComponent implements AfterViewChecked {
-  _item: any = {};
-  @Input() set item(val: any) {
+  _item: FlowDisplayItem;
+  @Input() set item(val: FlowDisplayItem) {
     this._item = val;
   }
-  get item(): any {
+  get item(): FlowDisplayItem {
     return this._item;
   }
   @Input() isSimplify = true;
   @Input() isGroupByAlias = false;
   @Input() idx = 0;
   @Input() isAbsolute: boolean = false;
-  @Output() itemClick: EventEmitter<any> = new EventEmitter();
+  @Output() itemClick = new EventEmitter<{ idx: number; event: MouseEvent }>();
 
   constructor(private cdr: ChangeDetectorRef) { }
 
@@ -43,4 +43,28 @@ export class FlowItemComponent implements AfterViewChecked {
   ngAfterViewChecked() {
     this.cdr.detectChanges();
   }
+}
+
+interface FlowDisplayItem {
+  method_text?: string;
+  description?: string;
+  source_ip?: string;
+  source_port?: string | number;
+  destination_ip?: string;
+  destination_port?: string | number;
+  info_date?: string;
+  diff_absolute?: string;
+  diff?: string;
+  QOS?: { MOS?: number; qosTYPEless?: string };
+  options: {
+    color?: string;
+    color_method?: string;
+    start?: number;
+    middle?: number;
+    rightEnd?: number;
+    direction?: boolean;
+    isRadialArrow?: boolean;
+    isLastHost?: boolean;
+    arrowStyleSolid?: boolean;
+  };
 }

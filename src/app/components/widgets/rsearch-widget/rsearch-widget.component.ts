@@ -8,6 +8,16 @@ import { ConstValue, UserConstValue } from '@app/models';
 import { SearchService } from '@app/services';
 import { Functions, setStorage } from '@app/helpers/functions';
 import { TranslateService } from '@ngx-translate/core'
+import { LokiCodeData } from './code-style-field/code-style-field.component';
+
+interface LokiSearchQuery {
+  text?: string;
+  rxText?: string;
+  limit: number;
+  protocol_id: string;
+  fields: unknown[];
+  [key: string]: unknown;
+}
 @Component({
   selector: 'app-rsearch-widget',
   templateUrl: './rsearch-widget.component.html',
@@ -33,7 +43,7 @@ export class RsearchWidgetComponent implements IWidget {
 
   lokiQuery: string;
   limit = 100;
-  searchQueryLoki: any;
+  searchQueryLoki: LokiSearchQuery;
   queryText: string;
   constructor(
     public dialog: MatDialog,
@@ -54,11 +64,13 @@ export class RsearchWidgetComponent implements IWidget {
       this.limit = data.limit * 1 || 100;
     }
   }
-  onCodeData(event) {
-    this.searchQueryLoki = event;
-    this.searchQueryLoki.limit = this.limit * 1 || 100;
-    this.searchQueryLoki.protocol_id = ConstValue.LOKI_PREFIX;
-    this.searchQueryLoki.fields = [];
+  onCodeData(event: LokiCodeData) {
+    this.searchQueryLoki = {
+      ...event,
+      limit: this.limit * 1 || 100,
+      protocol_id: ConstValue.LOKI_PREFIX,
+      fields: []
+    };
   }
   doSearchResult() {
     this.searchService.setLocalStorageQuery(this.searchQueryLoki);
@@ -66,7 +78,7 @@ export class RsearchWidgetComponent implements IWidget {
     this.router.navigate(['search/result']);
 
   }
-  onChangeField(event: any) {
+  onChangeField(event: unknown) {
 
   }
   handleEnterKeyPress(event) {

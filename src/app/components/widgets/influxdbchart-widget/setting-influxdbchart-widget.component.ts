@@ -196,7 +196,7 @@ export class SettingInfluxdbchartWidgetComponent {
         const res = await this._ss.getStatisticMeasurements(this.selectedEditQuery.database).toPromise();
 
         if (res && res.data) {
-            this.measurementList = res.data.Results[0].Series[0].values.map(i => ({ name: i[0], value: i[0] }));
+            this.measurementList = res.data.Results[0].Series[0].values.map(i => ({ name: String(i[0]), value: String(i[0]) }));
         }
         this.cdr.detectChanges();
     }
@@ -215,7 +215,7 @@ export class SettingInfluxdbchartWidgetComponent {
     async onPanelDatasource() {
         const res = await this._ss.getStatisticDbList().toPromise();
         if (res && res.data) {
-            this.databaseList = res.data.Results[0].Series[0].values.map(i => ({ name: i[0], value: i[0] }));
+            this.databaseList = res.data.Results[0].Series[0].values.map(i => ({ name: String(i[0]), value: String(i[0]) }));
             this.updateResult();
             this.cdr.detectChanges();
         }
@@ -234,7 +234,7 @@ export class SettingInfluxdbchartWidgetComponent {
         };
         const res = await this._ss.getStatisticRetentions(reqData).toPromise();
         if (res && res.data) {
-            this.retentionPolicyList = res.data.Results[0].Series[0].values.map(i => ({ name: i[0], value: i[0] }));
+            this.retentionPolicyList = res.data.Results[0].Series[0].values.map(i => ({ name: String(i[0]), value: String(i[0]) }));
             this.retentionPolicyList.push({ name: 'none', value: 'none' });
 
             this.updateResult();
@@ -258,7 +258,7 @@ export class SettingInfluxdbchartWidgetComponent {
             }
         }).toPromise();
         if (res && res.data) {
-            this.counterList = res.data.Results[0].Series[0].values.map(i => ({ name: i[0], value: i[0] }));
+            this.counterList = res.data.Results[0].Series[0].values.map(i => ({ name: String(i[0]), value: String(i[0]) }));
             this.counter.setValue(this.selectedEditQuery.detail.counter);
             this.selectedEditQuery.detail.measurement = this.measurement;
         }
@@ -278,7 +278,7 @@ export class SettingInfluxdbchartWidgetComponent {
         }).toPromise();
 
         if (res2 && res2.data) {
-            this.tagsList = res2.data.Results[0].Series[0].values.map(i => ({ name: i[0], value: i[0] }));
+            this.tagsList = res2.data.Results[0].Series[0].values.map(i => ({ name: String(i[0]), value: String(i[0]) }));
             this.tags.setValue(this.selectedEditQuery.detail.tags);
         }
         this.updateCss('counter');

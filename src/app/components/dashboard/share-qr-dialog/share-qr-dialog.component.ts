@@ -2,6 +2,7 @@ import { Component, Inject, ChangeDetectionStrategy, ChangeDetectorRef } from '@
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { AlertService, DashboardService, } from '@app/services';
 import { TranslateService } from '@ngx-translate/core';
+import { DashboardData } from '@app/models';
 @Component({
     selector: 'app-share-qr-dialog',
     templateUrl: './share-qr-dialog.component.html',
@@ -59,7 +60,7 @@ export class ShareQrDialogComponent {
     }
     shareDashboard() {
 
-        let actualDb: any;
+        let actualDb: DashboardData | undefined;
         this.dashboardService.getDashboardStore(this.id).toPromise().then(dbData => {
             actualDb = dbData?.data;
             if (actualDb) {

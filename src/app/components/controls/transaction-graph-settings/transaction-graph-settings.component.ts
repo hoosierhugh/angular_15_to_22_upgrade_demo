@@ -64,7 +64,7 @@ export class TransactionGraphSettingsComponent implements OnInit {
         this.isInfoOpened = false;
         this.cdr.detectChanges();
     }
-    formatLabel(value: number): any {
+    formatLabel(value: number): number {
         const percent = Math.round(Math.abs(value) / Math.abs(-50000) * 100);
         return percent;
     }

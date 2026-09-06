@@ -1,6 +1,7 @@
 import { Component, Inject, OnInit, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { TranslateService } from '@ngx-translate/core'
+import { AlertConfig } from './alert-widget.component';
 @Component({
     selector: 'app-setting-alert-widget-component',
     templateUrl: 'setting-alert-widget.component.html',
@@ -21,14 +22,14 @@ export class SettingAlertWidgetComponent implements OnInit {
     };
     public show = [false, false, false];
     public showPicker = [false, false, false];
-    colorsSuccess: any;
-    colorsFail: any;
-    colorsText: any;
+    colorsSuccess: Promise<string[]>;
+    colorsFail: Promise<string[]>;
+    colorsText: Promise<string[]>;
     constructor(
         private cdr: ChangeDetectorRef,
         public translateService: TranslateService,
         public dialogRef: MatDialogRef<SettingAlertWidgetComponent>,
-        @Inject(MAT_DIALOG_DATA) public data: any
+        @Inject(MAT_DIALOG_DATA) public data: AlertConfig
     ) {
         translateService.addLangs(['en'])
         translateService.setDefaultLang('en')
@@ -43,7 +44,7 @@ export class SettingAlertWidgetComponent implements OnInit {
         this.data.alertState = false;
         this.cdr.detectChanges();
     }
-    changeColorManual(color: any, type: string): void {
+    changeColorManual(color: string, type: string): void {
         if (type === 'success') {
             this.data.alertSuccessColor = color;
         } else if (type === 'fail') {

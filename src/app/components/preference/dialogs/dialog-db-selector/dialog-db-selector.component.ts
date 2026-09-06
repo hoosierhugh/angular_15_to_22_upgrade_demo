@@ -3,6 +3,17 @@ import { FormControl, Validators } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { AuthenticationService } from '@app/services';
 import { TranslateService } from '@ngx-translate/core'
+
+interface DatabaseSelectionDialogData {
+    data: {
+        db_list: string[];
+        table_list: string[];
+        db_src: string;
+        node_dst: string;
+        tables: string[];
+        [key: string]: string | string[];
+    };
+}
 @Component({
     selector: 'app-dialog-db-selector',
     templateUrl: './dialog-db-selector.component.html',
@@ -15,15 +26,15 @@ export class DialogDBSelectorComponent {
     canSave = false;
     node_src = new FormControl('');
     node_dst = new FormControl('');
-    tables = new FormControl([]);
-    tableSelection = [];
-    nodeSelection = [];
+    tables = new FormControl<string[]>([]);
+    tableSelection: string[] = [];
+    nodeSelection: string[] = [];
     dialogData;
     constructor(
         private authService: AuthenticationService,
         public translateService: TranslateService,
         public dialogRef: MatDialogRef<DialogDBSelectorComponent>,
-        @Inject(MAT_DIALOG_DATA) public data: any) {
+        @Inject(MAT_DIALOG_DATA) public data: DatabaseSelectionDialogData) {
         translateService.addLangs(['en'])
         translateService.setDefaultLang('en')
 

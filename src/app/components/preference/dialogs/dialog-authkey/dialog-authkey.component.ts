@@ -3,6 +3,13 @@ import { FormControl, Validators } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { AuthenticationService } from '@app/services';
 import { TranslateService } from '@ngx-translate/core'
+import { CrudDialogData } from '@app/models';
+
+interface AuthKeyDialogRecord {
+    name: string;
+    expire_date: Date | string;
+    active: boolean;
+}
 @Component({
     selector: 'app-dialog-authkey',
     templateUrl: './dialog-authkey.component.html',
@@ -23,7 +30,7 @@ export class DialogAuthKeyComponent {
         private authService: AuthenticationService,
         public dialogRef: MatDialogRef<DialogAuthKeyComponent>,
         public translateService: TranslateService,
-        @Inject(MAT_DIALOG_DATA) public data: any) {
+        @Inject(MAT_DIALOG_DATA) public data: CrudDialogData<AuthKeyDialogRecord>) {
         translateService.addLangs(['en'])
         translateService.setDefaultLang('en')
         if (data.isnew) {

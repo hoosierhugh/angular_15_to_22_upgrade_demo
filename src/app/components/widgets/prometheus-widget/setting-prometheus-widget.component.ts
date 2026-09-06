@@ -162,12 +162,12 @@ export class SettingPrometheusWidgetComponent {
     getMetrics(arrLabels: string[], callback: Function, result = []) {
         if (arrLabels.length > 0) {
             this._ps.getLabels(arrLabels.shift()).subscribe(metrics => {
-                metrics = metrics.map(i => {
+                const metricNames = metrics.map(i => {
                     let name = i.__name__;
                     name += '{' + Object.keys(i).filter(j => j !== '__name__').map(j => `${j}="${i[j]}"`).join(',') + '}';
                     return name;
                 });
-                result = result.concat(metrics);
+                result = result.concat(metricNames);
                 this.getMetrics(arrLabels, callback, result);
             });
             return;

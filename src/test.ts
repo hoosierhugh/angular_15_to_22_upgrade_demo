@@ -7,7 +7,14 @@ import {
   platformBrowserDynamicTesting
 } from '@angular/platform-browser-dynamic/testing';
 
-declare const require: any;
+interface WebpackContext {
+  keys(): string[];
+  (modulePath: string): unknown;
+}
+
+declare const require: {
+  context(directory: string, useSubdirectories: boolean, pattern: RegExp): WebpackContext;
+};
 
 // First, initialize the Angular testing environment.
 getTestBed().initTestEnvironment(

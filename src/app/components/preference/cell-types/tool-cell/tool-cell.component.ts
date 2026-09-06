@@ -7,16 +7,16 @@ import { TranslateService } from '@ngx-translate/core';
   styleUrls: ['./tool-cell.component.scss']
 })
 export class ToolCellComponent implements OnInit {
-    @Input() column;
-    @Input() isAccess;
-    @Input() page;
+    @Input() column: string;
+    @Input() isAccess: Record<string, boolean>;
+    @Input() page: string;
     @ViewChild(MatColumnDef) columnDef: MatColumnDef;
-    @Output() settingDialog: EventEmitter<any> = new EventEmitter();
-    @Output() resyncDialog: EventEmitter<any> = new EventEmitter();
-    @Output() resetDialog: EventEmitter<any> = new EventEmitter();
-    @Output() deleteDialog: EventEmitter<any> = new EventEmitter();
+    @Output() settingDialog = new EventEmitter<unknown>();
+    @Output() resyncDialog = new EventEmitter<unknown>();
+    @Output() resetDialog = new EventEmitter<unknown>();
+    @Output() deleteDialog = new EventEmitter<unknown>();
     constructor(
-      public table: MatTable<any>,  
+      public table: MatTable<unknown>,
       private cdr: ChangeDetectorRef,
       public translateService: TranslateService
       ) {
@@ -31,7 +31,7 @@ export class ToolCellComponent implements OnInit {
         }
       }
 
-    childCount(div) {
+    childCount(div: Element) {
         return div.childElementCount;
     }
 }

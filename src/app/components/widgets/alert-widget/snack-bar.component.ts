@@ -19,6 +19,10 @@ import { MAT_SNACK_BAR_DATA } from '@angular/material/snack-bar';
 })
 export class SnackBarComponent {
     constructor(
-        @Inject(MAT_SNACK_BAR_DATA) public data: any
+        @Inject(MAT_SNACK_BAR_DATA) public data: {
+            alertTextColor: string;
+            alertSuccessColor: string;
+            alertMessage: string;
+        }
     ) { }
 }

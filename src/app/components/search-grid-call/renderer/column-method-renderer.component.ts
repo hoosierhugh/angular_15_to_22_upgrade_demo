@@ -1,5 +1,6 @@
 import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { ICellRendererAngularComp } from 'ag-grid-angular';
+import { SearchGridCellParams } from './search-grid-renderer.types';
 
 @Component({
     selector: 'app-child-cell',
@@ -44,13 +45,13 @@ import { ICellRendererAngularComp } from 'ag-grid-angular';
     changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ColumnMethodRenderer implements ICellRendererAngularComp {
-    public params: any;
+    public params: SearchGridCellParams;
     selected
     method: string;
     copyTimer: number;
-    agInit(params: any): void {
+    agInit(params: SearchGridCellParams): void {
         this.params = params;
-        this.method = this.params.value || null;
+        this.method = this.params.value == null ? '' : String(this.params.value);
     }
 
     public openMethodPopup(event) {

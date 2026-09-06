@@ -1,6 +1,6 @@
 import { AlertService } from '@it-app/services/alert.service';
 import { PcapUploaderService } from './pcap-uploader.service';
-import { Component, Input, Output, EventEmitter, AfterViewInit, ViewChild, ChangeDetectorRef } from '@angular/core';
+import { Component, Input, Output, EventEmitter, AfterViewInit, ViewChild, ChangeDetectorRef, ElementRef } from '@angular/core';
 import { Widget } from '@app/helpers/widget';
 import { IWidget } from '../IWidget';
 import { TranslateService } from '@ngx-translate/core'
@@ -22,19 +22,19 @@ import { TranslateService } from '@ngx-translate/core'
 })
 export class PcapUploaderWidgetComponent implements IWidget, AfterViewInit {
     idDrugOver = false;
-    data: any;
+    data: unknown;
     filename: string;
     filesize: string;
-    fileToUpload: any;
+    fileToUpload: File | null = null;
     inProgress = false;
     isDataTimeNow = false;
-    @Input() config: any;
+    @Input() config: unknown;
     @Input() index: string;
     @Input() id: string;
 
-    @Output() changeSettings = new EventEmitter<any>();
+    @Output() changeSettings = new EventEmitter<unknown>();
 
-    @ViewChild('fileSelect', { static: true }) fileSelect;
+    @ViewChild('fileSelect', { static: true }) fileSelect: ElementRef<HTMLInputElement>;
 
     constructor(
         private pcapUploaderService: PcapUploaderService,
@@ -47,32 +47,37 @@ export class PcapUploaderWidgetComponent implements IWidget, AfterViewInit {
     }
 
     ngAfterViewInit() {
-        const hsp = e => {
-            this.idDrugOver = e.type === 'dragover';
-            e.preventDefault();
-            e.stopPropagation();
+        const hsp = (event: Event) => {
+            this.idDrugOver = event.type === 'dragover';
+            event.preventDefault();
+            event.stopPropagation();
         };
-        const handlerDrop = e => {
-            hsp(e);
-            Array.from(e.dataTransfer.files).forEach(this.handlerUpload.bind(this));
+        const handlerDrop = (event: DragEvent) => {
+            hsp(event);
+            Array.from(event.dataTransfer?.files || []).forEach(file => this.handlerUpload(file));
         };
-
-        Object.entries({
-            submit: hsp, drag: hsp, dragstart: hsp, dragend: hsp,
-            dragover: hsp, dragenter: hsp, dragleave: hsp,
-            drop: handlerDrop, change: e => this.handlerUpload(e.target.files[0])
-        }).forEach(([key, listener]) => {
-            this.fileSelect.nativeElement.addEventListener(key, listener);
+        const element = this.fileSelect.nativeElement;
+        ['submit', 'drag', 'dragstart', 'dragend', 'dragover', 'dragenter', 'dragleave']
+            .forEach(eventName => element.addEventListener(eventName, hsp));
+        element.addEventListener('drop', handlerDrop);
+        element.addEventListener('change', () => {
+            const file = element.files?.[0];
+            if (file) {
+                this.handlerUpload(file);
+            }
         });
     }
 
-    private handlerUpload(file) {
+    private handlerUpload(file: File) {
         this.filename = file.name;
         this.filesize = (file.size / 1024).toFixed(2);
         this.fileToUpload = file;
         this.cdr.detectChanges();
     }
     onSubmit() {
+        if (!this.fileToUpload) {
+            return;
+        }
         this.inProgress = true;
         this.pcapUploaderService.postFile(this.fileToUpload, this.isDataTimeNow).subscribe(data => {
             this.inProgress = false;

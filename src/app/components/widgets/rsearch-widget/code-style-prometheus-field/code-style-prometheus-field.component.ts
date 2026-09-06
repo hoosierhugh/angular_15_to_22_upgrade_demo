@@ -1,5 +1,17 @@
-import { Component, OnInit, ViewChild, AfterViewInit, Output, EventEmitter, Input } from '@angular/core';
+import { Component, OnInit, ViewChild, AfterViewInit, Output, EventEmitter, Input, ElementRef } from '@angular/core';
 import { MatMenuTrigger } from '@angular/material/menu';
+
+interface TextSegment {
+  text: string;
+  node: Node;
+}
+
+export interface PrometheusCodeUpdate {
+  text: string;
+  serverLoki: string;
+  obj: Record<string, string | null> | string;
+  rxText: string;
+}
 
 @Component({
   selector: 'app-code-style-prometheus-field',
@@ -20,17 +32,17 @@ export class CodeStylePrometheusFieldComponent implements OnInit, AfterViewInit 
   private _menuDOM: HTMLElement;
   private lastMenuXPosition = 0;
 
-  @Input() set queryText(val) {
+  @Input() set queryText(val: string) {
     this._queryText = val;
     this.updateEditor(null);
   }
   get queryText() {
     return this._queryText;
   }
-  @Input() arrayForMenu: Array<any> = [];
-  @Output() updateData: EventEmitter<any> = new EventEmitter();
-  @Output() keyEnter: EventEmitter<any> = new EventEmitter();
-  @ViewChild('divContainer', { static: false }) divContainer;
+  @Input() arrayForMenu: string[] = [];
+  @Output() updateData = new EventEmitter<PrometheusCodeUpdate>();
+  @Output() keyEnter = new EventEmitter<void>();
+  @ViewChild('divContainer', { static: false }) divContainer: ElementRef<HTMLDivElement>;
   @ViewChild(MatMenuTrigger, { static: false }) trigger: MatMenuTrigger;
 
   popupList: Array<string>;
@@ -62,7 +74,7 @@ export class CodeStylePrometheusFieldComponent implements OnInit, AfterViewInit 
     }
 
   }
-  onKeyDownDiv(event) {
+  onKeyDownDiv(event: KeyboardEvent) {
     if (!!({ ArrowDown: 1, ArrowUp: 1, Enter: 1 })[event.key]) {
       this.triggerNavMenu(event.key);
       event.preventDefault();
@@ -87,32 +99,36 @@ export class CodeStylePrometheusFieldComponent implements OnInit, AfterViewInit 
   }
   private getCaretPosition() {
     try {
-      const d = window.getSelection().anchorNode.parentNode as HTMLElement;
+      const d = window.getSelection()?.anchorNode?.parentNode as HTMLElement | null;
+      if (!d) {
+        return -1;
+      }
       this.lastMenuXPosition = Math.round(d.getBoundingClientRect().left);
       return Math.round(d.getBoundingClientRect().left);
     } catch (e) {
       return -1;
     }
   }
-  gatObjectLabels() {
-    const labels = this.arrayForMenu.map(i => {
-      return i.match(/\{(.+)\}/g).find(i => !!i)
-        .replace(/[\{\}\s\"]{1}/g, '')
+  gatObjectLabels(): Record<string, string[]> {
+    const labels: Record<string, string[]> = {};
+    this.arrayForMenu.forEach(item => {
+      const labelBlock = item.match(/\{(.+)\}/g)?.find(Boolean);
+      if (!labelBlock) {
+        return;
+      }
+      labelBlock.replace(/[\{\}\s\"]{1}/g, '')
         .split(',')
-        .map(j => j.split('='));
-    }).reduce((a, b) => {
-      a = a.concat(b);
-      return a;
-    }, []).reduce((a, b) => {
-      const [first, seccond] = b;
-      if (!a[first]) {
-        a[first] = [];
-      }
-      if (a[first].indexOf(seccond) === -1) {
-        a[first].push(seccond);
-      }
-      return a;
-    }, {});
+        .map(pair => pair.split('='))
+        .forEach(([name, value]) => {
+          if (!name || value === undefined) {
+            return;
+          }
+          labels[name] = labels[name] || [];
+          if (!labels[name].includes(value)) {
+            labels[name].push(value);
+          }
+        });
+    });
     return labels;
   }
   getLabels() {
@@ -134,7 +150,7 @@ export class CodeStylePrometheusFieldComponent implements OnInit, AfterViewInit 
       label = label || this.editor.innerText.split(',').pop().replace(/[\=\"\,\{\}]+/g, '');
       this.isLabel = false;
 
-      this.popupList = this.gatObjectLabels()[label];
+      this.popupList = this.gatObjectLabels()[label] || [];
 
       if (this.popupList.length > 0) {
         this.menuTitle = `Label value for "${label}"`;
@@ -144,7 +160,7 @@ export class CodeStylePrometheusFieldComponent implements OnInit, AfterViewInit 
       }
     }, 10);
   }
-  onKeyUpDiv(event): boolean | null | void {
+  onKeyUpDiv(event: KeyboardEvent): boolean | void {
     if (this.editor.innerText === '' || [17, 16].indexOf(event.keyCode) !== -1) {
       return;
     }
@@ -166,7 +182,7 @@ export class CodeStylePrometheusFieldComponent implements OnInit, AfterViewInit 
       return false;
     }
     if ([219, 222, 188, 187, 192].indexOf(event.keyCode) !== -1) {
-      const [getLastLetter] = window.getSelection().anchorNode.textContent.split('');
+      const [getLastLetter] = (window.getSelection()?.anchorNode?.textContent || '').split('');
 
       if ('(' === getLastLetter) { // ()
         this.editor.innerText = '()';
@@ -200,7 +216,7 @@ export class CodeStylePrometheusFieldComponent implements OnInit, AfterViewInit 
     }
     return;
   }
-  getObject(str: string) {
+  getObject(str: string): Record<string, string | null> | string {
     if (str.match(/\{.*\}/g)) {
       str = str.match(/\{.*\}/g).find(i => !!i);
     }
@@ -225,15 +241,15 @@ export class CodeStylePrometheusFieldComponent implements OnInit, AfterViewInit 
       if (json === '{: null}') {
         return {};
       }
-      return JSON.parse(json);
+      return JSON.parse(json) as Record<string, string | null>;
     } catch (e) {
       return json;
     }
   }
-  getRegExpString(str) {
+  getRegExpString(str: string): string {
     return str.split(/\{.*\}\s*/g)[1] || '';
   }
-  onMenuMessage(item, event: any = null) {
+  onMenuMessage(item: string, event: KeyboardEvent | null = null) {
     if (!event || (event.keyCode === 13 || event.keyCode === 32)) {
       if (this.isLabel) {
         this.typeInTextarea(item + '=');
@@ -253,7 +269,7 @@ export class CodeStylePrometheusFieldComponent implements OnInit, AfterViewInit 
     }
   }
 
-  private setStyleCodeColors(str) {
+  private setStyleCodeColors(str: string): string {
     const s = str.match(/[\{\}\=, ]{1}|[^\{\}\=, ]+/g);
     if (!s) {
       return '';
@@ -277,13 +293,13 @@ export class CodeStylePrometheusFieldComponent implements OnInit, AfterViewInit 
     }).join('');
   }
 
-  private getTextSegments(element) {
-    const textSegments = [];
+  private getTextSegments(element: Node): TextSegment[] {
+    const textSegments: TextSegment[] = [];
     try {
       Array.from(element.childNodes).forEach((node: Node) => {
         switch (node.nodeType) {
           case Node.TEXT_NODE:
-            textSegments.push({ text: node.nodeValue, node });
+            textSegments.push({ text: node.nodeValue || '', node });
             break;
 
           case Node.ELEMENT_NODE:
@@ -298,18 +314,18 @@ export class CodeStylePrometheusFieldComponent implements OnInit, AfterViewInit 
     return textSegments;
   }
 
-  private updateEditor(event, setEnd = false) {
+  private updateEditor(_event: Event | null, setEnd = false) {
     const sel = window.getSelection();
     const textSegments = this.getTextSegments(this.editor);
     const textContent = textSegments.map(({ text }) => text).join('');
-    let anchorIndex = null;
-    let focusIndex = null;
+    let anchorIndex: number | null = null;
+    let focusIndex: number | null = null;
     let currentIndex = 0;
     textSegments.forEach(({ text, node }) => {
-      if (node === sel.anchorNode) {
+      if (node === sel?.anchorNode) {
         anchorIndex = currentIndex + sel.anchorOffset;
       }
-      if (node === sel.focusNode) {
+      if (node === sel?.focusNode) {
         focusIndex = currentIndex + sel.focusOffset;
       }
       currentIndex += text.length;
@@ -322,7 +338,7 @@ export class CodeStylePrometheusFieldComponent implements OnInit, AfterViewInit 
     if (setEnd) {
       this.restoreSelection(this.editor.innerText.length, this.editor.innerText.length);
     } else {
-      this.restoreSelection(anchorIndex, focusIndex);
+      this.restoreSelection(anchorIndex ?? 0, focusIndex ?? anchorIndex ?? 0);
     }
     this.updateData.emit({
       text: textContent,
@@ -332,12 +348,15 @@ export class CodeStylePrometheusFieldComponent implements OnInit, AfterViewInit 
     });
   }
 
-  private restoreSelection(absoluteAnchorIndex, absoluteFocusIndex) {
+  private restoreSelection(absoluteAnchorIndex: number, absoluteFocusIndex: number) {
     const sel = window.getSelection();
+    if (!sel) {
+      return;
+    }
     const textSegments = this.getTextSegments(this.editor);
-    let anchorNode = this.editor;
+    let anchorNode: Node = this.editor;
     let anchorIndex = 0;
-    let focusNode = this.editor;
+    let focusNode: Node = this.editor;
     let focusIndex = 0;
     let currentIndex = 0;
 
@@ -358,11 +377,14 @@ export class CodeStylePrometheusFieldComponent implements OnInit, AfterViewInit 
       sel.setBaseAndExtent(anchorNode, anchorIndex, focusNode, focusIndex);
     } catch (err) { }
   }
-  private typeInTextarea(str) {
+  private typeInTextarea(str: string) {
     const sel = window.getSelection() as Selection;
-    const el = sel.anchorNode.parentNode as HTMLElement;
-    const start = sel['baseOffset'] || 0;
-    const end = sel['extentOffset'] || 0;
+    const el = sel.anchorNode?.parentNode as HTMLElement | null;
+    if (!el) {
+      return false;
+    }
+    const start = sel.anchorOffset || 0;
+    const end = sel.focusOffset || 0;
     const text = el.innerText;
     const before = text.substring(0, start);
     const after = text.substring(end, text.length);

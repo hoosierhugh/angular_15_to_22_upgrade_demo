@@ -17,7 +17,7 @@ export class ActiveCellComponent implements OnInit {
     };
     @ViewChild(MatColumnDef) columnDef: MatColumnDef;
 
-    constructor(public table: MatTable<any>,  
+    constructor(public table: MatTable<unknown>,
         private cdr: ChangeDetectorRef,
         public translateService: TranslateService) { 
             translateService.addLangs(['en'])

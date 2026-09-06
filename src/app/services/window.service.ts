@@ -6,7 +6,7 @@ import { Injectable } from '@angular/core';
 export class WindowService {
     currentWindow: string = '';
     windowList: Map<string, number> = new Map();
-    closeTimeout: any;
+    closeTimeout: ReturnType<typeof setTimeout>;
     constructor() {}
     close(id) {
         clearTimeout(this.closeTimeout)

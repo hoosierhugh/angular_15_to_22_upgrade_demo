@@ -11,20 +11,20 @@ import { Functions } from '@app/helpers/functions';
     changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class CustomTableComponent implements AfterViewInit {
-    @Input() columns = [];
-    @Input() columnsFilter = [];
+    @Input() columns: string[] = [];
+    @Input() columnsFilter: string[] = [];
 
-    @Output() rowClick: EventEmitter<any> = new EventEmitter();
-    @Output() rowDblClick: EventEmitter<any> = new EventEmitter();
+    @Output() rowClick = new EventEmitter<TableRowEvent>();
+    @Output() rowDblClick = new EventEmitter<TableRowEvent>();
     @ViewChild(MatSort, { static: false }) sort: MatSort;
     @ViewChild(MatPaginator, { static: false }) paginator: MatPaginator;
 
-    dataSource = new MatTableDataSource([]);
-    tableFilters = [];
-    _details: any;
+    dataSource = new MatTableDataSource<TableRow>([]);
+    tableFilters: TableFilter[] = [];
+    _details: TableRow[] = [];
     @Input() isPaginator = true;
     @Input()
-    set details(val) {
+    set details(val: TableRow[]) {
         this._details = val;
     }
     constructor(private cdr: ChangeDetectorRef) { }
@@ -36,7 +36,7 @@ export class CustomTableComponent implements AfterViewInit {
         }
         this.dataSource.sort = this.sort;
         this.dataSource.data = this._details;
-        this.dataSource.filterPredicate = (data: any, filtersJson: string) => {
+        this.dataSource.filterPredicate = (data: TableRow, filtersJson: string) => {
             const matchFilter = [];
             const filters = Functions.JSON_parse(filtersJson);
 
@@ -75,4 +75,19 @@ export class CustomTableComponent implements AfterViewInit {
         }
         this.cdr.detectChanges();
     }
+}
+
+interface TableRow {
+    [column: string]: unknown;
+}
+
+interface TableFilter {
+    id: string;
+    value: string;
+}
+
+interface TableRowEvent {
+    row: TableRow;
+    indexItem: number;
+    event: MouseEvent;
 }

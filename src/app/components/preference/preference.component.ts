@@ -39,22 +39,19 @@ export class PreferenceComponent implements OnInit, OnDestroy, AfterViewInit {
     isErrorResponse = false;
     toolType = '';
     filter = '';
-    service: any;
     isResetDashboard = true;
     isResetMapping = true;
     isConfigTab = false;
     isResyncTab = false;
     dataSource = new MatTableDataSource([{}]);
     configSource = new MatTableDataSource([{}]);
-    isAccess = {};
+    isAccess: Record<string, Record<string, boolean>> = {};
     dbList = [];
     files = [];
-    timeout: any;
-    linkDictionary;
+    linkDictionary: Record<string, string> = {};
 
     public pageId: string;
     public links: Array<string> = [];
-    public pagesStructure: any = {};
 
     @ViewChildren(MatPaginator) paginators !: QueryList<MatPaginator>;
     @ViewChildren(MatSort) sorters !: QueryList<MatSort>;
@@ -85,9 +82,8 @@ export class PreferenceComponent implements OnInit, OnDestroy, AfterViewInit {
         this.isAdmin = userData?.user?.admin === true;
         this.isExternal = userData?.user?.isExternal === true;
         const access = this.isAdmin ? ADMIN : this.isExternal ? 'external' : 'commonUser';
-        const { accessMapping, pagesStructureMapping, links } = PreferencesComponentMapping || {};
+        const { accessMapping, links } = PreferencesComponentMapping || {};
         this.isAccess = accessMapping[access];
-        this.pagesStructure = pagesStructureMapping[access];
         this.links = links[access];
 
         /**

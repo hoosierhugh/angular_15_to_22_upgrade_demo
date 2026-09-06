@@ -1,10 +1,6 @@
 import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { ICellRendererAngularComp } from 'ag-grid-angular';
-interface IP {
-    name: string;
-    value: string;
-    isShorten: boolean;
-}
+import { AliasDisplay, SearchGridCellParams } from '../search-grid-renderer.types';
 @Component({
     selector: 'app-child-cell',
     templateUrl: './column-alias-renderer.component.html',
@@ -48,35 +44,35 @@ interface IP {
 })
 export class ColumnAliasRenderer implements ICellRendererAngularComp {
 
-    public params: any;
+    public params: SearchGridCellParams;
     copyTimer: number;
     selected: boolean;
     timeout;
-    ip: IP  = {
+    ip: AliasDisplay  = {
         name: '',
         value: '',
         isShorten: false
     };
 
-    async agInit(params: any) {
+    async agInit(params: SearchGridCellParams) {
         this.params = params;
         this.ip = await this.getAlias(params.value);
         if (params.colDef.field === 'source_ip'
             && params.data.aliasSrc
-            && !params.data.aliasSrc.includes(params.value)
+            && !params.data.aliasSrc.includes(String(params.value))
             && this.ip.name === params.value) {
             this.ip = {
                 name: params.data.aliasSrc,
-                value: params.value,
+                value: String(params.value),
                 isShorten: false
             };
         } else if (params.colDef.field === 'destination_ip'
                     && params.data.aliasDst
-                    && !params.data.aliasDst.includes(params.value)
+                    && !params.data.aliasDst.includes(String(params.value))
                     && this.ip.name === params.value) {
             this.ip = {
                 name: params.data.aliasDst,
-                value: params.value,
+                value: String(params.value),
                 isShorten: false
             };
         }

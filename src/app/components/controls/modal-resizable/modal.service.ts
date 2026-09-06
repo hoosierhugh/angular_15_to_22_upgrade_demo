@@ -7,16 +7,15 @@ export const IS_DIFF_LEFT = 'isDiff-left';
 // @Injectable()
 @Injectable({ providedIn: 'root' })
 export class ModalService {
-    items: any[] = [];
-    _activeZIndex: any[] = [];
+    items: Record<string, boolean> = {};
+    _activeZIndex: Record<string, number> = {};
     draggingId: string | number | null;
-    diffWindowRair: any[] = [];
-    isDiffWindow: any;
+    isDiffWindow: typeof IS_DIFF_RIGHT | typeof IS_DIFF_LEFT | null;
     getOpacity: boolean = false;
 
     setDropLayer(bool: boolean, id: string | number, zIndex = 0, isDropLeft = false, isDropRight = false) {
         if (id == IS_DIFF) {
-            const isDiffPosition = ((isDropLeft && IS_DIFF_LEFT) || (isDropRight && IS_DIFF_RIGHT));
+            const isDiffPosition = isDropLeft ? IS_DIFF_LEFT : isDropRight ? IS_DIFF_RIGHT : null;
             this.isDiffWindow = bool ? isDiffPosition : null;
         }
 

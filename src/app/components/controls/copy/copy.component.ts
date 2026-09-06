@@ -26,7 +26,7 @@ export class CopyComponent implements OnInit {
             if (typeof data === 'undefined') {
                 return;
             }
-            this.copyData = data.data;
+            this.copyData = String(data.data ?? '');
             this.notification = data.notification;
             this.copy();
         });

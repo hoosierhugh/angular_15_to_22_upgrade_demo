@@ -7,6 +7,20 @@ import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatDialog } from '@angular/material/dialog';
+import { CrudDialogData, PreferenceScripts } from '@app/models';
+
+interface MappingDialogRecord {
+  hep_alias: string;
+  hepid: number | string;
+  partid: number;
+  retention: number;
+  partition_step: number;
+  profile: string;
+  correlation_mapping: unknown;
+  fields_mapping: unknown;
+  user_mapping: unknown;
+  [key: string]: unknown;
+}
 // import 'brace';
 // import 'brace/mode/text';
 // import 'brace/theme/github';
@@ -37,7 +51,10 @@ export class DialogMappingComponent {
   @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
   columns = [];
   specialColumns = [];
-  public mappingScript: any = { data: ''};
+  public mappingScript: PreferenceScripts = {
+    uuid: '', version: 0, data: '', profile: '', hepid: 0,
+    hep_alias: '', partid: 0, type: '', status: false
+  };
 
   hep_alias = new FormControl('', [
     Validators.required,
@@ -49,7 +66,7 @@ export class DialogMappingComponent {
     Validators.required,
     Validators.minLength(3)
   ]);
-  hepid = new FormControl('', [
+  hepid = new FormControl<string | number>('', [
     Validators.required,
     Validators.minLength(1),
     Validators.maxLength(4),
@@ -68,7 +85,7 @@ export class DialogMappingComponent {
     private scriptService: PreferenceScriptsService,
     public translateService: TranslateService,
     private cdr: ChangeDetectorRef,
-    @Inject(MAT_DIALOG_DATA) public data: any
+    @Inject(MAT_DIALOG_DATA) public data: CrudDialogData<MappingDialogRecord>
   ) {
     translateService.addLangs(['en'])
     translateService.setDefaultLang('en')
@@ -126,7 +143,7 @@ export class DialogMappingComponent {
           "ID", "Type", "Name", "Index", "Alias"
         ];
 
-        this.fieldsTableFields = JSON.parse(data?.data?.fields_mapping).map(m => ({
+        this.fieldsTableFields = JSON.parse(String(data?.data?.fields_mapping)).map(m => ({
           id: m.id,
           type: m.type,
           name: m.name,

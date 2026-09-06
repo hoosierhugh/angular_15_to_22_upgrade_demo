@@ -2,12 +2,13 @@ import { environment } from './../../../environments/environment';
 import { agGridColors } from './../../models/ag-grid-colors.model';
 import { CallIDColor } from '@app/models/CallIDColor.model';
 import { GridController } from './grid-controller';
+import { GridSizeSettings } from './grid-controller';
 import { FlowItemType } from '@app/models/flow-item-type.model';
 import { ColDef, GridOptions } from 'ag-grid-community';
 import { Subscription } from 'rxjs';
 import { Functions, getStorage, log, setStorage } from '@app/helpers/functions';
 import  moment from 'moment';
-import { ConstValue, UserConstValue } from '@app/models';
+import { ConstValue, FormDefault, UserConstValue } from '@app/models';
 import {
     Component,
     OnInit,
@@ -1095,7 +1096,7 @@ export class SearchGridCallComponent
         if (e.pageSize !== this.agGridSizeControl.pageSize) {
             this.agGridSizeControl.pageSize = e.pageSize;
             this.gridApi.paginationSetPageSize(e.pageSize);
-            let ls = getStorage(ConstValue.RESULT_GRID_SETTING);
+            let ls = getStorage<GridSizeSettings>(ConstValue.RESULT_GRID_SETTING);
 
             if (ls) {
                 ls.pageSize = e.pageSize;
@@ -1602,9 +1603,9 @@ export class SearchGridCallComponent
 
 
     private getColorByMapping(status: number): string {
-        const mappings = this._pmps.getCurrentMapping() || [{}];
-        const mappingStatus: any = mappings.find(({ value }) => value === status) ||
-            { color: Functions.colorsByStatus(status) };
+        const mappings = this._pmps.getCurrentMapping();
+        const mappingStatus: FormDefault = mappings.find(({ value }) => value === status) ||
+            { name: 'status', value: status, color: Functions.colorsByStatus(status) };
         return mappingStatus.color;
     }
 

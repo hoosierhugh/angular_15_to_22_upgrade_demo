@@ -11,7 +11,7 @@ export class SettingResultWidgetComponent {
     constructor(
         public dialogRef: MatDialogRef<SettingResultWidgetComponent>,
 public translateService: TranslateService,
-        @Inject(MAT_DIALOG_DATA) public data: any
+        @Inject(MAT_DIALOG_DATA) public data: { title: string; isAutoRefrasher: boolean }
     ) {
         translateService.addLangs(['en'])
         translateService.setDefaultLang('en')

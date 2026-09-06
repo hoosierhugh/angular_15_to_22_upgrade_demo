@@ -5,6 +5,22 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { environment } from '@environments/environment';
 import { PreferenceAgentsub } from '@app/models';
 
+export interface AgentServiceResponse {
+    data?: unknown;
+    [key: string]: unknown;
+}
+
+export interface AgentDataResponse {
+    data?: string;
+    [key: string]: unknown;
+}
+
+interface AgentSearchRequest {
+    uuid: string;
+    type: string;
+    data: unknown;
+}
+
 @Injectable({
     providedIn: 'root'
 })
@@ -25,30 +41,30 @@ export class AgentsubService {
     }
 
     // perform lookup for data type against HEPSUB subscriber UUID, if type is download file data will be returned
-    getHepsubElements({uuid, type, data}): Observable<any> {
-        let options = type === 'download' ? {responseType: 'blob' as 'json'} : undefined;
-        return this.http.post<any>(`${this.url}/search/${uuid}/${type}`, data, options);
+    getHepsubElements({uuid, type, data}: AgentSearchRequest): Observable<AgentServiceResponse> {
+        const options = type === 'download' ? {responseType: 'blob' as 'json'} : undefined;
+        return this.http.post<AgentServiceResponse>(`${this.url}/search/${uuid}/${type}`, data, options);
     }
 
     // type = 'cdr' | 'wav' | 'json'
-    getType(type: string): Observable<any> {
-        return this.http.get<any>(`${this.url}/type/${type}`);
+    getType(type: string): Observable<AgentServiceResponse> {
+        return this.http.get<AgentServiceResponse>(`${this.url}/type/${type}`);
     }
 
-    getAgentCdr(type): Observable<any> {
+    getAgentCdr(type: string): Observable<AgentServiceResponse> {
         /**
          * TODO:
          * transaction dialog / logs / HEPSUB:"test-endpoint"/ cdr
          * as on HOMER [domain:port-1]/dashboard/home
          * [domain:port-1]/api/v3/agent/type/cdr
          */
-        return this.http.get(`${this.url}/type/${type}`);
+        return this.http.get<AgentServiceResponse>(`${this.url}/type/${type}`);
     }
 
-    getData(agent: any, type?: string): Observable<any> {
+    getData(agent: Pick<PreferenceAgentsub, 'protocol' | 'host' | 'port' | 'path'>, type?: string): Observable<AgentDataResponse | null> {
         // console.log({agent, type});
         const { protocol, host, port, path } = agent;
-        const returnDefault = () => new Observable<any>(observer => {
+        const returnDefault = () => new Observable<null>(observer => {
             observer.next(null);
             observer.complete();
         });
@@ -58,7 +74,7 @@ export class AgentsubService {
         const headers = new HttpHeaders().set('Content-Type', 'application/json');
 
         try {
-            return this.http.post(`${protocol}://${host}:${port}${path}/${type}`, { headers });
+            return this.http.post<AgentDataResponse>(`${protocol}://${host}:${port}${path}/${type}`, { headers });
         } catch (err) {
             return returnDefault();
         }

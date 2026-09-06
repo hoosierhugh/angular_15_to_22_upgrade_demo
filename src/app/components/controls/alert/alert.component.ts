@@ -15,7 +15,7 @@ import { AlertProper, AlertSubject, MessageTimer } from '@app/models/alert.model
 })
 
 export class AlertComponent implements OnInit, OnDestroy {
-    timeoutId: any;
+    timeoutId: ReturnType<typeof setTimeout>;
     isOpen = false;
     messages: Map<string, AlertProper> = new Map();
     guidArray: Array<string> = [];

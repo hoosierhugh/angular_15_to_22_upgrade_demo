@@ -31,6 +31,7 @@ import { PreferencesComponentMapping } from '@app/models/preferences-component-m
 
 import  moment from 'moment';
 import { Functions } from '@app/helpers/functions';
+import { ComponentType } from '@angular/cdk/portal';
 @Component({
     selector: 'app-page-alias',
     templateUrl: './page-alias.component.html',
@@ -49,7 +50,7 @@ export class PageAliasComponent implements OnInit, OnDestroy, AfterViewInit {
     @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
     columns = [];
     specialColumns = [];
-    isAccess: any;
+    isAccess: Record<string, boolean>;
     filter = '';
 
     constructor(
@@ -122,7 +123,7 @@ export class PageAliasComponent implements OnInit, OnDestroy, AfterViewInit {
     ngOnDestroy() {
 
     }
-    settingDialog(item: any = null, type?: string) {
+    settingDialog(item: PreferenceAlias | null = null, type?: string) {
         const isCopy = type === 'copy';
         let _result;
         const onOpenDialog = (result) => {
@@ -145,7 +146,7 @@ export class PageAliasComponent implements OnInit, OnDestroy, AfterViewInit {
         }
         this.openDialog(DialogAliasComponent, Functions.cloneObject(item), onOpenDialog, isCopy);
     }
-    async openDialog(dialog, data: any = null, cb: Function = null, isCopy = false) {
+    async openDialog(dialog: ComponentType<unknown>, data: unknown = null, cb: ((result: unknown) => void) | null = null, isCopy = false) {
         const result = await this.dialog
             .open(dialog, {
                 width: '800px',
@@ -161,7 +162,7 @@ export class PageAliasComponent implements OnInit, OnDestroy, AfterViewInit {
             this.cdr.detectChanges();
         }
     }
-    deleteDialog(item: any = null) {
+    deleteDialog(item: PreferenceAlias | null = null) {
         const data = { page: this.page, message: 'delete'};
         this.openDialog(
             DialogDeleteAlertComponent,

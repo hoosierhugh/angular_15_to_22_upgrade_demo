@@ -7,12 +7,12 @@ import { TranslateService } from '@ngx-translate/core'
   styleUrls: ['./data-cell.component.scss']
 })
 export class DataCellComponent implements OnInit {
-    @Output() settingDialog: EventEmitter<any> = new EventEmitter();
+    @Output() settingDialog = new EventEmitter<{ item: unknown; type: 'data-preview' }>();
     @Input() column;
     @ViewChild(MatColumnDef) columnDef: MatColumnDef;
 
     constructor(
-      public table: MatTable<any>,  
+      public table: MatTable<unknown>,
       private cdr: ChangeDetectorRef,
       public translateService: TranslateService
       ) {

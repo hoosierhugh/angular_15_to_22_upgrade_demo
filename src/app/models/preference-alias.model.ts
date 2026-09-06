@@ -9,4 +9,5 @@ export interface PreferenceAlias {
     mask: number;
     captureID: string;
     status: boolean;
+    actionType?: string;
 }

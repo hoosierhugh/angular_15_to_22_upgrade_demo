@@ -1,5 +1,23 @@
 import { Component, Output, EventEmitter, Input, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
 
+interface MappingProtocol {
+    guid: string;
+    hep_alias: string;
+    profile: string;
+    hepid: number;
+}
+
+interface ProtocolOption {
+    id: string;
+    name: string;
+    value: string;
+    protocol: string;
+    protocol_id: {
+        name: string;
+        value: number;
+    };
+}
+
 @Component({
     selector: 'app-code-proto-selector',
     templateUrl: './code-proto-selector.component.html',
@@ -9,11 +27,11 @@ import { Component, Output, EventEmitter, Input, ChangeDetectionStrategy, Change
 export class CodeProtoSelectorComponent {
     protoSelect;
     preProtoSelect;
-    protocolList: Array<any> = [];
-    @Output() protoChanged: EventEmitter<any> = new EventEmitter();
+    protocolList: ProtocolOption[] = [];
+    @Output() protoChanged = new EventEmitter<ProtocolOption | Record<string, never>>();
 
     @Input()
-    set value(val) {
+    set value(val: ProtocolOption | null) {
         if (!val || !!this.preProtoSelect) {
             return;
         }
@@ -22,7 +40,7 @@ export class CodeProtoSelectorComponent {
     }
 
     @Input()
-    set mappingList(protocols) {
+    set mappingList(protocols: MappingProtocol[] | null) {
         if (!protocols) {
             return;
         }
@@ -45,7 +63,7 @@ export class CodeProtoSelectorComponent {
 
     setValue(val) {
     }
-    changeProto($event: Event) {
+    changeProto($event: ProtocolOption) {
         this.protoSelect = $event;
         this.protoChanged.emit(this.protoSelect || {});
     }

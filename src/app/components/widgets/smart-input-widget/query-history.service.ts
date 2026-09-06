@@ -1,4 +1,9 @@
 import { setStorage, getStorage } from '@app/helpers/functions';
+
+interface StoredQuery {
+  timestamp: number;
+  record: string;
+}
 export class QueryHistoryService {
   id_widget;
 
@@ -8,26 +13,26 @@ export class QueryHistoryService {
   get key() {
     return 'smart-query-history-' + this.id_widget;
   }
-  private setFormat(record) {
+  private setFormat(record: string): StoredQuery {
     return { timestamp: new Date().getTime(), record };
   }
 
-  addRecord(record) {
+  addRecord(record: string) {
     console.log('addRecord::', record);
-    const records: any[] = getStorage(this.key) || [];
+    const records: StoredQuery[] = getStorage(this.key) || [];
 
     if (
       !records.find(i => JSON.stringify(i.record) === JSON.stringify(record)) &&
-      !record?.record?.match(/^\s+$/g) &&
-      record?.record !== ''
+      !/^\s*$/.test(record)
     ) {
       records.unshift(this.setFormat(record));
     }
 
     setStorage(this.key, records.filter(({record}) => !record?.match(/^\s*$/g)).slice(0, 12));
   }
-  getRecords(): any[] {
-    return (getStorage(this.key) || []).map(({ record }) => record).filter(record => !record?.match(/^\s*$/g));
+  getRecords(): string[] {
+    const records: StoredQuery[] = getStorage(this.key) || [];
+    return records.map(({ record }) => record).filter(record => !/^\s*$/.test(record));
   }
   removeHistory() {
     localStorage.removeItem(this.key);

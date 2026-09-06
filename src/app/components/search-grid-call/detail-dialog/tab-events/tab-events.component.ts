@@ -7,10 +7,10 @@ import { Component, Input, AfterViewChecked, Output, EventEmitter, AfterViewInit
     changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class TabEventsComponent implements AfterViewInit {
-    itemData: any;
-    ip: any;
+    itemData: Record<string, unknown> | number;
+    ip: Record<string, HostDisplay> | number;
 
-    @Input() set dataItem(_dataItem) {
+    @Input() set dataItem(_dataItem: { data: { hostinfo: Record<string, HostInfo> } }) {
         const hostinfo = _dataItem.data.hostinfo;
         if (Object.keys(hostinfo).length <= 0) {
             this.ip = 0;
@@ -34,13 +34,33 @@ export class TabEventsComponent implements AfterViewInit {
         }
     }
 
-    @Output() ready: EventEmitter<any> = new EventEmitter();
+    @Output() ready = new EventEmitter<void>();
 
     ngAfterViewInit() {
 
         setTimeout(() => {
-            this.ready.emit({});
+            this.ready.emit();
         }, 35);
     }
 
+}
+
+interface HostInfo {
+    alias: string;
+    group: string;
+    mask: number;
+    shardid: string;
+    status: boolean;
+    type: number;
+    ipv6: boolean;
+}
+
+interface HostDisplay {
+    Alias: string;
+    Group: string;
+    Mask: number;
+    ShardID: string;
+    Status: 'Active' | 'Inactive';
+    Type: number;
+    IPV6: boolean;
 }

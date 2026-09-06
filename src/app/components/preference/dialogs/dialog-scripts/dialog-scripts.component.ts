@@ -5,6 +5,17 @@ import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 // import 'brace/mode/text';
 // import 'brace/theme/github';
 import { TranslateService } from '@ngx-translate/core'
+import { CrudDialogData } from '@app/models';
+
+interface ScriptDialogRecord {
+    data: unknown;
+    profile: string;
+    hepid: number | string;
+    hep_alias: string;
+    partid: number | string;
+    type: string;
+    status: boolean;
+}
 @Component({
     selector: 'app-dialog-scripts',
     templateUrl: './dialog-scripts.component.html',
@@ -18,7 +29,7 @@ export class DialogScriptsComponent {
     regNum = /^[0-9]+$/;
     regString = /^[a-zA-Z0-9\-\_]+$/;
 
-    partid = new FormControl('', [
+    partid = new FormControl<string | number>('', [
         Validators.required,
         Validators.minLength(1),
         Validators.maxLength(3),
@@ -37,7 +48,7 @@ export class DialogScriptsComponent {
         Validators.required,
         Validators.minLength(3)
     ]);
-    hepid = new FormControl('', [
+    hepid = new FormControl<string | number>('', [
         Validators.required,
         Validators.minLength(1),
         Validators.maxLength(4),
@@ -55,7 +66,7 @@ export class DialogScriptsComponent {
     constructor(
         public dialogRef: MatDialogRef<DialogScriptsComponent>,
         public translateService: TranslateService,
-        @Inject(MAT_DIALOG_DATA) public data: any
+        @Inject(MAT_DIALOG_DATA) public data: CrudDialogData<ScriptDialogRecord>
     ) {
         translateService.addLangs(['en'])
         translateService.setDefaultLang('en')

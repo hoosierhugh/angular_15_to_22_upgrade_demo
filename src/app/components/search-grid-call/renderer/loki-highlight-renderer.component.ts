@@ -1,5 +1,6 @@
 import { Component, ChangeDetectionStrategy } from '@angular/core';
 import {ICellRendererAngularComp} from 'ag-grid-angular';
+import { SearchGridCellParams } from './search-grid-renderer.types';
 
 @Component({
     template: `
@@ -10,18 +11,18 @@ import {ICellRendererAngularComp} from 'ag-grid-angular';
 })
 
 export class LokiHighlightRenderer implements ICellRendererAngularComp {
-    public params: any;
+    public params: SearchGridCellParams;
     data: string;
 
-    agInit(params: any): void {
+    agInit(params: SearchGridCellParams): void {
         this.params = params;
         const rxText = this.params.context.componentParent.searchQueryLoki.rxText;
         if (!!rxText) {
             const regex = new RegExp('(' + rxText + ')', 'g');
-            this.data = this.htmlSpecialChars(this.params.value)
+            this.data = this.htmlSpecialChars(String(this.params.value ?? ''))
                 .replace(regex, (g, a) => `<span>${a}</span>`);
         } else {
-            this.data = this.htmlSpecialChars(this.params.value || '');
+            this.data = this.htmlSpecialChars(String(this.params.value ?? ''));
         }
     }
     private htmlSpecialChars(s: string) {

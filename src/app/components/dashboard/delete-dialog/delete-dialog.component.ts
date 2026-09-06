@@ -13,7 +13,7 @@ export class DeleteDialogComponent {
   constructor(
     public dialogRef: MatDialogRef<DeleteDialogComponent>,
       public translateService: TranslateService,
-    @Inject(MAT_DIALOG_DATA) public data: any) {
+    @Inject(MAT_DIALOG_DATA) public data: unknown) {
        translateService.addLangs(['en'])
         translateService.setDefaultLang('en')
     }
@@ -22,5 +22,4 @@ export class DeleteDialogComponent {
       this.dialogRef.close();
   }
 }
-
 

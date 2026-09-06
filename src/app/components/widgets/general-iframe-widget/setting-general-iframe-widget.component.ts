@@ -2,6 +2,13 @@ import { Component, Inject, ChangeDetectionStrategy } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { SelectList } from '../influxdbchart-widget/setting-influxdbchart-widget.component';
 import { TranslateService } from '@ngx-translate/core'
+
+interface GeneralIframeSettingsData {
+    title: string;
+    url: string;
+    desc: string;
+    refresh: boolean;
+}
 @Component({
     selector: 'app-iframe-rsearch-widget-component',
     templateUrl: 'setting-general-iframe-widget.component.html',
@@ -13,14 +20,14 @@ export class SettingGeneralIframeWidgetComponent {
 
     dashboardList: SelectList[] = [];
     panelList: SelectList[] = [];
-    dashboardSource: any;
-    panelListValue: any;
+    dashboardSource: string | null;
+    panelListValue: string | null;
 
     isInvalid: boolean;
     constructor(
         public dialogRef: MatDialogRef<SettingGeneralIframeWidgetComponent>,
         public translateService: TranslateService,
-        @Inject(MAT_DIALOG_DATA) public data: any) {
+        @Inject(MAT_DIALOG_DATA) public data: GeneralIframeSettingsData) {
         translateService.addLangs(['en'])
         translateService.setDefaultLang('en')
     }

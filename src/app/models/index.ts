@@ -21,3 +21,6 @@ export * from './preference-users.model';
 export * from './preference-user-settings.model';
 export * from './statistic-database.model';
 export * from './dictionary.model';
+export * from './crud-dialog-data.model';
+export * from './widget-settings-change.model';
+export * from './api-response.model';

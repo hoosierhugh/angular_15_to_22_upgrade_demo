@@ -4,6 +4,14 @@ import { HttpClient } from '@angular/common/http';
 import { environment } from '@environments/environment';
 import { VERSION } from '../../../../VERSION';
 
+export interface UpdateCheckResponse {
+    data?: {
+        upgrade?: boolean;
+        version?: string;
+    };
+    message?: string;
+}
+
 @Injectable({
     providedIn: 'root'
 })
@@ -12,9 +20,9 @@ export class UpdateAlertService {
 
     constructor(private http: HttpClient) { }
 
-    check(): Observable<any> {
+    check(): Observable<UpdateCheckResponse> {
         // const testVersion = '9.0.1'; // '10.0.1'
-        return this.http.get<any>(`${this.url}${VERSION}`);
+        return this.http.get<UpdateCheckResponse>(`${this.url}${VERSION}`);
     }
 
 }

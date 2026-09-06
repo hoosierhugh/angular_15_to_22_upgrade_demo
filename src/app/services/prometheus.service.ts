@@ -12,16 +12,25 @@ export class PrometheusService {
 
     constructor(private http: HttpClient) { }
 
-    getLabel(): Observable<any> {
-        return this.http.get<any>(`${this.url}/labels`);
+    getLabel(): Observable<string[]> {
+        return this.http.get<string[]>(`${this.url}/labels`);
     }
 
-    getLabels(id: string): Observable<any> {
-        return this.http.get<any>(`${this.url}/label/${id}`);
+    getLabels(id: string): Observable<Array<Record<string, string>>> {
+        return this.http.get<Array<Record<string, string>>>(`${this.url}/label/${id}`);
     }
 
-    getValue(data: any): Observable<any> {
-        return this.http.post<any>(`${this.url}/value`, data);
+    getValue(data: unknown): Observable<PrometheusQueryResult[]> {
+        return this.http.post<PrometheusQueryResult[]>(`${this.url}/value`, data);
     }
+}
+
+export interface PrometheusQueryResult {
+    data: {
+        result: Array<{
+            metric: Record<string, string> & { __name__?: string };
+            values: Array<[number, string]>;
+        }>;
+    };
 }
 // /api/v3/prometheus/label/net_contntrack_dialer_conn_failed_total

@@ -1,4 +1,4 @@
-import { HttpEventType, HttpErrorResponse } from '@angular/common/http';
+import { HttpEvent, HttpEventType, HttpErrorResponse, HttpResponse } from '@angular/common/http';
 import { Component, Inject, ChangeDetectionStrategy, ViewChild, ElementRef, AfterViewInit, OnInit, ChangeDetectorRef } from '@angular/core';
 import { FormControl, Validators } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
@@ -9,6 +9,19 @@ import { of } from 'rxjs';
 import { map, tap, last, catchError } from 'rxjs/operators';
 import { trigger, state, style, animate, transition } from '@angular/animations';
 import { TranslateService } from '@ngx-translate/core'
+import { ApiResponse } from '@app/models';
+
+interface ImportDialogData {
+    data: { pageId: string };
+}
+
+interface UploadFile {
+    data: File;
+    inProgress: boolean;
+    progress: number;
+    canRetry: boolean;
+    canCancel: boolean;
+}
 @Component({
     selector: 'app-dialog-import',
     templateUrl: './dialog-import.component.html',
@@ -24,7 +37,7 @@ import { TranslateService } from '@ngx-translate/core'
     changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class DialogImportComponent implements AfterViewInit, OnInit {
-    @ViewChild('fileUpload', { static: false }) fileUpload: ElementRef;
+    @ViewChild('fileUpload', { static: false }) fileUpload: ElementRef<HTMLInputElement>;
     pageId: string;
     isReplace = false;
     isUploading = false;
@@ -33,13 +46,13 @@ export class DialogImportComponent implements AfterViewInit, OnInit {
     isHomer2 = false;
     uploadInfo = '';
     file: FileUploadModel;
-    files = [];
+    files: UploadFile[] = [];
     constructor(
         public uploadService: UploadService,
         public translateService: TranslateService,
         public dialogRef: MatDialogRef<DialogImportComponent>,
         private cdr: ChangeDetectorRef,
-        @Inject(MAT_DIALOG_DATA) public data: any) {
+        @Inject(MAT_DIALOG_DATA) public data: ImportDialogData) {
         translateService.addLangs(['en'])
         translateService.setDefaultLang('en')
         this.pageId = data.data.pageId;
@@ -70,15 +83,13 @@ export class DialogImportComponent implements AfterViewInit, OnInit {
             isUploaded: this.isUploaded
         });
     }
-    onImport(e) {
-        for (const property in e) {
-            if (property !== 'length' && property !== 'item') {
-                this.files.push({ data: e[property], inProgress: false, progress: 0, canRetry: false, canCancel: true });
-            }
-        }
+    onImport(files: FileList) {
+        Array.from(files).forEach(file => {
+            this.files.push({ data: file, inProgress: false, progress: 0, canRetry: false, canCancel: true });
+        });
         this.uploadFiles();
     }
-    private removeFileFromArray(file) {
+    private removeFileFromArray(file: UploadFile) {
         const index = this.files.indexOf(file);
         if (index > -1) {
             this.files.splice(index, 1);
@@ -90,7 +101,7 @@ export class DialogImportComponent implements AfterViewInit, OnInit {
             this.uploadFile(file);
         });
     }
-    uploadFile(file) {
+    uploadFile(file: UploadFile) {
         const formData = new FormData();
         formData.append('file', file.data);
         file.inProgress = true;
@@ -122,10 +133,9 @@ export class DialogImportComponent implements AfterViewInit, OnInit {
                     return of(`Upload failed: ${file.data.name}`);
                 })
             )
-            .subscribe((event: any) => {
-                if (typeof (event) === 'object') {
-
-                    if (event.body && event.body.data) {
+            .subscribe((event: HttpEvent<ApiResponse<unknown>> | string) => {
+                if (event instanceof HttpResponse) {
+                    if (event.body?.data) {
                         this.isUploaded = true;
                         this.removeFileFromArray(file);
                         this.uploadInfo = 'Response: info: ' + JSON.stringify(event.body);

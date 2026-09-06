@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpErrorResponse, HttpHeaders } from '@angular/common/http';
 
 import { environment } from '@environments/environment';
-import { PreferenceUsers, UserProfile } from '@app/models';
+import { ApiResponse, PreferenceUsers, UserProfile } from '@app/models';
 interface GetAllUsers {
     count: number;
     data: PreferenceUsers[];
@@ -77,6 +77,6 @@ export class PreferenceUserService {
     }
 
     getAllGroups() {
-        return this.http.get(`${this.url}/groups`);
+        return this.http.get<ApiResponse<string[]>>(`${this.url}/groups`);
     }
 }

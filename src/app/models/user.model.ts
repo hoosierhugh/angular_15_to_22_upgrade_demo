@@ -10,6 +10,10 @@ export interface User {
     guid?: string;
     scope?: string;
     token?: string;
+    timezone?: {
+        name: string;
+        [key: string]: unknown;
+    };
     user?: {
         admin: boolean;
         force_password: boolean;

@@ -1,20 +1,43 @@
 import { createHomeDashboard, demoUser, sipMapping } from './mock-data';
 
 export const MOCK_API_BASE = '/__mock_api__/v3';
-export interface MockReply { status: number; body: any; }
+export interface MockReply<T = unknown> { status: number; body: T; }
+
+type MockEntity = {
+    guid?: string;
+    uuid?: string;
+    id?: string | number;
+    category?: string;
+    [key: string]: unknown;
+};
+
+interface MockDashboard extends MockEntity {
+    id: string;
+    dashboardId: string;
+    owner: string;
+    data: MockEntity & {
+        widgets: unknown[];
+        name?: string;
+        shared?: boolean;
+        type?: number;
+    };
+}
+
 const clone = <T>(value: T): T => JSON.parse(JSON.stringify(value));
+const isRecord = (value: unknown): value is Record<string, unknown> =>
+    typeof value === 'object' && value !== null && !Array.isArray(value);
 
 /** One in-memory backend per page; never uses fetch, credentials or real storage. */
 export class MockApi {
-    private dashboards: Record<string, any> = { home: createHomeDashboard() };
-    private collections: Record<string, any[]> = {
+    private dashboards: Record<string, MockDashboard> = { home: createHomeDashboard() };
+    private collections: Record<string, MockEntity[]> = {
         '/users': [clone(demoUser)], '/user/settings': [], '/advanced': [],
         '/alias': [], '/mapping/protocol': [clone(sipMapping)]
     };
     private sequence = 0;
 
-    handle(method: string, path: string, body?: any): MockReply {
-        const ok = (data: any): MockReply => ({ status: 200, body: clone(data) });
+    handle(method: string, path: string, body?: unknown): MockReply {
+        const ok = <T>(data: T): MockReply<T> => ({ status: 200, body: clone(data) });
         const missing = (): MockReply => ({ status: 404, body: { message: 'Demo record not found' } });
         if (method === 'GET') {
             if (path === '/users/profile') {
@@ -46,12 +69,12 @@ export class MockApi {
             const id = decodeURIComponent(dashboard[1]);
             if (method === 'GET') { return this.dashboards[id] ? ok(this.dashboards[id]) : missing(); }
             if (method === 'POST' || method === 'PUT') {
-                const data = body?.data || body;
-                if (!Array.isArray(data?.widgets)) {
+                const data = isRecord(body) && isRecord(body.data) ? body.data : body;
+                if (!isRecord(data) || !Array.isArray(data.widgets)) {
                     return { status: 400, body: { message: 'Demo dashboard requires widgets' } };
                 }
                 this.dashboards[id] = { id, dashboardId: id, owner: 'demo',
-                    data: { ...clone(data), dashboardId: id } };
+                    data: { ...clone(data), dashboardId: id, widgets: clone(data.widgets) } };
                 return ok({ status: 'ok', message: 'Demo dashboard saved', data: this.dashboards[id] });
             }
             if (method === 'DELETE') {
@@ -72,12 +95,12 @@ export class MockApi {
             }
             if (method === 'POST' && id === null) {
                 const guid = `demo-${++this.sequence}`;
-                const row = { ...clone(body || {}), guid, uuid: guid };
+                const row: MockEntity = { ...clone(isRecord(body) ? body : {}), guid, uuid: guid };
                 rows.push(row);
                 return ok({ data: row, message: 'Demo record created' });
             }
             if (method === 'PUT' && index >= 0) {
-                rows[index] = { ...rows[index], ...clone(body), guid: rows[index].guid };
+                rows[index] = { ...rows[index], ...clone(isRecord(body) ? body : {}), guid: rows[index].guid };
                 return ok({ data: rows[index], message: 'Demo record updated' });
             }
             if (method === 'DELETE' && index >= 0) {

@@ -5,6 +5,7 @@ import { AlertService } from './../../../services';
 import { TranslateService } from '@ngx-translate/core'
 import { AlertOverlayService } from './alert-overlay.service';
 import { AlertOverlayRef } from './alert-ref';
+import { AlertSubject } from '@app/models/alert.model';
 
 
 
@@ -17,8 +18,8 @@ import { AlertOverlayRef } from './alert-ref';
 
 export class AlertSourceComponent implements OnInit, OnDestroy {
     private subscription: Subscription;
-    message: any;
-    timeoutId: any;
+    message: AlertSubject;
+    timeoutId: ReturnType<typeof setTimeout>;
     isOpen = false;
     dialogRef: AlertOverlayRef;
     constructor(
@@ -31,7 +32,7 @@ export class AlertSourceComponent implements OnInit, OnDestroy {
         translateService.setDefaultLang('en')
     }
     ngOnInit() {
-        this.subscription = this.alertService.getMessage().subscribe((message: any | null) => {
+        this.subscription = this.alertService.getMessage().subscribe((message: AlertSubject | null) => {
             if (!message || message?.text === '') {
                 return;
             }

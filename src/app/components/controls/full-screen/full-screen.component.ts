@@ -20,9 +20,9 @@ export class FullScreenComponent implements OnInit {
     @Input() allowReadOnly: boolean = false;
     @ViewChild('innerContainer') innerContainer: ElementRef<HTMLElement>;
     @ViewChild('content') content: ElementRef<HTMLElement>;
-    @Output() fullPage: EventEmitter<any> = new EventEmitter();
-    @Output() import: EventEmitter<any> = new EventEmitter();
-    @Input() data: any;
+    @Output() fullPage = new EventEmitter<boolean>();
+    @Output() import = new EventEmitter<string>();
+    @Input() data: { json?: string; title?: string; type?: string };
     constructor(
         private cdr: ChangeDetectorRef) { }
 

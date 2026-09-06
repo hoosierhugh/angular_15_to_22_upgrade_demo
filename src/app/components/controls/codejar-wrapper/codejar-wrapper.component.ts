@@ -1,7 +1,7 @@
 import hljs from 'highlight.js';
 import {
     Component, EventEmitter, Input, OnInit, Output, AfterViewInit,
-    ChangeDetectionStrategy, ChangeDetectorRef, ViewChild, HostListener
+    ChangeDetectionStrategy, ChangeDetectorRef, ViewChild, HostListener, ElementRef
 } from '@angular/core';
 import { CodeJarContainer } from 'ngx-codejar';
 
@@ -27,14 +27,10 @@ export class CodeJarWrapperComponent implements OnInit, AfterViewInit {
     _readOnly = false;
     @Input()
     set readOnly(value: boolean) {
-        console.log('set readOnly', value, this.editor);
         this._readOnly = value;
-        // if (this.editor) {
-        //     this.editor.updateOptions({ readOnly: value });
-        // }
         if (this.codejar) {
             console.log('set readOnly', this._readOnly, this.codejar);
-            this.codejar.nativeElement.querySelector('pre').attributes.contenteditable.value  = !this._readOnly;
+            this.updateContentEditable();
         }
     };
     get readOnly(): boolean {
@@ -43,13 +39,12 @@ export class CodeJarWrapperComponent implements OnInit, AfterViewInit {
     @Input() durationBeforeCallback = 0;
     @Input() disabled = false;
 
-    @Output() ready: any = new EventEmitter<string>();
-    editor: any;
+    @Output() ready = new EventEmitter<string>();
     code: string = '';
     errorMessage = '';
     isReadyToShow = false;
 
-    @ViewChild('codejar') codejar: any;
+    @ViewChild('codejar') codejar: ElementRef<HTMLDivElement>;
 
     constructor(private cdr: ChangeDetectorRef) {
     }
@@ -75,32 +70,30 @@ export class CodeJarWrapperComponent implements OnInit, AfterViewInit {
 
     ngAfterViewInit(): void {
 
-        this.editor?.updateOptions({ readOnly: this._readOnly });
         requestAnimationFrame(() => {
             console.log('ngAfterViewInit');
             if (this.codejar) {
                 console.log('set readOnly:requestAnimationFrame', this._readOnly, this.codejar);
-                this.codejar.nativeElement.querySelector('pre').attributes.contenteditable.value  = !this._readOnly;
+                this.updateContentEditable();
             }
         })
     }
     ngOnInit(): void {
     }
 
-    onInit(editor: any) {
-        let line = editor.getPosition();
-        this.editor = editor;
-        this.editor?.updateOptions({ readOnly: this._readOnly });
-        console.log(line);
+    private updateContentEditable(): void {
+        this.codejar.nativeElement.querySelector('pre')
+            ?.setAttribute('contenteditable', String(!this._readOnly));
     }
-    onChangeCode(event: any) {
+
+    onChangeCode(event: string) {
         this.code = event;
         if (this.jsonValidator) {
             try {
                 JSON.parse(this.code);
                 this.errorMessage = '';
-            } catch (e) {
-                this.errorMessage = e.message;
+            } catch (error: unknown) {
+                this.errorMessage = error instanceof Error ? error.message : String(error);
             }
         }
         requestAnimationFrame(() => this.cdr.detectChanges());

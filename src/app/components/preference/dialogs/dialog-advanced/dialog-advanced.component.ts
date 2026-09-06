@@ -4,6 +4,15 @@ import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { Functions } from '@app/helpers/functions';
 import { AuthenticationService } from '@app/services';
 import { TranslateService } from '@ngx-translate/core'
+import { CrudDialogData } from '@app/models';
+
+interface AdvancedDialogRecord {
+    partid: number | string;
+    category: string;
+    param: string;
+    data: unknown;
+    type?: string;
+}
 @Component({
     selector: 'app-dialog-advanced',
     templateUrl: './dialog-advanced.component.html',
@@ -29,7 +38,7 @@ export class DialogAdvancedComponent {
         Validators.required,
         Validators.minLength(3)
     ]);
-    partid = new FormControl('', [
+    partid = new FormControl<string | number>('', [
         Validators.required,
         Validators.minLength(1),
         Validators.maxLength(3),
@@ -42,7 +51,7 @@ export class DialogAdvancedComponent {
         private authService: AuthenticationService,
         public dialogRef: MatDialogRef<DialogAdvancedComponent>,
         public translateService: TranslateService,
-        @Inject(MAT_DIALOG_DATA) public data: any) {
+        @Inject(MAT_DIALOG_DATA) public data: CrudDialogData<AdvancedDialogRecord>) {
         
         translateService.addLangs(['en'])
         translateService.setDefaultLang('en')

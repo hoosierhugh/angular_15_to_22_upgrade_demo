@@ -16,7 +16,7 @@ import { DialogSettingsGridDialog } from '../grid-settings-dialog/grid-settings-
 })
 
 export class HeaderActionRenderer {
-    public params: any;
+    public params: IHeaderParams;
     constructor(public dialog: MatDialog) {
         console.groupEnd();
     }
@@ -26,13 +26,12 @@ export class HeaderActionRenderer {
     }
 
     public onCheckAllClick() {
-        let i = 0;
-        let bool = true;
-        while (this.params.api.getRowNode(i) !== undefined && bool) {
-            bool = bool && this.params.api.getRowNode(i).selected;
-            i++;
-        }
-        if (!bool) {
+        let allSelected = true;
+        this.params.api.forEachNode(node => {
+            allSelected = allSelected && node.isSelected() === true;
+        });
+
+        if (!allSelected) {
             this.params.api.selectAll();
         } else {
             this.params.api.deselectAll();

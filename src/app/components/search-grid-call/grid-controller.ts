@@ -1,7 +1,13 @@
-import { ColDef } from 'ag-grid-community';
+import { ColDef, ColumnState } from 'ag-grid-community';
 import { Input, Component } from '@angular/core';
 import { Functions, getStorage, setStorage } from '@app/helpers/functions';
 import { ConstValue, UserConstValue } from './../../models/const-value.model';
+
+export interface GridSizeSettings {
+    selectedType?: string;
+    sizeColumnsToFit?: boolean;
+    pageSize?: number;
+}
 
 @Component({
     template: ''
@@ -37,8 +43,8 @@ export class GridController {
     public recoverAgGridSizeControl() {
         /** recover agGridSizeControl settings from localStorage */
         const { selectedType, sizeColumnsToFit, pageSize } =
-            getStorage(UserConstValue.RESULT_GRID_SETTING) ||
-            getStorage(ConstValue.RESULT_GRID_SETTING) || {};
+            getStorage<GridSizeSettings>(UserConstValue.RESULT_GRID_SETTING) ||
+            getStorage<GridSizeSettings>(ConstValue.RESULT_GRID_SETTING) || {};
 
         if (!selectedType && sizeColumnsToFit) {
             Object.keys(this.agGridSizeControl).forEach(option => {
@@ -58,7 +64,7 @@ export class GridController {
         const lsIndex = ConstValue.RESULT_STATE + id;
         const lsIndexUser = UserConstValue.RESULT_STATE + id;
 
-        let columnState = getStorage(lsIndexUser) || getStorage(lsIndex);
+        let columnState = getStorage<ColumnState[]>(lsIndexUser) || getStorage<ColumnState[]>(lsIndex);
         if (columnState) {
             columnState = columnState.map(column =>
                 column = {

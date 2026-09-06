@@ -6,9 +6,9 @@ import { Pipe, PipeTransform } from '@angular/core';
 })
 
 export class FilterPipe implements PipeTransform {
-    transform(value: any[], filterBy: string): any[] {
+    transform<T extends { name: string }>(value: T[], filterBy: string): T[] {
         filterBy = filterBy ? filterBy.toLocaleLowerCase() : null;
-        return filterBy ? value.filter((item: any) =>
+        return filterBy ? value.filter((item: T) =>
             item.name.toLocaleLowerCase().indexOf(filterBy) !== -1) : value;
     }
 }

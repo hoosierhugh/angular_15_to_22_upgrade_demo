@@ -1,5 +1,6 @@
 import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { ICellRendererAngularComp } from 'ag-grid-angular';
+import { SearchGridCellParams } from './search-grid-renderer.types';
 
 @Component({
     selector: 'app-child-cell',
@@ -40,14 +41,14 @@ import { ICellRendererAngularComp } from 'ag-grid-angular';
     changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ColumnCallidRenderer implements ICellRendererAngularComp {
-    public params: any;
+    public params: SearchGridCellParams;
     callid: string;
     copyTimer: number;
     selected: boolean;
     timeout;
-    agInit(params: any): void {
+    agInit(params: SearchGridCellParams): void {
         this.params = params;
-        this.callid = this.params.value || null;
+        this.callid = this.params.value == null ? '' : String(this.params.value);
     }
     startCopy() {
         this.copyTimer = Date.now();
@@ -73,7 +74,7 @@ export class ColumnCallidRenderer implements ICellRendererAngularComp {
                 this.params.node.rowIndex,
                 this.params.data,
                 event,
-                this.params?.column?.colDef.field
+                this.params.colDef.field
             );
     }
 
