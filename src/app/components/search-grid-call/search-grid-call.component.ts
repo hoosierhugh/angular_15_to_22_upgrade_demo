@@ -967,7 +967,7 @@ export class SearchGridCallComponent
                     this.rowData = [];
                     checkNoData(!!this.rowData?.length);
                     this.dataReady.emit({});
-                    console.error(new Error(result));
+                    console.error(new Error('Search call returned no data.'), result);
                     return;
                 }
                 this.rowData = result.data;
@@ -1354,10 +1354,10 @@ export class SearchGridCallComponent
 
                     if (decoded) {
                         const [_decoded] = decoded || [];
-                        const out = _decoded?._source?.layers || _decoded || decoded;
+                        const out = _decoded?._source?.layers || _decoded || {};
 
                         /** sort items */
-                        let outSortied = {
+                        let outSortied: Record<string, unknown> = {
                             ...{
                                 frame: null,
                                 eth: null,
@@ -1371,7 +1371,7 @@ export class SearchGridCallComponent
                         };
                         /** clear from empty items */
                         outSortied = Object.entries(outSortied)
-                            .reduce((a, [key, value]) => {
+                            .reduce<Record<string, unknown>>((a, [key, value]) => {
                                 if (value) {
                                     a[key] = value;
                                 }

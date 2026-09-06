@@ -8,7 +8,7 @@ export class Functions {
   static amfList = ['server_type_in', 'server_type_out', 'ipgroup_in', 'ipgroup_out', 'source_ip', 'destination_ip', 'IPs'];
   static newGuid() {
     return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, c => {
-      const r: any = Math.random() * 16 | 0;
+      const r = Math.random() * 16 | 0;
       const v = c === 'x' ? r : (r & 0x3 | 0x8);
       return v.toString(16);
     });
@@ -208,10 +208,10 @@ export class Functions {
     }
     return col;
   }
-  static messageFormatter(dist: Array<any>) {
+  static messageFormatter<T>(dist: T[]): T[] {
     return dist;
   }
-  static cloneObject(src: any): any {
+  static cloneObject<T>(src: T): T {
     try {
       return JSON.parse(JSON.stringify(src));
     } catch (err) { }
@@ -282,7 +282,7 @@ export class Functions {
   static originalOrder(a: KeyValue<number, string>, b: KeyValue<number, string>): number {
     return 0;
   }
-  static md5object(obj: any): string {
+  static md5object(obj: unknown): string {
     try {
       return Functions.md5(JSON.stringify(obj) || '');
     } catch (err) {
@@ -362,12 +362,12 @@ export class Functions {
     return fields;
   }
 
-  static arrayUniques(arr: any[]): any[] {
+  static arrayUniques<T>(arr: T[]): T[] {
     const isObject = !!arr.find(i => typeof i === 'object');
     if (isObject) {
       return arr.map(i => JSON.stringify(i)).sort()
         .filter((i, k, a) => i !== a[k - 1])
-        .filter(i => !!i).map(i => this.JSON_parse(i));
+        .filter(i => !!i).map(i => this.JSON_parse(i) as T);
     }
 
     return arr.sort().filter((i, k, a) => i !== a[k - 1]).filter(i => !!i);

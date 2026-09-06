@@ -11,12 +11,35 @@ export interface UserSettings {
     dateTimeRange: {
         title: string;
         timezone: string,
-        dates: [moment.Moment, moment.Moment]
+        dates: Array<moment.Moment | string>
     };
-    protosearchSettings: any;
-    favorites: any;
-    searchTabs?: any;
-    profile_fields?: any;
+    protosearchSettings: Record<string, StoredProtoSearchConfig>;
+    favorites: StoredFavorite[];
+    searchTabs?: StoredSearchTab[];
+    profile_fields?: unknown[];
+}
+
+export interface StoredProtoSearchConfig {
+    fields?: unknown[];
+    limit?: unknown;
+    text?: unknown;
+    [key: string]: unknown;
+}
+
+export interface StoredFavorite {
+    id?: string;
+    name?: string;
+    [key: string]: unknown;
+}
+
+export interface StoredSearchTab {
+    id: string;
+    name: string;
+    isDisplayGrid?: boolean;
+    owner?: {
+        username?: string;
+    };
+    [key: string]: unknown;
 }
 
 enum TypeForSave {
@@ -51,9 +74,9 @@ export class SessionStorageService {
         return SessionStorageService.userSettings;
     }
 
-    private localUserSettings: BehaviorSubject<any>;
+    private localUserSettings: BehaviorSubject<UserSettings>;
 
-    public sessionStorage: Observable<any>;
+    public sessionStorage: Observable<UserSettings>;
 
     constructor(private authenticationService: AuthenticationService) {
         this.updateDataFromLocalStorage();
@@ -74,7 +97,7 @@ export class SessionStorageService {
                 if (!this.setting.updateType || this.setting.updateType === TypeForSave.PROTO_SEARCH) {
                     this.setting.updateType = TypeForSave.FULL;
                 }
-                this.localUserSettings = new BehaviorSubject<any>(this.setting);
+                this.localUserSettings = new BehaviorSubject<UserSettings>(this.setting);
                 this.sessionStorage = this.localUserSettings.asObservable();
             }
         });
@@ -93,7 +116,7 @@ export class SessionStorageService {
         };
     }
 
-    public saveDateTimeRange(dtr: any) {
+    public saveDateTimeRange(dtr: UserSettings['dateTimeRange']) {
         this.setting.dateTimeRange = dtr;
         this.saveUserData(TypeForSave.DATA_TIME_RANGE);
     }
@@ -103,7 +126,7 @@ export class SessionStorageService {
     private saveUserData(updateType = TypeForSave.FULL) {
         log('this.setting.protosearchSettings', this.setting.protosearchSettings);
         Object.entries(this.setting.protosearchSettings)
-            .forEach(([key, widget]: any[]) => {
+            .forEach(([key, widget]) => {
                 if (!widget || widget.hasOwnProperty(ConstValue.serverLoki)) {
                     return;
                 }
@@ -122,15 +145,15 @@ export class SessionStorageService {
         delete this.setting.protosearchSettings[widgetId];
         this.saveUserData(TypeForSave.PROTO_SEARCH);
     }
-    public saveProtoSearchConfig(widgetId: string, fieldsValue: any) {
+    public saveProtoSearchConfig(widgetId: string, fieldsValue: StoredProtoSearchConfig) {
         this.setting.protosearchSettings[widgetId] = fieldsValue;
         this.saveUserData(TypeForSave.PROTO_SEARCH);
     }
-    public saveFavoritesConfig(favorites) {
+    public saveFavoritesConfig(favorites: StoredFavorite[]) {
         this.setting.favorites = favorites;
         this.saveUserData(TypeForSave.FAVORITES);
     }
-    public saveSearchTabsConfig(searchTabs) {
+    public saveSearchTabsConfig(searchTabs: StoredSearchTab[]) {
         this.setting.searchTabs = searchTabs;
         this.saveUserData(TypeForSave.SEARCH_TABS);
     }

@@ -90,7 +90,7 @@ class Functions {
       }[dscp] + `(${dscp})` || dscp + ''
     );
   }
-  static md5object(obj: any): string {
+  static md5object(obj: unknown): string {
     try {
       return Functions.md5(JSON.stringify(obj) || '');
     } catch (err) {
@@ -100,7 +100,7 @@ class Functions {
   static md5(str: string): string {
     return Md5.hashAsciiStr(str) + '';
   }
-  static cloneObject(src: any): any {
+  static cloneObject<T>(src: T): T {
     try {
       return JSON.parse(JSON.stringify(src));
     } catch (err) {}
@@ -154,7 +154,7 @@ class Functions {
   }
   static newGuid() {
     return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, (c) => {
-      const r: any = (Math.random() * 16) | 0;
+      const r = (Math.random() * 16) | 0;
       const v = c === 'x' ? r : (r & 0x3) | 0x8;
       return v.toString(16);
     });

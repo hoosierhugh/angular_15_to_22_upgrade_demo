@@ -88,7 +88,7 @@ export class ProtosearchWidgetComponent implements IWidget, OnInit, OnDestroy, A
   };
   locationNode: any = null;
   locationGroup: any = null;
-  profileFields: [];
+  profileFields: unknown[] = [];
   lokiQueryText: string;
   searchQueryLoki: any;
   isDefaultSearchType;

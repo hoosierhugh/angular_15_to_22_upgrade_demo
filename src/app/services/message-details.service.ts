@@ -7,45 +7,71 @@ export enum ArrowEventState {
     FOLLOWING = 'following'
 }
 
+export interface MessageDetailsEvent {
+    message: unknown;
+    metadata: MessageNavigationMetadata;
+}
+
+export interface MessageDetailsArrowEvent {
+    eventType: ArrowEventState;
+    metadata: MessageArrowMetadata;
+}
+
+export interface MessageNavigationMetadata {
+    channelId: string;
+    itemId: number;
+    isLeft: boolean;
+    isRight: boolean;
+    isBrowserWindow: boolean;
+}
+
+export interface MessageArrowMetadata {
+    data: Pick<MessageNavigationMetadata, 'channelId' | 'itemId'>;
+    mouseEventData: unknown;
+}
+
+export interface ParentWindowData {
+    isBrowserWindow?: boolean;
+}
 
 @Injectable({
     providedIn: 'root'
 })
 export class MessageDetailsService {
-    static parentWindow: any = {};
+    static parentWindow: Record<string, ParentWindowData> = {};
     constructor() { }
-    private subject = new Subject<any>();
-    private subjectArrows = new Subject<any>();
+    private subject = new Subject<MessageDetailsEvent>();
+    private subjectArrows = new Subject<MessageDetailsArrowEvent>();
 
-    public get event(): Observable<any> {
+    public get event(): Observable<MessageDetailsEvent> {
         return this.subject.asObservable();
     }
 
-    public get arrows(): Observable<any> {
+    public get arrows(): Observable<MessageDetailsArrowEvent> {
         return this.subjectArrows.asObservable();
     }
-    public setParentWindowData(indexWindow: string, data: any = null): void {
+    public setParentWindowData(indexWindow: string, data: ParentWindowData = {}): void {
         const hash = Functions.md5(indexWindow);
         MessageDetailsService.parentWindow[hash] = data;
     }
-    public getParentWindowData(indexWindow: string): any {
+    public getParentWindowData(indexWindow: string): ParentWindowData {
         const hash = Functions.md5(indexWindow);
         const p = MessageDetailsService.parentWindow;
         return p && p[hash] || { isBrowserWindow: false };
     }
 
-    public open(message: any, metadata: any): void {
+    public open(message: unknown, metadata: MessageNavigationMetadata): void {
         this.subject.next({ message, metadata });
     }
 
-    public clickArrowRight(metadata: any): void {
+    public clickArrowRight(metadata: MessageArrowMetadata): void {
         this.subjectArrows.next({
             eventType: ArrowEventState.FOLLOWING,
             metadata
         });
     }
 
-    public clickArrowLeft(metadata: any): void {
+    public clickArrowLeft(metadata: MessageArrowMetadata): void {
         this.subjectArrows.next({
             eventType: ArrowEventState.PREVIOUS,
             metadata

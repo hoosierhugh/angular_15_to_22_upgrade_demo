@@ -3,7 +3,7 @@ import { AbstractControl, FormControl, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { emailValidator } from '@app/helpers/email-validator.directive';
 import { Functions } from '@app/helpers/functions';
-import { UserProfile } from '@app/models';
+import { PreferenceUsers, UserProfile } from '@app/models';
 import { AlertService, AuthenticationService, PreferenceUserService, UserSecurityService } from '@app/services';
 import { lastValueFrom } from 'rxjs';
 
@@ -91,8 +91,8 @@ export class PageProfileComponent implements OnInit {
   @Input() page: string;
   @Input() pageID: string;
   userProfile: UserProfile
-  data: any;
-  timeout: any;
+  data!: PreferenceUsers;
+  timeout: ReturnType<typeof setTimeout> | undefined;
   constructor(        
     private service: PreferenceUserService,
     private authenticationService: AuthenticationService,
@@ -124,7 +124,7 @@ export class PageProfileComponent implements OnInit {
     await this.getProfile()
     await lastValueFrom(this.service
       .getAllGroups())
-      .then((groups: any) => {
+      .then((groups) => {
         this.groupList = groups.data;
       });
   }
@@ -139,14 +139,14 @@ export class PageProfileComponent implements OnInit {
     this.profileColor = this.idColorHash(this.userProfile.guid)
     this.cdr.detectChanges();
   }
-  async getUser(guid) {
+  async getUser(guid: string) {
     const {data} = await lastValueFrom(this.service.getById(guid));
     [this.data] = data;
       (d => {
         this.originalUser = d.username;
         this.username.setValue(d.username);
         this.usergroup.setValue(d.usergroup.toLowerCase());
-        this.partid.setValue(d.partid);
+        this.partid.setValue(String(d.partid));
         this.firstname.setValue(d.firstname);
         this.email.setValue(d.email);
         this.lastname.setValue(d.lastname);
@@ -160,7 +160,7 @@ export class PageProfileComponent implements OnInit {
     }
   }
   
-  usernameValidator(userControl: AbstractControl) {
+  usernameValidator(userControl: AbstractControl): Promise<{ userNameNotAvailable: true } | null> {
     return new Promise(resolve => {
         if (typeof this.timeout !== 'undefined') {
             clearTimeout(this.timeout);
@@ -175,13 +175,23 @@ export class PageProfileComponent implements OnInit {
     });
   
   }
-  isTaken(user) {
-    return this.service.getAll().toPromise().then((users: any) => {
+  isTaken(user: string | null): Promise<boolean> {
+    return this.service.getAll().toPromise().then((users) => {
         return ([].concat(users?.data?.map?.(m => m?.username) || [])).includes(user) && user !== this.originalUser;
     });
   }
   onSubmit() {
-    const result:any = {}
+    const result: PreferenceUsers = {
+      username: String(this.username.value ?? ''),
+      usergroup: String(this.usergroup.value ?? ''),
+      partid: Number(this.partid.value ?? 0),
+      password: String(this.password.value ?? ''),
+      firstname: String(this.firstname.value ?? ''),
+      email: String(this.email.value ?? ''),
+      lastname: String(this.lastname.value ?? ''),
+      department: String(this.department.value ?? ''),
+      guid: this.userProfile.guid,
+    };
     if (!this.username?.invalid &&
         !this.usergroup?.invalid &&
         !this.partid?.invalid &&
@@ -191,17 +201,6 @@ export class PageProfileComponent implements OnInit {
         !this.department?.invalid
     ) {
       
-        (d => {
-            d.username = this.username?.value;
-            d.usergroup = this.usergroup?.value;
-            d.partid = this.partid?.value;
-            d.password = this.password?.value;
-            d.firstname = this.firstname?.value;
-            d.email = this.email?.value;
-            d.lastname = this.lastname?.value;
-            d.department = this.department?.value;
-            d.guid = this.userProfile.guid;
-        })(result);
         lastValueFrom(this.service.update(result))        
         .then(() => {
             if (this.data.usergroup !== this.bufferGroup || result.password) {

@@ -215,7 +215,7 @@ export class MenuComponent implements OnInit, OnDestroy {
                         }
                     });
                     this.searchTabsList = data.searchTabs.filter(f =>
-                        f.owner.username === currentUser);
+                        f.owner?.username === currentUser);
                     this.cdr.detectChanges();
                 }
             }

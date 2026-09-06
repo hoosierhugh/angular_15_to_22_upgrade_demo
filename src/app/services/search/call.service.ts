@@ -5,6 +5,21 @@ import { environment } from '@environments/environment';
 import { SearchCallModel } from '../../models/search-call.model';
 import { map } from 'rxjs/operators';
 
+export interface SearchCallResponse<T = unknown> {
+    data?: T;
+}
+
+export interface DecodedSearchCallLayer {
+    _source?: {
+        layers?: Record<string, unknown>;
+    };
+    [key: string]: unknown;
+}
+
+export interface DecodedSearchCallResult {
+    decoded?: DecodedSearchCallLayer[];
+}
+
 @Injectable({
     providedIn: 'root'
 })
@@ -15,21 +30,21 @@ export class SearchCallService {
     constructor(private http: HttpClient) { }
 
     // Return search call message
-    getMessage(data: any): Observable<any> {
-        return this.http.post<any>(`${this.url}/message`, data);
+    getMessage(data: unknown): Observable<SearchCallResponse> {
+        return this.http.post<SearchCallResponse>(`${this.url}/message`, data);
     }
 
     // Return search call data
-    getData(searchConfig: SearchCallModel): Observable<any> {
-        return this.http.post<any>(`${this.url}/data`, searchConfig);
+    getData(searchConfig: SearchCallModel): Observable<SearchCallResponse> {
+        return this.http.post<SearchCallResponse>(`${this.url}/data`, searchConfig);
     }
 
     // Return search call export data
-    getExportData(): Observable<any> {
-        return this.http.get<any>(`${this.url}/export/data`);
+    getExportData(): Observable<unknown> {
+        return this.http.get<unknown>(`${this.url}/export/data`);
     }
 
-    getDecodedData(searchConfig: SearchCallModel) {
-        return this.http.post<any>(`${this.url}/decode/message`, searchConfig);
+    getDecodedData(searchConfig: SearchCallModel): Observable<SearchCallResponse<DecodedSearchCallResult[]>> {
+        return this.http.post<SearchCallResponse<DecodedSearchCallResult[]>>(`${this.url}/decode/message`, searchConfig);
     }
 }
