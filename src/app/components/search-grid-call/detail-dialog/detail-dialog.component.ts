@@ -27,10 +27,11 @@ import { AgentRequestModel } from '@app/models/agent-request-model';
 import  moment from 'moment';
 
 @Component({
-  selector: 'app-detail-dialog',
-  templateUrl: './detail-dialog.component.html',
-  styleUrls: ['./detail-dialog.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
+    selector: 'app-detail-dialog',
+    templateUrl: './detail-dialog.component.html',
+    styleUrls: ['./detail-dialog.component.scss'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    standalone: false
 })
 export class DetailDialogComponent implements OnInit, OnDestroy {
   _sipDataItem: any;

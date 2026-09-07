@@ -18,7 +18,8 @@ interface AliasDialogRecord {
     selector: 'app-dialog-alias',
     templateUrl: './dialog-alias.component.html',
     styleUrls: ['./dialog-alias.component.scss'],
-    changeDetection: ChangeDetectionStrategy.OnPush
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    standalone: false
 })
 export class DialogAliasComponent {
     @ViewChild('data_view', { static: false }) editor;

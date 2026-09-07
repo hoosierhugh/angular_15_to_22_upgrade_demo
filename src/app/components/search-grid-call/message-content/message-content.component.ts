@@ -12,10 +12,11 @@ import { DateFormat, TimeFormattingService } from '@app/services/time-formatting
 const parsip = _parsip;
 // const moment = _moment;
 @Component({
-  selector: 'app-message-content',
-  templateUrl: './message-content.component.html',
-  styleUrls: ['./message-content.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
+    selector: 'app-message-content',
+    templateUrl: './message-content.component.html',
+    styleUrls: ['./message-content.component.scss'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    standalone: false
 })
 export class MessageContentComponent implements OnInit, OnDestroy, AfterViewInit, AfterContentInit {
   _data: any;

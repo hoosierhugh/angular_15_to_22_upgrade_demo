@@ -11,7 +11,8 @@ import { TranslateService } from '@ngx-translate/core'
     templateUrl: 'setting-protosearch-widget.component.html',
     styleUrls: ['./setting-protosearch-widget.component.scss'],
     changeDetection: ChangeDetectionStrategy.OnPush,
-    encapsulation: ViewEncapsulation.None
+    encapsulation: ViewEncapsulation.None,
+    standalone: false
 })
 
 export class SettingProtosearchWidgetComponent implements OnInit, OnDestroy {

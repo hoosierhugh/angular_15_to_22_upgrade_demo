@@ -30,9 +30,10 @@ import { ComponentType } from '@angular/cdk/portal';
 
 
 @Component({
-  selector: 'app-page-scripts',
-  templateUrl: './page-scripts.component.html',
-  styleUrls: ['./page-scripts.component.scss']
+    selector: 'app-page-scripts',
+    templateUrl: './page-scripts.component.html',
+    styleUrls: ['./page-scripts.component.scss'],
+    standalone: false
 })
 export class PageScriptsComponent implements OnInit, AfterViewInit, OnDestroy {
     isLoading = false;

@@ -15,7 +15,8 @@ interface DeleteAlertDialogData {
     selector: 'app-dialog-delete-alert',
     templateUrl: './dialog-delete-alert.component.html',
     styleUrls: ['./dialog-delete-alert.component.scss'],
-    changeDetection: ChangeDetectionStrategy.OnPush
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    standalone: false
 })
 export class DialogDeleteAlertComponent {
     message: string;

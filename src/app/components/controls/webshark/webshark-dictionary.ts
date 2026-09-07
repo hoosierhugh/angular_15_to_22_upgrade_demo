@@ -7,7 +7,8 @@
 import { Component } from '@angular/core';
 
 @Component({
-    template: ''
+    template: '',
+    standalone: false
 })
 export class WebsharkDictionary {
     static _ws = {

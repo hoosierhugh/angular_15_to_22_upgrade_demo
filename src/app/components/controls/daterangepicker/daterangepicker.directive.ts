@@ -27,18 +27,19 @@ import {
   @Directive({
     selector: 'input[ngxDaterangepickerMd]',
     host: {
-      '(keyup.esc)': 'hide()',
-      '(blur)': 'onBlur()',
-      '(click)': 'open()',
-      '(keyup)': 'inputChanged($event)'
+        '(keyup.esc)': 'hide()',
+        '(blur)': 'onBlur()',
+        '(click)': 'open()',
+        '(keyup)': 'inputChanged($event)'
     },
     providers: [
-      {
-        provide: NG_VALUE_ACCESSOR,
-        useExisting: forwardRef(() => DaterangepickerDirective), multi: true
-      }
-  ]
-  })
+        {
+            provide: NG_VALUE_ACCESSOR,
+            useExisting: forwardRef(() => DaterangepickerDirective), multi: true
+        }
+    ],
+    standalone: false
+})
   export class DaterangepickerDirective implements OnInit, OnChanges, DoCheck {
     public picker: DaterangepickerComponent;
     private _onChange = Function.prototype;

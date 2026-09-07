@@ -41,7 +41,8 @@ import { SearchGridCellParams } from './search-grid-renderer.types';
             border-radius:3px;
 
         }
-    `]
+    `],
+    standalone: false
 })
 export class GenericCellRenderer implements ICellRendererAngularComp {
     public params: SearchGridCellParams;

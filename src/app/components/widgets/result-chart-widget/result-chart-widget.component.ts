@@ -15,7 +15,8 @@ interface ResultChartConfig {
     selector: 'app-result-chart-widget',
     templateUrl: './result-chart-widget.component.html',
     styleUrls: ['./result-chart-widget.component.scss'],
-    changeDetection: ChangeDetectionStrategy.OnPush
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    standalone: false
 })
 @Widget({
     title: 'Display Results Chart',

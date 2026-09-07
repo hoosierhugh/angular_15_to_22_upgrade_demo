@@ -10,7 +10,8 @@ interface AgentSubscriptionDialogRecord {
     selector: 'app-dialog-agentsub',
     templateUrl: './dialog-agentsub.component.html',
     styleUrls: ['./dialog-agentsub.component.scss'],
-    changeDetection: ChangeDetectionStrategy.OnPush
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    standalone: false
 })
 
 export class DialogAgentsubComponent {

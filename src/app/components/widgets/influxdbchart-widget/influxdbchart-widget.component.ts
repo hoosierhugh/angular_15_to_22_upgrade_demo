@@ -15,7 +15,8 @@ import { Functions } from '@app/helpers/functions';
     selector: 'app-influxdbchart-widget',
     templateUrl: './influxdbchart-widget.component.html',
     styleUrls: ['./influxdbchart-widget.component.scss'],
-    changeDetection: ChangeDetectionStrategy.OnPush
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    standalone: false
 })
 @Widget({
     title: 'InfluxDB',

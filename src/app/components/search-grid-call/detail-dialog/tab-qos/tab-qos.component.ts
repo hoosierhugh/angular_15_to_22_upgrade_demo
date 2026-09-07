@@ -45,10 +45,11 @@ interface QosWorkerResult {
 }
 
 @Component({
-  selector: 'app-tab-qos',
-  templateUrl: './tab-qos.component.html',
-  styleUrls: ['./tab-qos.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush
+    selector: 'app-tab-qos',
+    templateUrl: './tab-qos.component.html',
+    styleUrls: ['./tab-qos.component.scss'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    standalone: false
 })
 
 export class TabQosComponent implements OnInit, AfterViewInit {

@@ -7,7 +7,8 @@ import { SearchGridCellParams } from './search-grid-renderer.types';
         <span class='cell-wrapper' (click)='copy(data)'>
             <div class="loki-highlight" [innerHTML]="data"></div>
         </span>`,
-    changeDetection: ChangeDetectionStrategy.OnPush
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    standalone: false
 })
 
 export class LokiHighlightRenderer implements ICellRendererAngularComp {

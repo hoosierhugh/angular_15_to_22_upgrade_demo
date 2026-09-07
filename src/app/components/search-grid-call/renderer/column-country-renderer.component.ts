@@ -40,7 +40,8 @@ import { SearchGridCellParams } from './search-grid-renderer.types';
 
         }
     `],
-    changeDetection: ChangeDetectionStrategy.OnPush
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    standalone: false
 })
 export class ColumnCountryRenderer implements ICellRendererAngularComp {
     selected = false;

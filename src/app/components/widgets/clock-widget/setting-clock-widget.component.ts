@@ -17,7 +17,8 @@ interface ClockSettingsData extends Pick<ClockConfig,
     selector: 'app-setting-clock-widget-component',
     templateUrl: 'setting-clock-widget.component.html',
     styleUrls: ['./setting-clock-widget.component.scss'],
-    changeDetection: ChangeDetectionStrategy.OnPush
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    standalone: false
 })
 
 export class SettingClockWidgetComponent {

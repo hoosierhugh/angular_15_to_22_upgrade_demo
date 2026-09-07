@@ -2,10 +2,11 @@ import { Component, OnInit, Input, ChangeDetectionStrategy, ChangeDetectorRef, E
 import { Functions } from '@app/helpers/functions';
 
 @Component({
-  selector: 'app-tab-logs',
-  templateUrl: './tab-logs.component.html',
-  styleUrls: ['./tab-logs.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush
+    selector: 'app-tab-logs',
+    templateUrl: './tab-logs.component.html',
+    styleUrls: ['./tab-logs.component.scss'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    standalone: false
 })
 export class TabLogsComponent implements OnInit, AfterViewInit {
     _data: LogEntry[] = [];

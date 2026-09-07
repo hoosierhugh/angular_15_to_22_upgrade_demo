@@ -3,7 +3,8 @@ import  moment from 'moment';
 
 @Pipe({
     name: 'moment',
-    pure: false
+    pure: false,
+    standalone: false
 })
 
 export class MomentPipe implements PipeTransform {

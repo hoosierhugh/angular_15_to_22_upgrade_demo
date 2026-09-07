@@ -29,9 +29,10 @@ import { Functions } from '@app/helpers/functions';
 import { ComponentType } from '@angular/cdk/portal';
 
 @Component({
-  selector: 'app-page-hepsub',
-  templateUrl: './page-hepsub.component.html',
-  styleUrls: ['./page-hepsub.component.scss']
+    selector: 'app-page-hepsub',
+    templateUrl: './page-hepsub.component.html',
+    styleUrls: ['./page-hepsub.component.scss'],
+    standalone: false
 })
 export class PageHepsubComponent implements OnInit, AfterViewInit, OnDestroy {
     isLoading = false;

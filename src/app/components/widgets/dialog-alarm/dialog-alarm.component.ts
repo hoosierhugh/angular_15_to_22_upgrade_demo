@@ -26,7 +26,8 @@ interface AlarmDialogData {
     selector: 'app-dialog-alarm',
     templateUrl: './dialog-alarm.component.html',
     styleUrls: ['./dialog-alarm.component.scss'],
-    changeDetection: ChangeDetectionStrategy.OnPush
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    standalone: false
 })
 export class DialogAlarmComponent {
     presetList: AlarmPreset[] = [];

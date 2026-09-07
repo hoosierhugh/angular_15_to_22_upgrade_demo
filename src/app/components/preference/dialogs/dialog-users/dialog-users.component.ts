@@ -10,10 +10,11 @@ import moment from 'moment';
 import { lastValueFrom } from 'rxjs';
 import { ApiResponse, CrudDialogData, PreferenceUsers } from '@app/models';
 @Component({
-  selector: 'app-dialog-users',
-  templateUrl: './dialog-users.component.html',
-  styleUrls: ['./dialog-users.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush
+    selector: 'app-dialog-users',
+    templateUrl: './dialog-users.component.html',
+    styleUrls: ['./dialog-users.component.scss'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    standalone: false
 })
 export class DialogUsersComponent implements OnInit {
   isValidForm = false;

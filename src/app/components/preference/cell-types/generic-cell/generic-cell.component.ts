@@ -4,7 +4,8 @@ import { MatColumnDef, MatTable } from '@angular/material/table';
 @Component({
     selector: 'app-generic-cell',
     templateUrl: './generic-cell.component.html',
-    styleUrls: ['./generic-cell.component.scss']
+    styleUrls: ['./generic-cell.component.scss'],
+    standalone: false
 })
 export class GenericCellComponent implements OnInit {
     @Input() column;

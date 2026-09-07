@@ -13,7 +13,8 @@ interface ArrayItem {
     selector: 'app-chips-input',
     templateUrl: './chips-input.component.html',
     styleUrls: ['./chips-input.component.scss'],
-    changeDetection: ChangeDetectionStrategy.OnPush
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    standalone: false
 })
 export class ChipsInputComponent implements OnInit {
     visible = true;

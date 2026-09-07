@@ -38,7 +38,8 @@ import { SearchGridCellParams } from './search-grid-renderer.types';
         border-radius:3px;
 
     }`],
-    changeDetection: ChangeDetectionStrategy.OnPush
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    standalone: false
 })
 export class ColumnCallidRenderer implements ICellRendererAngularComp {
     public params: SearchGridCellParams;

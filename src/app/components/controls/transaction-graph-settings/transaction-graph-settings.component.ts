@@ -4,9 +4,10 @@ import { UserConstValue } from '@app/models';
 import { TranslateService } from '@ngx-translate/core';
 
 @Component({
-  selector: 'app-transaction-graph-settings',
-  templateUrl: './transaction-graph-settings.component.html',
-  styleUrls: ['./transaction-graph-settings.component.scss']
+    selector: 'app-transaction-graph-settings',
+    templateUrl: './transaction-graph-settings.component.html',
+    styleUrls: ['./transaction-graph-settings.component.scss'],
+    standalone: false
 })
 export class TransactionGraphSettingsComponent implements OnInit {
     _options;

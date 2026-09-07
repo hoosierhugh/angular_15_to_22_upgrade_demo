@@ -9,7 +9,8 @@ import { lastValueFrom } from 'rxjs';
     selector: 'app-grafana-rsearch-widget-component',
     templateUrl: 'setting-grafana-widget.component.html',
     styleUrls: ['./setting-grafana-widget.component.scss'],
-    changeDetection: ChangeDetectionStrategy.OnPush
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    standalone: false
 })
 export class SettingIframeWidgetComponent implements OnInit {
 

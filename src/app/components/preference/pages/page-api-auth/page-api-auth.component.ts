@@ -29,9 +29,10 @@ import { PreferencesComponentMapping } from '@app/models/preferences-component-m
 import { ComponentType } from '@angular/cdk/portal';
 
 @Component({
-  selector: 'app-page-api-auth',
-  templateUrl: './page-api-auth.component.html',
-  styleUrls: ['./page-api-auth.component.scss']
+    selector: 'app-page-api-auth',
+    templateUrl: './page-api-auth.component.html',
+    styleUrls: ['./page-api-auth.component.scss'],
+    standalone: false
 })
 export class PageApiAuthComponent implements OnInit, AfterViewInit, OnDestroy {
     isLoading = false;

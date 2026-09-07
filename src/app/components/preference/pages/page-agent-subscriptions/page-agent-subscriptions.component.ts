@@ -28,9 +28,10 @@ import { PreferencesComponentMapping } from '@app/models/preferences-component-m
 import { ComponentType } from '@angular/cdk/portal';
 
 @Component({
-  selector: 'app-page-agent-subscriptions',
-  templateUrl: './page-agent-subscriptions.component.html',
-  styleUrls: ['./page-agent-subscriptions.component.scss']
+    selector: 'app-page-agent-subscriptions',
+    templateUrl: './page-agent-subscriptions.component.html',
+    styleUrls: ['./page-agent-subscriptions.component.scss'],
+    standalone: false
 })
 export class PageAgentSubscriptionsComponent implements OnInit, AfterViewInit, OnDestroy {
     isLoading = false;

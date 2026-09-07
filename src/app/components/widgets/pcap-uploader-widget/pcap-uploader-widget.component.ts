@@ -8,7 +8,8 @@ import { TranslateService } from '@ngx-translate/core'
 @Component({
     selector: 'app-pcap-uploader-widget',
     templateUrl: './pcap-uploader-widget.component.html',
-    styleUrls: ['./pcap-uploader-widget.component.scss']
+    styleUrls: ['./pcap-uploader-widget.component.scss'],
+    standalone: false
 })
 @Widget({
     title: 'PCAP Uploader',

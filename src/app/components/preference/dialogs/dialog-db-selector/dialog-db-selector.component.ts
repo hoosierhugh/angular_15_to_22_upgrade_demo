@@ -18,7 +18,8 @@ interface DatabaseSelectionDialogData {
     selector: 'app-dialog-db-selector',
     templateUrl: './dialog-db-selector.component.html',
     styleUrls: ['./dialog-db-selector.component.scss'],
-    changeDetection: ChangeDetectionStrategy.OnPush
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    standalone: false
 })
 export class DialogDBSelectorComponent {
     isValidForm = false;

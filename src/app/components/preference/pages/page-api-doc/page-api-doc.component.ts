@@ -7,8 +7,8 @@ import { SwaggerUIBundle } from 'swagger-ui-dist';
 @Component({
     selector: 'app-page-api-doc',
     templateUrl: './page-api-doc.component.html',
-    styleUrls: ['./page-api-doc.component.scss']
-
+    styleUrls: ['./page-api-doc.component.scss'],
+    standalone: false
 })
 
 export class PageApiDocComponent implements OnInit {

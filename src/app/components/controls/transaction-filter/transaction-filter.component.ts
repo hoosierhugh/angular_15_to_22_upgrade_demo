@@ -42,6 +42,7 @@ interface StoredFlowFilterState {
     selector: 'app-filter',
     templateUrl: './transaction-filter.component.html',
     styleUrls: ['./transaction-filter.component.scss'],
+    standalone: false
 })
 export class TransactionFilterComponent implements OnInit {
     flowFilters;

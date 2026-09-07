@@ -7,7 +7,8 @@ import { SettingButtonComponent } from './setting-button';
 @Component({
     selector: 'custom-ag-grid',
     templateUrl: './custom-ag-grid.component.html',
-    styleUrls: ['./custom-ag-grid.component.scss']
+    styleUrls: ['./custom-ag-grid.component.scss'],
+    standalone: false
 })
 export class CustomAgGridComponent implements OnInit {
     agGridSizeControl = {

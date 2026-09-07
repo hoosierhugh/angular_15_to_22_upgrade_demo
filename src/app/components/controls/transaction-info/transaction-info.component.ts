@@ -11,9 +11,10 @@ export interface CallIdData {
 }
 
 @Component({
-  selector: 'app-transaction-info',
-  templateUrl: './transaction-info.component.html',
-  styleUrls: ['./transaction-info.component.scss']
+    selector: 'app-transaction-info',
+    templateUrl: './transaction-info.component.html',
+    styleUrls: ['./transaction-info.component.scss'],
+    standalone: false
 })
 
 export class TransactionInfoComponent implements OnInit {

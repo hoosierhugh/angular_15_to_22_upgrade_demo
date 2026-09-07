@@ -7,7 +7,8 @@ import { AuthenticationService } from '@app/services';
     selector: 'app-dialog-export',
     templateUrl: './dialog-export.component.html',
     styleUrls: ['./dialog-export.component.scss'],
-    changeDetection: ChangeDetectionStrategy.OnPush
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    standalone: false
 })
 export class DialogExportComponent {
     pageId: string = 'users';

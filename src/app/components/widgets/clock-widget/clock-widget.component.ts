@@ -34,7 +34,8 @@ export interface ClockConfig {
     selector: 'app-clock-widget',
     templateUrl: './clock-widget.component.html',
     styleUrls: ['./clock-widget.component.scss'],
-    changeDetection: ChangeDetectionStrategy.OnPush
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    standalone: false
 })
 @Widget({
     title: 'World Clock',

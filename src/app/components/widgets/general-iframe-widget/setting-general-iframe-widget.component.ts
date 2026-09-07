@@ -13,7 +13,8 @@ interface GeneralIframeSettingsData {
     selector: 'app-iframe-rsearch-widget-component',
     templateUrl: 'setting-general-iframe-widget.component.html',
     styleUrls: ['./setting-general-iframe-widget.component.scss'],
-    changeDetection: ChangeDetectionStrategy.OnPush
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    standalone: false
 })
 
 export class SettingGeneralIframeWidgetComponent {

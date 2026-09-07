@@ -8,10 +8,11 @@ import { AlertService, AuthenticationService, PreferenceUserService, UserSecurit
 import { lastValueFrom } from 'rxjs';
 
 @Component({
-  selector: 'app-page-profile',
-  templateUrl: './page-profile.component.html',
-  styleUrls: ['./page-profile.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush
+    selector: 'app-page-profile',
+    templateUrl: './page-profile.component.html',
+    styleUrls: ['./page-profile.component.scss'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    standalone: false
 })
 export class PageProfileComponent implements OnInit {
   

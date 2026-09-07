@@ -24,7 +24,8 @@ export interface DashboardConfig {
     selector: 'app-edit-dialog',
     templateUrl: './edit-dialog.component.html',
     styleUrls: ['./edit-dialog.component.scss'],
-    changeDetection: ChangeDetectionStrategy.OnPush
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    standalone: false
 })
 export class EditDialogComponent implements OnInit {
     private envUrl = `${environment.apiUrl.replace('/api/v3', '')}`;

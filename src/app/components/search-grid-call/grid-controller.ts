@@ -10,7 +10,8 @@ export interface GridSizeSettings {
 }
 
 @Component({
-    template: ''
+    template: '',
+    standalone: false
 })
 export class GridController {
     agGridSizeControl;

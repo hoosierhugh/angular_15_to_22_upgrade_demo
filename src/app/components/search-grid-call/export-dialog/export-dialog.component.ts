@@ -17,7 +17,8 @@ export interface ExportData {
     selector: 'app-export-dialog',
     templateUrl: 'export-dialog.component.html',
     styleUrls: ['./export-dialog.component.scss'],
-    changeDetection: ChangeDetectionStrategy.OnPush
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    standalone: false
 })
 
 export class ExportDialogComponent implements OnInit {

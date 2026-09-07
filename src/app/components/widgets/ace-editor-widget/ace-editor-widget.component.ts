@@ -20,7 +20,8 @@ export interface AceEditorConfig {
     selector: 'app-ace-editor-widget-component',
     templateUrl: 'ace-editor-widget.component.html',
     styleUrls: ['./ace-editor-widget.component.scss'],
-    changeDetection: ChangeDetectionStrategy.OnPush
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    standalone: false
 })
 @Widget({
     title: 'Embed Markdown',

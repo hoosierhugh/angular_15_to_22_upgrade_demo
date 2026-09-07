@@ -15,10 +15,11 @@ import { Functions } from '@app/helpers/functions';
 import { MatTabGroup } from '@angular/material/tabs';
 
 @Component({
-  selector: 'app-tab-hepsub',
-  templateUrl: './tab-hepsub.component.html',
-  styleUrls: ['./tab-hepsub.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush
+    selector: 'app-tab-hepsub',
+    templateUrl: './tab-hepsub.component.html',
+    styleUrls: ['./tab-hepsub.component.scss'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    standalone: false
 })
 export class TabHepsubComponent implements OnInit, OnDestroy, AfterViewInit {
   _dataItem: any;

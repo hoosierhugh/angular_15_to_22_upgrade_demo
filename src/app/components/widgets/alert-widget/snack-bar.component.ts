@@ -15,7 +15,8 @@ import { MAT_SNACK_BAR_DATA } from '@angular/material/snack-bar';
             padding: 14px 16px;
         }
     `],
-    changeDetection: ChangeDetectionStrategy.OnPush
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    standalone: false
 })
 export class SnackBarComponent {
     constructor(

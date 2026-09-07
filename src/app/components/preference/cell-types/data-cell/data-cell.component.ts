@@ -2,9 +2,10 @@ import { ChangeDetectorRef, Component, EventEmitter, Input, OnInit, Output, View
 import { MatColumnDef, MatTable } from '@angular/material/table';
 import { TranslateService } from '@ngx-translate/core'
 @Component({
-  selector: 'app-data-cell',
-  templateUrl: './data-cell.component.html',
-  styleUrls: ['./data-cell.component.scss']
+    selector: 'app-data-cell',
+    templateUrl: './data-cell.component.html',
+    styleUrls: ['./data-cell.component.scss'],
+    standalone: false
 })
 export class DataCellComponent implements OnInit {
     @Output() settingDialog = new EventEmitter<{ item: unknown; type: 'data-preview' }>();

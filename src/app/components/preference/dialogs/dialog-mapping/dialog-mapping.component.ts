@@ -25,10 +25,11 @@ interface MappingDialogRecord {
 // import 'brace/mode/text';
 // import 'brace/theme/github';
 @Component({
-  selector: 'app-dialog-mapping',
-  templateUrl: './dialog-mapping.component.html',
-  styleUrls: ['./dialog-mapping.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush
+    selector: 'app-dialog-mapping',
+    templateUrl: './dialog-mapping.component.html',
+    styleUrls: ['./dialog-mapping.component.scss'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    standalone: false
 })
 export class DialogMappingComponent {
   @ViewChild('correlation_mapping_view', { static: false }) correlationEditor;

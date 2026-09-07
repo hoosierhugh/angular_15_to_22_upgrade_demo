@@ -16,7 +16,8 @@ export interface DialogData {
     selector: 'app-grid-setting-dialog',
     templateUrl: 'grid-settings-dialog.html',
     styleUrls: ['./grid-settings-dialog.scss'],
-    changeDetection: ChangeDetectionStrategy.OnPush
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    standalone: false
 })
 export class DialogSettingsGridDialog {
     public apiColumn: any;

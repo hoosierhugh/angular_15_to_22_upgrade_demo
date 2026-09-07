@@ -5,10 +5,11 @@ import { CopyService } from '@app/services/copy.service';
 import { Subscription } from 'rxjs';
 
 @Component({
-  selector: 'app-copy',
-  templateUrl: './copy.component.html',
-  styleUrls: ['./copy.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush
+    selector: 'app-copy',
+    templateUrl: './copy.component.html',
+    styleUrls: ['./copy.component.scss'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    standalone: false
 })
 export class CopyComponent implements OnInit {
     private subscription: Subscription;

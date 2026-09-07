@@ -7,7 +7,8 @@ import { TranslateService } from '@ngx-translate/core'
     selector: 'app-dialog-authtoken-display',
     templateUrl: './dialog-authtoken-display.component.html',
     styleUrls: ['./dialog-authtoken-display.component.scss'],
-    changeDetection: ChangeDetectionStrategy.OnPush
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    standalone: false
 })
 
 export class DialogAuthTokenDisplayComponent {

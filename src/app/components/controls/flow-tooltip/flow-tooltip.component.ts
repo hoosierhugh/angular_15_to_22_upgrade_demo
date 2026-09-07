@@ -8,7 +8,8 @@ import { TooltipService, TooltipDetails } from '@app/services/tooltip.service';
     templateUrl: './flow-tooltip.component.html',
     styleUrls: ['./flow-tooltip.component.scss'],
     host: { '(document:mousemove)': 'onMouseMove($event)' },
-    changeDetection: ChangeDetectionStrategy.OnPush
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    standalone: false
 })
 export class FlowTooltipComponent implements OnInit, OnDestroy {
     private subscription: Subscription;

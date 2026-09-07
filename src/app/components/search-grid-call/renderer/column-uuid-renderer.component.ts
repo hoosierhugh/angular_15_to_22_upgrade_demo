@@ -10,7 +10,7 @@ import { SearchGridCellParams } from './search-grid-renderer.types';
     </span>
     `,
     styles: ['a { user-select: text; color: inherit; text-decoration: unset; overflow: hidden; }',
-    `
+        `
               ::-moz-selection { 
                   background:#20c997;
                   color:white; 
@@ -40,7 +40,8 @@ import { SearchGridCellParams } from './search-grid-renderer.types';
                   border-radius:3px;
           
               }`],
-    changeDetection: ChangeDetectionStrategy.OnPush
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    standalone: false
 })
 export class ColumnUuidRenderer implements ICellRendererAngularComp {
     public params: SearchGridCellParams;

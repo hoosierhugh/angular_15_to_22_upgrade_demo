@@ -17,7 +17,8 @@ interface AdvancedDialogRecord {
     selector: 'app-dialog-advanced',
     templateUrl: './dialog-advanced.component.html',
     styleUrls: ['./dialog-advanced.component.scss'],
-    changeDetection: ChangeDetectionStrategy.OnPush
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    standalone: false
 })
 export class DialogAdvancedComponent {
     @ViewChild('data_view', { static: false }) editor;

@@ -24,7 +24,7 @@ type MosCellParams = ICellRendererParams<SearchGridRow, number | string,
         background-color: hsla(180, 100%, 10%, 0.4);
         border-radius: 3px;
         overflow: hidden;
-    }`,`
+    }`, `
         ::-moz-selection { 
             background:#20c997;
             color:white; 
@@ -55,7 +55,8 @@ type MosCellParams = ICellRendererParams<SearchGridRow, number | string,
             border-radius:3px;
 
         }`],
-    changeDetection: ChangeDetectionStrategy.OnPush
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    standalone: false
 })
 export class ColumnMOSRenderer implements ICellRendererAngularComp {
     // backup for circle in mos

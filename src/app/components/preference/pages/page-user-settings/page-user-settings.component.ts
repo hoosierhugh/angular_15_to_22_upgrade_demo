@@ -32,6 +32,7 @@ import { ComponentType } from '@angular/cdk/portal';
     templateUrl: './page-user-settings.component.html',
     styleUrls: ['./page-user-settings.component.scss'],
     changeDetection: ChangeDetectionStrategy.OnPush,
+    standalone: false
 })
 
 export class PageUserSettingsComponent implements OnInit, OnDestroy, AfterViewInit {

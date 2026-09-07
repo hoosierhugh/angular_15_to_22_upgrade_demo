@@ -23,6 +23,7 @@ import {
 
 @Directive({
     selector: '[hepTooltip]',
+    standalone: false
 })
 export class HepTooltipDirective implements OnInit {
     @Input('hepTooltip') tooltipContent: TemplateRef<unknown> | ComponentType<unknown>;

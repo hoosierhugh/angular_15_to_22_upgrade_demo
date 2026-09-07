@@ -19,7 +19,8 @@ import { ModulesService } from '@app/services/modules.service';
     templateUrl: './loki-results.component.html',
     styleUrls: ['./loki-results.component.scss'],
     encapsulation: ViewEncapsulation.None,
-    changeDetection: ChangeDetectionStrategy.OnPush
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    standalone: false
 })
 export class LokiResultsComponent implements OnInit, AfterViewInit {
     @Input() id;

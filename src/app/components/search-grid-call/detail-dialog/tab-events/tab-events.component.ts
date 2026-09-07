@@ -4,7 +4,8 @@ import { Component, Input, AfterViewChecked, Output, EventEmitter, AfterViewInit
     selector: 'app-tab-events',
     templateUrl: './tab-events.component.html',
     styleUrls: ['./tab-events.component.css'],
-    changeDetection: ChangeDetectionStrategy.OnPush
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    standalone: false
 })
 export class TabEventsComponent implements AfterViewInit {
     itemData: Record<string, unknown> | number;

@@ -2,7 +2,8 @@ import { Pipe, PipeTransform } from '@angular/core';
 
 @Pipe({
     name: 'colorOffset',
-    pure: false
+    pure: false,
+    standalone: false
 })
 
 export class ColorOffsetPipe implements PipeTransform {

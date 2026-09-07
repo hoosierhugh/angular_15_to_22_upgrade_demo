@@ -20,10 +20,11 @@ import { TransactionFilterService } from '@app/components/controls/transaction-f
 import { Subscription } from 'rxjs';
 
 @Component({
-  selector: 'app-tab-messages',
-  templateUrl: './tab-messages.component.html',
-  styleUrls: ['./tab-messages.component.scss'],
-  changeDetection: ChangeDetectionStrategy.Default
+    selector: 'app-tab-messages',
+    templateUrl: './tab-messages.component.html',
+    styleUrls: ['./tab-messages.component.scss'],
+    changeDetection: ChangeDetectionStrategy.Default,
+    standalone: false
 })
 
 export class TabMessagesComponent implements OnInit, AfterViewInit, OnDestroy {

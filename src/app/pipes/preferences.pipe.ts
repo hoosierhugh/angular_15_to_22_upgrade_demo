@@ -3,7 +3,8 @@ import { PreferencesContentMapping } from '@app/models/preferences-kw-mapping';
 
 @Pipe({
     name: 'preferences',
-    pure: false
+    pure: false,
+    standalone: false
 })
 
 export class PreferencesPipe implements PipeTransform {

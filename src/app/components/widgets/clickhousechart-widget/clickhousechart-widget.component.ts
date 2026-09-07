@@ -35,7 +35,8 @@ interface ClickhouseChartResult {
     styleUrls: ['./clickhousechart-widget.component.scss'],
     changeDetection: ChangeDetectionStrategy.OnPush,
     encapsulation: ViewEncapsulation.None,
-    providers: [{ provide: VIRTUAL_SCROLL_STRATEGY, useClass: CustomVirtualScrollStrategy }]
+    providers: [{ provide: VIRTUAL_SCROLL_STRATEGY, useClass: CustomVirtualScrollStrategy }],
+    standalone: false
 })
 @Widget({
     title: 'Clickhouse',

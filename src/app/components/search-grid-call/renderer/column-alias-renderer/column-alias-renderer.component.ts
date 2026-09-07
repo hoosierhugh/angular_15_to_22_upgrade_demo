@@ -40,7 +40,8 @@ import { AliasDisplay, SearchGridCellParams } from '../search-grid-renderer.type
             border:1px solid white;
             border-radius:3px;
 
-        }`]
+        }`],
+    standalone: false
 })
 export class ColumnAliasRenderer implements ICellRendererAngularComp {
 

@@ -15,10 +15,11 @@ import { lastValueFrom } from 'rxjs';
 import { QueryHistoryService } from '../query-history.service';
 
 @Component({
-  selector: 'app-code-style-smart-input-field',
-  templateUrl: './code-style-smart-input-field.component.html',
-  styleUrls: ['./code-style-smart-input-field.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush
+    selector: 'app-code-style-smart-input-field',
+    templateUrl: './code-style-smart-input-field.component.html',
+    styleUrls: ['./code-style-smart-input-field.component.scss'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    standalone: false
 })
 
 export class CodeStyleSmartInputFieldComponent implements AfterViewInit {

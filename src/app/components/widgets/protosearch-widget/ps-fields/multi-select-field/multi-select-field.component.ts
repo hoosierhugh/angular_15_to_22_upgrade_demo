@@ -16,11 +16,11 @@ interface OptionType {
 }
 
 @Component({
-  selector: 'app-multi-select-field',
-  templateUrl: './multi-select-field.component.html',
-  styleUrls: ['./multi-select-field.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush
-
+    selector: 'app-multi-select-field',
+    templateUrl: './multi-select-field.component.html',
+    styleUrls: ['./multi-select-field.component.scss'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    standalone: false
 })
 export class MultiSelectFieldComponent implements OnInit {
   /** CONST */

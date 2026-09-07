@@ -20,7 +20,8 @@ interface ScriptDialogRecord {
     selector: 'app-dialog-scripts',
     templateUrl: './dialog-scripts.component.html',
     styleUrls: ['./dialog-scripts.component.scss'],
-    changeDetection: ChangeDetectionStrategy.OnPush
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    standalone: false
 })
 
 export class DialogScriptsComponent {

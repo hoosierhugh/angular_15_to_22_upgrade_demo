@@ -7,7 +7,10 @@ import { Functions } from './helpers/functions';
 import {TranslateService} from '@ngx-translate/core';
 
 
-@Component({ selector: 'app-root', templateUrl: 'app.component.html' })
+@Component({
+    selector: 'app-root', templateUrl: 'app.component.html',
+    standalone: false
+})
 export class AppComponent {
     readonly mockMode = MOCK_MODE;
     currentUser: User;

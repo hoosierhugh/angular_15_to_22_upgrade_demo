@@ -6,7 +6,8 @@ import { TranslateService } from '@ngx-translate/core'
     selector: 'app-update-alert',
     templateUrl: './update-alert.component.html',
     styleUrls: ['./update-alert.component.scss'],
-    changeDetection: ChangeDetectionStrategy.OnPush
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    standalone: false
 })
 export class UpdateAlertComponent implements OnInit {
     @ViewChild('refreshForm', { static: true }) refreshForm;

@@ -3,9 +3,10 @@ import { ChangeDetectorRef, Component, Input, OnInit, ViewChild } from '@angular
 import { MatColumnDef, MatTable } from '@angular/material/table';
 import { TranslateService } from '@ngx-translate/core'
 @Component({
-  selector: 'app-last-error-cell',
-  templateUrl: './last-error-cell.component.html',
-  styleUrls: ['./last-error-cell.component.scss']
+    selector: 'app-last-error-cell',
+    templateUrl: './last-error-cell.component.html',
+    styleUrls: ['./last-error-cell.component.scss'],
+    standalone: false
 })
 export class LastErrorCellComponent implements OnInit {
   @Input() column;

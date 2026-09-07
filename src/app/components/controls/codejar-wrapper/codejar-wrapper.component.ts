@@ -9,7 +9,8 @@ import { CodeJarContainer } from 'ngx-codejar';
     selector: 'app-codejar-wrapper',
     templateUrl: './codejar-wrapper.component.html',
     styleUrls: ['./codejar-wrapper.component.scss'],
-    changeDetection: ChangeDetectionStrategy.OnPush
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    standalone: false
 })
 export class CodeJarWrapperComponent implements OnInit, AfterViewInit {
     @Input()

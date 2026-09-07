@@ -7,7 +7,8 @@ import { VERSION } from 'src/VERSION';
     selector: 'app-page-about',
     templateUrl: './page-about.component.html',
     styleUrls: ['./page-about.component.scss'],
-    changeDetection: ChangeDetectionStrategy.OnPush
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    standalone: false
 })
 export class PageAboutComponent implements OnInit {
     uiVersion = VERSION;

@@ -27,7 +27,8 @@ import { SearchGridCellParams } from './search-grid-renderer.types';
             border: 1px solid transparent
         }`
     ],
-    changeDetection: ChangeDetectionStrategy.OnPush
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    standalone: false
 })
 export class ColumnActionRenderer implements ICellRendererAngularComp {
     public params: SearchGridCellParams;

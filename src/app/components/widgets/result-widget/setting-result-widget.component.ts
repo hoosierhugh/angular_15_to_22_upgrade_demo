@@ -5,7 +5,8 @@ import { TranslateService } from '@ngx-translate/core'
     selector: 'app-setting-result-widget-component',
     templateUrl: 'setting-result-widget.component.html',
     styleUrls: ['./setting-result-widget.component.scss'],
-    changeDetection: ChangeDetectionStrategy.OnPush
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    standalone: false
 })
 export class SettingResultWidgetComponent {
     constructor(

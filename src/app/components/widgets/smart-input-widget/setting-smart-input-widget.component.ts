@@ -8,10 +8,11 @@ import { Functions } from '@app/helpers/functions';
 import { TranslateService } from '@ngx-translate/core'
 
 @Component({
-  selector: 'app-setting-smart-input-widget-component',
-  templateUrl: 'setting-smart-input-widget.component.html',
-  styleUrls: ['./setting-smart-input-widget.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush
+    selector: 'app-setting-smart-input-widget-component',
+    templateUrl: 'setting-smart-input-widget.component.html',
+    styleUrls: ['./setting-smart-input-widget.component.scss'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    standalone: false
 })
 
 export class SettingSmartInputWidgetComponent implements OnInit, OnDestroy {

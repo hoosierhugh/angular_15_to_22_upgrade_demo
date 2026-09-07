@@ -7,7 +7,8 @@
 @import "theme.scss";
 @include mat.all-component-densities(-1);
 
-@include mat.core();
+@include mat.elevation-classes();
+@include mat.app-background();
 @import "swagger-styles.scss";
 // @import "https://cdnjs.cloudflare.com/ajax/libs/vis/4.21.0/vis.min.css";
 @import "./assets/css/vis.min.scss";

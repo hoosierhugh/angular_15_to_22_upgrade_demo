@@ -5,7 +5,8 @@ import { MatDialogRef, MAT_DIALOG_DATA} from '@angular/material/dialog';
     selector: 'app-url-warning-dialog',
     templateUrl: './url-warning-dialog.component.html',
     styleUrls: ['./url-warning-dialog.component.scss'],
-    changeDetection: ChangeDetectionStrategy.OnPush
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    standalone: false
 })
 export class UrlWarningDialog {
 

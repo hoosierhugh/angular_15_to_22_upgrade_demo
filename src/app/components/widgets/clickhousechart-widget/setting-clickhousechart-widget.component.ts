@@ -32,7 +32,8 @@ export interface ClickhousePeriodicElement {
     selector: 'app-setting-clickhousechart-widget-component',
     templateUrl: 'setting-clickhousechart-widget.component.html',
     styleUrls: ['./setting-clickhousechart-widget.component.scss'],
-    changeDetection: ChangeDetectionStrategy.OnPush
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    standalone: false
 })
 
 export class SettingClickhouseChartWidgetComponent {

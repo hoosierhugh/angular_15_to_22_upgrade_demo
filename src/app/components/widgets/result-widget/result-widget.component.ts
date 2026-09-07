@@ -27,7 +27,8 @@ interface ResultWidgetConfig {
     selector: 'app-result-widget',
     templateUrl: './result-widget.component.html',
     styleUrls: ['./result-widget.component.scss'],
-    changeDetection: ChangeDetectionStrategy.Default
+    changeDetection: ChangeDetectionStrategy.Default,
+    standalone: false
 })
 @Widget({
     title: 'Display Results',

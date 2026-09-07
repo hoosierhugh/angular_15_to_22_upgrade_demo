@@ -24,7 +24,8 @@ export interface LokiCodeData {
     selector: 'app-code-style-field',
     templateUrl: './code-style-field.component.html',
     styleUrls: ['./code-style-field.component.scss'],
-    changeDetection: ChangeDetectionStrategy.OnPush
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    standalone: false
 })
 export class CodeStyleFieldComponent implements OnInit, AfterViewInit, OnChanges {
     divHTML: string;

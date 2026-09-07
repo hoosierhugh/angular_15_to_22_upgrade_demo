@@ -6,7 +6,8 @@ import { AlertConfig } from './alert-widget.component';
     selector: 'app-setting-alert-widget-component',
     templateUrl: 'setting-alert-widget.component.html',
     styleUrls: ['./setting-alert-widget.component.scss'],
-    changeDetection: ChangeDetectionStrategy.OnPush
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    standalone: false
 })
 
 export class SettingAlertWidgetComponent implements OnInit {

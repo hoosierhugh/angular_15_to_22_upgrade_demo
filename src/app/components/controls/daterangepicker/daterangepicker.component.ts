@@ -26,10 +26,11 @@ export enum SideEnum {
     },
     encapsulation: ViewEncapsulation.None,
     providers: [{
-        provide: NG_VALUE_ACCESSOR,
-        useExisting: forwardRef(() => DaterangepickerComponent),
-        multi: true
-    }]
+            provide: NG_VALUE_ACCESSOR,
+            useExisting: forwardRef(() => DaterangepickerComponent),
+            multi: true
+        }],
+    standalone: false
 })
 export class DaterangepickerComponent implements OnInit {
     private _old: { start: any, end: any } = { start: null, end: null };

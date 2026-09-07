@@ -11,10 +11,11 @@ import {
 import { Functions } from '@app/helpers/functions';
 
 @Component({
-  selector: 'app-flow-item',
-  templateUrl: './flow-item.component.html',
-  styleUrls: ['./flow-item.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
+    selector: 'app-flow-item',
+    templateUrl: './flow-item.component.html',
+    styleUrls: ['./flow-item.component.scss'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    standalone: false
 })
 export class FlowItemComponent implements AfterViewChecked {
   _item: FlowDisplayItem;

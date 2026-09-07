@@ -27,7 +27,8 @@ interface GeneralIframeSettingsChange {
     selector: 'app-general-iframe-widget',
     templateUrl: './general-iframe-widget.component.html',
     styleUrls: ['./general-iframe-widget.component.scss'],
-    changeDetection: ChangeDetectionStrategy.OnPush
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    standalone: false
 })
 @Widget({
     title: 'Embed Content',

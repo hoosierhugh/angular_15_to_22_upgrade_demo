@@ -8,9 +8,10 @@ import {
 import { MatColumnDef, MatCellDef, MatTable } from '@angular/material/table';
 import  moment from 'moment';
 @Component({
-  selector: 'app-expire-cell',
-  templateUrl: './expire-cell.component.html',
-  styleUrls: ['./expire-cell.component.scss'],
+    selector: 'app-expire-cell',
+    templateUrl: './expire-cell.component.html',
+    styleUrls: ['./expire-cell.component.scss'],
+    standalone: false
 })
 
 export class ExpireCellComponent implements OnInit {

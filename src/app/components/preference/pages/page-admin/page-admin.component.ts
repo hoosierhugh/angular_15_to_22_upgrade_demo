@@ -5,9 +5,10 @@ import { HttpResponse } from '@angular/common/http';
 import { AlertService } from '@app/services';
 
 @Component({
-  selector: 'app-page-admin',
-  templateUrl: './page-admin.component.html',
-  styleUrls: ['./page-admin.component.scss']
+    selector: 'app-page-admin',
+    templateUrl: './page-admin.component.html',
+    styleUrls: ['./page-admin.component.scss'],
+    standalone: false
 })
 export class PageAdminComponent {
   @Input() page: string;

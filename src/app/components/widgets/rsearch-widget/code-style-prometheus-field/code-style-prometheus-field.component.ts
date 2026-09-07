@@ -14,9 +14,10 @@ export interface PrometheusCodeUpdate {
 }
 
 @Component({
-  selector: 'app-code-style-prometheus-field',
-  templateUrl: './code-style-prometheus-field.component.html',
-  styleUrls: ['./code-style-prometheus-field.component.scss']
+    selector: 'app-code-style-prometheus-field',
+    templateUrl: './code-style-prometheus-field.component.html',
+    styleUrls: ['./code-style-prometheus-field.component.scss'],
+    standalone: false
 })
 export class CodeStylePrometheusFieldComponent implements OnInit, AfterViewInit {
   divHTML: string;

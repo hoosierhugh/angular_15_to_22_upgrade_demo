@@ -17,7 +17,8 @@ interface StatusFilterModel { value: string; }
 @Component({
     selector: 'app-status-filter',
     templateUrl: 'status-filter.component.html',
-    styleUrls: ['status-filter.component.scss']
+    styleUrls: ['status-filter.component.scss'],
+    standalone: false
 })
 export class StatusFilterComponent implements IFilterAngularComp {
     private params: FilterParams;

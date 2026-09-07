@@ -41,6 +41,7 @@ export interface GridChartConfig {
     templateUrl: 'grid-chart-dialog.component.html',
     styleUrls: ['./grid-chart-dialog.component.scss'],
     changeDetection: ChangeDetectionStrategy.OnPush,
+    standalone: false
 })
 export class DialogChartGridDialogComponent
     implements OnInit, OnChanges, OnDestroy, AfterViewInit {

@@ -18,10 +18,11 @@ import { AfterViewInit } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
 
 @Component({
-  selector: 'app-tab-export',
-  templateUrl: './tab-export.component.html',
-  styleUrls: ['./tab-export.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush
+    selector: 'app-tab-export',
+    templateUrl: './tab-export.component.html',
+    styleUrls: ['./tab-export.component.scss'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    standalone: false
 })
 export class TabExportComponent implements OnInit, AfterViewInit {
   @Input() callid;

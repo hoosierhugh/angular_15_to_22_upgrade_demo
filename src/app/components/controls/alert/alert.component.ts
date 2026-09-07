@@ -11,7 +11,8 @@ import { AlertProper, AlertSubject, MessageTimer } from '@app/models/alert.model
     selector: 'alert-overlay',
     templateUrl: 'alert.component.html',
     styleUrls: ['./alert.component.scss'],
-    changeDetection: ChangeDetectionStrategy.OnPush
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    standalone: false
 })
 
 export class AlertComponent implements OnInit, OnDestroy {

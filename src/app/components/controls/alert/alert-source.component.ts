@@ -13,7 +13,8 @@ import { AlertSubject } from '@app/models/alert.model';
     selector: 'alert',
     template: ``,
     styleUrls: ['./alert.component.scss'],
-    changeDetection: ChangeDetectionStrategy.OnPush
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    standalone: false
 })
 
 export class AlertSourceComponent implements OnInit, OnDestroy {

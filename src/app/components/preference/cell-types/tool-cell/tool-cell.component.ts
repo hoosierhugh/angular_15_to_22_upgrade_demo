@@ -2,9 +2,10 @@ import { ChangeDetectorRef, Component, Input, OnInit, Output, ViewChild, EventEm
 import { MatColumnDef, MatTable } from '@angular/material/table';
 import { TranslateService } from '@ngx-translate/core';
 @Component({
-  selector: 'app-tool-cell',
-  templateUrl: './tool-cell.component.html',
-  styleUrls: ['./tool-cell.component.scss']
+    selector: 'app-tool-cell',
+    templateUrl: './tool-cell.component.html',
+    styleUrls: ['./tool-cell.component.scss'],
+    standalone: false
 })
 export class ToolCellComponent implements OnInit {
     @Input() column: string;

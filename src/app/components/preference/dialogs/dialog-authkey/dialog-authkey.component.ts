@@ -14,7 +14,8 @@ interface AuthKeyDialogRecord {
     selector: 'app-dialog-authkey',
     templateUrl: './dialog-authkey.component.html',
     styleUrls: ['./dialog-authkey.component.scss'],
-    changeDetection: ChangeDetectionStrategy.OnPush
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    standalone: false
 })
 export class DialogAuthKeyComponent {
     isValidForm = false;

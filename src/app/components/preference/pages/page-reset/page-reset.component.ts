@@ -12,7 +12,8 @@ import { ComponentType } from '@angular/cdk/portal';
 @Component({
     selector: 'app-page-reset',
     templateUrl: './page-reset.component.html',
-    styleUrls: ['./page-reset.component.scss']
+    styleUrls: ['./page-reset.component.scss'],
+    standalone: false
 })
 export class PageResetComponent implements OnInit {
     isAdmin = false;

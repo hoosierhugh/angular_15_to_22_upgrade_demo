@@ -18,7 +18,8 @@ interface UserSettingsDialogValue {
     selector: 'app-dialog-user-settings',
     templateUrl: './dialog-user-settings.component.html',
     styleUrls: ['./dialog-user-settings.component.scss'],
-    changeDetection: ChangeDetectionStrategy.OnPush
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    standalone: false
 })
 export class DialogUserSettingsComponent {
     isValidForm = false;

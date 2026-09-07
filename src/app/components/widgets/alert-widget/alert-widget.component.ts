@@ -39,7 +39,8 @@ export interface AlertConfig {
     selector: 'app-alert-widget',
     templateUrl: './alert-widget.component.html',
     styleUrls: ['./alert-widget.component.scss'],
-    changeDetection: ChangeDetectionStrategy.OnPush
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    standalone: false
 })
 @Widget({
     title: 'Alert',

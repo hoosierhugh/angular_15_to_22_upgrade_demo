@@ -9,7 +9,8 @@ import moment from 'moment';
     selector: 'full-screen',
     templateUrl: './full-screen.component.html',
     styleUrls: ['./full-screen.component.scss'],
-    changeDetection: ChangeDetectionStrategy.OnPush
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    standalone: false
 })
 export class FullScreenComponent implements OnInit {
     @ViewChild('fileSelect', { static: true }) fileSelect;

@@ -11,7 +11,8 @@ import { TranslateService } from '@ngx-translate/core'
     selector: 'app-setting-prometheus-widget-component',
     templateUrl: 'setting-prometheus-widget.component.html',
     styleUrls: ['./setting-prometheus-widget.component.scss'],
-    changeDetection: ChangeDetectionStrategy.OnPush
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    standalone: false
 })
 
 export class SettingPrometheusWidgetComponent {

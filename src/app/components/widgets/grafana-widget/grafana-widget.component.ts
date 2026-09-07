@@ -36,7 +36,8 @@ export interface IframeConfig {
     selector: 'app-iframe-widget',
     templateUrl: './grafana-widget.component.html',
     styleUrls: ['./grafana-widget.component.scss'],
-    changeDetection: ChangeDetectionStrategy.Default
+    changeDetection: ChangeDetectionStrategy.Default,
+    standalone: false
 })
 @Widget({
     title: 'Grafana',

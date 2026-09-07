@@ -5,7 +5,8 @@ import { TranslateService } from '@ngx-translate/core'
     selector: 'app-setting-result-chart-widget-component',
     templateUrl: 'setting-result-chart-widget.component.html',
     styleUrls: ['./setting-result-chart-widget.component.scss'],
-    changeDetection: ChangeDetectionStrategy.OnPush
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    standalone: false
 })
 
 export class SettingResultChartWidgetComponent {

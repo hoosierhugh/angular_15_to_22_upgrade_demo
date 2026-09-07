@@ -39,14 +39,15 @@ export class CustomVirtualScrollStrategy extends FixedSizeVirtualScrollStrategy 
 }
 
 @Component({
-  selector: 'app-tab-flow',
-  templateUrl: './tab-flow.component.html',
-  styleUrls: ['./tab-flow.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  encapsulation: ViewEncapsulation.None,
-  providers: [
-    { provide: VIRTUAL_SCROLL_STRATEGY, useClass: CustomVirtualScrollStrategy },
-  ],
+    selector: 'app-tab-flow',
+    templateUrl: './tab-flow.component.html',
+    styleUrls: ['./tab-flow.component.scss'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    encapsulation: ViewEncapsulation.None,
+    providers: [
+        { provide: VIRTUAL_SCROLL_STRATEGY, useClass: CustomVirtualScrollStrategy },
+    ],
+    standalone: false
 })
 export class TabFlowComponent
   implements OnInit, AfterViewInit, AfterViewChecked, OnDestroy {

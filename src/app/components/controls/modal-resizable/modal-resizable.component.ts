@@ -14,7 +14,8 @@ import { IS_DIFF, ModalService } from './modal.service';
     selector: 'app-modal-resizable',
     templateUrl: './modal-resizable.component.html',
     styleUrls: ['./modal-resizable.component.scss'],
-    changeDetection: ChangeDetectionStrategy.OnPush
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    standalone: false
 })
 export class ModalResizableComponent implements OnInit, AfterViewInit, OnDestroy {
     static ZIndex = 12;

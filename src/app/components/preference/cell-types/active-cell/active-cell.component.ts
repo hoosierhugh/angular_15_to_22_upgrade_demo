@@ -5,7 +5,8 @@ import { TranslateService } from '@ngx-translate/core'
 @Component({
     selector: 'app-active-cell',
     templateUrl: './active-cell.component.html',
-    styleUrls: ['./active-cell.component.scss']
+    styleUrls: ['./active-cell.component.scss'],
+    standalone: false
 })
 export class ActiveCellComponent implements OnInit {
     @Input() column;

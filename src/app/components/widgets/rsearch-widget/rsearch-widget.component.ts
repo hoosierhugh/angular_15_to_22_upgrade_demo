@@ -19,10 +19,11 @@ interface LokiSearchQuery {
   [key: string]: unknown;
 }
 @Component({
-  selector: 'app-rsearch-widget',
-  templateUrl: './rsearch-widget.component.html',
-  styleUrls: ['./rsearch-widget.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush
+    selector: 'app-rsearch-widget',
+    templateUrl: './rsearch-widget.component.html',
+    styleUrls: ['./rsearch-widget.component.scss'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    standalone: false
 })
 @Widget({
   title: 'Loki Search',

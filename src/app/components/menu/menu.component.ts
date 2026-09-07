@@ -56,7 +56,8 @@ export interface DashboardData {
     selector: 'app-menu',
     templateUrl: './menu.component.html',
     styleUrls: ['./menu.component.scss'],
-    changeDetection: ChangeDetectionStrategy.OnPush
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    standalone: false
 })
 export class MenuComponent implements OnInit, OnDestroy {
     readonly mockMode = MOCK_MODE;

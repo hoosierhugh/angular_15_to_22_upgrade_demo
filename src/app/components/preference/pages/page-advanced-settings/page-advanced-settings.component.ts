@@ -27,9 +27,10 @@ import { PreferencesComponentMapping } from '@app/models/preferences-component-m
 import { Functions } from '@app/helpers/functions';
 import { ComponentType } from '@angular/cdk/portal';
 @Component({
-  selector: 'app-page-advanced-settings',
-  templateUrl: './page-advanced-settings.component.html',
-  styleUrls: ['./page-advanced-settings.component.scss']
+    selector: 'app-page-advanced-settings',
+    templateUrl: './page-advanced-settings.component.html',
+    styleUrls: ['./page-advanced-settings.component.scss'],
+    standalone: false
 })
 export class PageAdvancedSettingsComponent implements OnInit, AfterViewInit, OnDestroy {
 

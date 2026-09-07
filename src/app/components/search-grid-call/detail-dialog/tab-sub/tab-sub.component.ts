@@ -4,7 +4,8 @@ import { Component, Input, ChangeDetectionStrategy } from '@angular/core';
     selector: 'app-tab-sub',
     templateUrl: './tab-sub.component.html',
     styleUrls: ['./tab-sub.component.css'],
-    changeDetection: ChangeDetectionStrategy.OnPush
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    standalone: false
 })
 export class TabSubComponent {
     @Input() dataItem: { data?: unknown };

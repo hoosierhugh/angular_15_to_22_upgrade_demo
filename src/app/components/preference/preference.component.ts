@@ -28,6 +28,7 @@ import { AdminService } from '@app/services/preferences/admin.service';
     templateUrl: './preference.component.html',
     styleUrls: ['./preference.component.scss'],
     changeDetection: ChangeDetectionStrategy.OnPush,
+    standalone: false
 })
 
 export class PreferenceComponent implements OnInit, OnDestroy, AfterViewInit {

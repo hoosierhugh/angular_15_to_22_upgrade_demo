@@ -7,7 +7,8 @@ import { DashboardData } from '@app/models';
     selector: 'app-share-qr-dialog',
     templateUrl: './share-qr-dialog.component.html',
     styleUrls: ['./share-qr-dialog.component.scss'],
-    changeDetection: ChangeDetectionStrategy.OnPush
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    standalone: false
 })
 export class ShareQrDialogComponent {
     dashboardLink;

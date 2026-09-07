@@ -59,7 +59,8 @@ import { DateFormat, TimeFormattingService } from '@app/services/time-formatting
     templateUrl: './search-grid-call.component.html',
     styleUrls: ['./search-grid-call.component.scss'],
     changeDetection: ChangeDetectionStrategy.OnPush,
-    providers: [MessageDetailsService]
+    providers: [MessageDetailsService],
+    standalone: false
 })
 export class SearchGridCallComponent
     extends GridController

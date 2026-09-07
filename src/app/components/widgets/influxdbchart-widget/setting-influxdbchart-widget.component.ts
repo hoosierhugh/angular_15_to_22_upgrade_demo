@@ -47,7 +47,8 @@ export interface GroupedSelectList {
     selector: 'app-setting-influxdbchart-widget-component',
     templateUrl: 'setting-influxdbchart-widget.component.html',
     styleUrls: ['./setting-influxdbchart-widget.component.scss'],
-    changeDetection: ChangeDetectionStrategy.OnPush
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    standalone: false
 })
 
 export class SettingInfluxdbchartWidgetComponent {

@@ -32,7 +32,8 @@ import { TranslateService } from '@ngx-translate/core';
     selector: 'app-page-system-overview',
     templateUrl: './page-system-overview.component.html',
     styleUrls: ['./page-system-overview.component.scss'],
-    changeDetection: ChangeDetectionStrategy.OnPush
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    standalone: false
 })
 export class PageSystemOverviewComponent implements OnInit, AfterViewInit, OnDestroy {
     isLoading = false;

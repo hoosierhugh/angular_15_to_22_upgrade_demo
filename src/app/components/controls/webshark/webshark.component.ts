@@ -24,8 +24,8 @@ interface FlatNode {
     selector: 'app-webshark',
     templateUrl: './webshark.component.html',
     styleUrls: ['./webshark.component.scss'],
-    changeDetection: ChangeDetectionStrategy.OnPush
-
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    standalone: false
 })
 export class WebsharkComponent implements OnInit, AfterViewInit {
     _data: any;

@@ -34,7 +34,8 @@ interface UploadFile {
             ])
         ])
     ],
-    changeDetection: ChangeDetectionStrategy.OnPush
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    standalone: false
 })
 export class DialogImportComponent implements AfterViewInit, OnInit {
     @ViewChild('fileUpload', { static: false }) fileUpload: ElementRef<HTMLInputElement>;

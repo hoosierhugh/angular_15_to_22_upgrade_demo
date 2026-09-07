@@ -43,10 +43,11 @@ interface ColumnListContainer {
 }
 
 @Component({
-  selector: 'app-setting-button',
-  templateUrl: 'setting-button.html',
-  styleUrls: ['setting-button.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush
+    selector: 'app-setting-button',
+    templateUrl: 'setting-button.html',
+    styleUrls: ['setting-button.scss'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    standalone: false
 })
 export class SettingButtonComponent implements ICellRendererAngularComp {
   public params: SettingButtonParams;

@@ -37,6 +37,7 @@ import { ComponentType } from '@angular/cdk/portal';
     templateUrl: './page-alias.component.html',
     styleUrls: ['./page-alias.component.scss'],
     changeDetection: ChangeDetectionStrategy.OnPush,
+    standalone: false
 })
 
 export class PageAliasComponent implements OnInit, OnDestroy, AfterViewInit {

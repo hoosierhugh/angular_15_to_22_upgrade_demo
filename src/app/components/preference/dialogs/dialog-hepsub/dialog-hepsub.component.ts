@@ -18,7 +18,8 @@ interface HepSubscriptionDialogRecord {
     selector: 'app-dialog-hepsub',
     templateUrl: './dialog-hepsub.component.html',
     styleUrls: ['./dialog-hepsub.component.scss'],
-    changeDetection: ChangeDetectionStrategy.OnPush
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    standalone: false
 })
 export class DialogHepsubComponent {
     isValidForm = false;

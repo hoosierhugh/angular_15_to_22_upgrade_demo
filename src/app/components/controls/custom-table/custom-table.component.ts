@@ -8,7 +8,8 @@ import { Functions } from '@app/helpers/functions';
     selector: 'app-custom-table',
     templateUrl: './custom-table.component.html',
     styleUrls: ['./custom-table.component.css'],
-    changeDetection: ChangeDetectionStrategy.OnPush
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    standalone: false
 })
 export class CustomTableComponent implements AfterViewInit {
     @Input() columns: string[] = [];

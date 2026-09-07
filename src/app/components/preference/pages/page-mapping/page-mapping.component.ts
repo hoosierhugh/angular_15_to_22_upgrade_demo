@@ -29,9 +29,10 @@ import { Functions } from '@app/helpers/functions';
 import { ComponentType } from '@angular/cdk/portal';
 
 @Component({
-  selector: 'app-page-mapping',
-  templateUrl: './page-mapping.component.html',
-  styleUrls: ['./page-mapping.component.scss']
+    selector: 'app-page-mapping',
+    templateUrl: './page-mapping.component.html',
+    styleUrls: ['./page-mapping.component.scss'],
+    standalone: false
 })
 export class PageMappingComponent implements OnInit, AfterViewInit, OnDestroy {
     isLoading = false;

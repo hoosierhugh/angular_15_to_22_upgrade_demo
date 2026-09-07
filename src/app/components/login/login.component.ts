@@ -19,7 +19,8 @@ import { TranslateService } from '@ngx-translate/core';
     templateUrl: './login.component.html',
     styleUrls: ['./login.component.scss'],
     encapsulation: ViewEncapsulation.None,
-    changeDetection: ChangeDetectionStrategy.OnPush
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    standalone: false
 })
 export class LoginComponent implements OnInit {
     @ViewChild('oAuthButton', { static: false }) oAuthButton;

@@ -12,7 +12,8 @@ import { DialogSettingsGridDialog } from '../grid-settings-dialog/grid-settings-
     styles: [
         `.btn { line-height: 0.5 }`
     ],
-    changeDetection: ChangeDetectionStrategy.OnPush
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    standalone: false
 })
 
 export class HeaderActionRenderer {

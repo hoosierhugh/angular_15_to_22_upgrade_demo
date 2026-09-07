@@ -50,11 +50,12 @@ interface SearchFieldItem {
 }
 
 @Component({
-  selector: 'app-protosearch-widget',
-  templateUrl: './protosearch-widget.component.html',
-  styleUrls: ['./protosearch-widget.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  encapsulation: ViewEncapsulation.None,
+    selector: 'app-protosearch-widget',
+    templateUrl: './protosearch-widget.component.html',
+    styleUrls: ['./protosearch-widget.component.scss'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    encapsulation: ViewEncapsulation.None,
+    standalone: false
 })
 @Widget({
   title: 'Proto Search',

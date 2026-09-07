@@ -13,7 +13,8 @@ import { TranslateService } from '@ngx-translate/core';
     selector: 'app-prometheus-widget',
     templateUrl: './prometheus-widget.component.html',
     styleUrls: ['./prometheus-widget.component.scss'],
-    changeDetection: ChangeDetectionStrategy.OnPush
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    standalone: false
 })
 @Widget({
     title: 'Prometheus',

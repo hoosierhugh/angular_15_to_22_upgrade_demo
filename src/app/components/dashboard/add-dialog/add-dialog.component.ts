@@ -10,7 +10,8 @@ import { PreferenceAdvanced } from '@app/models';
     selector: 'app-add-dialog',
     templateUrl: './add-dialog.component.html',
     styleUrls: ['./add-dialog.component.scss'],
-    changeDetection: ChangeDetectionStrategy.OnPush
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    standalone: false
 })
 
 export class AddDialogComponent {

@@ -8,7 +8,8 @@ import { AceEditorConfig } from './ace-editor-widget.component';
     selector: 'app-settings-ace-editor-widget-component',
     templateUrl: 'settings-ace-editor-widget.component.html',
     styleUrls: ['./settings-ace-editor-widget.component.scss'],
-    changeDetection: ChangeDetectionStrategy.OnPush
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    standalone: false
 })
 export class SettingsAceEditorWidgetComponent {
     readOnly = false;

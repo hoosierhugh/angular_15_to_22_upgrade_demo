@@ -35,9 +35,10 @@ enum TASK_TYPE {
   hidden = 404,
 }
 @Component({
-  selector: 'app-tab-callinfo',
-  templateUrl: './tab-callinfo.component.html',
-  styleUrls: ['./tab-callinfo.component.scss'],
+    selector: 'app-tab-callinfo',
+    templateUrl: './tab-callinfo.component.html',
+    styleUrls: ['./tab-callinfo.component.scss'],
+    standalone: false
 })
 export class TabCallinfoComponent implements AfterViewInit {
   hostinfo: any;

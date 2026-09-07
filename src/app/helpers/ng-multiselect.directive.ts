@@ -48,6 +48,7 @@ export class NgSelectErrorStateMatcher {
             useExisting: NgSelectFormFieldControlDirective,
         },
     ],
+    standalone: false
 })
 export class NgSelectFormFieldControlDirective
     implements MatFormFieldControl<unknown>, OnDestroy, DoCheck {
