@@ -11,7 +11,7 @@ type MosCellParams = ICellRendererParams<SearchGridRow, number | string,
     template: `
     <span class='cell-wrapper' (mousedown)='startCopy()' (mouseup)='copy(params.value)'>
         <div [ngClass]="{'mos-cell': !isEmpty}" [style.color]='mosColor'>
-            <div>{{params.value / 100}}</div>
+            <div>{{mos !== null ? mos / 100 : ''}}</div>
         </div>
     </span>
     `,
@@ -62,7 +62,7 @@ export class ColumnMOSRenderer implements ICellRendererAngularComp {
     // backup for circle in mos
     public params: MosCellParams;
     method: string;
-    mos: number | null;
+    mos: number | null = null;
     mosColor: string;
     isEmpty: boolean;
     displayedValue: number | string;

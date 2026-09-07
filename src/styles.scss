@@ -1,20 +1,20 @@
 @use "@angular/material" as mat;
+@use "theme" as *;
+@use "swagger-styles";
+@use "./assets/css/vis.min";
+@use "./assets/roboto/roboto";
 
 /* You can add global styles to this file, and also import other style files */
 
 @import "~@angular/material/prebuilt-themes/deeppurple-amber.css";
 @import "~bootstrap/dist/css/bootstrap.min.css";
-@import "theme.scss";
 @include mat.all-component-densities(-1);
 
 @include mat.elevation-classes();
 @include mat.app-background();
-@import "swagger-styles.scss";
 // @import "https://cdnjs.cloudflare.com/ajax/libs/vis/4.21.0/vis.min.css";
-@import "./assets/css/vis.min.scss";
 // @import "https://api.mapbox.com/mapbox-gl-js/v1.10.1/mapbox-gl.css";
 @import "./assets/css/mapbox-gl.css";
-@import "./assets/roboto/roboto.scss";
 @import "~highlight.js/styles/github.css";
 // mat icons font
 @font-face {

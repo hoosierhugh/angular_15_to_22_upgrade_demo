@@ -76,7 +76,7 @@
             [formControl]="password"
             (change)="validate()" (blur)="validate()" (keyup)="validate()"
             required />
-          <mat-error *ngIf="data.isNew && password?.errors?.['required']">The password {{'validators.required' | translate }}</mat-error>
+          <mat-error *ngIf="data.isnew && password?.errors?.['required']">The password {{'validators.required' | translate }}</mat-error>
           <mat-error *ngIf="password?.errors?.['minlength']">
             {{ password?.errors?.['minlength']?.requiredLength }} {{'validators.minChars' | translate }}
           </mat-error>

@@ -4,7 +4,11 @@ import { TranslateService } from '@ngx-translate/core'
 import { CrudDialogData } from '@app/models';
 
 interface AgentSubscriptionDialogRecord {
-    mapping?: unknown;
+    hep_alias?: string;
+    hepid?: number | string;
+    profile?: string;
+    data?: unknown;
+    mapping?: string;
 }
 @Component({
     selector: 'app-dialog-agentsub',
