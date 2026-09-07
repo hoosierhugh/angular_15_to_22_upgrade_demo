@@ -2,6 +2,7 @@
 I will have separate branches for each version of Angular so that the viewer can see the changes.
 For example: `upgrade/angular-16, upgrade/angular-17, etc`
 
+Starting with the Angular 18 branch, I've decided to refactor all of the type `any` to proper TypeScript types.  `any` is a pet peeve of mine.  I inherited this project from somebody else, otherwise there would NOT be type `any` in the app.  This will be a sizeable refactor.
 
 ## Local demo (no backend or login)
 
