@@ -29,4 +29,4 @@ normal authentication and backend behavior; they do not enable demo mode.
 
 ## HOMER
 
-Homer is an open source telecommunications software, you can learn more about it here: [text](https://github.com/sipcapture/homer)
+Homer is an open source telecommunications software, you can learn more about it here: [Homer](https://github.com/sipcapture/homer)
