@@ -26,3 +26,7 @@ are outside that HTTP interception, so this is not a fully offline sandbox.
 `npm run build:mock` writes to `dist/homer-ui-mock`. Do not deploy that build as
 an authenticated service. Existing `npm run dev` and production builds retain
 normal authentication and backend behavior; they do not enable demo mode.
+
+## HOMER
+
+Homer is an open source telecommunications software, you can learn more about it here: [text](https://github.com/sipcapture/homer)
