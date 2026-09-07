@@ -1236,7 +1236,7 @@ export class ProtosearchWidgetComponent implements IWidget, OnInit, OnDestroy, A
       this.targetResultsContainerValue.setValue(
         !selectedFields.length
           ? [firstWidget]
-          : [this.defaultContainer] || [firstWidget]
+          : [this.defaultContainer]
       );
     }
     this.fields.forEach((i) => {

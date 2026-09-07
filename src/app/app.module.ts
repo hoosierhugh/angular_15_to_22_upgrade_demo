@@ -162,7 +162,7 @@ import { GridsterModule } from 'angular-gridster2';
 import { QRCodeModule } from 'angularx-qrcode';
 import { DynamicModule } from 'ng-dynamic-component';
 import { NgChartsModule } from 'ng2-charts';
-import { MarkdownModule, MARKED_OPTIONS } from 'ngx-markdown';
+import { MarkdownModule } from 'ngx-markdown';
 import { NgxDaterangepickerMd } from './components/controls/daterangepicker';
 import { MultiSelectFieldModule } from './components/widgets/protosearch-widget/ps-fields/multi-select-field/multi-select-field.module';
 import { UpdateAlertComponent } from './components/controls/update-alert/update-alert.component';
@@ -340,12 +340,7 @@ export function HttpLoaderFactory(http: HttpClient) {
         // AceModule,
         // AceEditorModule,
         FontAwesomeModule,
-        MarkdownModule.forRoot({
-            markedOptions: {
-                provide: MARKED_OPTIONS,
-                useValue: { headerIds: false }
-            }
-        }),
+        MarkdownModule.forRoot(),
         NgxDaterangepickerMd.forRoot(),
         MultiSelectFieldModule,
         AgChartsModule,

@@ -78,12 +78,17 @@ export class MessageContentComponent implements OnInit, OnDestroy, AfterViewInit
         } if ((sipData?.headers?.['Content-Type']?.[0]?.raw)?.toLowerCase() === 'application/vq-rtcpxr') {
           /**parse vq */
           this.pt.vqr = parsip.getVQ(sipData?.body);
-        } if (sipData?.headers?.['X-Rtp-Stat']?.[0]?.raw ||
-          sipData?.headers?.[('X-Rtp-Stat').toLocaleLowerCase()]?.[0]?.raw) {
-          /** parse x-rtp */
-          this.pt.xrtp = parsip.getVQ(sipData?.headers['X-Rtp-Stat' || 'x-rtp-stat'][0].raw);
+        }
 
-        } if (sipData?.headers?.Identity?.[0]?.raw) {
+        const xRtpStat = sipData?.headers?.['X-Rtp-Stat']?.[0]?.raw
+          ?? sipData?.headers?.['x-rtp-stat']?.[0]?.raw;
+        if (xRtpStat) {
+          /** parse x-rtp */
+          this.pt.xrtp = parsip.getVQ(xRtpStat);
+
+        }
+
+        if (sipData?.headers?.Identity?.[0]?.raw) {
           /** parse jwt */
           this.pt.jwt = jwt_decode(sipData?.headers?.Identity[0].raw);
 
