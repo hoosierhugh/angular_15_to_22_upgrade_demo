@@ -34,3 +34,7 @@ normal authentication and backend behavior; they do not enable demo mode.
 ## HOMER
 
 Homer is an open source telecommunications software, you can learn more about it here: [Homer](https://github.com/sipcapture/homer)
+
+## YouTube
+
+I have a related YouTube video here: [YouTube](https://www.youtube.com/watch?v=0Zgyo_KzD38)
