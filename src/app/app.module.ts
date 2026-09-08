@@ -159,7 +159,7 @@ import { NgxJsonViewerModule } from 'ngx-json-viewer';
 // import { AceModule, ACE_CONFIG, AceConfigInterface } from 'ngx-ace-wrapper';
 // import { AceEditorModule } from 'ng2-ace-editor';
 import { GridsterModule } from 'angular-gridster2';
-import { QRCodeModule } from 'angularx-qrcode';
+import { QRCodeComponent } from 'angularx-qrcode';
 import { DynamicModule } from 'ng-dynamic-component';
 import { NgChartsModule } from 'ng2-charts';
 import { MarkdownModule } from 'ngx-markdown';
@@ -336,7 +336,7 @@ export function HttpLoaderFactory(http: HttpClient) {
         NoopAnimationsModule,
         AgGridModule,
         NgxJsonViewerModule,
-        QRCodeModule,
+        QRCodeComponent,
         // AceModule,
         // AceEditorModule,
         FontAwesomeModule,
