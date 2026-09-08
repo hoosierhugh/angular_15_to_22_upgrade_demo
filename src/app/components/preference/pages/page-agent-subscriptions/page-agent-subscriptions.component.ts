@@ -1,12 +1,13 @@
 
 import {
-    Component,
-    OnInit,
-    OnDestroy,
-    ChangeDetectorRef,
-    ViewChild,
-    AfterViewInit,
-    Input
+  Component,
+  OnInit,
+  OnDestroy,
+  ChangeDetectorRef,
+  ViewChild,
+  AfterViewInit,
+  Input,
+  ChangeDetectionStrategy
 } from '@angular/core';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
@@ -31,6 +32,7 @@ import { ComponentType } from '@angular/cdk/portal';
     selector: 'app-page-agent-subscriptions',
     templateUrl: './page-agent-subscriptions.component.html',
     styleUrls: ['./page-agent-subscriptions.component.scss'],
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false
 })
 export class PageAgentSubscriptionsComponent implements OnInit, AfterViewInit, OnDestroy {

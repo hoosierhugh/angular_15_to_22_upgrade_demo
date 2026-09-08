@@ -1,11 +1,12 @@
 
-import { ChangeDetectorRef, Component, Input, OnInit, ViewChild } from '@angular/core';
+import { ChangeDetectorRef, Component, Input, OnInit, ViewChild, ChangeDetectionStrategy } from '@angular/core';
 import { MatColumnDef, MatTable } from '@angular/material/table';
 import { TranslateService } from '@ngx-translate/core'
 @Component({
     selector: 'app-last-error-cell',
     templateUrl: './last-error-cell.component.html',
     styleUrls: ['./last-error-cell.component.scss'],
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false
 })
 export class LastErrorCellComponent implements OnInit {

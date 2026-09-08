@@ -1,6 +1,9 @@
-import { Component, OnInit,
-    ChangeDetectorRef,
-    Input, } from '@angular/core';
+import {
+  Component, OnInit,
+  ChangeDetectorRef,
+  Input,
+  ChangeDetectionStrategy
+} from '@angular/core';
 import { ConstValue } from '@app/models';
 import { DialogDeleteAlertComponent } from '../../dialogs';
 import { AlertService, AuthenticationService, DashboardService, PreferenceMappingProtocolService, SessionStorageService } from '@app/services';
@@ -13,6 +16,7 @@ import { ComponentType } from '@angular/cdk/portal';
     selector: 'app-page-reset',
     templateUrl: './page-reset.component.html',
     styleUrls: ['./page-reset.component.scss'],
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false
 })
 export class PageResetComponent implements OnInit {

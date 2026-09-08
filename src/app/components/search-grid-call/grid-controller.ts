@@ -1,5 +1,5 @@
 import { ColDef, ColumnState } from 'ag-grid-community';
-import { Input, Component } from '@angular/core';
+import { Input, Component, ChangeDetectionStrategy } from '@angular/core';
 import { Functions, getStorage, setStorage } from '@app/helpers/functions';
 import { ConstValue, UserConstValue } from './../../models/const-value.model';
 
@@ -11,6 +11,7 @@ export interface GridSizeSettings {
 
 @Component({
     template: '',
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false
 })
 export class GridController {

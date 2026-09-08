@@ -1,12 +1,13 @@
 import { ConstValue, UserConstValue } from '@app/models/const-value.model';
 import {
-    Component,
-    ChangeDetectorRef,
-    Input,
-    HostListener,
-    ViewChild,
-    ElementRef,
-    OnInit,
+  Component,
+  ChangeDetectorRef,
+  Input,
+  HostListener,
+  ViewChild,
+  ElementRef,
+  OnInit,
+  ChangeDetectionStrategy
 } from '@angular/core';
 import { FlowItemType } from '@app/models/flow-item-type.model';
 import { Functions, setStorage } from '@app/helpers/functions';
@@ -42,6 +43,7 @@ interface StoredFlowFilterState {
     selector: 'app-filter',
     templateUrl: './transaction-filter.component.html',
     styleUrls: ['./transaction-filter.component.scss'],
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false
 })
 export class TransactionFilterComponent implements OnInit {

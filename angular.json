@@ -11,12 +11,15 @@
             "prefix": "app",
             "architect": {
                 "build": {
-                    "builder": "@angular-devkit/build-angular:browser",
+                    "builder": "@angular-devkit/build-angular:application",
                     "options": {
-                        "outputPath": "dist/homer-ui",
+                        "outputPath": {
+                          "base": "dist/homer-ui"
+                        },
                         "index": "src/index.html",
-                        "main": "src/main.ts",
-                        "polyfills": "src/polyfills.ts",
+                        "polyfills": [
+                          "src/polyfills.ts"
+                        ],
                         "tsConfig": "src/tsconfig.app.json",
                         "allowedCommonJsDependencies": [
                             "lodash",
@@ -45,7 +48,13 @@
                             "node_modules/highlight.js/styles/atom-one-dark.css"
                         ],
                         "scripts": [],
-                        "webWorkerTsConfig": "tsconfig.worker.json"
+                        "webWorkerTsConfig": "tsconfig.worker.json",
+                        "browser": "src/main.ts",
+                        "stylePreprocessorOptions": {
+                          "includePaths": [
+                            "."
+                          ]
+                        }
                     },
                     "configurations": {
                         "mock": {
@@ -53,13 +62,14 @@
                                 { "replace": "src/environments/environment.ts", "with": "src/environments/environment.mock.ts" },
                                 { "replace": "src/app/runtime-mode.ts", "with": "src/app/mock/runtime-mode.mock.ts" }
                             ],
-                            "outputPath": "dist/homer-ui-mock",
+                            "outputPath": {
+                              "base": "dist/homer-ui-mock"
+                            },
                             "baseHref": "/",
                             "optimization": false,
                             "sourceMap": false,
                             "aot": false,
-                            "extractLicenses": false,
-                            "buildOptimizer": false
+                            "extractLicenses": false
                         },
                         "development": {
                             "fileReplacements": [
@@ -74,8 +84,6 @@
                             "namedChunks": false,
                             "aot": false,
                             "extractLicenses": false,
-                            "vendorChunk": false,
-                            "buildOptimizer": false,
                             "budgets": [
                                 {
                                     "type": "initial",
@@ -97,8 +105,6 @@
                             "namedChunks": false,
                             "aot": false,
                             "extractLicenses": false,
-                            "vendorChunk": false,
-                            "buildOptimizer": false,
                             "budgets": [
                                 {
                                     "type": "initial",
@@ -120,8 +126,6 @@
                             "namedChunks": true,
                             "aot": true,
                             "extractLicenses": true,
-                            "vendorChunk": false,
-                            "buildOptimizer": true,
                             "budgets": [
                                 {
                                     "type": "initial",
@@ -143,8 +147,6 @@
                             "namedChunks": false,
                             "aot": false,
                             "extractLicenses": false,
-                            "vendorChunk": false,
-                            "buildOptimizer": false,
                             "budgets": [
                                 {
                                     "type": "initial",
@@ -166,8 +168,6 @@
                             "namedChunks": false,
                             "aot": false,
                             "extractLicenses": false,
-                            "vendorChunk": false,
-                            "buildOptimizer": false,
                             "budgets": [
                                 {
                                     "type": "initial",

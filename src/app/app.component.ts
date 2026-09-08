@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { AlertService, AuthenticationService } from './services';
 import { User } from '@app/models';
 import { MOCK_MODE } from './runtime-mode';
@@ -9,6 +9,7 @@ import {TranslateService} from '@ngx-translate/core';
 
 @Component({
     selector: 'app-root', templateUrl: 'app.component.html',
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false
 })
 export class AppComponent {

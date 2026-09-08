@@ -23,7 +23,7 @@ import { TabCallinfoModule } from './components/search-grid-call/detail-dialog/t
 import { TabEventsModule } from './components/search-grid-call/detail-dialog/tab-events/tab-events.module';
 // import { VirtualScrollerModule } from 'ngx-virtual-scroller';
 /* @angular */
-import { HTTP_INTERCEPTORS, HttpClient, provideHttpClient, withInterceptorsFromDi, withJsonpSupport } from '@angular/common/http';
+import { HTTP_INTERCEPTORS, HttpClient, provideHttpClient, withInterceptorsFromDi, withJsonpSupport, withXhr } from '@angular/common/http';
 import { NgModule, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { BrowserModule } from '@angular/platform-browser';
@@ -386,7 +386,7 @@ export function HttpLoaderFactory(http: HttpClient) {
         { provide: PreferencesContentMapping, useClass: PreferencesContentMapping },
         { provide: APP_BASE_HREF, useValue: window['base-href'] },
         TransactionFilterService,
-        provideHttpClient(withInterceptorsFromDi(), withJsonpSupport())
+        provideHttpClient(withXhr(), withInterceptorsFromDi(), withJsonpSupport())
     ] })
 
 export class AppModule {

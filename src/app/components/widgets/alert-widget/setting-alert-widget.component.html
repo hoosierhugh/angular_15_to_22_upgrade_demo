@@ -116,7 +116,7 @@
         circleSpacing="10"
         [colors]="this.colorsSuccess | async"
         [color]=data.alertSuccessColor
-        (onChange)="changeColorManual($event?.['color'].hex, 'success')"></color-circle>
+        (onChange)="changeColorManual($safeNavigationMigration($event?.['color'].hex), 'success')"></color-circle>
     </div>
 
     <div class="hex-code">
@@ -164,7 +164,7 @@
         circleSpacing="10"
         [colors]='this.colorsFail | async'
         [color]=data.alertFailColor
-        (onChangeComplete)="changeColorManual($event?.['color']?.hex, 'fail')"></color-circle>
+        (onChangeComplete)="changeColorManual($safeNavigationMigration($event?.['color']?.hex), 'fail')"></color-circle>
     </div>
 
     <div class="hex-code">
@@ -213,7 +213,7 @@
         circleSpacing="10"
         [colors]='this.colorsText | async'
         [color]="data.alertTextColor"
-        (onChangeComplete)="changeColorManual($event?.['color']?.hex, 'text')"></color-circle>
+        (onChangeComplete)="changeColorManual($safeNavigationMigration($event?.['color']?.hex), 'text')"></color-circle>
     </div>
 
     <div class="hex-code">

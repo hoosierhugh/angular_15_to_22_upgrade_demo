@@ -4,6 +4,7 @@ import {
   Input,
   OnInit,
   ViewChild,
+  ChangeDetectionStrategy
 } from '@angular/core';
 import { MatColumnDef, MatCellDef, MatTable } from '@angular/material/table';
 import  moment from 'moment';
@@ -11,6 +12,7 @@ import  moment from 'moment';
     selector: 'app-expire-cell',
     templateUrl: './expire-cell.component.html',
     styleUrls: ['./expire-cell.component.scss'],
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false
 })
 

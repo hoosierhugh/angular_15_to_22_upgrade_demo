@@ -25,10 +25,10 @@
         <div *ngIf="item.field_name === 'proto_selector'">
           <!-- static fields -->
           <!-- if proto selector-->
-          <app-code-proto-selector [value]="fields[0]?.value"
+          <app-code-proto-selector [value]="$safeNavigationMigration(fields[0]?.value)"
             [mappingList]="mappingList | async"
             (protoChanged)="onProtoChange($event)"
-            [id]="fields[0]?.name">
+            [id]="$safeNavigationMigration(fields[0]?.name)">
           </app-code-proto-selector>
         </div>
         <!-- if item is targetResultsContainer -->

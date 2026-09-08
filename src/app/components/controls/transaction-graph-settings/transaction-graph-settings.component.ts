@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { ChangeDetectorRef, Component, EventEmitter, Input, OnInit, Output, ChangeDetectionStrategy } from '@angular/core';
 import { Functions } from '@app/helpers/functions';
 import { UserConstValue } from '@app/models';
 import { TranslateService } from '@ngx-translate/core';
@@ -7,6 +7,7 @@ import { TranslateService } from '@ngx-translate/core';
     selector: 'app-transaction-graph-settings',
     templateUrl: './transaction-graph-settings.component.html',
     styleUrls: ['./transaction-graph-settings.component.scss'],
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false
 })
 export class TransactionGraphSettingsComponent implements OnInit {

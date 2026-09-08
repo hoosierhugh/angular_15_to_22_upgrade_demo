@@ -1,6 +1,6 @@
 import { AlertService } from '@it-app/services/alert.service';
 import { PcapUploaderService } from './pcap-uploader.service';
-import { Component, Input, Output, EventEmitter, AfterViewInit, ViewChild, ChangeDetectorRef, ElementRef } from '@angular/core';
+import { Component, Input, Output, EventEmitter, AfterViewInit, ViewChild, ChangeDetectorRef, ElementRef, ChangeDetectionStrategy } from '@angular/core';
 import { Widget } from '@app/helpers/widget';
 import { IWidget } from '../IWidget';
 import { TranslateService } from '@ngx-translate/core'
@@ -9,6 +9,7 @@ import { TranslateService } from '@ngx-translate/core'
     selector: 'app-pcap-uploader-widget',
     templateUrl: './pcap-uploader-widget.component.html',
     styleUrls: ['./pcap-uploader-widget.component.scss'],
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false
 })
 @Widget({

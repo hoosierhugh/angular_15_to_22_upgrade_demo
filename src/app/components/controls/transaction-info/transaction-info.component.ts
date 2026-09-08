@@ -1,4 +1,4 @@
-import { Component, ChangeDetectorRef, Input, HostListener, ViewChild, ElementRef, OnInit } from '@angular/core';
+import { Component, ChangeDetectorRef, Input, HostListener, ViewChild, ElementRef, OnInit, ChangeDetectionStrategy } from '@angular/core';
 import { Functions } from '@app/helpers/functions';
 import  moment from 'moment';
 import { TranslateService } from '@ngx-translate/core'
@@ -14,6 +14,7 @@ export interface CallIdData {
     selector: 'app-transaction-info',
     templateUrl: './transaction-info.component.html',
     styleUrls: ['./transaction-info.component.scss'],
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false
 })
 

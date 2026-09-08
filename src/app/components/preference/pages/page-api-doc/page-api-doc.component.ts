@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnInit, ChangeDetectionStrategy } from '@angular/core';
 import { environment } from '@environments/environment';
 import { MOCK_MODE } from '@app/runtime-mode';
 import { SwaggerUIBundle } from 'swagger-ui-dist';
@@ -8,6 +8,7 @@ import { SwaggerUIBundle } from 'swagger-ui-dist';
     selector: 'app-page-api-doc',
     templateUrl: './page-api-doc.component.html',
     styleUrls: ['./page-api-doc.component.scss'],
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false
 })
 

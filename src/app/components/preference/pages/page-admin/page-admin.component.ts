@@ -1,5 +1,5 @@
 import { Functions } from '@app/helpers/functions';
-import { Component, Input } from '@angular/core';
+import { Component, Input, ChangeDetectionStrategy } from '@angular/core';
 import { AdminService, StreamType } from '@app/services/preferences/admin.service';
 import { HttpResponse } from '@angular/common/http';
 import { AlertService } from '@app/services';
@@ -8,6 +8,7 @@ import { AlertService } from '@app/services';
     selector: 'app-page-admin',
     templateUrl: './page-admin.component.html',
     styleUrls: ['./page-admin.component.scss'],
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false
 })
 export class PageAdminComponent {

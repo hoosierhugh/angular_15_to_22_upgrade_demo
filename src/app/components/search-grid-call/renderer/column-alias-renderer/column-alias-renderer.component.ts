@@ -41,6 +41,7 @@ import { AliasDisplay, SearchGridCellParams } from '../search-grid-renderer.type
             border-radius:3px;
 
         }`],
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false
 })
 export class ColumnAliasRenderer implements ICellRendererAngularComp {

@@ -1,4 +1,4 @@
-import { Component, ViewChild, ViewContainerRef } from '@angular/core';
+import { Component, ViewChild, ViewContainerRef, ChangeDetectionStrategy } from '@angular/core';
 import {
     IAfterGuiAttachedParams,
     IDoesFilterPassParams,
@@ -18,6 +18,7 @@ interface StatusFilterModel { value: string; }
     selector: 'app-status-filter',
     templateUrl: 'status-filter.component.html',
     styleUrls: ['status-filter.component.scss'],
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false
 })
 export class StatusFilterComponent implements IFilterAngularComp {

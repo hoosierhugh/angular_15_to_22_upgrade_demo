@@ -6,8 +6,8 @@
 
 /* You can add global styles to this file, and also import other style files */
 
-@import "~@angular/material/prebuilt-themes/deeppurple-amber.css";
-@import "~bootstrap/dist/css/bootstrap.min.css";
+@import "@angular/material/prebuilt-themes/deeppurple-amber.css";
+@import "bootstrap/dist/css/bootstrap.min.css";
 @include mat.all-component-densities(-1);
 
 @include mat.elevation-classes();
@@ -15,7 +15,7 @@
 // @import "https://cdnjs.cloudflare.com/ajax/libs/vis/4.21.0/vis.min.css";
 // @import "https://api.mapbox.com/mapbox-gl-js/v1.10.1/mapbox-gl.css";
 @import "./assets/css/mapbox-gl.css";
-@import "~highlight.js/styles/github.css";
+@import "highlight.js/styles/github.css";
 // mat icons font
 @font-face {
     font-family: "Material Icons";
@@ -218,13 +218,13 @@ span.mat-option-text {
     //text-transform: capitalize !important;
 }
 
-@import "~ag-grid-community/styles/ag-grid.css";
+@import "ag-grid-community/styles/ag-grid.css";
 
 $ag-mat-primary: mat.m2-get-color-from-palette($homerprimary);
 $ag-mat-accent: mat.m2-get-color-from-palette($homeraccent);
 
-// @import "~ag-grid-community/dist/styles/ag-theme-balham.css";
-@import "~ag-grid-community/styles/ag-theme-material.css";
+// @import "ag-grid-community/dist/styles/ag-theme-balham.css";
+@import "ag-grid-community/styles/ag-theme-material.css";
 
 $flow-checkbox-color: mat.m2-get-color-from-palette($checkbox-color);
 

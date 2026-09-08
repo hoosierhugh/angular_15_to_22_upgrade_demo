@@ -42,6 +42,7 @@ import { SearchGridCellParams } from './search-grid-renderer.types';
 
         }
     `],
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false
 })
 export class GenericCellRenderer implements ICellRendererAngularComp {

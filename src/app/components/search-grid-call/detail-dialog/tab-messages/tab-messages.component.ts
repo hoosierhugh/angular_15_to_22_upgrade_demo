@@ -23,7 +23,7 @@ import { Subscription } from 'rxjs';
     selector: 'app-tab-messages',
     templateUrl: './tab-messages.component.html',
     styleUrls: ['./tab-messages.component.scss'],
-    changeDetection: ChangeDetectionStrategy.Default,
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false
 })
 

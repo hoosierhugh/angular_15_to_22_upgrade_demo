@@ -8,7 +8,7 @@ class="profile-body mat-elevation-z8"
 
     <div class="profile-card" [style.background-color]="profileColor + 22">
         <img *ngIf="userProfile?.avatar !== ''; else noAvatar"
-        [src]="userProfile?.avatar" alt=""
+        [src]="$safeNavigationMigration(userProfile?.avatar)" alt=""
         (onError)="userProfile.avatar = ''"
         class="profile-icon">
 

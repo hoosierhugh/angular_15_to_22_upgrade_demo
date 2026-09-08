@@ -1,10 +1,11 @@
-import { ChangeDetectorRef, Component, Input, OnInit, Output, ViewChild, EventEmitter } from '@angular/core';
+import { ChangeDetectorRef, Component, Input, OnInit, Output, ViewChild, EventEmitter, ChangeDetectionStrategy } from '@angular/core';
 import { MatColumnDef, MatTable } from '@angular/material/table';
 import { TranslateService } from '@ngx-translate/core';
 @Component({
     selector: 'app-tool-cell',
     templateUrl: './tool-cell.component.html',
     styleUrls: ['./tool-cell.component.scss'],
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false
 })
 export class ToolCellComponent implements OnInit {

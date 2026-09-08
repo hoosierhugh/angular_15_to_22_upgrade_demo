@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, AfterViewInit, Output, EventEmitter, Input, ElementRef } from '@angular/core';
+import { Component, OnInit, ViewChild, AfterViewInit, Output, EventEmitter, Input, ElementRef, ChangeDetectionStrategy } from '@angular/core';
 import { MatMenuTrigger } from '@angular/material/menu';
 
 interface TextSegment {
@@ -17,6 +17,7 @@ export interface PrometheusCodeUpdate {
     selector: 'app-code-style-prometheus-field',
     templateUrl: './code-style-prometheus-field.component.html',
     styleUrls: ['./code-style-prometheus-field.component.scss'],
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false
 })
 export class CodeStylePrometheusFieldComponent implements OnInit, AfterViewInit {

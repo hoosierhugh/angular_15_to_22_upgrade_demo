@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component, EventEmitter, HostListener, Input, OnInit, Output } from '@angular/core';
+import { ChangeDetectorRef, Component, EventEmitter, HostListener, Input, OnInit, Output, ChangeDetectionStrategy } from '@angular/core';
 import { Functions } from '@app/helpers/functions';
 import { DateFormat } from '@app/services/time-formatting.service';
 import { GridOptions } from 'ag-grid-community';
@@ -8,6 +8,7 @@ import { SettingButtonComponent } from './setting-button';
     selector: 'custom-ag-grid',
     templateUrl: './custom-ag-grid.component.html',
     styleUrls: ['./custom-ag-grid.component.scss'],
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false
 })
 export class CustomAgGridComponent implements OnInit {

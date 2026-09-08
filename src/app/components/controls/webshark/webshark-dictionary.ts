@@ -4,10 +4,11 @@
  * 
  * https://github.com/aerospike-community/aerospike-wireshark-plugin/blob/master/tests/test-heartbeat-mesh.pcapng.pdml
  */
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 
 @Component({
     template: '',
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false
 })
 export class WebsharkDictionary {

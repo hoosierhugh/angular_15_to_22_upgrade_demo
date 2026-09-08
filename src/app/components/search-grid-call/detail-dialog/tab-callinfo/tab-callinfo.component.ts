@@ -4,6 +4,7 @@ import {
   EventEmitter,
   Output,
   AfterViewInit,
+  ChangeDetectionStrategy
 } from '@angular/core';
 import { Functions } from '../../../../helpers/functions';
 import  moment from 'moment';
@@ -38,6 +39,7 @@ enum TASK_TYPE {
     selector: 'app-tab-callinfo',
     templateUrl: './tab-callinfo.component.html',
     styleUrls: ['./tab-callinfo.component.scss'],
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false
 })
 export class TabCallinfoComponent implements AfterViewInit {

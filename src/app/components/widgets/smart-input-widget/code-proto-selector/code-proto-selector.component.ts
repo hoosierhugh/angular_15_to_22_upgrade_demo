@@ -22,7 +22,7 @@ interface ProtocolOption {
     selector: 'app-code-proto-selector',
     templateUrl: './code-proto-selector.component.html',
     styleUrls: ['./code-proto-selector.component.scss'],
-    changeDetection: ChangeDetectionStrategy.Default,
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false
 })
 export class CodeProtoSelectorComponent {

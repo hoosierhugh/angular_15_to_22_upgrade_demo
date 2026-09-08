@@ -14,7 +14,7 @@
     <mat-tab label="SIP" *ngIf="pt?.sip" class="parsed-data">
 
       <div class="parsed-data">
-        <ngx-json-viewer style="color:gray" class="sipParse" [json]="pt?.sip" [expanded]="false">
+        <ngx-json-viewer style="color:gray" class="sipParse" [json]="$safeNavigationMigration(pt?.sip)" [expanded]="false">
         </ngx-json-viewer>
       </div>
 

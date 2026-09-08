@@ -1,12 +1,13 @@
 
 import {
-    Component,
-    OnInit,
-    OnDestroy,
-    ChangeDetectorRef,
-    ViewChild,
-    AfterViewInit,
-    Input,
+  Component,
+  OnInit,
+  OnDestroy,
+  ChangeDetectorRef,
+  ViewChild,
+  AfterViewInit,
+  Input,
+  ChangeDetectionStrategy
 } from '@angular/core';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
@@ -33,6 +34,7 @@ import { ComponentType } from '@angular/cdk/portal';
     selector: 'app-page-scripts',
     templateUrl: './page-scripts.component.html',
     styleUrls: ['./page-scripts.component.scss'],
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false
 })
 export class PageScriptsComponent implements OnInit, AfterViewInit, OnDestroy {

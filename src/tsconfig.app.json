@@ -29,5 +29,14 @@
     "environments/environment.prod.ts",
     "environments/environment.dev.ts",
     "environments/environment.webapp.ts"
-  ]
+  ],
+  "angularCompilerOptions": {
+    "extendedDiagnostics": {
+      "checks": {
+        "nullishCoalescingNotNullable": "suppress",
+        "optionalChainNotNullable": "suppress"
+      }
+    },
+    "strictTemplates": false
+  }
 }

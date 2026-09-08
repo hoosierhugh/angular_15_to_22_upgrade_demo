@@ -1,11 +1,12 @@
 import {
-    Component,
-    OnInit,
-    ChangeDetectorRef,
-    ViewChild,
-    AfterViewInit,
-    OnDestroy,
-    Input
+  Component,
+  OnInit,
+  ChangeDetectorRef,
+  ViewChild,
+  AfterViewInit,
+  OnDestroy,
+  Input,
+  ChangeDetectionStrategy
 } from '@angular/core';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
@@ -30,6 +31,7 @@ import { ComponentType } from '@angular/cdk/portal';
     selector: 'app-page-advanced-settings',
     templateUrl: './page-advanced-settings.component.html',
     styleUrls: ['./page-advanced-settings.component.scss'],
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false
 })
 export class PageAdvancedSettingsComponent implements OnInit, AfterViewInit, OnDestroy {
