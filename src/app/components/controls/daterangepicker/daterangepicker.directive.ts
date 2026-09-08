@@ -1,7 +1,6 @@
 import {
     Directive,
     ViewContainerRef,
-    ComponentFactoryResolver,
     ElementRef,
     HostListener,
     forwardRef,
@@ -23,7 +22,7 @@ import {
   import { LocaleConfig } from './daterangepicker.config';
   import { LocaleService } from './locale.service';
   const moment = _moment;
-  
+
   @Directive({
     selector: 'input[ngxDaterangepickerMd]',
     host: {
@@ -159,7 +158,6 @@ import {
     constructor(
       public viewContainerRef: ViewContainerRef,
       public _changeDetectorRef: ChangeDetectorRef,
-      private _componentFactoryResolver: ComponentFactoryResolver,
       private _el: ElementRef,
       private _renderer: Renderer2,
       private differs: KeyValueDiffers,
@@ -168,9 +166,8 @@ import {
     ) {
       this.drops = 'down';
       this.opens = 'auto';
-      const componentFactory = this._componentFactoryResolver.resolveComponentFactory(DaterangepickerComponent);
       viewContainerRef.clear();
-      const componentRef = viewContainerRef.createComponent(componentFactory);
+      const componentRef = viewContainerRef.createComponent(DaterangepickerComponent);
       this.picker = (<DaterangepickerComponent>componentRef.instance);
       this.picker.inline = false; // set inline to false for all directive usage
     }
@@ -381,4 +378,3 @@ import {
       }
     }
   }
-  

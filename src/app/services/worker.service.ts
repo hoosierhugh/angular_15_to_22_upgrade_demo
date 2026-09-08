@@ -27,9 +27,9 @@ export class WorkerService {
     const workerId = path === WorkerScript.CLICKHOUSE ? `${workerCommand}_${id}` : workerCommand;
     if (!WorkerService.workerPull[workerCommand]) {
       if (path === WorkerScript.TRANSACTION) {
-        WorkerService.workerPull[workerId] = new WorkerService(new Worker(new URL('@app/workers/transaction.worker', import.meta.url), { type: 'module' }));
+        WorkerService.workerPull[workerId] = new WorkerService(new Worker(new URL('../workers/transaction.worker', import.meta.url), { type: 'module' }));
       } else if (path === WorkerScript.CLICKHOUSE) {
-        WorkerService.workerPull[workerId] = new WorkerService(new Worker(new URL('@app/workers/clickhouse.worker', import.meta.url), { type: 'module' }));
+        WorkerService.workerPull[workerId] = new WorkerService(new Worker(new URL('../workers/clickhouse.worker', import.meta.url), { type: 'module' }));
       }
      
     }

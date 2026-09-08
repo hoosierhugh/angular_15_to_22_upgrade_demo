@@ -158,7 +158,7 @@ import { AgGridModule } from 'ag-grid-angular';
 import { NgxJsonViewerModule } from 'ngx-json-viewer';
 // import { AceModule, ACE_CONFIG, AceConfigInterface } from 'ngx-ace-wrapper';
 // import { AceEditorModule } from 'ng2-ace-editor';
-import { GridsterModule } from 'angular-gridster2';
+import { Gridster, GridsterItem } from 'angular-gridster2';
 import { QRCodeComponent } from 'angularx-qrcode';
 import { DynamicModule } from 'ng-dynamic-component';
 import { NgChartsModule } from 'ng2-charts';
@@ -325,7 +325,8 @@ export function HttpLoaderFactory(http: HttpClient) {
         BrowserAnimationsModule,
         FormsModule,
         ReactiveFormsModule,
-        GridsterModule,
+        Gridster,
+        GridsterItem,
         NgChartsModule,
         DynamicModule,
         routing,

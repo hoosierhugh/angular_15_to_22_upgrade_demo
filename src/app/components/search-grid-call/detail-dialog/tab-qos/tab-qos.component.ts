@@ -156,7 +156,7 @@ export class TabQosComponent implements OnInit, AfterViewInit {
     });
 
 
-    this.worker = new WorkerService(new Worker(new URL('@app/workers/qos.worker', import.meta.url), { type: 'module' }));
+    this.worker = new WorkerService(new Worker(new URL('../../../../workers/qos.worker', import.meta.url), { type: 'module' }));
 
   }
 

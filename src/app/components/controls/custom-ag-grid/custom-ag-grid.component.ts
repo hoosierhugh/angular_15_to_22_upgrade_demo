@@ -139,7 +139,7 @@ export class CustomAgGridComponent implements OnInit {
     }
     private sizeToFit() {
         setTimeout(() => {
-            this.gridOptions.api?.sizeColumnsToFit();
+            this.gridApi?.sizeColumnsToFit();
             this.cdr.detectChanges();
         }, 100);
     }

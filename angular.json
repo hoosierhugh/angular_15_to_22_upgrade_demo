@@ -37,7 +37,8 @@
                             "moment",
                             "diff-match-patch",
                             "is-in-subnet",
-                            "ts-md5/dist/md5"
+                            "ts-md5/dist/md5",
+                            "swagger-ui-dist/swagger-ui-bundle.js"
                         ],
                         "assets": [
                             "src/favicon.ico",
@@ -179,7 +180,7 @@
                     }
                 },
                 "serve": {
-                    "builder": "@angular-devkit/build-angular:dev-server",
+                    "builder": "@angular/build:dev-server",
                     "options": {
                       "buildTarget": "homer-ui:build"
                     },

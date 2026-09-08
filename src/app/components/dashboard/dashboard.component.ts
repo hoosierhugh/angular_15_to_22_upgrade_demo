@@ -336,7 +336,7 @@ export class DashboardComponent implements OnInit, OnDestroy, AfterViewInit {
         widget.isWarning = widget.rows < rowAmount;
       }
     }
-    this.gridOptions?.api?.optionsChanged();
+    this.gridster?.api?.calculateLayout();
 
   }
   dismissWarning(item) {
@@ -352,7 +352,7 @@ export class DashboardComponent implements OnInit, OnDestroy, AfterViewInit {
       if (item.rows > rows || item.cols > cols) {
         item.rows = 1;
         item.cols = 1;
-        this.gridOptions?.api?.getNextPossiblePosition(item);
+        this.gridster?.api?.getNextPossiblePosition(item);
       }
     });
   }
@@ -503,8 +503,7 @@ export class DashboardComponent implements OnInit, OnDestroy, AfterViewInit {
     }
     if (this.dashboardArray?.length) {
       this.dashboardArray.forEach(item => item.output = {
-        changeSettings: this.onChangeWidget.bind(this),
-        deleteWidget: this.removeItem.bind([null, this])
+        changeSettings: this.onChangeWidget.bind(this)
       });
       this.dashboardCollection.data.widgets = this.dashboardArray;
 
@@ -640,7 +639,7 @@ export class DashboardComponent implements OnInit, OnDestroy, AfterViewInit {
       if (!this.isShared) {
         this.gridLocked = true;
       }
-      this.gridOptions?.api?.optionsChanged();
+      this.gridster?.api?.calculateLayout();
       this.cdr.detectChanges();
 
     } else if (this.gridLocked) {
@@ -664,7 +663,7 @@ export class DashboardComponent implements OnInit, OnDestroy, AfterViewInit {
       };
 
       this.gridLocked = false;
-      this.gridOptions?.api?.optionsChanged();
+      this.gridster?.api?.calculateLayout();
       this.cdr.detectChanges();
     }
     this.save();
@@ -787,7 +786,7 @@ export class DashboardComponent implements OnInit, OnDestroy, AfterViewInit {
         this.gridOptions.maxRows = Number.MAX_VALUE;
         break;
     }
-    this.gridOptions?.api?.optionsChanged();
+    this.gridster?.api?.calculateLayout();
     setTimeout(() => {
       if (!this.isIframe) {
         this.resizeExcess();
@@ -1000,13 +999,17 @@ export class DashboardComponent implements OnInit, OnDestroy, AfterViewInit {
     };
     if (data.config) { widget.config = data.config; }
     if (tabGroup) { widget.tabGroup = tabGroup; }
-    if (!this.gridOptions?.api?.getNextPossiblePosition(widget)) {
+    const gridsterApi = this.gridster?.api;
+    const canPlaceWidget = gridsterApi?.getNextPossiblePosition(widget);
+    if (canPlaceWidget === false) {
       this.gridOptions.gridType = GridType.ScrollVertical;
       this.dashboardCollection.data.config.gridType = GridType.ScrollVertical;
       this.changedOptions();
-      const updatedWidget = this.gridOptions?.api?.getFirstPossiblePosition(widget);
-      widget.x = updatedWidget.x;
-      widget.y = updatedWidget.y;
+      const updatedWidget = gridsterApi?.getFirstPossiblePosition(widget);
+      if (updatedWidget) {
+        widget.x = updatedWidget.x;
+        widget.y = updatedWidget.y;
+      }
     }
     this.dashboardArray = [...this.dashboardArray, widget];
     this.save();
@@ -1344,7 +1347,7 @@ export class DashboardComponent implements OnInit, OnDestroy, AfterViewInit {
       this.gridOptions.rowHeightRatio = 1;
     }
     try {
-      this.gridOptions?.api?.optionsChanged();
+      this.gridster?.api?.calculateLayout();
     } catch (err) { }
   }
   // To work on Grafana "Variables" feature you have to have setup with same origin for backend and UI 

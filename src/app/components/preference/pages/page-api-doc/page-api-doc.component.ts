@@ -1,7 +1,7 @@
 import { Component, Input, OnInit, ChangeDetectionStrategy } from '@angular/core';
 import { environment } from '@environments/environment';
 import { MOCK_MODE } from '@app/runtime-mode';
-import { SwaggerUIBundle } from 'swagger-ui-dist';
+import SwaggerUIBundle from 'swagger-ui-dist/swagger-ui-bundle.js';
 
 // declare const SwaggerUIBundle: any;
 @Component({
