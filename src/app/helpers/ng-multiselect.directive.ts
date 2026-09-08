@@ -124,15 +124,11 @@ export class NgSelectFormFieldControlDirective
         @Optional() private _parentFormGroup: FormGroupDirective
     ) {
 
-        host.focusEvent.asObservable().pipe(untilDestroyed(this))
-            .subscribe((v) => {
+        host.focusEvent.subscribe((v) => {
                 this._shouldFloat = true;
                 this.stateChanges.next();
             });
-        host.blurEvent
-            .asObservable()
-            .pipe(untilDestroyed(this))
-            .subscribe((v) => {
+        host.blurEvent.subscribe((v) => {
                 this._shouldFloat = false;
                 this.stateChanges.next();
             });
@@ -159,10 +155,7 @@ export class NgSelectFormFieldControlDirective
                     this.stateChanges.next();
                 });
         } else {
-            host.changeEvent
-                .asObservable()
-                .pipe(untilDestroyed(this))
-                .subscribe((v) => {
+            host.changeEvent.subscribe((v) => {
                     this._value = v;
 
                     this.stateChanges.next();

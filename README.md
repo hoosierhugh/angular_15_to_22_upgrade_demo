@@ -2,7 +2,7 @@
 
 ## Local demo (no backend or login needed)
 
-This branch can run on Node.js 22.22.3.
+This branch can run on Node.js 24
 Starting with this branch (Angular 18), I've decided to refactor all of the type `any` to proper TypeScript types.  `any` is a pet peeve of mine.  I inherited this project from somebody else, otherwise there would NOT be type `any` in the app.  This will be a sizeable refactor.
 
 After installing dependencies with `npm install`, run:

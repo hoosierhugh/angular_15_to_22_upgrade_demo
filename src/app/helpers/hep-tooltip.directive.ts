@@ -68,7 +68,7 @@ export class HepTooltipDirective implements OnInit {
         }
     }
     @HostListener('mouseover')
-    private _show(): void {
+    _show(): void {
         if (this._overlayRef) {
             let containerPortal: TemplatePortal<unknown> | ComponentPortal<unknown>;
             if (this.tooltipContent instanceof TemplateRef) {
@@ -86,7 +86,7 @@ export class HepTooltipDirective implements OnInit {
         }
     }
     @HostListener('mouseout')
-    private _hide(): void {
+    _hide(): void {
         if (this._overlayRef) {
             this._overlayRef.detach();
         }

@@ -33,7 +33,6 @@
                             "moment-timezone",
                             "moment",
                             "diff-match-patch",
-                            "maplibre-gl",
                             "is-in-subnet",
                             "ts-md5/dist/md5"
                         ],
