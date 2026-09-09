@@ -20,7 +20,6 @@
         "module": "es2020",
         "lib": ["es2022", "dom"],
         "paths": {
-        "path": ["./node_modules/path-browserify"],
         "@app/*": ["./src/app/*"],
         "@it-app/*": ["./src/app/*"],
         "@environments/*": ["./src/environments/*"],
@@ -30,9 +29,7 @@
         "@models/*": ["./src/app/models/*"],
         "@defaults": ["./src/app/models/defaults/index.ts"],
         "@defaults/*": ["./src/app/models/defaults/*"],
-        "@widgets/*": ["./src/app/components/widgets/*"],
-        "timers": ["./node_modules/timers-browserify"],
-        "stream": ["./node_modules/stream-browserify"]
+        "@widgets/*": ["./src/app/components/widgets/*"]
         },
         "useDefineForClassFields": false
     }
