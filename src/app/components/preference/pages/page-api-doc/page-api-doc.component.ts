@@ -24,7 +24,7 @@ export class PageApiDocComponent implements OnInit {
         }
 
         const url = new URL(environment.apiUrl, document.baseURI);
-        const ui = SwaggerUIBundle({
+        SwaggerUIBundle({
             dom_id: '#swagger-ui',
             layout: 'BaseLayout',
             presets: [

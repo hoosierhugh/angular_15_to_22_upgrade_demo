@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, ChangeDetectionStrategy, ChangeDetectorRef, ViewChild, AfterViewInit, ElementRef, QueryList, ViewChildren, inject } from '@angular/core';
+import { Component, ChangeDetectionStrategy, ChangeDetectorRef, ViewChild, AfterViewInit, ElementRef, QueryList, ViewChildren, inject } from '@angular/core';
 import { ActivatedRoute, Router, ActivationEnd } from '@angular/router';
 
 import { filter } from 'rxjs/operators';
@@ -20,7 +20,7 @@ import { AdminService } from '@app/services/preferences/admin.service';
     standalone: false
 })
 
-export class PreferenceComponent implements OnInit, OnDestroy, AfterViewInit {
+export class PreferenceComponent implements AfterViewInit {
     private authenticationService = inject(AuthenticationService);
     private router = inject(Router);
     private _route = inject(ActivatedRoute);
@@ -109,9 +109,6 @@ export class PreferenceComponent implements OnInit, OnDestroy, AfterViewInit {
         return this.linkDictionary?.[pageId] || pageId;
     }
 
-    ngOnInit() {
-
-    }
     access(pageId, funcName): boolean {
         return !!this.isAccess[pageId] && !!this.isAccess[pageId][funcName];
     }
@@ -128,7 +125,6 @@ export class PreferenceComponent implements OnInit, OnDestroy, AfterViewInit {
             linked.classList.add('activated');
         }
     }
-    ngOnDestroy() { }
 }
 
 export class FileUploadModel {

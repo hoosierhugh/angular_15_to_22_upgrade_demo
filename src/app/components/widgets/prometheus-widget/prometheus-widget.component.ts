@@ -1,5 +1,5 @@
 import { DateTimeRangeService, DateTimeTick, Timestamp } from '@app/services/data-time-range.service';
-import { Component, OnInit, Input, Output, EventEmitter, OnDestroy, AfterViewInit, ChangeDetectionStrategy, inject } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter, OnDestroy, ChangeDetectionStrategy, inject } from '@angular/core';
 import { SettingPrometheusWidgetComponent } from './setting-prometheus-widget.component';
 import { PrometheusService } from '@app/services/prometheus.service';
 import { MatDialog } from '@angular/material/dialog';

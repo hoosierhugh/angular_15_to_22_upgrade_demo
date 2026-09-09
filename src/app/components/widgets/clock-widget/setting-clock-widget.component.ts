@@ -2,7 +2,7 @@ import { Component, ChangeDetectionStrategy, ChangeDetectorRef, inject } from '@
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 
 import { TranslateService } from '@ngx-translate/core'
-import { ClockConfig, TimeZone } from './clock-widget.component';
+import { ClockConfig } from './clock-widget.component';
 
 import * as _moment from 'moment-timezone';
 const moment = _moment;

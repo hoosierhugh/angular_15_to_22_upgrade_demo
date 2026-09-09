@@ -142,7 +142,6 @@ export class CodeStyleSmartInputFieldComponent implements AfterViewInit {
       if (labelsData && labelsData.data && labelsData.data.data.length > 0) {
         labels = labelsData.data.data.map(i => i.value);
       }
-      const readyAdded: any = this.getObject(this.editor.innerText);
       console.log({ labels });
       this.popupList = labels.sort();
       if (this.popupList.length > 0) {

@@ -24,7 +24,6 @@ import { COMMA, ENTER } from '@angular/cdk/keycodes';
 import { ConstValue } from '@app/models';
 import { FormControl } from '@angular/forms';
 import { TranslateService } from '@ngx-translate/core';
-import { MatCheckboxChange } from '@angular/material/checkbox';
 
 interface SearchFieldItem {
   field_name: string;
@@ -413,10 +412,6 @@ export class ProtosearchWidgetComponent implements IWidget, OnInit, OnDestroy, A
             }
           });
         } else if (this._cache?.fields) {
-          const cacheQuery = this.searchService.getLocalStorageQuery(
-            true
-          );
-
           this.fields?.forEach((item) => {
             if (
               item.type === 'array_string' &&
@@ -1379,7 +1374,7 @@ export class ProtosearchWidgetComponent implements IWidget, OnInit, OnDestroy, A
   }
 
   async onSearchTabAdd(searchObj) {
-    const { id, title, query, name, config } = searchObj;
+    const { id, name, config } = searchObj;
     const searchTab: any = {};
 
     searchTab.data = {

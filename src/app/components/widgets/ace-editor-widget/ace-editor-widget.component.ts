@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, Output, EventEmitter, OnDestroy, ChangeDetectionStrategy, ChangeDetectorRef, inject } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter, ChangeDetectionStrategy, ChangeDetectorRef, inject } from '@angular/core';
 import { SettingsAceEditorWidgetComponent } from './settings-ace-editor-widget.component';
 import { MatDialog } from '@angular/material/dialog';
 import { IWidget } from '../IWidget';
@@ -32,7 +32,7 @@ export interface AceEditorConfig {
     minHeight: 300,
     minWidth: 300
 })
-export class AceEditorWidgetComponent implements IWidget, OnInit, OnDestroy {
+export class AceEditorWidgetComponent implements IWidget, OnInit {
     dialog = inject(MatDialog);
     private cdr = inject(ChangeDetectorRef);
     translateService = inject(TranslateService);
@@ -100,5 +100,4 @@ export class AceEditorWidgetComponent implements IWidget, OnInit, OnDestroy {
         void this.openDialog();
     }
 
-    ngOnDestroy() { }
 }

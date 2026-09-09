@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, Output, EventEmitter, ChangeDetectionStrategy, ChangeDetectorRef, ElementRef, ViewChild, inject } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter, ChangeDetectionStrategy, ChangeDetectorRef, inject } from '@angular/core';
 import { ExportCallService, FileType } from '@app/services/export/call.service';
 import { Functions } from '@app/helpers/functions';
 import { CopyService, PreferenceAdvancedService } from '@app/services';
@@ -252,9 +252,9 @@ export class TabExportComponent implements OnInit, AfterViewInit {
       }
     });
 
-    for (const [key, callid] of Object.entries(sdp)) {
+    for (const callid of Object.values(sdp)) {
 
-      for (const [subkey, sdpEl] of Object.entries(callid)) {
+      for (const sdpEl of Object.values(callid)) {
         if (!this.pcapsuleIP.some(ip => ip.src_ip === sdpEl.mediaIpAudio && ip.src_port === sdpEl.mediaPortAudio)) {
           this.pcapsuleIP.push({
             src_ip: sdpEl.mediaIpAudio,

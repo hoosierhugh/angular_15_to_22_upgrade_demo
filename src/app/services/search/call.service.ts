@@ -3,7 +3,6 @@ import { Observable } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 import { environment } from '@environments/environment';
 import { SearchCallModel } from '../../models/search-call.model';
-import { map } from 'rxjs/operators';
 
 export interface SearchCallResponse<T = unknown> {
     data?: T;

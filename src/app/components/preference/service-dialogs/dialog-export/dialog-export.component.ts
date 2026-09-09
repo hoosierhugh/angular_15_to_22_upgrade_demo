@@ -1,7 +1,5 @@
-import { Component, ChangeDetectionStrategy, ViewChild, inject } from '@angular/core';
-import { FormControl, Validators } from '@angular/forms';
-import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { AuthenticationService } from '@app/services';
+import { Component, ChangeDetectionStrategy, inject } from '@angular/core';
+import { MAT_DIALOG_DATA } from '@angular/material/dialog';
 
 @Component({
     selector: 'app-dialog-export',

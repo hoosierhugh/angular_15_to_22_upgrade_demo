@@ -41,6 +41,13 @@ module.exports = defineConfig([
       "@angular-eslint/prefer-on-push-component-change-detection": "off",
       // Defer the existing any-to-unknown/type refactor to a separate pass.
       "@typescript-eslint/no-explicit-any": "off",
+      // Parameters are often required by framework/callback signatures even
+      // when a particular implementation does not use them. Locals and
+      // imports remain checked and must be removed when unused.
+      "@typescript-eslint/no-unused-vars": [
+        "error",
+        { args: "none", caughtErrors: "none" },
+      ],
     },
   },
   {

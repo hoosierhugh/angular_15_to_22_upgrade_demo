@@ -1,11 +1,10 @@
-import { Component, OnInit, OnDestroy, ChangeDetectionStrategy, ChangeDetectorRef, ViewChild, AfterViewInit, Input, inject } from '@angular/core';
+import { Component, OnInit, ChangeDetectionStrategy, ChangeDetectorRef, ViewChild, AfterViewInit, Input, inject } from '@angular/core';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatDialog } from '@angular/material/dialog';
 import {
-    PreferenceAliasService,
-    PreferenceIpAliasService
+    PreferenceAliasService
 } from '@app/services/preferences/index';
 import {
     DialogAliasComponent,
@@ -14,13 +13,10 @@ import {
 } from '@app/components/preference/dialogs';
 import {
     PreferenceAlias,
-    PreferenceIpAlias,
 } from '@app/models';
 import { AlertService, AuthenticationService } from '@app/services';
-import { DialogImportComponent } from '@app/components/preference/service-dialogs';
 import { PreferencesComponentMapping } from '@app/models/preferences-component-mapping';
 
-import  moment from 'moment';
 import { Functions } from '@app/helpers/functions';
 import { ComponentType } from '@angular/cdk/portal';
 @Component({
@@ -31,7 +27,7 @@ import { ComponentType } from '@angular/cdk/portal';
     standalone: false
 })
 
-export class PageAliasComponent implements OnInit, OnDestroy, AfterViewInit {
+export class PageAliasComponent implements OnInit, AfterViewInit {
     private authenticationService = inject(AuthenticationService);
     private alertService = inject(AlertService);
     private service = inject(PreferenceAliasService);
@@ -112,17 +108,12 @@ export class PageAliasComponent implements OnInit, OnDestroy, AfterViewInit {
         this.dataSource.filter = this.filter.trim().toLowerCase();
         this.cdr.detectChanges();
     }
-    ngOnDestroy() {
-
-    }
     settingDialog(item: PreferenceAlias | null = null, type?: string) {
         const isCopy = type === 'copy';
-        let _result;
         const onOpenDialog = (result) => {
             if (!result) {
                 return;
             }
-            _result = result;
             result.isCopy = isCopy;
             this.service[result.isnew ? 'add' : (isCopy ? 'copy' : 'update')](result.data)
                 .toPromise()

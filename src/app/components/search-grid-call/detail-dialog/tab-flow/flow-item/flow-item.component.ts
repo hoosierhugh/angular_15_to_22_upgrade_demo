@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, Output, EventEmitter, ChangeDetectionStrategy, AfterViewChecked, ChangeDetectorRef, inject } from '@angular/core';
+import { Component, Input, Output, EventEmitter, ChangeDetectionStrategy, AfterViewChecked, ChangeDetectorRef, inject } from '@angular/core';
 import { Functions } from '@app/helpers/functions';
 
 @Component({

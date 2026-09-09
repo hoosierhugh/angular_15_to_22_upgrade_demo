@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, ChangeDetectionStrategy, ChangeDetectorRef, EventEmitter, Output, AfterViewInit, inject } from '@angular/core';
+import { Component, Input, ChangeDetectionStrategy, ChangeDetectorRef, EventEmitter, Output, AfterViewInit, inject } from '@angular/core';
 import { Functions } from '@app/helpers/functions';
 
 @Component({
@@ -8,7 +8,7 @@ import { Functions } from '@app/helpers/functions';
     changeDetection: ChangeDetectionStrategy.OnPush,
     standalone: false
 })
-export class TabLogsComponent implements OnInit, AfterViewInit {
+export class TabLogsComponent implements AfterViewInit {
     private cdr = inject(ChangeDetectorRef);
 
     _data: LogEntry[] = [];
@@ -44,8 +44,6 @@ export class TabLogsComponent implements OnInit, AfterViewInit {
     }
     @Output() ready = new EventEmitter<void>();
 
-    ngOnInit() {
-    }
     ngAfterViewInit() {
 
         setTimeout(() => {

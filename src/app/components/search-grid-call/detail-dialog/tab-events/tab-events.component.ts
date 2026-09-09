@@ -1,4 +1,4 @@
-import { Component, Input, AfterViewChecked, Output, EventEmitter, AfterViewInit, ChangeDetectionStrategy } from '@angular/core';
+import { Component, Input, Output, EventEmitter, AfterViewInit, ChangeDetectionStrategy } from '@angular/core';
 
 @Component({
     selector: 'app-tab-events',

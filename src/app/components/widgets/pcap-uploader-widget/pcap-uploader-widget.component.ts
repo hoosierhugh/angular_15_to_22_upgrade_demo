@@ -1,6 +1,6 @@
 import { AlertService } from '@it-app/services/alert.service';
 import { PcapUploaderService } from './pcap-uploader.service';
-import { Component, Input, Output, EventEmitter, AfterViewInit, ViewChild, ChangeDetectorRef, ElementRef, ChangeDetectionStrategy, OnInit, OnDestroy, inject } from '@angular/core';
+import { Component, Input, Output, EventEmitter, AfterViewInit, ViewChild, ChangeDetectorRef, ElementRef, ChangeDetectionStrategy, OnInit, inject } from '@angular/core';
 import { Widget } from '@app/helpers/widget';
 import { IWidget } from '../IWidget';
 import { TranslateService } from '@ngx-translate/core'
@@ -22,7 +22,7 @@ import { TranslateService } from '@ngx-translate/core'
     minHeight: 300,
     minWidth: 300
 })
-export class PcapUploaderWidgetComponent implements IWidget, AfterViewInit, OnInit, OnDestroy {
+export class PcapUploaderWidgetComponent implements IWidget, AfterViewInit, OnInit {
     private pcapUploaderService = inject(PcapUploaderService);
     private cdr = inject(ChangeDetectorRef);
     alertService = inject(AlertService);
@@ -101,5 +101,4 @@ export class PcapUploaderWidgetComponent implements IWidget, AfterViewInit, OnIn
 
     ngOnInit() { }
 
-    ngOnDestroy() { }
 }

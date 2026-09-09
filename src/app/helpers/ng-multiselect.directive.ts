@@ -1,5 +1,5 @@
 import { MatFormFieldControl } from '@angular/material/form-field';
-import { Directive, HostBinding, Input, OnDestroy, DoCheck, ChangeDetectorRef, OnInit, inject } from '@angular/core';
+import { Directive, HostBinding, Input, OnDestroy, DoCheck, ChangeDetectorRef, inject } from '@angular/core';
 import { Subject } from 'rxjs';
 import {
     NgControl,
@@ -41,7 +41,7 @@ export class NgSelectErrorStateMatcher {
     standalone: false
 })
 export class NgSelectFormFieldControlDirective
-    implements MatFormFieldControl<unknown>, OnDestroy, DoCheck, OnInit {
+    implements MatFormFieldControl<unknown>, OnDestroy, DoCheck {
     private host = inject(NgSelectComponent);
     private cdr = inject(ChangeDetectorRef);
     ngControl = inject(NgControl, { optional: true, self: true });
@@ -174,7 +174,6 @@ export class NgSelectFormFieldControlDirective
     private _disabled = false;
     private _value: unknown;
 
-    ngOnInit() {}
     ngOnDestroy() {
         this.stateChanges.complete();
     }
@@ -207,7 +206,6 @@ export class NgSelectFormFieldControlDirective
     }
 
     onContainerClick(event: MouseEvent): void {
-        const target = event.target as HTMLElement;
             this.host.focus();
             this.host.open();
         }

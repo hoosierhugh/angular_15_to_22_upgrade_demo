@@ -2,12 +2,7 @@ import { Injectable, inject } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { environment } from '@environments/environment';
 
-enum Stream {
-  rtpagent,
-  picserver,
-  homerapp
-}
-export type StreamType = keyof typeof Stream;
+export type StreamType = 'rtpagent' | 'picserver' | 'homerapp';
 
 interface AdminActionResponse {
   data?: {

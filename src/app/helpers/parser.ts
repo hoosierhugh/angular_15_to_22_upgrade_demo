@@ -990,8 +990,6 @@ export class TransactionServiceProcessor {
       return messages;
     }
 
-    const messagesLength = messages.length;
-    const inc = 0;
     const dtmf: any[] = [];
     dtmfData.forEach((item) => {
       if (item.DTMF && item.DTMF.length > 0) {

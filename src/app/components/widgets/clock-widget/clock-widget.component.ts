@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, Output, EventEmitter, ElementRef, ViewChild, ChangeDetectionStrategy, ChangeDetectorRef, OnDestroy, inject } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter, ElementRef, ViewChild, ChangeDetectionStrategy, ChangeDetectorRef, inject } from '@angular/core';
 import { Widget, WidgetArrayInstance } from '@app/helpers/widget';
 import { SettingClockWidgetComponent } from './setting-clock-widget.component';
 import { MatDialog } from '@angular/material/dialog';
@@ -46,7 +46,7 @@ export interface ClockConfig {
     minHeight: 300,
     minWidth: 300
 })
-export class ClockWidgetComponent implements IWidget, OnDestroy, OnInit {
+export class ClockWidgetComponent implements IWidget, OnInit {
     dialog = inject(MatDialog);
     private cdr = inject(ChangeDetectorRef);
 
@@ -179,6 +179,4 @@ export class ClockWidgetComponent implements IWidget, OnDestroy, OnInit {
 
         this.cdr.detectChanges();
     }
-    ngOnDestroy() { }
-
 }

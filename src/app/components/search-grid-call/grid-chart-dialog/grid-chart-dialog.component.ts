@@ -254,7 +254,6 @@ export class DialogChartGridDialogComponent
             }
         }
         const rowData = {};
-        const keyData = {};
         const _keysArray = [];
         const _labelsArray = [];
         const _fillsArray = [];
@@ -376,7 +375,7 @@ export class DialogChartGridDialogComponent
                     }
                 }
             });
-            for (const [key, value] of Object.entries(rowData)) {
+            for (const value of Object.values(rowData)) {
                 this.gridData.push(value);
             }
             this.gridData.sort((a, b) => b.value - a.value);
@@ -488,8 +487,6 @@ export class DialogChartGridDialogComponent
     }
 
     setOptionsForChart() {
-        const type = this.chartSubType;
-
         if (this.chartType === 'column') {
             this.chartSideX = 'Horizontal';
             this.chartSideY = 'Vertical';

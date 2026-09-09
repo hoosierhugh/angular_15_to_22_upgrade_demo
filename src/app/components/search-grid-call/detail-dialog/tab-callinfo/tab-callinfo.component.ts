@@ -164,10 +164,6 @@ export class TabCallinfoComponent implements AfterViewInit {
               trans?.LastMessage - trans?.FirstMessage;
 
             if (message?.method === 'INVITE' && trans?.timeInvite === 0) {
-              const ipsfiltered = Object.keys(this.ipAlias).map((m) => ({
-                name: this.ipAlias[m],
-                value: this.getzero(m),
-              }));
               trans.timeInvite = messageTime;
               trans.CdrStartTime = trans?.timeInvite;
               trans.UAC =

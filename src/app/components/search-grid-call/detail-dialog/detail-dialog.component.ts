@@ -2,7 +2,7 @@ import { CallIDColor } from '@app/models/CallIDColor.model';
 import { Component, Input, Output, EventEmitter, OnInit, ChangeDetectionStrategy, ChangeDetectorRef, OnDestroy, inject } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { ActivatedRoute } from '@angular/router';
-import { Functions, setStorage, getStorage } from '@app/helpers/functions';
+import { Functions } from '@app/helpers/functions';
 import { FlowItemType } from '@app/models/flow-item-type.model';
 import {
   PreferenceAdvancedService,
@@ -339,7 +339,7 @@ export class DetailDialogComponent implements OnInit, OnDestroy {
       /** if exist an agent on hepsub list */
 
       if (HepList.includes(agent.type)) {
-        const agReq = this.formatRequest(agent, this.agentRequest);
+        this.formatRequest(agent, this.agentRequest);
       }
     });
   }
@@ -439,8 +439,6 @@ export class DetailDialogComponent implements OnInit, OnDestroy {
     mData.data.item = Functions.cloneObject({
       raw: mData?.data?.raw || mData?.data?.message,
     });
-
-    const uuid = row?.data?.item?.uuid;
 
     mData.data.messageDetailTableData = Object.entries(
       Functions.cloneObject(mData.data)

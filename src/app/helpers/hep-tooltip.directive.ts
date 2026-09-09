@@ -1,4 +1,4 @@
-import { Directive, Input, TemplateRef, OnInit, ElementRef, HostListener, ViewContainerRef, Component, inject } from '@angular/core';
+import { Directive, Input, TemplateRef, OnInit, ElementRef, HostListener, ViewContainerRef, inject } from '@angular/core';
 
 import {
     ComponentType,

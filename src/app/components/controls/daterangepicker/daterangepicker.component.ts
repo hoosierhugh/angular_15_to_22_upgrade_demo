@@ -408,14 +408,6 @@ export class DaterangepickerComponent implements OnInit {
 
     /** Update model */
     private _updateModel(elem: string) {
-        let _hour;
-        if (elem == "left") {
-            _hour = this.hourleft;
-        }
-        else {
-            _hour = this.hourright;
-        }
-
         //this._dateAdapter.setHour(this._model, _hour);
         //this._dateAdapter.setMinute(this._model, this.minute);
         //this._dateAdapter.setSecond(this._model, this.second);
@@ -516,24 +508,18 @@ export class DaterangepickerComponent implements OnInit {
     }
 
     renderTimePicker(side: SideEnum) {
-        let selected, minDate;
-        const maxDate = this.maxDate;
+        let selected;
         if (side === SideEnum.left) {
-            selected = this.startDate.clone(),
-                minDate = this.minDate;
+            selected = this.startDate.clone();
         } else if (side === SideEnum.right && this.endDate) {
-            selected = this.endDate.clone(),
-                minDate = this.startDate;
+            selected = this.endDate.clone();
         } else if (side === SideEnum.right && !this.endDate) {
             // don't have an end date, use the start date then put the selected time for the right side as the time
             selected = this._getDateWithTime(this.startDate, SideEnum.right);
             if (selected.isBefore(this.startDate)) {
                 selected = this.startDate.clone();  //set it back to the start date the time was backwards
             }
-            minDate = this.startDate;
         }
-        const start = this.timePicker24Hour ? 0 : 1;
-        const end = this.timePicker24Hour ? 23 : 12;
         this.timepickerVariables[side] = {
             hours: [],
             minutes: [],
@@ -890,9 +876,6 @@ export class DaterangepickerComponent implements OnInit {
     }
 
     clickApply(e?) {
-        const CurrentDate1 = this.startDate.unix();
-        const CurrentDate2 = this.startDate.format();
-
         if (!this.singleDatePicker && this.startDate && !this.endDate) {
             this.endDate = this._getDateWithTime(this.startDate, SideEnum.right);
 

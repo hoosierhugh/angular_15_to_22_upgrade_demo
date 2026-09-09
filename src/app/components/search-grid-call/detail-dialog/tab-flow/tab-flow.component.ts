@@ -9,7 +9,6 @@ import {
   ArrowEventState,
 } from '@app/services/message-details.service';
 import {
-  CdkVirtualScrollViewport,
   FixedSizeVirtualScrollStrategy,
   VIRTUAL_SCROLL_STRATEGY,
 } from '@angular/cdk/scrolling';
@@ -188,7 +187,6 @@ export class TabFlowComponent
             itemId++;
             break;
         }
-        const itemData: any = this.arrayItemsVisible[itemId];
         this.onClickMessageRow(arrData[itemId], data.metadata.mouseEventData, {
           isLeft: !!arrData[itemId - 1],
           isRight: !!arrData[itemId + 1],

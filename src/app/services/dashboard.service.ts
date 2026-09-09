@@ -1,4 +1,4 @@
-import { Functions, log, setStorage } from '@app/helpers/functions';
+import { Functions, setStorage } from '@app/helpers/functions';
 import { HttpGetBuffer } from '@app/helpers/http-get-buffer';
 import { ApiResponse, ConstValue, DashboardContentModel, DashboardData, DashboardModel, UserConstValue } from '@app/models';
 import { Injectable, inject } from '@angular/core';

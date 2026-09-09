@@ -194,7 +194,6 @@ import { TranslateModule, TranslateLoader, TranslateCompiler } from '@ngx-transl
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 import { TranslateLinkCompiler } from './helpers/translate-link-complier';
 import { TransactionGraphSettingsComponent } from './components/controls/transaction-graph-settings/transaction-graph-settings.component';
-import { CopyComponent } from './components/controls/copy/copy.component';
 import { CopyModule } from './components/controls/copy/copy.module';
 import { CodeProtoSelectorComponent } from './components/widgets/smart-input-widget/code-proto-selector/code-proto-selector.component';
 import { PageProfileComponent } from './components/preference/pages/page-profile/page-profile.component';

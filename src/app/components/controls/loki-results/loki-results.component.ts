@@ -1,5 +1,5 @@
 import { AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, EventEmitter, Input, OnInit, Output, ViewEncapsulation, inject } from '@angular/core';
-import { Functions, log } from '@app/helpers/functions';
+import { Functions } from '@app/helpers/functions';
 import { PreferenceAdvancedService, SearchRemoteService, SearchService } from '@app/services';
 import { DateTimeRangeService } from '@app/services/data-time-range.service';
 import { ModulesService } from '@app/services/modules.service';

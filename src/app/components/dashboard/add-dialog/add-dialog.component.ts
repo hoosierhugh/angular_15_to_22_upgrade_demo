@@ -1,6 +1,6 @@
 import { Component, ChangeDetectionStrategy, ChangeDetectorRef, inject } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { WidgetArray, WidgetArrayInstance } from '@app/helpers/widget';
+import { WidgetArray } from '@app/helpers/widget';
 import { PreferenceAdvancedService } from '@app/services';
 import { ProxyService } from '@app/services/proxy.service';
 import { lastValueFrom } from 'rxjs';

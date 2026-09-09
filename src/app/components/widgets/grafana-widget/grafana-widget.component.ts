@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, Output, EventEmitter, OnDestroy, AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, ElementRef, ViewChild, inject } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter, OnDestroy, ChangeDetectionStrategy, ChangeDetectorRef, ElementRef, ViewChild, inject } from '@angular/core';
 import { SettingIframeWidgetComponent } from './setting-grafana-widget.component';
 import { MatDialog } from '@angular/material/dialog';
 import { DateTimeRangeService, DateTimeTick, Timestamp } from '@app/services/data-time-range.service';

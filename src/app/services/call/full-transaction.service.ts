@@ -31,7 +31,7 @@ export class FullTransactionService {
     return new Observable<any>(observer => {
       let tData;
       const next = type => observer.next({ type, data: tData });
-      let tr = false, dt = false, qo = false, lo = false, rc = false;
+      let tr = false, dt = false, qo = false, lo = false;
       const ready = (type, fn = null) => {
         // console.log('ready', type)
         if (this.isReadyAfterCollectData) {

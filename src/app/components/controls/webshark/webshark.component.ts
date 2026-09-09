@@ -3,7 +3,7 @@ import { WebsharkDictionaryApiService, IdType } from './webshark-dictionary-api.
 import { WebsharkDictionary } from './webshark-dictionary';
 import { Functions, log } from '@app/helpers/functions';
 import { Input, ChangeDetectionStrategy, ChangeDetectorRef, AfterViewInit, Output, EventEmitter, inject } from '@angular/core';
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnDestroy } from '@angular/core';
 import { FlatTreeControl } from '@angular/cdk/tree';
 import { MatTreeFlatDataSource, MatTreeFlattener } from '@angular/material/tree';
 import  moment from 'moment';
@@ -27,7 +27,7 @@ interface FlatNode {
     changeDetection: ChangeDetectionStrategy.OnPush,
     standalone: false
 })
-export class WebsharkComponent implements OnInit, AfterViewInit, OnDestroy {
+export class WebsharkComponent implements AfterViewInit, OnDestroy {
     private websharkDictionaryApiService = inject(WebsharkDictionaryApiService);
     tooltipService = inject(TooltipService);
     private cdr = inject(ChangeDetectorRef);
@@ -298,9 +298,6 @@ export class WebsharkComponent implements OnInit, AfterViewInit, OnDestroy {
             .map(
                 i => i.replace(/(\w){1}/, (g, a) => ('' + a).toUpperCase()))
             .join(' ');
-    }
-
-    ngOnInit() {
     }
 
     showMessage(event) {

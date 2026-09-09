@@ -1,4 +1,4 @@
-import { Component, ViewChild, OnInit, AfterViewInit, OnDestroy, ChangeDetectionStrategy, ChangeDetectorRef, inject } from '@angular/core';
+import { Component, ViewChild, OnInit, AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, inject } from '@angular/core';
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { AuthenticationService, DashboardService } from '@app/services';
 import { Functions } from '@app/helpers/functions';
@@ -14,7 +14,7 @@ import { environment } from '@environments/environment';
     standalone: false
 })
 export class AddDashboardDialogComponent
-  implements OnInit, AfterViewInit, OnDestroy
+  implements OnInit, AfterViewInit
 {
   dialogRef = inject<MatDialogRef<AddDashboardDialogComponent>>(MatDialogRef);
   private dashboardService = inject(DashboardService);
@@ -209,8 +209,6 @@ export class AddDashboardDialogComponent
     this.nameNewPanel.markAsTouched();
     this.cdr.detectChanges();
   }
-
-  ngOnDestroy() {}
 
   dNameValidator(dashboardControl: AbstractControl) {
     return new Promise((resolve) => {

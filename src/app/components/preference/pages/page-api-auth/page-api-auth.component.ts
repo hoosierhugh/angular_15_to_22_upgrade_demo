@@ -1,5 +1,5 @@
 
-import { Component, OnInit, OnDestroy, ChangeDetectorRef, ViewChild, AfterViewInit, Input, ChangeDetectionStrategy, inject } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef, ViewChild, AfterViewInit, Input, ChangeDetectionStrategy, inject } from '@angular/core';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { MatPaginator } from '@angular/material/paginator';
@@ -27,7 +27,7 @@ import { ComponentType } from '@angular/cdk/portal';
     changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false
 })
-export class PageApiAuthComponent implements OnInit, AfterViewInit, OnDestroy {
+export class PageApiAuthComponent implements OnInit, AfterViewInit {
     private authenticationService = inject(AuthenticationService);
     private alertService = inject(AlertService);
     private service = inject(PreferenceAuthKeyService);
@@ -104,9 +104,6 @@ export class PageApiAuthComponent implements OnInit, AfterViewInit, OnDestroy {
     applyFilter() {
         this.dataSource.filter = this.filter.trim().toLowerCase();
         this.cdr.detectChanges();
-    }
-    ngOnDestroy() {
-
     }
     settingDialog(item: PreferenceAuthKey | null = null, type?: string) {
         const isCopy = type === 'copy';

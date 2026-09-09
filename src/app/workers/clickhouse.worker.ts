@@ -121,7 +121,6 @@ class ClickhouseProcessor {
         tags: item.tags.map(tag => tag + ': ' + item.data[tag]).join(', ')
       };
     });
-    let fillKey = 0;
     const formattedData = formattedSeries.reduce<Record<string, { tags: string; value: unknown[] }>>((a, b) => {
       if (!a[b.label]) {
         a[b.label] = {
@@ -154,7 +153,6 @@ class ClickhouseProcessor {
         label: key,
         data: value.value
       });
-      fillKey++;
     });
     const outData = {
       data: chartData,

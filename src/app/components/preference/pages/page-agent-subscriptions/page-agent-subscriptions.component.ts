@@ -1,5 +1,5 @@
 
-import { Component, OnInit, OnDestroy, ChangeDetectorRef, ViewChild, AfterViewInit, Input, ChangeDetectionStrategy, inject } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef, ViewChild, AfterViewInit, Input, ChangeDetectionStrategy, inject } from '@angular/core';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { MatPaginator } from '@angular/material/paginator';
@@ -26,7 +26,7 @@ import { ComponentType } from '@angular/cdk/portal';
     changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false
 })
-export class PageAgentSubscriptionsComponent implements OnInit, AfterViewInit, OnDestroy {
+export class PageAgentSubscriptionsComponent implements OnInit, AfterViewInit {
     private authenticationService = inject(AuthenticationService);
     private alertService = inject(AlertService);
     private service = inject(PreferenceAgentsubService);
@@ -104,17 +104,12 @@ export class PageAgentSubscriptionsComponent implements OnInit, AfterViewInit, O
         this.dataSource.filter = this.filter.trim().toLowerCase();
         this.cdr.detectChanges();
     }
-    ngOnDestroy() {
-
-    }
     settingDialog(item: PreferenceAgentsub | null = null, type?: string) {
         const isCopy = type === 'copy';
-        let _result;
         const onOpenDialog = (result) => {
             if (!result) {
                 return;
             }
-            _result = result;
             result.isCopy = isCopy;
             this.service[result.isnew ? 'add' : (isCopy ? 'copy' : 'update')](result.data)
                 .toPromise()

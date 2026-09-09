@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewEncapsulation, ChangeDetectorRef, ChangeDetectionStrategy, ViewChild, ElementRef, inject } from '@angular/core';
+import { Component, OnInit, ViewEncapsulation, ChangeDetectorRef, ChangeDetectionStrategy, ViewChild, inject } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { AbstractControl, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { first } from 'rxjs/operators';
@@ -9,8 +9,6 @@ import { AuthType, AuthTypeCollection } from '@app/services/authentication.servi
 import { UserSecurityService } from '@app/services/user-security.service';
 import { MatDialog } from '@angular/material/dialog';
 
-import { ConstValue } from '@app/models/const-value.model';
-import { Functions, setStorage } from '@app/helpers/functions';
 
 import { TranslateService } from '@ngx-translate/core';
 
@@ -55,8 +53,6 @@ export class LoginComponent implements OnInit {
     isDirect = false;
     // authentication;
     constructor() {
-        const translateService = this.translateService;
-
         // redirect to home if already logged in
         if (this.authenticationService?.currentUserValue ) {
             this.router.navigateByUrl('/');
@@ -85,7 +81,6 @@ export class LoginComponent implements OnInit {
                 this.cdr.detectChanges();
             })
         }
-        const browserLang = translateService.getBrowserLang();
         this.translateService.get('LINK').subscribe(data => {
             return data;
         }, error => {

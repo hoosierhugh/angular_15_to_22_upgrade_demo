@@ -1,4 +1,4 @@
-import { Component, ViewChild, ChangeDetectionStrategy, OnInit, ChangeDetectorRef, inject } from '@angular/core';
+import { Component, ChangeDetectionStrategy, OnInit, ChangeDetectorRef, inject } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { Functions } from '@app/helpers/functions';
 import { AuthenticationService, AlertService, PreferenceUserService, PreferenceAdvancedService } from '@app/services';

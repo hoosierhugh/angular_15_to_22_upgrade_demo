@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, ChangeDetectionStrategy, ChangeDetectorRef, ViewChild, AfterViewInit, Input, inject } from '@angular/core';
+import { Component, OnInit, ChangeDetectionStrategy, ChangeDetectorRef, ViewChild, AfterViewInit, Input, inject } from '@angular/core';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { MatPaginator } from '@angular/material/paginator';
@@ -26,7 +26,7 @@ import { ComponentType } from '@angular/cdk/portal';
     standalone: false
 })
 
-export class PageUserSettingsComponent implements OnInit, OnDestroy, AfterViewInit {
+export class PageUserSettingsComponent implements OnInit, AfterViewInit {
     private authenticationService = inject(AuthenticationService);
     private alertService = inject(AlertService);
     private service = inject(PreferenceUserSettingsService);
@@ -102,17 +102,12 @@ export class PageUserSettingsComponent implements OnInit, OnDestroy, AfterViewIn
         this.dataSource.filter = this.filter.trim().toLowerCase();
         this.cdr.detectChanges();
     }
-    ngOnDestroy() {
-
-    }
     settingDialog(item: PreferenceUsersSettings | null = null, type?: string) {
         const isCopy = type === 'copy';
-        let _result;
         const onOpenDialog = (result) => {
             if (!result) {
                 return;
             }
-            _result = result;
             result.isCopy = isCopy;
             this.service[result.isnew ? 'add' : (isCopy ? 'copy' : 'update')](result.data)
                 .toPromise()

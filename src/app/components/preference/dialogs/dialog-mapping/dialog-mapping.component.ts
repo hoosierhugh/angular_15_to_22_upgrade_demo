@@ -1,4 +1,4 @@
-import { Component, ChangeDetectionStrategy, ViewChild, ChangeDetectorRef, OnInit, AfterViewInit, inject } from '@angular/core';
+import { Component, ChangeDetectionStrategy, ViewChild, ChangeDetectorRef, AfterViewInit, inject } from '@angular/core';
 import { FormControl, Validators } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { PreferenceScriptsService } from '@app/services';
@@ -6,7 +6,6 @@ import { TranslateService } from '@ngx-translate/core'
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { MatPaginator } from '@angular/material/paginator';
-import { MatDialog } from '@angular/material/dialog';
 import { CrudDialogData, PreferenceScripts } from '@app/models';
 
 interface MappingDialogRecord {
@@ -31,7 +30,7 @@ interface MappingDialogRecord {
     changeDetection: ChangeDetectionStrategy.OnPush,
     standalone: false
 })
-export class DialogMappingComponent implements OnInit, AfterViewInit {
+export class DialogMappingComponent implements AfterViewInit {
   dialogRef = inject<MatDialogRef<DialogMappingComponent>>(MatDialogRef);
   private scriptService = inject(PreferenceScriptsService);
   translateService = inject(TranslateService);
@@ -165,7 +164,6 @@ export class DialogMappingComponent implements OnInit, AfterViewInit {
 
     this.isValidForm = true;
   }
-  ngOnInit(): void {}
 
   ngAfterViewInit() {
     const options = {

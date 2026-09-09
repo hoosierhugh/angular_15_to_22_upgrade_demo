@@ -2,7 +2,7 @@ import { Input, Output, Component, ViewChild, EventEmitter, AfterViewInit, Chang
 import { MatDialog } from '@angular/material/dialog';
 import { Router } from '@angular/router';
 import { IWidget } from '../IWidget';
-import { Subscription, Observable, from } from 'rxjs';
+import { Subscription, Observable } from 'rxjs';
 import { Functions } from '@app/helpers/functions';
 import { Widget, WidgetArrayInstance } from '@app/helpers/widget';
 import { map, startWith } from 'rxjs/operators';
@@ -679,7 +679,6 @@ export class SmartInputWidgetComponent
     this.countFieldColumns = result.countFieldColumns;
 
     this._sss.removeProtoSearchConfig(this.widgetId);
-    const _forRestoreFieldsValue = Functions.cloneObject(this.fields);
     this.updateButtonState();
     this.changeSettings.emit({
       config: this.config,

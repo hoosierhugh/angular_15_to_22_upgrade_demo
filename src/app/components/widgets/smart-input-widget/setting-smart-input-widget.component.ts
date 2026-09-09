@@ -3,7 +3,6 @@ import { FormControl } from '@angular/forms';
 import { Component, OnInit, OnDestroy, ChangeDetectionStrategy, ChangeDetectorRef, inject } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA, MatDialog } from '@angular/material/dialog';
 import { DialogAlarmComponent } from '../dialog-alarm/dialog-alarm.component';
-import { ConstValue } from '@app/models';
 import { Functions } from '@app/helpers/functions';
 import { TranslateService } from '@ngx-translate/core'
 

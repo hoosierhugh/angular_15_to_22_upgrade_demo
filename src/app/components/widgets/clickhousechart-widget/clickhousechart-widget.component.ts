@@ -1,7 +1,7 @@
 import { SettingClickhouseChartWidgetComponent } from './setting-clickhousechart-widget.component';
 
 import { CdkVirtualScrollViewport, VIRTUAL_SCROLL_STRATEGY } from '@angular/cdk/scrolling';
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, EventEmitter, Input, OnDestroy, OnInit, Output, ViewChild, ViewEncapsulation, inject } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, EventEmitter, Input, OnInit, Output, ViewChild, ViewEncapsulation, inject } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { CustomVirtualScrollStrategy } from '@app/components/search-grid-call';
 import { Functions } from '@app/helpers/functions';
@@ -48,7 +48,7 @@ interface ClickhouseChartResult {
     minWidth: 300,
 
 })
-export class ClickhouseChartWidgetComponent implements IWidget, OnInit, OnDestroy {
+export class ClickhouseChartWidgetComponent implements IWidget, OnInit {
     dialog = inject(MatDialog);
     private _dtrs = inject(DateTimeRangeService);
     private cdr = inject(ChangeDetectorRef);
@@ -118,7 +118,6 @@ export class ClickhouseChartWidgetComponent implements IWidget, OnInit, OnDestro
                         let text = label.replace(functionRegex, '')
                         text = text.split(', ')
                         const tagCheckRegex = new RegExp(`${wordRegex}:\\s+\\S+`)
-                        const labelNumberRegex = new RegExp(`${wordRegex}:\\s+\\S+`)
                         text = text.map(tag => {
                             if (!tagCheckRegex.test(tag)) {
                                 return null;
@@ -186,9 +185,6 @@ export class ClickhouseChartWidgetComponent implements IWidget, OnInit, OnDestro
             this.update(this.config.chart.type.value);
             this.cdr.detectChanges();
         });
-    }
-    ngOnDestroy() {
-
     }
     generateLegend() {
         if (typeof this._chart !== 'undefined' && typeof this._chart.chart !== 'undefined') {

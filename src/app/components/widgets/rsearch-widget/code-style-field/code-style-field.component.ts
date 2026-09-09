@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, AfterViewInit, Output, EventEmitter, Input, ChangeDetectionStrategy, ChangeDetectorRef, OnChanges, inject } from '@angular/core';
+import { Component, ViewChild, AfterViewInit, Output, EventEmitter, Input, ChangeDetectionStrategy, ChangeDetectorRef, OnChanges, inject } from '@angular/core';
 import { MatMenuTrigger } from '@angular/material/menu';
 import { SearchRemoteService, PreferenceAdvancedService } from '@app/services';
 
@@ -16,7 +16,7 @@ export interface LokiCodeData {
     changeDetection: ChangeDetectionStrategy.OnPush,
     standalone: false
 })
-export class CodeStyleFieldComponent implements OnInit, AfterViewInit, OnChanges {
+export class CodeStyleFieldComponent implements AfterViewInit, OnChanges {
     private _pas = inject(PreferenceAdvancedService);
     private _srs = inject(SearchRemoteService);
     private cdr = inject(ChangeDetectorRef);
@@ -60,8 +60,6 @@ export class CodeStyleFieldComponent implements OnInit, AfterViewInit, OnChanges
         });
     }
 
-    ngOnInit() {
-    }
     ngOnChanges() {
         if (this.queryText && this.editor !== undefined) {
             this.editor.innerText = this.queryText;

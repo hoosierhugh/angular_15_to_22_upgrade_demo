@@ -1,6 +1,6 @@
-import { OnInit, OnDestroy, EventEmitter, Type } from '@angular/core';
+import { EventEmitter, Type } from '@angular/core';
 
-export interface IWidget extends OnInit, OnDestroy {
+export interface IWidget {
     id: string;
     config?: unknown;
     changeSettings?: EventEmitter<unknown>;

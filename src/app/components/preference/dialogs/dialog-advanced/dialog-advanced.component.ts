@@ -1,7 +1,6 @@
 import { Component, ChangeDetectionStrategy, ViewChild, inject } from '@angular/core';
 import { FormControl, Validators } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { Functions } from '@app/helpers/functions';
 import { AuthenticationService } from '@app/services';
 import { TranslateService } from '@ngx-translate/core'
 import { CrudDialogData } from '@app/models';

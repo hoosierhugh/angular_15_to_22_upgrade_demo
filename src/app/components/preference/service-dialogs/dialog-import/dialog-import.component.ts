@@ -1,9 +1,7 @@
 import { HttpEvent, HttpEventType, HttpErrorResponse, HttpResponse } from '@angular/common/http';
-import { Component, ChangeDetectionStrategy, ViewChild, ElementRef, AfterViewInit, OnInit, ChangeDetectorRef, inject } from '@angular/core';
-import { FormControl, Validators } from '@angular/forms';
+import { Component, ChangeDetectionStrategy, ViewChild, ElementRef, AfterViewInit, ChangeDetectorRef, inject } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { FileUploadModel } from '@app/components';
-import { AuthenticationService } from '@app/services';
 import { UploadService } from '@app/services/upload.service';
 import { of } from 'rxjs';
 import { map, tap, last, catchError } from 'rxjs/operators';
@@ -37,7 +35,7 @@ interface UploadFile {
     changeDetection: ChangeDetectionStrategy.OnPush,
     standalone: false
 })
-export class DialogImportComponent implements AfterViewInit, OnInit {
+export class DialogImportComponent implements AfterViewInit {
     uploadService = inject(UploadService);
     translateService = inject(TranslateService);
     dialogRef = inject<MatDialogRef<DialogImportComponent>>(MatDialogRef);
@@ -62,8 +60,7 @@ export class DialogImportComponent implements AfterViewInit, OnInit {
         translateService.setDefaultLang('en')
         this.pageId = data.data.pageId;
     }
-    ngOnInit() {
-    }
+
     ngAfterViewInit() {
         const hsp = e => {
             this.isDragOver = e.type === 'dragover';

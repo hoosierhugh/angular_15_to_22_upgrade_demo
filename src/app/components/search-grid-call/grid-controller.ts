@@ -1,6 +1,6 @@
 import { ColDef, ColumnState } from 'ag-grid-community';
 import { Input, Component, ChangeDetectionStrategy } from '@angular/core';
-import { Functions, getStorage, setStorage } from '@app/helpers/functions';
+import {  getStorage, setStorage } from '@app/helpers/functions';
 import { ConstValue, UserConstValue } from './../../models/const-value.model';
 
 export interface GridSizeSettings {

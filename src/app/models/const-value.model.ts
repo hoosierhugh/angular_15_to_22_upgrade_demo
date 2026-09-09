@@ -1,4 +1,3 @@
-import { VERSION } from '../../VERSION';
 import { Functions } from '@app/helpers/functions';
 import { MOCK_MODE } from '../runtime-mode';
 const PREFIX = MOCK_MODE ? 'HOMER-DEMO-' : 'HOMER-';

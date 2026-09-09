@@ -1,4 +1,4 @@
-import { Component, Input, ChangeDetectionStrategy, OnInit, OnDestroy, inject } from '@angular/core';
+import { Component, Input, ChangeDetectionStrategy, OnInit, inject } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { IWidget } from '../IWidget';
 import { Router } from '@angular/router';
@@ -6,7 +6,7 @@ import { Router } from '@angular/router';
 import { Widget, WidgetArrayInstance } from '@app/helpers/widget';
 import { ConstValue, UserConstValue } from '@app/models';
 import { SearchService } from '@app/services';
-import { Functions, setStorage } from '@app/helpers/functions';
+import { Functions } from '@app/helpers/functions';
 import { TranslateService } from '@ngx-translate/core'
 import { LokiCodeData } from './code-style-field/code-style-field.component';
 
@@ -38,7 +38,7 @@ interface LokiSearchQuery {
   minWidth: 300,
   deprecated: true
 })
-export class RsearchWidgetComponent implements IWidget, OnInit, OnDestroy {
+export class RsearchWidgetComponent implements IWidget, OnInit {
   dialog = inject(MatDialog);
   translateService = inject(TranslateService);
   private router = inject(Router);
@@ -100,5 +100,4 @@ export class RsearchWidgetComponent implements IWidget, OnInit, OnDestroy {
   openDialog(): void {
   }
 
-  ngOnDestroy() { }
 }

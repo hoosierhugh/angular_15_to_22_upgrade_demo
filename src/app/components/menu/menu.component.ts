@@ -17,7 +17,6 @@ import {
     User,
     WidgetModel,
     DashboardModel,
-    ConstValue,
     UserProfile,
 } from '@app/models';
 import { MatDialog } from '@angular/material/dialog';
@@ -29,8 +28,8 @@ import { filter } from 'rxjs/operators';
 import { environment } from '@environments/environment';
 import { MOCK_MODE } from '@app/runtime-mode';
 import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
-import * as widgets from '../widgets';
-import { Functions, setStorage } from '@app/helpers/functions';
+import '../widgets';
+import { Functions } from '@app/helpers/functions';
 import { TranslateService } from '@ngx-translate/core';
 import { TimeFormattingService } from '@app/services/time-formatting.service';
 export interface DashboardData {
@@ -155,7 +154,6 @@ export class MenuComponent implements OnInit, OnDestroy {
     }
 
     async ngOnInit() {
-        const wArr = widgets; /* hack for init all widget on prodaction mode - DON'T REMOVE IT!!!! */
         await this.getFormat();
         await this.getProfile();
         this.isDashboardAdd = await this.userSecurityService.isDashboardAdd();

@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, ChangeDetectionStrategy, ChangeDetectorRef, EventEmitter, Output, inject } from '@angular/core';
+import { Component, ChangeDetectionStrategy, ChangeDetectorRef, EventEmitter, Output, inject } from '@angular/core';
 
 import { CopyService, } from './../../../services';
 import { TranslateService } from '@ngx-translate/core'
@@ -15,7 +15,7 @@ import { AlertProper, AlertSubject, MessageTimer } from '@app/models/alert.model
     standalone: false
 })
 
-export class AlertComponent implements OnInit, OnDestroy {
+export class AlertComponent {
     translateService = inject(TranslateService);
     private copyService = inject(CopyService);
     private cdr = inject(ChangeDetectorRef);
@@ -34,8 +34,7 @@ export class AlertComponent implements OnInit, OnDestroy {
         translateService.setDefaultLang('en')
     }
     @Output() closeAlert = new EventEmitter();
-    ngOnInit() {
-    }
+
     clearMessage(guid: string) {
         clearTimeout(this.messages.get(guid)?.timeout);
         this.guidArray = this.guidArray.filter(guidFromArray => guidFromArray !== guid);
@@ -58,8 +57,6 @@ export class AlertComponent implements OnInit, OnDestroy {
             }, MessageTimer);
             this.messages.set(guid, message);
         }
-    }
-    ngOnDestroy() {
     }
     toggleFull(guid: string) {
         const message = this.messages.get(guid);

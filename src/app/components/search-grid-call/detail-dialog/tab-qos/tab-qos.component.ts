@@ -4,9 +4,8 @@
 
 import { Component, OnInit, Input, Output, EventEmitter, ViewChild, ChangeDetectionStrategy, ChangeDetectorRef, AfterViewInit, HostListener, ElementRef, inject } from '@angular/core';
 import { PreferenceAdvancedService } from '@app/services';
-import { Chart, ChartDataset, ChartType } from 'chart.js';
+import {  ChartDataset, ChartType } from 'chart.js';
 import { BaseChartDirective } from 'ng2-charts';
-import  moment from 'moment';
 
 import { Functions } from '@app/helpers/functions';
 import { WorkerService } from '@services/worker.service';
@@ -205,7 +204,6 @@ export class TabQosComponent implements OnInit, AfterViewInit {
 
       setTimeout(() => {
         this._isLoaded = true;
-        const t = performance.now();
         this.cdr.detectChanges();
       });
 
@@ -230,7 +228,6 @@ export class TabQosComponent implements OnInit, AfterViewInit {
       this.streamsRTP = outData.streamsRTP as any[];
 
       this._isLoaded = true;
-      const t = performance.now();
       this.cdr.detectChanges();
     }
   }
@@ -271,7 +268,6 @@ export class TabQosComponent implements OnInit, AfterViewInit {
         this.chartRTCP.hideDataset(index, checkArray);
       }
 
-      const mosFraction = true;
       await this.update('onChangeRTCP', this.mosFraction, { streamsRTCP: this.streamsRTCP });
 
       this.cdr.detectChanges();

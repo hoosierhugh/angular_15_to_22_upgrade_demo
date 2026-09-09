@@ -194,25 +194,7 @@ export class MessageContentComponent implements OnInit, OnDestroy, AfterViewInit
   }
 
   onSelectedTab() {
-    const tabs = this.matTabGroup._tabs['_results'].reduce((a, b) => {
-      return { ...a, [b.isActive]: b.textLabel };
-    }, {});
-    const actualTab = tabs['true'];
-    const rawAsJSON = this.data.raw_source && Functions.JSON_parse(this.data.raw_source) || this.data.raw_source;
-    // console.log('rawAsJSON', rawAsJSON);
-    const tabsInfo = {
-      Message: typeof this.data.raw_source !== 'undefined' ? this.data.raw_source : this.objString(this.data.raw),
-      SIP: this.objString(this.pt?.sip),
-      SDP: this.objString(this.pt?.sdp),
-      Decoded: this.objString(this._data.decoded),
-      Details: this.objString(this.tableObj),
-      XRTP: this.objString(this.pt?.xrtp),
-      JWT: this.objString(this.pt?.jwt),
-      VQR: this.objString(this.pt?.vqr),
-
-    };
-
-
+    // Kept as a template callback for compatibility; tab changes require no action.
   }
   objString(s) {
     return JSON.stringify(s, null, 4);

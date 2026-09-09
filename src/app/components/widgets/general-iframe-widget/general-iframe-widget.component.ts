@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, Output, EventEmitter, OnDestroy, AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, inject } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter, ChangeDetectionStrategy, ChangeDetectorRef, inject } from '@angular/core';
 import { SettingGeneralIframeWidgetComponent } from './setting-general-iframe-widget.component';
 import { MatDialog } from '@angular/material/dialog';
 import { DateTimeRangeService, DateTimeTick } from '../../../services/data-time-range.service';
@@ -40,7 +40,7 @@ interface GeneralIframeSettingsChange {
     minWidth: 300,
 
 })
-export class GeneralIframeWidgetComponent implements IWidget, OnInit, OnDestroy {
+export class GeneralIframeWidgetComponent implements IWidget, OnInit {
     dialog = inject(MatDialog);
     private _dtrs = inject(DateTimeRangeService);
     private cdr = inject(ChangeDetectorRef);
@@ -142,5 +142,4 @@ export class GeneralIframeWidgetComponent implements IWidget, OnInit, OnDestroy 
         this.cdr.detectChanges();
     }
 
-    ngOnDestroy() { }
 }

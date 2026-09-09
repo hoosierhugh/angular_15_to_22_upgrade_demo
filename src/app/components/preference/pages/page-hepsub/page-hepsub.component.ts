@@ -1,5 +1,5 @@
 
-import { Component, OnInit, OnDestroy, ChangeDetectorRef, ViewChild, AfterViewInit, Input, ChangeDetectionStrategy, inject } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef, ViewChild, AfterViewInit, Input, ChangeDetectionStrategy, inject } from '@angular/core';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { MatPaginator } from '@angular/material/paginator';
@@ -27,7 +27,7 @@ import { ComponentType } from '@angular/cdk/portal';
     changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false
 })
-export class PageHepsubComponent implements OnInit, AfterViewInit, OnDestroy {
+export class PageHepsubComponent implements OnInit, AfterViewInit {
     private authenticationService = inject(AuthenticationService);
     private alertService = inject(AlertService);
     private service = inject(PreferenceHepsubService);
@@ -101,17 +101,12 @@ export class PageHepsubComponent implements OnInit, AfterViewInit, OnDestroy {
         this.dataSource.filter = this.filter.trim().toLowerCase();
         this.cdr.detectChanges();
     }
-    ngOnDestroy() {
-
-    }
     settingDialog(item: PreferenceHepsub | null = null, type?: string) {
         const isCopy = type === 'copy';
-        let _result;
         const onOpenDialog = (result) => {
             if (!result) {
                 return;
             }
-            _result = result;
             result.isCopy = isCopy;
             this.service[result.isnew ? 'add' : (isCopy ? 'copy' : 'update')](result.data)
                 .toPromise()

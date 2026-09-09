@@ -6,7 +6,7 @@ import { GridSizeSettings } from './grid-controller';
 import { FlowItemType } from '@app/models/flow-item-type.model';
 import { ColDef, GridOptions } from 'ag-grid-community';
 import { Subscription } from 'rxjs';
-import { Functions, getStorage, log, setStorage } from '@app/helpers/functions';
+import { Functions, getStorage, setStorage } from '@app/helpers/functions';
 import  moment from 'moment';
 import { ConstValue, FormDefault, UserConstValue } from '@app/models';
 import { Component, OnInit, OnDestroy, AfterViewInit, ChangeDetectorRef, Input, HostListener, Output, EventEmitter, ViewChild, ChangeDetectionStrategy, inject } from '@angular/core';
@@ -1044,9 +1044,6 @@ export class SearchGridCallComponent
         const param = Functions.cloneObject(params);
         let index = 0;
         if (params.rowIndex >= this.colorList.length) {
-            const multiplier = (param.rowIndex / this.colorList.length);
-            const remainder = param.rowIndex % Math.round(multiplier);
-
             index = params.rowIndex % this.colorList.length;
         } else {
             index = param.rowIndex;

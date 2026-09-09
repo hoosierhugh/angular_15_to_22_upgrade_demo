@@ -1,4 +1,4 @@
-import { AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, EventEmitter, Input, OnDestroy, OnInit, Output, ViewChild, inject } from '@angular/core';
+import { AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, EventEmitter, Input, OnInit, Output, ViewChild, inject } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { SearchGridCallComponent } from '@app/components/search-grid-call/search-grid-call.component';
 import { Functions } from '@app/helpers/functions';
@@ -29,7 +29,7 @@ interface ResultWidgetConfig {
     minHeight: 400,
     minWidth: 650,
 })
-export class ResultWidgetComponent implements IWidget, OnInit, AfterViewInit, OnDestroy {
+export class ResultWidgetComponent implements IWidget, OnInit, AfterViewInit {
     dialog = inject(MatDialog);
     private dashboardService = inject(DashboardService);
     private cdr = inject(ChangeDetectorRef);
@@ -96,7 +96,5 @@ export class ResultWidgetComponent implements IWidget, OnInit, AfterViewInit, On
             config: _f(this.config),
             id: this.id
         });
-    }
-    ngOnDestroy() {
     }
 }

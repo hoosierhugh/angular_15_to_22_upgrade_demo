@@ -1,4 +1,4 @@
-import { HttpClient, HttpEvent, HttpHeaders, HttpErrorResponse, HttpEventType } from '@angular/common/http';
+import { HttpClient, HttpEvent, HttpHeaders } from '@angular/common/http';
 import { Injectable, inject } from '@angular/core';
 import { environment } from '@environments/environment';
 import { ApiResponse } from '@app/models';

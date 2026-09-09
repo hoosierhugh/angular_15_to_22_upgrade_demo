@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, ChangeDetectionStrategy, ChangeDetectorRef, ViewChild, AfterViewInit, Input, inject } from '@angular/core';
+import { Component, OnInit, ChangeDetectionStrategy, ChangeDetectorRef, ViewChild, AfterViewInit, Input, inject } from '@angular/core';
 import { Router } from '@angular/router';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
@@ -31,7 +31,7 @@ import { ComponentType } from '@angular/cdk/portal';
     standalone: false
 })
 
-export class PageUsersComponent implements OnInit, OnDestroy, AfterViewInit {
+export class PageUsersComponent implements OnInit, AfterViewInit {
     private authenticationService = inject(AuthenticationService);
     private router = inject(Router);
     private alertService = inject(AlertService);
@@ -104,9 +104,6 @@ export class PageUsersComponent implements OnInit, OnDestroy, AfterViewInit {
     applyFilter() {
         this.dataSource.filter = this.filter.trim().toLowerCase();
         this.cdr.detectChanges();
-    }
-    ngOnDestroy() {
-
     }
     settingDialog(item: PreferenceUsers | null = null, type?: string) {
         const bufferGroup = item?.usergroup;

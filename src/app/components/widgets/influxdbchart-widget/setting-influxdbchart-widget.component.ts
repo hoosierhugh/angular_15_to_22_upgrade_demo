@@ -3,7 +3,6 @@ import { MatDialogRef, MAT_DIALOG_DATA, MatDialog } from '@angular/material/dial
 import { FormControl } from '@angular/forms';
 import { MatTable } from '@angular/material/table';
 import { StatisticService } from '../../../services/statistic.service';
-import { ChartType } from 'chart.js';
 import { AlertService } from '../../../services/alert.service';
 import { DateTimeRangeService } from '../../../services/data-time-range.service';
 import { Functions } from '@app/helpers/functions';

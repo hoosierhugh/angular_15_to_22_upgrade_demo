@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, EventEmitter, HostListener, Input, OnInit, Output, ViewChild, AfterViewInit, inject } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, EventEmitter, HostListener, Input, Output, ViewChild, AfterViewInit, inject } from '@angular/core';
 import { emitWindowResize, saveToFile } from '@app/helpers/windowFunctions';
 import moment from 'moment';
 
@@ -9,7 +9,7 @@ import moment from 'moment';
     changeDetection: ChangeDetectionStrategy.OnPush,
     standalone: false
 })
-export class FullScreenComponent implements OnInit, AfterViewInit {
+export class FullScreenComponent implements AfterViewInit {
     private cdr = inject(ChangeDetectorRef);
 
     @ViewChild('fileSelect', { static: true }) fileSelect;
@@ -24,8 +24,6 @@ export class FullScreenComponent implements OnInit, AfterViewInit {
     @Output() import = new EventEmitter<string>();
     @Input() data: { json?: string; title?: string; type?: string };
 
-    ngOnInit() {
-    }
     ngAfterViewInit() {
         const hsp = e => {
             this.isDragOver = e.type === 'dragover';

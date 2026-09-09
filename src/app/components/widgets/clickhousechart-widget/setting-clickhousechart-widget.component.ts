@@ -3,12 +3,10 @@ import { MatDialogRef, MAT_DIALOG_DATA, MatDialog } from '@angular/material/dial
 import { FormControl } from '@angular/forms';
 import { MatTable } from '@angular/material/table';
 import { ClickhouseSerivce } from '@app/services/clickhouse.service';
-import { ChartType } from 'chart.js';
 import { AlertService } from '@app/services/alert.service';
-import { DateTimeRangeService } from '@app/services/data-time-range.service';
 import { Functions } from '@app/helpers/functions';
 import { DialogAlarmComponent } from '../dialog-alarm/dialog-alarm.component';
-import { SelectList, GroupedSelectList } from '../influxdbchart-widget/setting-influxdbchart-widget.component';
+import { SelectList } from '../influxdbchart-widget/setting-influxdbchart-widget.component';
 import { TranslateService } from '@ngx-translate/core'
 export interface ClickhousePeriodicElement {
     id: string;

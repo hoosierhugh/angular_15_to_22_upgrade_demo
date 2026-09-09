@@ -18,7 +18,7 @@ import { ShareQrDialogComponent } from './share-qr-dialog/share-qr-dialog.compon
 import { IWidget, IWidgetMetaData } from '../widgets/IWidget';
 import { Observable, Subscription } from 'rxjs';
 import { WidgetArray, WidgetArrayInstance } from '@app/helpers/widget';
-import { Functions, log, setStorage } from '@app/helpers/functions';
+import { Functions, setStorage } from '@app/helpers/functions';
 import { ConstValue, UserConstValue } from '../../models/const-value.model';
 import { DateTimeRangeService, DateTimeTick, Timestamp } from '@app/services/data-time-range.service';
 import { UserSecurityService } from '@app/services/user-security.service';
@@ -135,7 +135,6 @@ export class DashboardComponent implements OnInit, OnDestroy, AfterViewInit {
 
     translateService.addLangs(['en'])
     translateService.setDefaultLang('en')
-    const browserLang = translateService.getBrowserLang();
   }
 
   @HostListener('document:keydown', ['$event']) onKeydownHandler(event: KeyboardEvent) {
@@ -161,13 +160,6 @@ export class DashboardComponent implements OnInit, OnDestroy, AfterViewInit {
       }
     }
 
-    let widgetList: any[];
-    if (ls != null && ls.currentWidgetList !== undefined) {
-      widgetList = ls.currentWidgetList;
-    } else {
-      widgetList = this.dashboardService.dbs.currentWidgetList;
-    }
-    const firstWidget = widgetList.findIndex(widget => widget.strongIndex === 'ProtosearchWidgetComponent');
     if (event.key === 'Tab' && event.shiftKey === true) {
       event.preventDefault();
       let i = 0;
@@ -693,16 +685,7 @@ export class DashboardComponent implements OnInit, OnDestroy, AfterViewInit {
       }
 
       const width = WidgetArray[iW] ? WidgetArray[iW].minWidth : 300;
-      const wSize = { minWidth: width, minHeight: height };
-
       /* widget resize on */
-      const { maxCols, maxRows, minRows, minCols, gridType } = this.gridOptions;
-      const winHeight = window.innerHeight;
-      const winWidth = window.innerWidth;
-      const cellWidth = (winWidth / maxCols) - 6;
-      const cellHeight = Math.round((winHeight / Math.round(minRows)) - 6);
-      const { minHeight, minWidth } = wSize;
-
       const colAmount = Math.ceil(width / columnRes);
       if (this.dashboardArray[iD] && this.dashboardArray[iD].rows < colAmount) {
         if (this.dashboardCollection.data.config.ignoreMinSize === 'warning') {
@@ -919,8 +902,7 @@ export class DashboardComponent implements OnInit, OnDestroy, AfterViewInit {
   async onDashboardAdd(tabGroup: string = null) {
 
     const data = await this.dialog.open(AddDialogComponent, { width: '600px', data: {} }).afterClosed().toPromise();
-    const defaultColsRows = { maxCols: 300, maxRows: 300 };
-    const { maxCols, maxRows, minRows, minCols, gridType } = this.gridOptions;
+    const { minRows, minCols, gridType } = this.gridOptions;
     const winHeight = window.innerHeight;
     const winWidth = window.innerWidth;
     const cellWidth = (winWidth - (6 * minCols)) / minCols;
@@ -1035,7 +1017,7 @@ export class DashboardComponent implements OnInit, OnDestroy, AfterViewInit {
 
       }
     };
-    const data = await dialogref.afterClosed().toPromise();
+    await dialogref.afterClosed().toPromise();
     await this.onDashboardSave().toPromise();
     this.getData();
     this.dashboardService.update();
@@ -1132,20 +1114,11 @@ export class DashboardComponent implements OnInit, OnDestroy, AfterViewInit {
     })(this.dashboardCollection, _d);
     // prevDash = previous dashboard
     // gridOptions = current dashboard
-    const wParams = { colParam: {}, rowParam: {} };
-    const pD = this.prevDash;
     const gO = this.gridOptions;
 
     let prevColWidth = 0;
     let actColWidth = 0;
-    let prevRowHeight = 0;
-    let actRowHeight = 0;
-
-
     this.dashboardArray.forEach(f => {
-
-      const prevWidget = this.prevWidgArray?.find(g => g.id === f.id);
-
       switch (gO.gridType) {
 
         case 'fit':
@@ -1161,12 +1134,6 @@ export class DashboardComponent implements OnInit, OnDestroy, AfterViewInit {
           break;
 
         case 'scrollHorizontal':
-          // get for previous width / height
-          prevRowHeight = prevWidget.height / prevWidget.rows;
-          prevColWidth = prevWidget.width / prevWidget.cols;
-
-          prevRowHeight = Math.round((gridHeight - ((6 * this.prevDash.minRows) - 6)) / this.prevDash.minRows);
-          actRowHeight = Math.round((gridHeight - ((6 * this.gridOptions.minRows) - 6)) / this.gridOptions.minRows);
           f.rows = Math.round((f.rows * this.gridOptions.minRows) / this.prevDash.minRows);
 
           // GET COL AMOUNT

@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, Output, EventEmitter, OnDestroy, ChangeDetectionStrategy, ChangeDetectorRef, inject } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter, ChangeDetectionStrategy, ChangeDetectorRef, inject } from '@angular/core';
 import { Widget, WidgetArrayInstance } from '@app/helpers/widget';
 import { IWidget } from '../IWidget';
 import { Functions } from '@app/helpers/functions';
@@ -28,7 +28,7 @@ interface ResultChartConfig {
     minWidth: 600,
 
 })
-export class ResultChartWidgetComponent implements IWidget, OnInit, OnDestroy {
+export class ResultChartWidgetComponent implements IWidget, OnInit {
     dialog = inject(MatDialog);
     private cdr = inject(ChangeDetectorRef);
 
@@ -70,8 +70,5 @@ export class ResultChartWidgetComponent implements IWidget, OnInit, OnDestroy {
             config: _f(this.config),
             id: this.id
         });
-    }
-    ngOnDestroy() {
-
     }
 }

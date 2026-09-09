@@ -1,4 +1,4 @@
-import { AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, EventEmitter, HostListener, Input, OnDestroy, OnInit, Output, SimpleChanges, ViewChild, inject } from '@angular/core';
+import { AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, EventEmitter, HostListener, Input, OnDestroy, OnInit, Output, ViewChild, inject } from '@angular/core';
 import { emitWindowResize } from '@app/helpers/windowFunctions';
 import { WindowService } from '@app/services/window.service';
 import moment from 'moment';
@@ -307,7 +307,7 @@ export class ModalResizableComponent implements OnInit, AfterViewInit, OnDestroy
         return +this.layerZIndex.nativeElement.style.zIndex
     }
     onResize(event: any, controlName: string) {
-        const { min, ceil } = Math;
+        const { ceil } = Math;
         this._noLayout = false;
         this.setMouseLayer(true);
         const x0 = ceil(event.clientX);
@@ -374,7 +374,7 @@ export class ModalResizableComponent implements OnInit, AfterViewInit, OnDestroy
     }
     onResizeTouch(event: TouchEvent, controlName: string) {
         event.preventDefault()
-        const { min, ceil } = Math;
+        const { ceil } = Math;
         this._noLayout = false;
         this.setMouseLayer(true);
         if (this.touchPosition === null) {

@@ -1,7 +1,6 @@
 import { Component, ChangeDetectionStrategy, inject } from '@angular/core';
 import { IHeaderParams } from 'ag-grid-community';
 import { MatDialog } from '@angular/material/dialog';
-import { DialogSettingsGridDialog } from '../grid-settings-dialog/grid-settings-dialog';
 
 
 @Component({

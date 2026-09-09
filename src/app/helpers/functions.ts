@@ -321,8 +321,6 @@ export class Functions {
         arg[i] = this.cloneObject(_a);
       }
     });
-    const dt = this.logTime ? performance.now() - this.logTime : 0;
-    const dts = '[' + dt.toFixed(3) + 'ms]';
     this.logTime = performance.now();
   }
 

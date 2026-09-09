@@ -91,10 +91,6 @@ export class ExportDialogComponent implements OnInit {
     }
     onUpdateProto(event) {
         if (typeof this.apiColumn?.getAllColumns() !== 'undefined' && this.apiColumn.getAllColumns() !== null) {
-            const objField = event.find(i => {
-                const k = this._bufferData.find(j => i.name === j.name);
-                return i.selected !== k.selected;
-            });
             this._bufferData = Functions.cloneObject(this.allColumnIds);
             this.exportColumns = [];
             for (let i = 0; i < this._bufferData.length; i++) {
