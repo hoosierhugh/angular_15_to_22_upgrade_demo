@@ -1,4 +1,4 @@
-import { Component, Inject, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
+import { Component, ChangeDetectionStrategy, ChangeDetectorRef, inject } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { AlertService, DashboardService, } from '@app/services';
 import { TranslateService } from '@ngx-translate/core';
@@ -11,6 +11,13 @@ import { DashboardData } from '@app/models';
     standalone: false
 })
 export class ShareQrDialogComponent {
+    dialogRef = inject<MatDialogRef<ShareQrDialogComponent>>(MatDialogRef);
+    data = inject(MAT_DIALOG_DATA);
+    dashboardService = inject(DashboardService);
+    cdr = inject(ChangeDetectorRef);
+    alertService = inject(AlertService);
+    translateService = inject(TranslateService);
+
     dashboardLink;
     dashboardId;
     elementType;
@@ -19,15 +26,10 @@ export class ShareQrDialogComponent {
     id;
     shared;
     params;
-    constructor(
-        public dialogRef: MatDialogRef<ShareQrDialogComponent>,
-        @Inject(MAT_DIALOG_DATA) public data,
-        public dashboardService: DashboardService,
-        public cdr: ChangeDetectorRef,
-        public alertService: AlertService,
-        public translateService: TranslateService
+    constructor() {
+        const data = this.data;
+        const dashboardService = this.dashboardService;
 
-    ) {
 
         this.dashboardId = dashboardService.getCurrentDashBoardId();
 
@@ -55,8 +57,8 @@ export class ShareQrDialogComponent {
         qrlink.select();
         document.execCommand('copy');
         qrlink.setSelectionRange(0, 0);
-        this.translateService.get('notifications.success.linkCopy').subscribe(res => { 
-            this.alertService.success(res);   
+        this.translateService.get('notifications.success.linkCopy').subscribe(res => {
+            this.alertService.success(res);
         })
     }
     shareDashboard() {
@@ -69,8 +71,8 @@ export class ShareQrDialogComponent {
                 this.dashboardService.updateDashboard(actualDb);
                 this.shared = true;
                 this.onShareDashboard(this.shared);
-                this.translateService.get('notifications.success.dashboardShared').subscribe(res => { 
-                    this.alertService.success(res);   
+                this.translateService.get('notifications.success.dashboardShared').subscribe(res => {
+                    this.alertService.success(res);
                 })
                 this.cdr.detectChanges();
             }

@@ -1,4 +1,4 @@
-import { Component, Inject, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
+import { Component, ChangeDetectionStrategy, ChangeDetectorRef, inject } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 
 import { TranslateService } from '@ngx-translate/core'
@@ -22,16 +22,18 @@ interface ClockSettingsData extends Pick<ClockConfig,
 })
 
 export class SettingClockWidgetComponent {
-    arrayTimeZones: Array<string> = [];
-    arrayClockType: Array<string> = ['Digital', 'Analog', 'Both'];
+    private cdr = inject(ChangeDetectorRef);
+    translateService = inject(TranslateService);
+    dialogRef = inject<MatDialogRef<SettingClockWidgetComponent>>(MatDialogRef);
+    data = inject<ClockSettingsData>(MAT_DIALOG_DATA);
+
+    arrayTimeZones: string[] = [];
+    arrayClockType: string[] = ['Digital', 'Analog', 'Both'];
     minSize = 8;
     maxSize = 100;
-    constructor(
-        private cdr: ChangeDetectorRef,
-        public translateService: TranslateService,
-        public dialogRef: MatDialogRef<SettingClockWidgetComponent>,
-        @Inject(MAT_DIALOG_DATA) public data: ClockSettingsData
-    ) {
+    constructor() {
+        const translateService = this.translateService;
+
         translateService.addLangs(['en'])
         translateService.setDefaultLang('en')
         this.arrayTimeZones = moment.tz.names();

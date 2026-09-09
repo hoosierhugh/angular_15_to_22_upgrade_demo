@@ -1,4 +1,4 @@
-import { Component, Inject, ChangeDetectionStrategy, ChangeDetectorRef, OnInit, EventEmitter } from '@angular/core';
+import { Component, ChangeDetectionStrategy, ChangeDetectorRef, OnInit, EventEmitter, inject } from '@angular/core';
 import { AbstractControl, FormControl, Validators } from '@angular/forms';
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { AuthenticationService } from '@app/services/authentication.service';
@@ -28,10 +28,18 @@ export interface DashboardConfig {
     standalone: false
 })
 export class EditDialogComponent implements OnInit {
+    dialogRef = inject<MatDialogRef<EditDialogComponent>>(MatDialogRef);
+    private dashboardService = inject(DashboardService);
+    private cdr = inject(ChangeDetectorRef);
+    private authenticationService = inject(AuthenticationService);
+    data = inject<DashboardConfig>(MAT_DIALOG_DATA);
+    dialog = inject(MatDialog);
+    private translateService = inject(TranslateService);
+
     private envUrl = `${environment.apiUrl.replace('/api/v3', '')}`;
     onDeleteWidgets = new EventEmitter();
     onTile = new EventEmitter();
-    isSameOrigin: boolean = false;
+    isSameOrigin = false;
     typeList = [];
     typeBoolean = {
         CUSTOM: {
@@ -61,7 +69,7 @@ export class EditDialogComponent implements OnInit {
     };
     isHomeOrSearch = false;
     isSEARCH = false;
-    ignoreMinSizeList: { [key: string]: string } = {
+    ignoreMinSizeList: Record<string, string> = {
         /* 'Limit': 'limit', */
         'Warning': 'warning',
         'Ignore': 'Ignore'
@@ -79,15 +87,10 @@ export class EditDialogComponent implements OnInit {
     isInvalid = false;
     nameBuffer: string;
     dashboardTypesDictionary;
-    constructor(
-        public dialogRef: MatDialogRef<EditDialogComponent>,
-        private dashboardService: DashboardService,
-        private cdr: ChangeDetectorRef,
-        private authenticationService: AuthenticationService,
-        @Inject(MAT_DIALOG_DATA) public data: DashboardConfig,
-        public dialog: MatDialog,
-        private translateService: TranslateService
-    ) {
+    constructor() {
+        const data = this.data;
+        const translateService = this.translateService;
+
         translateService.addLangs(['en'])
         translateService.setDefaultLang('en')
         this.isSEARCH = this.dashboardService.getCurrentDashBoardId() === 'search';

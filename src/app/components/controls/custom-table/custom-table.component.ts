@@ -1,4 +1,4 @@
-import { Component, OnInit, AfterContentInit, ViewChild, Input, Output, EventEmitter, ChangeDetectorRef, ChangeDetectionStrategy, AfterViewInit } from '@angular/core';
+import { Component, OnInit, AfterContentInit, ViewChild, Input, Output, EventEmitter, ChangeDetectorRef, ChangeDetectionStrategy, AfterViewInit, inject } from '@angular/core';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
@@ -12,6 +12,8 @@ import { Functions } from '@app/helpers/functions';
     standalone: false
 })
 export class CustomTableComponent implements AfterViewInit {
+    private cdr = inject(ChangeDetectorRef);
+
     @Input() columns: string[] = [];
     @Input() columnsFilter: string[] = [];
 
@@ -28,7 +30,6 @@ export class CustomTableComponent implements AfterViewInit {
     set details(val: TableRow[]) {
         this._details = val;
     }
-    constructor(private cdr: ChangeDetectorRef) { }
 
     ngAfterViewInit() {
         this.dataSource = new MatTableDataSource();
@@ -78,9 +79,7 @@ export class CustomTableComponent implements AfterViewInit {
     }
 }
 
-interface TableRow {
-    [column: string]: unknown;
-}
+type TableRow = Record<string, unknown>;
 
 interface TableFilter {
     id: string;

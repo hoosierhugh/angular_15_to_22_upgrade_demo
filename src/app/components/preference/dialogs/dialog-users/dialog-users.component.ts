@@ -1,4 +1,4 @@
-import { Component, Inject, ViewChild, ChangeDetectionStrategy, OnInit, ChangeDetectorRef } from '@angular/core';
+import { Component, ViewChild, ChangeDetectionStrategy, OnInit, ChangeDetectorRef, inject } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { Functions } from '@app/helpers/functions';
 import { AuthenticationService, AlertService, PreferenceUserService, PreferenceAdvancedService } from '@app/services';
@@ -17,6 +17,15 @@ import { ApiResponse, CrudDialogData, PreferenceUsers } from '@app/models';
     standalone: false
 })
 export class DialogUsersComponent implements OnInit {
+  private authenticationService = inject(AuthenticationService);
+  dialogRef = inject<MatDialogRef<DialogUsersComponent>>(MatDialogRef);
+  private alertService = inject(AlertService);
+  private userService = inject(PreferenceUserService);
+  translateService = inject(TranslateService);
+  private _pas = inject(PreferenceAdvancedService);
+  private cdr = inject(ChangeDetectorRef);
+  data = inject<CrudDialogData<PreferenceUsers>>(MAT_DIALOG_DATA);
+
   isValidForm = false;
   isAdmin = false;
   pass2: string;
@@ -31,7 +40,7 @@ export class DialogUsersComponent implements OnInit {
   timeout: ReturnType<typeof setTimeout> | undefined;
   lastPasswordChange: string;
   lastLogin: string;
-  isDisabled: boolean = true;
+  isDisabled = true;
   regPassword: RegExp;
   characterRequirements: CharacterRequirements = {
     numbers: true,
@@ -97,18 +106,13 @@ export class DialogUsersComponent implements OnInit {
     Validators.pattern(this.regDept)
   ]);
 
-  groupList: Array<string>;
+  groupList: string[];
   dateFormat: string;
   hasStatistics = false;
-  constructor(
-    private authenticationService: AuthenticationService,
-    public dialogRef: MatDialogRef<DialogUsersComponent>,
-    private alertService: AlertService,
-    private userService: PreferenceUserService,
-    public translateService: TranslateService,
-    private _pas: PreferenceAdvancedService,
-    private cdr: ChangeDetectorRef,
-    @Inject(MAT_DIALOG_DATA) public data: CrudDialogData<PreferenceUsers>) {
+  constructor() {
+    const translateService = this.translateService;
+    const data = this.data;
+
     translateService.addLangs(['en'])
     translateService.setDefaultLang('en')
     if (data.isnew) {

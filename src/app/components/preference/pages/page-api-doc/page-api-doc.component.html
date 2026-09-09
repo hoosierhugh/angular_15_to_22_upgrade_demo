@@ -1,8 +1,12 @@
 <div class="tab-name">
-    <h3>{{page | titlecase}}</h3>
-    <h6 class='tab-description'> {{ 'preference.' + pageID +  '.description' | translate }} </h6>
+  <h3>{{page | titlecase}}</h3>
+  <h6 class='tab-description'> {{ 'preference.' + pageID +  '.description' | translate }} </h6>
 </div>
-<div *ngIf="isMockMode" class="api-container">
+@if (isMockMode) {
+  <div class="api-container">
     API documentation requires a running HOMER API and is unavailable in the local demo.
-</div>
-<div *ngIf="!isMockMode" class="api-container" id="swagger-ui"></div>
+  </div>
+}
+@if (!isMockMode) {
+  <div class="api-container" id="swagger-ui"></div>
+}

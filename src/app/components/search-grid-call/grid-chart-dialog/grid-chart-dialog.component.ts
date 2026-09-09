@@ -1,16 +1,4 @@
-import {
-    Component,
-    Input,
-    Output,
-    EventEmitter,
-    OnInit,
-    ElementRef,
-    SimpleChanges,
-    ViewChild,
-    OnDestroy,
-    OnChanges,
-    ChangeDetectionStrategy,
-} from '@angular/core';
+import { Component, Input, Output, EventEmitter, OnInit, ElementRef, SimpleChanges, ViewChild, OnDestroy, OnChanges, ChangeDetectionStrategy, inject } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { Functions, setStorage } from '@app/helpers/functions';
 import { ChangeDetectorRef, AfterViewInit } from '@angular/core';
@@ -45,6 +33,9 @@ export interface GridChartConfig {
 })
 export class DialogChartGridDialogComponent
     implements OnInit, OnChanges, OnDestroy, AfterViewInit {
+    private cdr = inject(ChangeDetectorRef);
+    private dashboardService = inject(DashboardService);
+
     chartReady = true;
     public apiColumn: any;
     apiPoint: any;
@@ -52,8 +43,8 @@ export class DialogChartGridDialogComponent
     isBrowserWindow = false;
     _isLoaded = true;
     agGridSizeControl: any = {};
-    allColumnIds: Array<any> = [];
-    _bufferData: Array<any>;
+    allColumnIds: any[] = [];
+    _bufferData: any[];
     gridData = [];
     isShowPanelSettings = false;
     groupColumnAxis1: string;
@@ -89,7 +80,7 @@ export class DialogChartGridDialogComponent
     @Input() config: GridChartConfig;
     @Input() inChartContainer = false;
     @Input() id: string;
-    @Input('isLoaded')
+    @Input()
     set isLoaded(val) {
         this._isLoaded = val;
     }
@@ -97,12 +88,12 @@ export class DialogChartGridDialogComponent
         return this._isLoaded;
     }
 
-    @Output() changeSettings: EventEmitter<any> = new EventEmitter();
-    @Output() openMessage: EventEmitter<any> = new EventEmitter();
-    @Output() close: EventEmitter<any> = new EventEmitter();
+    @Output() changeSettings = new EventEmitter<any>();
+    @Output() openMessage = new EventEmitter<any>();
+    @Output() close = new EventEmitter<any>();
     @ViewChild('filterContainer', { static: false })
     filterContainer: ElementRef;
-    dataLogs: Array<any>;
+    dataLogs: any[];
 
     chartTypeList = [
         'line',
@@ -163,10 +154,6 @@ export class DialogChartGridDialogComponent
         chartType: 'line',
     };
     columnKeys = [];
-    constructor(
-        private cdr: ChangeDetectorRef,
-        private dashboardService: DashboardService
-    ) { }
     ngOnInit() {
         if (!this.inChartContainer) {
             let ls: any;
@@ -243,7 +230,7 @@ export class DialogChartGridDialogComponent
             typeof this.apiColumn?.getAllColumns() !== 'undefined' &&
             this.apiColumn.getAllColumns() !== null
         ) {
-            Object.values(this.apiColumn.getAllColumns() as Object)
+            Object.values(this.apiColumn.getAllColumns() as object)
                 .filter((column) => !['', 'id'].includes(column.colDef.field))
                 .forEach((column) =>
                     this.allColumnIds.push({

@@ -1,4 +1,4 @@
-import { Component, ChangeDetectionStrategy } from '@angular/core';
+import { Component, ChangeDetectionStrategy, inject } from '@angular/core';
 import { AlertService, AuthenticationService } from './services';
 import { User } from '@app/models';
 import { MOCK_MODE } from './runtime-mode';
@@ -13,15 +13,17 @@ import {TranslateService} from '@ngx-translate/core';
     standalone: false
 })
 export class AppComponent {
+    private authenticationService = inject(AuthenticationService);
+    translateService = inject(TranslateService);
+    alertService = inject(AlertService);
+
     readonly mockMode = MOCK_MODE;
     currentUser: User;
     title = 'HOMER';
     translateError = false
-    constructor(
-        private authenticationService: AuthenticationService,
-        public translateService: TranslateService,
-        public alertService: AlertService
-        ) {
+    constructor() {
+        const translateService = this.translateService;
+
 
         if (!this.authenticationService?.currentUserValue) {
             this.authenticationService.logout();

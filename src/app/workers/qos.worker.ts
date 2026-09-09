@@ -7,12 +7,12 @@ class QosProcessor {
   public isError = false;
   public errorMessage: any;
   public color: any;
-  public labels: Array<any> = [];
+  public labels: any[] = [];
   public isRTCP = false;
   public isRTP = false;
   public isNoDataRTP = false;
   public isNoDataRTCP = false;
-  public chartDataRTP: Array<any> = [
+  public chartDataRTP: any[] = [
     {
       data: [],
       label: 'TOTAL_PK',
@@ -58,13 +58,13 @@ class QosProcessor {
     },
   ];
 
-  public chartLabelsRTP: Array<any> = [];
+  public chartLabelsRTP: any[] = [];
 
-  public chartLabelsRTCP: Array<any> = [];
+  public chartLabelsRTCP: any[] = [];
   public chartType: any = 'bar';
   public chartLegend = true;
 
-  public chartDataRTCP: Array<any> = [
+  public chartDataRTCP: any[] = [
     {
       data: [],
       label: 'packets',
@@ -186,8 +186,8 @@ class QosProcessor {
 
   public hideLabelsFlag = true;
   public hideLabelsFlagRTP = true;
-  public streamsRTCP: Array<any> = [];
-  public streamsRTP: Array<any> = [];
+  public streamsRTCP: any[] = [];
+  public streamsRTP: any[] = [];
 
   public init(srcdata, mosFraction) {
 
@@ -346,7 +346,7 @@ class QosProcessor {
       return;
     }
 
-    let uc = /\u0010/;
+    const uc = /\u0010/;
 
     data.map(m => {
       m.raw = m.raw.replace(uc, '.')
@@ -674,10 +674,10 @@ class QosProcessor {
       chartDataRTCP.forEach(val => {
         const unique = item.srcIp + val.label + item.dstIp;
         const rColor = this.setColor(unique);
-        const arrData = val.data as Array<number> || [];
+        const arrData = val.data as number[] || [];
         const _data = this.getData(item, val.label);
-        const arrBackgroundColor = val.backgroundColor as Array<string> || [];
-        const arrHoverBackgroundColor = val.hoverBackgroundColor as Array<string> || [];
+        const arrBackgroundColor = val.backgroundColor as string[] || [];
+        const arrHoverBackgroundColor = val.hoverBackgroundColor as string[] || [];
 
         val.data = arrData.concat(_data);
 
@@ -716,7 +716,7 @@ class QosProcessor {
     };
   }
   private getData(item: any, label: string) {
-    const data = item[label + 'Data'] as Array<number> || [];
+    const data = item[label + 'Data'] as number[] || [];
     if (item[label]) {
       return this.cloneObject(data);
     }

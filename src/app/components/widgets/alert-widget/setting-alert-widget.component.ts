@@ -1,4 +1,4 @@
-import { Component, Inject, OnInit, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, ChangeDetectionStrategy, ChangeDetectorRef, inject } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { TranslateService } from '@ngx-translate/core'
 import { AlertConfig } from './alert-widget.component';
@@ -11,9 +11,14 @@ import { AlertConfig } from './alert-widget.component';
 })
 
 export class SettingAlertWidgetComponent implements OnInit {
-    arrayRequestType: Array<string> = ['GET', 'POST'];
-    arrayComparsionLogic: Array<string> = ['AND', 'OR'];
-    comparsionTypeList: { [key: string]: string } = {
+    private cdr = inject(ChangeDetectorRef);
+    translateService = inject(TranslateService);
+    dialogRef = inject<MatDialogRef<SettingAlertWidgetComponent>>(MatDialogRef);
+    data = inject<AlertConfig>(MAT_DIALOG_DATA);
+
+    arrayRequestType: string[] = ['GET', 'POST'];
+    arrayComparsionLogic: string[] = ['AND', 'OR'];
+    comparsionTypeList: Record<string, string> = {
         '=': '==',
         '<': '<',
         '>': '>',
@@ -26,12 +31,9 @@ export class SettingAlertWidgetComponent implements OnInit {
     colorsSuccess: Promise<string[]>;
     colorsFail: Promise<string[]>;
     colorsText: Promise<string[]>;
-    constructor(
-        private cdr: ChangeDetectorRef,
-        public translateService: TranslateService,
-        public dialogRef: MatDialogRef<SettingAlertWidgetComponent>,
-        @Inject(MAT_DIALOG_DATA) public data: AlertConfig
-    ) {
+    constructor() {
+        const translateService = this.translateService;
+
         translateService.addLangs(['en'])
         translateService.setDefaultLang('en')
     }

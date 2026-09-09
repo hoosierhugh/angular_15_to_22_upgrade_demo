@@ -5,9 +5,7 @@ export enum WorkerScript {
   TRANSACTION = '@app/workers/transaction.worker',
   CLICKHOUSE = '@app/workers/clickhouse.worker'
 }
-interface WorkerPull {
-  [key: string]: WorkerService;
-}
+type WorkerPull = Record<string, WorkerService>;
 
 interface WorkerMetadata {
   workerCommand: WorkerCommands | string;
@@ -23,7 +21,7 @@ export class WorkerService {
   worker: Worker;
   instanceId: number;
 
-  static async doOnce<TOutput = unknown>(workerCommand: WorkerCommands, data: unknown, path: string = WorkerScript.TRANSACTION, id: string = '1'): Promise<TOutput> {
+  static async doOnce<TOutput = unknown>(workerCommand: WorkerCommands, data: unknown, path: string = WorkerScript.TRANSACTION, id = '1'): Promise<TOutput> {
     const workerId = path === WorkerScript.CLICKHOUSE ? `${workerCommand}_${id}` : workerCommand;
     if (!WorkerService.workerPull[workerCommand]) {
       if (path === WorkerScript.TRANSACTION) {
@@ -31,7 +29,7 @@ export class WorkerService {
       } else if (path === WorkerScript.CLICKHOUSE) {
         WorkerService.workerPull[workerId] = new WorkerService(new Worker(new URL('../workers/clickhouse.worker', import.meta.url), { type: 'module' }));
       }
-     
+
     }
     return await WorkerService.workerPull[workerId].do<TOutput>(workerCommand, data);
   }

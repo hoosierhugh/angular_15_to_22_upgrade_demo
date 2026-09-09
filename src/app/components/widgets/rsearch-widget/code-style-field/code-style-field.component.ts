@@ -1,15 +1,4 @@
-import {
-    Component,
-    OnInit,
-    ViewChild,
-    AfterViewInit,
-    Output,
-    EventEmitter,
-    Input,
-    ChangeDetectionStrategy,
-    ChangeDetectorRef,
-    OnChanges
-} from '@angular/core';
+import { Component, OnInit, ViewChild, AfterViewInit, Output, EventEmitter, Input, ChangeDetectionStrategy, ChangeDetectorRef, OnChanges, inject } from '@angular/core';
 import { MatMenuTrigger } from '@angular/material/menu';
 import { SearchRemoteService, PreferenceAdvancedService } from '@app/services';
 
@@ -28,6 +17,10 @@ export interface LokiCodeData {
     standalone: false
 })
 export class CodeStyleFieldComponent implements OnInit, AfterViewInit, OnChanges {
+    private _pas = inject(PreferenceAdvancedService);
+    private _srs = inject(SearchRemoteService);
+    private cdr = inject(ChangeDetectorRef);
+
     divHTML: string;
     divText: string;
     serverLoki: string;
@@ -53,13 +46,9 @@ export class CodeStyleFieldComponent implements OnInit, AfterViewInit, OnChanges
     @ViewChild('divContainer', { static: false }) divContainer;
     @ViewChild(MatMenuTrigger, { static: false }) trigger: MatMenuTrigger;
 
-    popupList: Array<string>;
+    popupList: string[];
 
-    constructor(
-        private _pas: PreferenceAdvancedService,
-        private _srs: SearchRemoteService,
-        private cdr: ChangeDetectorRef
-    ) {
+    constructor() {
         this._pas.getAll().toPromise().then(res => {
             if (res && res.data) {
                 this.serverLoki = res.data.find(i =>
@@ -97,7 +86,7 @@ export class CodeStyleFieldComponent implements OnInit, AfterViewInit, OnChanges
         this.setMenuXPosition();
         this.editor.focus();
 
-        const labels: Array<string> = await this._srs.getLabel(this.serverLoki).toPromise();
+        const labels: string[] = await this._srs.getLabel(this.serverLoki).toPromise();
         this.isLabel = true;
         if (labels?.length === 0) {
             this.lokiConnectionDisapper = true;
@@ -179,7 +168,7 @@ export class CodeStyleFieldComponent implements OnInit, AfterViewInit, OnChanges
         }
     }
     onKeyDownDiv(event) {
-        if (!!({ ArrowDown: 1, ArrowUp: 1, Enter: 1 })[event.key]) {
+        if (({ ArrowDown: 1, ArrowUp: 1, Enter: 1 })[event.key]) {
             this.triggerNavMenu(event.key);
             event.preventDefault();
             return;
@@ -197,7 +186,7 @@ export class CodeStyleFieldComponent implements OnInit, AfterViewInit, OnChanges
             this.trigger.closeMenu();
             return;
         }
-        if (!!({ ArrowDown: 1, ArrowUp: 1, Enter: 1 })[event.key]) {
+        if (({ ArrowDown: 1, ArrowUp: 1, Enter: 1 })[event.key]) {
             this.triggerNavMenu(event.key);
             event.preventDefault();
             return;

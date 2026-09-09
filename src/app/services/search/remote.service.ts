@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { Observable } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 import { environment } from '@environments/environment';
@@ -11,10 +11,10 @@ export interface SearchRemoteResponse<T = unknown> {
   providedIn: 'root'
 })
 export class SearchRemoteService {
+    private http = inject(HttpClient);
+
 
     private url = `${environment.apiUrl}/search/remote`;
-
-    constructor(private http: HttpClient) { }
 
     // Return search remote data
     getData(data: unknown): Observable<SearchRemoteResponse> {

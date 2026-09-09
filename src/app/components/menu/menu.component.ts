@@ -1,12 +1,4 @@
-import {
-    Component,
-    OnInit,
-    OnDestroy,
-    ChangeDetectionStrategy,
-    ChangeDetectorRef,
-    ElementRef,
-    ViewChild,
-} from '@angular/core';
+import { Component, OnInit, OnDestroy, ChangeDetectionStrategy, ChangeDetectorRef, ElementRef, ViewChild, inject } from '@angular/core';
 import {
     AuthenticationService,
     DashboardService,
@@ -60,9 +52,25 @@ export interface DashboardData {
     standalone: false
 })
 export class MenuComponent implements OnInit, OnDestroy {
+    private dashboardService = inject(DashboardService);
+    private _dtrs = inject(DateTimeRangeService);
+    private router = inject(Router);
+    dialog = inject(MatDialog);
+    private authenticationService = inject(AuthenticationService);
+    private _sss = inject(SessionStorageService);
+    private cdr = inject(ChangeDetectorRef);
+    private _puss = inject(PreferenceUserSettingsService);
+    private _pus = inject(PreferenceUserService);
+    private userSecurityService = inject(UserSecurityService);
+    private searchService = inject(SearchService);
+    private _pas = inject(PreferenceAdvancedService);
+    private alertService = inject(AlertService);
+    private translateService = inject(TranslateService);
+    private _tfs = inject(TimeFormattingService);
+
     readonly mockMode = MOCK_MODE;
     sessionStorageSubscription: Subscription;
-    panelList: Array<any>;
+    panelList: any[];
     timeRangeName: string;
     panelName: string;
     refresherName: string;
@@ -124,23 +132,10 @@ export class MenuComponent implements OnInit, OnDestroy {
     userProfile: UserProfile;
     @ViewChild('favList', { static: true }) favList: ElementRef;
     @ViewChild('tabList', { static: true }) tabList: ElementRef;
-    constructor(
-        private dashboardService: DashboardService,
-        private _dtrs: DateTimeRangeService,
-        private router: Router,
-        public dialog: MatDialog,
-        private authenticationService: AuthenticationService,
-        private _sss: SessionStorageService,
-        private cdr: ChangeDetectorRef,
-        private _puss: PreferenceUserSettingsService,
-        private _pus: PreferenceUserService,
-        private userSecurityService: UserSecurityService,
-        private searchService: SearchService,
-        private _pas: PreferenceAdvancedService,
-        private alertService: AlertService,
-        private translateService: TranslateService,
-        private _tfs: TimeFormattingService
-    ) {
+    constructor() {
+        const router = this.router;
+        const translateService = this.translateService;
+
         translateService.addLangs(['en'])
         translateService.setDefaultLang('en')
         if (environment.environment !== '') {
@@ -468,7 +463,7 @@ export class MenuComponent implements OnInit, OnDestroy {
         this._dtrs.setDelay(delay);
     }
 
-    onPreference(page: string = "users") {
+    onPreference(page = "users") {
         this.router.navigate([`preference/${page}`]);
     }
 

@@ -47,7 +47,7 @@ export class CodeStylePrometheusFieldComponent implements OnInit, AfterViewInit 
   @ViewChild('divContainer', { static: false }) divContainer: ElementRef<HTMLDivElement>;
   @ViewChild(MatMenuTrigger, { static: false }) trigger: MatMenuTrigger;
 
-  popupList: Array<string>;
+  popupList: string[];
 
   constructor() { }
 
@@ -77,7 +77,7 @@ export class CodeStylePrometheusFieldComponent implements OnInit, AfterViewInit 
 
   }
   onKeyDownDiv(event: KeyboardEvent) {
-    if (!!({ ArrowDown: 1, ArrowUp: 1, Enter: 1 })[event.key]) {
+    if (({ ArrowDown: 1, ArrowUp: 1, Enter: 1 })[event.key]) {
       this.triggerNavMenu(event.key);
       event.preventDefault();
       return;
@@ -166,7 +166,7 @@ export class CodeStylePrometheusFieldComponent implements OnInit, AfterViewInit 
     if (this.editor.innerText === '' || [17, 16].indexOf(event.keyCode) !== -1) {
       return;
     }
-    if (!!({ ArrowDown: 1, ArrowUp: 1, Enter: 1 })[event.key]) {
+    if (({ ArrowDown: 1, ArrowUp: 1, Enter: 1 })[event.key]) {
       this.triggerNavMenu(event.key);
       event.preventDefault();
       return;

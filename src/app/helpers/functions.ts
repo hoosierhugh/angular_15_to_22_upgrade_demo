@@ -38,7 +38,7 @@ export class Functions {
       '1000': 'JSON-DYN',
     }[payload] || 'HEP-' + payload;
   }
-  static colorsByStatus(status: number, proto: string = '') {
+  static colorsByStatus(status: number, proto = '') {
     switch (proto) {
       case '60_call_h20': default: return ['white',
         '#CC1900', '#FF3332', '#B8F2FF', '#B8F2FF',
@@ -219,7 +219,7 @@ export class Functions {
     return src;
   }
   static getUriParams(): any {
-    if (!!window.location.hash) {
+    if (window.location.hash) {
       return window.location.hash.replace('#', '');
     }
     const lsearch = window.location.search || '';
@@ -261,17 +261,17 @@ export class Functions {
       }, 0);
     }
   }
-  static secondsToHour(data: number = 0) {
+  static secondsToHour(data = 0) {
     return new Date(data * 1000).toISOString().substr(11, 8);
   }
   // getTimestamp produces a timestamp in format YYYYMMDDHHMMSS
   static getTimestamp(date: Date = new Date()): string {
-    let year = date.getFullYear();
-    let month = date.getMonth() + 1;
-    let day = date.getDate();
-    let hh = date.getHours();
-    let mm = date.getMinutes();
-    let ss = date.getSeconds();
+    const year = date.getFullYear();
+    const month = date.getMonth() + 1;
+    const day = date.getDate();
+    const hh = date.getHours();
+    const mm = date.getMinutes();
+    const ss = date.getSeconds();
     return "" + year +
       (month < 10 ? "0" + month : month) +
       (day < 10 ? "0" + day : day) +
@@ -351,7 +351,7 @@ export class Functions {
   // Get the alias fields
   // get alias names if its servertype or group
   // get IP value if its alias => IP type
-  static getAliasFields(aliasList: Array<any>): Object {
+  static getAliasFields(aliasList: any[]): object {
     const fields = {};
     this.amfList.forEach(f => {
       fields[f] = aliasList.map(m => ({
@@ -373,7 +373,7 @@ export class Functions {
     return arr.sort().filter((i, k, a) => i !== a[k - 1]).filter(i => !!i);
   }
   static shareLinkUUID(): string {
-    if (!!window.location.hash) {
+    if (window.location.hash) {
       return window.location.hash.replace('#', '');
     }
     return null;
@@ -418,13 +418,13 @@ export class Functions {
     return color;
   }
   static idColorHash(str){
-    var hash = 0;
+    let hash = 0;
     for (var i = 0; i < str.length; i++) {
         hash = str.charCodeAt(i) + ((hash << 5) - hash);
     }
-    var colour = '#';
+    let colour = '#';
     for (var i = 0; i < 3; i++) {
-        var value = (hash >> (i * 8)) & 0xFF;
+        const value = (hash >> (i * 8)) & 0xFF;
         colour += ('00' + value.toString(16)).substr(-2);
     }
     return colour;

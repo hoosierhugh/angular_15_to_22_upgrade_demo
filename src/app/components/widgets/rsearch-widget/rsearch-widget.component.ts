@@ -1,4 +1,4 @@
-import { Component, Input, ChangeDetectionStrategy } from '@angular/core';
+import { Component, Input, ChangeDetectionStrategy, OnInit, OnDestroy, inject } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { IWidget } from '../IWidget';
 import { Router } from '@angular/router';
@@ -38,7 +38,12 @@ interface LokiSearchQuery {
   minWidth: 300,
   deprecated: true
 })
-export class RsearchWidgetComponent implements IWidget {
+export class RsearchWidgetComponent implements IWidget, OnInit, OnDestroy {
+  dialog = inject(MatDialog);
+  translateService = inject(TranslateService);
+  private router = inject(Router);
+  private searchService = inject(SearchService);
+
   @Input() id: string;
   @Input() config: unknown;
 
@@ -46,12 +51,9 @@ export class RsearchWidgetComponent implements IWidget {
   limit = 100;
   searchQueryLoki: LokiSearchQuery;
   queryText: string;
-  constructor(
-    public dialog: MatDialog,
-    public translateService: TranslateService,
-    private router: Router,
-    private searchService: SearchService
-  ) {
+  constructor() {
+    const translateService = this.translateService;
+
     translateService.addLangs(['en'])
     translateService.setDefaultLang('en')
   }

@@ -1,5 +1,5 @@
 import { WindowComponent } from './window/window.component';
-import { CUSTOM_ELEMENTS_SCHEMA, NgModule } from '@angular/core';
+import { CUSTOM_ELEMENTS_SCHEMA, NgModule, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ModalResizableComponent } from './modal-resizable.component';
 import { MatToolbarModule } from '@angular/material/toolbar';
@@ -32,7 +32,9 @@ import { MatButtonModule } from '@angular/material/button';
     // providers: [ModalService]
 })
 export class ModalResizableModule {
-    constructor(library: FaIconLibrary) {
+    constructor() {
+        const library = inject(FaIconLibrary);
+
         library.addIconPacks(fas as IconPack, fab as IconPack, far as IconPack);
     }
 }

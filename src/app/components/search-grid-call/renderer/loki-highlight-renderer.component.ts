@@ -18,7 +18,7 @@ export class LokiHighlightRenderer implements ICellRendererAngularComp {
     agInit(params: SearchGridCellParams): void {
         this.params = params;
         const rxText = this.params.context.componentParent.searchQueryLoki.rxText;
-        if (!!rxText) {
+        if (rxText) {
             const regex = new RegExp('(' + rxText + ')', 'g');
             this.data = this.htmlSpecialChars(String(this.params.value ?? ''))
                 .replace(regex, (g, a) => `<span>${a}</span>`);
@@ -30,7 +30,7 @@ export class LokiHighlightRenderer implements ICellRendererAngularComp {
         return s.replace(/\</g, '&lt;').replace(/\>/g, '&gt;');
 
     }
-    
+
     copy(value) {
         this.params.context.componentParent.copy(value);
     }

@@ -8,22 +8,28 @@
   <p>Select settings</p>
   <div>
     <mat-radio-group [(ngModel)]="data.agGridSizeControl.selectedType" class='radio-group'>
-        <mat-radio-button [value]='item.type' *ngFor="let item of radioSizeType">{{item.title}}</mat-radio-button>
+      @for (item of radioSizeType; track item) {
+        <mat-radio-button [value]='item.type'>{{item.title}}</mat-radio-button>
+      }
     </mat-radio-group>
-  </div>  
+  </div>
 
   <hr />
 
-  <app-drag-drop-list *ngIf="apiColumn.getAllColumns() !== 'undefined' && this.apiColumn.getAllColumns() !== null"
-    [list]="allColumnIds"
-    (order)="onUpdateProto($event)"
-  ></app-drag-drop-list>
-   <div *ngIf="apiColumn.getAllColumns() === 'undefined' || this.apiColumn.getAllColumns() === null">
+  @if (apiColumn.getAllColumns() !== 'undefined' && this.apiColumn.getAllColumns() !== null) {
+    <app-drag-drop-list
+      [list]="allColumnIds"
+      (order)="onUpdateProto($event)"
+    ></app-drag-drop-list>
+  }
+  @if (apiColumn.getAllColumns() === 'undefined' || this.apiColumn.getAllColumns() === null) {
+    <div>
       Please make a search to access settings
-   </div>
+    </div>
+  }
 </div>
 
-<div mat-dialog-actions style="float: right; margin-bottom: 0rem;"> 
+<div mat-dialog-actions style="float: right; margin-bottom: 0rem;">
   <!-- <button  mat-raised-button (click)="onNoClick()">{{'LINK.buttons.cancel' | translate}}</button> -->
   <button mat-raised-button color=primary [mat-dialog-close]="data" cdkFocusInitial [disabled]="apiColumn.getAllColumns() === 'undefined' || this.apiColumn.getAllColumns() === null">{{'LINK.buttons.save' | translate}}</button>
 </div>

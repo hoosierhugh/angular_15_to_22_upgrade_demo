@@ -1,14 +1,5 @@
 import { CallIDColor } from '@app/models/CallIDColor.model';
-import {
-  Component,
-  Input,
-  Output,
-  EventEmitter,
-  OnInit,
-  ChangeDetectionStrategy,
-  ChangeDetectorRef,
-  OnDestroy,
-} from '@angular/core';
+import { Component, Input, Output, EventEmitter, OnInit, ChangeDetectionStrategy, ChangeDetectorRef, OnDestroy, inject } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { ActivatedRoute } from '@angular/router';
 import { Functions, setStorage, getStorage } from '@app/helpers/functions';
@@ -34,6 +25,16 @@ import  moment from 'moment';
     standalone: false
 })
 export class DetailDialogComponent implements OnInit, OnDestroy {
+  private _pas = inject(PreferenceAdvancedService);
+  private cdr = inject(ChangeDetectorRef);
+  private _pass = inject(PreferenceAgentsubService);
+  private _agss = inject(AgentsubService);
+  private _phss = inject(PreferenceHepsubService);
+  private _route = inject(ActivatedRoute);
+  private _scs = inject(SearchCallService);
+  private tooltipService = inject(TooltipService);
+  private messageDetailsService = inject(MessageDetailsService);
+
   _sipDataItem: any;
   @Input() titleName = 'Call-ID';
   @Input() titleId: string;
@@ -44,7 +45,7 @@ export class DetailDialogComponent implements OnInit, OnDestroy {
   @Input() snapShotTimeRange: any;
   @Input() rowData: any;
   @Input() config: any;
-  @Input() callIDColorList: Array<CallIDColor>;
+  @Input() callIDColorList: CallIDColor[];
   isWindow = true;
   _qosData: any;
   tabStringIndex = 'Flow';
@@ -152,7 +153,7 @@ export class DetailDialogComponent implements OnInit, OnDestroy {
 
     this.cdr.detectChanges();
   }
-  @Input('isLoaded')
+  @Input()
   set isLoaded(val) {
     this._isLoaded = val;
     this.cdr.detectChanges();
@@ -163,20 +164,8 @@ export class DetailDialogComponent implements OnInit, OnDestroy {
   protocol_profile: string;
   private dateFormat: string;
 
-  @Output() openMessage: EventEmitter<any> = new EventEmitter();
-  @Output() close: EventEmitter<any> = new EventEmitter();
-
-  constructor(
-    private _pas: PreferenceAdvancedService,
-    private cdr: ChangeDetectorRef,
-    private _pass: PreferenceAgentsubService,
-    private _agss: AgentsubService,
-    private _phss: PreferenceHepsubService,
-    private _route: ActivatedRoute,
-    private _scs: SearchCallService,
-    private tooltipService: TooltipService,
-    private messageDetailsService: MessageDetailsService
-  ) {}
+  @Output() openMessage = new EventEmitter<any>();
+  @Output() close = new EventEmitter<any>();
   updateGraphSettings(e) {
     this.graphSettings = Functions.cloneObject(e);
     this.cdr.detectChanges();
@@ -390,7 +379,7 @@ export class DetailDialogComponent implements OnInit, OnDestroy {
     this.activeTab = event;
   }
 
-  get getTabs(): Array<string> {
+  get getTabs(): string[] {
     const isWebshark =
       !!this.sipDataItem?.data?.messages?.[0]?.source_data?.frame_protocol;
     return [

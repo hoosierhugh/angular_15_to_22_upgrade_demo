@@ -20,11 +20,15 @@
             <input matInput
               [formControl]="profile"
               autocomplete="off"
-            />
-            <mat-error *ngIf="profile?.errors?.['required']">{{'validators.required' | translate }}</mat-error>
-            <mat-error *ngIf="profile?.errors?.['minlength']">
-              {{ profile?.errors?.['minlength']?.requiredLength }} {{'validators.minChars' | translate }}
-            </mat-error>
+              />
+            @if (profile?.errors?.['required']) {
+              <mat-error>{{'validators.required' | translate }}</mat-error>
+            }
+            @if (profile?.errors?.['minlength']) {
+              <mat-error>
+                {{ profile?.errors?.['minlength']?.requiredLength }} {{'validators.minChars' | translate }}
+              </mat-error>
+            }
           </mat-form-field>
         </div>
 
@@ -34,17 +38,25 @@
             <input matInput
               [formControl]="hep_alias"
               autocomplete="off"
-            />
-            <mat-error *ngIf="hep_alias?.errors?.['required']">{{'validators.required' | translate }}</mat-error>
-            <mat-error *ngIf="hep_alias?.errors?.['minlength']">
-              {{ hep_alias?.errors?.['minlength']?.requiredLength }} {{'validators.minChars' | translate }}
-            </mat-error>
-            <mat-error *ngIf="hep_alias?.errors?.['maxlength']">
-              {{ hep_alias?.errors?.['maxlength']?.requiredLength }} {{'validators.maxChars' | translate }}
-            </mat-error>
-            <mat-error *ngIf="hep_alias?.errors?.['pattern'] && !hep_alias?.errors?.['minlength']">
-              {{'validators.pattern' | translate }} [aA-Zz], [0-9], "-" or "_"]
-            </mat-error>
+              />
+            @if (hep_alias?.errors?.['required']) {
+              <mat-error>{{'validators.required' | translate }}</mat-error>
+            }
+            @if (hep_alias?.errors?.['minlength']) {
+              <mat-error>
+                {{ hep_alias?.errors?.['minlength']?.requiredLength }} {{'validators.minChars' | translate }}
+              </mat-error>
+            }
+            @if (hep_alias?.errors?.['maxlength']) {
+              <mat-error>
+                {{ hep_alias?.errors?.['maxlength']?.requiredLength }} {{'validators.maxChars' | translate }}
+              </mat-error>
+            }
+            @if (hep_alias?.errors?.['pattern'] && !hep_alias?.errors?.['minlength']) {
+              <mat-error>
+                {{'validators.pattern' | translate }} [aA-Zz], [0-9], "-" or "_"]
+              </mat-error>
+            }
           </mat-form-field>
         </div>
 
@@ -54,11 +66,19 @@
             <input matInput
               [formControl]="hepid"
               autocomplete="off"
-            />
-            <mat-error *ngIf="hepid?.errors?.['required']">{{'validators.required' | translate }}</mat-error>
-            <mat-error *ngIf="hepid?.errors?.['min']">{{'validators.minNumber' | translate }} 1</mat-error>
-            <mat-error *ngIf="hepid?.errors?.['max']">{{'validators.maxNumber' | translate }} 10000</mat-error>
-            <mat-error *ngIf="hepid?.errors?.['pattern']">{{'validators.patternNumber' | translate }}</mat-error>
+              />
+            @if (hepid?.errors?.['required']) {
+              <mat-error>{{'validators.required' | translate }}</mat-error>
+            }
+            @if (hepid?.errors?.['min']) {
+              <mat-error>{{'validators.minNumber' | translate }} 1</mat-error>
+            }
+            @if (hepid?.errors?.['max']) {
+              <mat-error>{{'validators.maxNumber' | translate }} 10000</mat-error>
+            }
+            @if (hepid?.errors?.['pattern']) {
+              <mat-error>{{'validators.patternNumber' | translate }}</mat-error>
+            }
           </mat-form-field>
         </div>
       </div>
@@ -70,61 +90,69 @@
             <input matInput
               [formControl]="type"
               autocomplete="off"
-            />
-            <mat-error *ngIf="type?.errors?.['required']">{{'validators.required' | translate }}</mat-error>
-            <mat-error *ngIf="type?.errors?.['minlength']">
-              {{ type?.errors?.['minlength']?.requiredLength }} {{'validators.minChars' | translate }}
-            </mat-error>
-            <mat-error *ngIf="type?.errors?.['maxlength']">
-              {{ type?.errors?.['maxlength']?.requiredLength }} {{'validators.maxChars' | translate }}
-            </mat-error>
-            <mat-error *ngIf="type?.errors?.['pattern'] && !type?.errors?.['minlength']">
-              {{'validators.pattern' | translate }} [aA-Zz], [0-9], "-" or "_"]
-            </mat-error>
+              />
+            @if (type?.errors?.['required']) {
+              <mat-error>{{'validators.required' | translate }}</mat-error>
+            }
+            @if (type?.errors?.['minlength']) {
+              <mat-error>
+                {{ type?.errors?.['minlength']?.requiredLength }} {{'validators.minChars' | translate }}
+              </mat-error>
+            }
+            @if (type?.errors?.['maxlength']) {
+              <mat-error>
+                {{ type?.errors?.['maxlength']?.requiredLength }} {{'validators.maxChars' | translate }}
+              </mat-error>
+            }
+            @if (type?.errors?.['pattern'] && !type?.errors?.['minlength']) {
+              <mat-error>
+                {{'validators.pattern' | translate }} [aA-Zz], [0-9], "-" or "_"]
+              </mat-error>
+            }
           </mat-form-field>
         </div>
         <!-- <div>
 
-          <mat-form-field type="number"
-            style="padding-right: 1rem">
-            <mat-label>{{ 'preference.scripts.dialog.partition' | translate }}</mat-label>
-            <input matInput
-              type="number"
-              [formControl]="partid"
-              autocomplete="off"
+        <mat-form-field type="number"
+          style="padding-right: 1rem">
+          <mat-label>{{ 'preference.scripts.dialog.partition' | translate }}</mat-label>
+          <input matInput
+            type="number"
+            [formControl]="partid"
+            autocomplete="off"
             />
-            <mat-error *ngIf="partid?.errors?.required">{{'validators.required' | translate }}</mat-error>
-            <mat-error *ngIf="partid?.errors?.min">{{'validators.minNumber' | translate }} 1</mat-error>
-            <mat-error *ngIf="partid?.errors?.max">{{'validators.maxNumber' | translate }} 100</mat-error>
-            <mat-error *ngIf="partid?.errors?.pattern">{{'validators.patternNumber' | translate }}</mat-error>
-          </mat-form-field>
-        </div> -->
-        <div>
-          <mat-checkbox [(ngModel)]="data.data.status">{{data.data.status ? 'Active' : 'Inactive'}}</mat-checkbox>
-        </div>
+          <mat-error *ngIf="partid?.errors?.required">{{'validators.required' | translate }}</mat-error>
+          <mat-error *ngIf="partid?.errors?.min">{{'validators.minNumber' | translate }} 1</mat-error>
+          <mat-error *ngIf="partid?.errors?.max">{{'validators.maxNumber' | translate }} 100</mat-error>
+          <mat-error *ngIf="partid?.errors?.pattern">{{'validators.patternNumber' | translate }}</mat-error>
+        </mat-form-field>
+      </div> -->
+      <div>
+        <mat-checkbox [(ngModel)]="data.data.status">{{data.data.status ? 'Active' : 'Inactive'}}</mat-checkbox>
       </div>
-    </mat-tab>
-    <mat-tab [label]="'preference.scripts.dialog.jsScripts' | translate">
-      <hr />
+    </div>
+  </mat-tab>
+  <mat-tab [label]="'preference.scripts.dialog.jsScripts' | translate">
+    <hr />
 
-      <p>
-        <strong>{{ 'preference.scripts.dialog.jsScripts' | translate }}</strong>
-      </p>
-      <small>{{ 'preference.scripts.dialog.jsScriptsDescription' | translate }}</small>
-      <hr />
-      <full-screen (fullPage)='disableClose($event)'
-                    (import)='import($event)'
-                    [data]='{json:data.data.data, title: "Script " +  data.data.hep_alias + " " + data.data.profile, type: "js"}'>
-        <app-codejar-wrapper [mode]="'javascript'"
-          [theme]="'monokai'"
-          [readOnly]="!isAdmin"
-          [(text)]="data.data.data"
-          [style.min-height.%]="100"
-          style="padding: 5px"
-        ></app-codejar-wrapper>
-      </full-screen>
-    </mat-tab>
-  </mat-tab-group>
+    <p>
+      <strong>{{ 'preference.scripts.dialog.jsScripts' | translate }}</strong>
+    </p>
+    <small>{{ 'preference.scripts.dialog.jsScriptsDescription' | translate }}</small>
+    <hr />
+    <full-screen (fullPage)='disableClose($event)'
+      (import)='import($event)'
+      [data]='{json:data.data.data, title: "Script " +  data.data.hep_alias + " " + data.data.profile, type: "js"}'>
+      <app-codejar-wrapper [mode]="'javascript'"
+        [theme]="'monokai'"
+        [readOnly]="!isAdmin"
+        [(text)]="data.data.data"
+        [style.min-height.%]="100"
+        style="padding: 5px"
+      ></app-codejar-wrapper>
+    </full-screen>
+  </mat-tab>
+</mat-tab-group>
 
 
 </div>
@@ -132,7 +160,7 @@
 <div mat-dialog-actions
   style="float: right; margin-bottom: 0rem">
   <button mat-raised-button
-    (click)="onNoClick()">{{'LINK.buttons.cancel' | translate}}</button>
+  (click)="onNoClick()">{{'LINK.buttons.cancel' | translate}}</button>
   <button mat-raised-button
     color="primary"
     (click)="onSubmit()"

@@ -1,69 +1,81 @@
 <div class="loki-main-container"
-    style="display: flex;background:white">
-    <div style="flex:1;padding:12px;padding-bottom:5px;">
-        <app-code-style-field [queryText]="queryText"
-            (updateData)="onUpdateData($event)"
-            (keyEnter)="doSerchResult()"></app-code-style-field>
+  style="display: flex;background:white">
+  <div style="flex:1;padding:12px;padding-bottom:5px;">
+    <app-code-style-field [queryText]="queryText"
+      (updateData)="onUpdateData($event)"
+    (keyEnter)="doSerchResult()"></app-code-style-field>
+  </div>
+  <div style="display: flex; align-items: flex-end; padding: 0 0.5rem;padding-top:12px;padding-left:0px;">
+    <button mat-button
+      class="refresh-search"
+      (click)="doSerchResult()"><fa-icon icon="sync"></fa-icon> Run Query</button>
     </div>
-    <div style="display: flex; align-items: flex-end; padding: 0 0.5rem;padding-top:12px;padding-left:0px;">
-        <button mat-button
-            class="refresh-search"
-            (click)="doSerchResult()"><fa-icon icon="sync"></fa-icon> Run Query</button>
-    </div>
-</div>
-<div>
-    <div class="search-logs" *ngIf="loading">
+  </div>
+  <div>
+    @if (loading) {
+      <div class="search-logs">
         LOADING... PLEASE WAIT
-    </div>
-    <div *ngIf="!resultData || resultData.length < 1 && !loading"
+      </div>
+    }
+    @if (!resultData || resultData.length < 1 && !loading) {
+      <div
         class="search-logs">
         <div>
-            <strong *ngIf="!resultsFound" class="logs-strong">No Results Found</strong>
-
-            <strong *ngIf="resultsFound" class="logs-strong">Ready to Search Logs!</strong>
-            
-            <p>Fine tune and hit <strong><fa-icon icon="sync"></fa-icon> Run Query</strong> </p>
+          @if (!resultsFound) {
+            <strong class="logs-strong">No Results Found</strong>
+          }
+          @if (resultsFound) {
+            <strong class="logs-strong">Ready to Search Logs!</strong>
+          }
+          <p>Fine tune and hit <strong><fa-icon icon="sync"></fa-icon> Run Query</strong> </p>
         </div>
-        <div *ngIf="!isFirstSearch && resultData === []">
+        @if (!isFirstSearch && resultData === []) {
+          <div>
             <i> No Result Found </i>
-        </div>
-    </div>
+          </div>
+        }
+      </div>
+    }
 
-    <div *ngIf="resultData?.length && !loading"
+    @if (resultData?.length && !loading) {
+      <div
         [className]="'loki-search'+(isResultPage ? ' result-page' : '')">
         <div class="switches">
-
-            <div class="time-display">
-                <mat-checkbox color="primary"
-                    [checked]="showTime"
-                    class="example-margin"
-                    [(ngModel)]="showTime"><span style="font-family: monospace">Time</span></mat-checkbox>
+          <div class="time-display">
+            <mat-checkbox color="primary"
+              [checked]="showTime"
+              class="example-margin"
+              [(ngModel)]="showTime"><span style="font-family: monospace">Time</span></mat-checkbox>
             </div>
-        </div>
-
-        <div class="loki-container">
-            <div *ngFor="let i of resultData trackBy: identify;let idx = index"
+          </div>
+          <div class="loki-container">
+            @for (i of resultData; track identify($index, i); let idx = $index) {
+              <div
                 >
                 <div class="loki-body item" (click)="showLabel(idx)">
-                    <span><mat-icon [id]="'icon-'+idx" style="font-size: 12px;height:12px;width:12px">navigate_next</mat-icon></span>
-                <div class="item-tex-loki hover lokitime"
-                    *ngIf="showTime">{{i.micro_ts | moment:'YYYY-MM-DD HH:mm:ss'}} <p *ngIf="showTs"
-                        class="timeseconds">{{i.micro_ts}}</p>
-                </div>
-
-                
+                  <span><mat-icon [id]="'icon-'+idx" style="font-size: 12px;height:12px;width:12px">navigate_next</mat-icon></span>
+                  @if (showTime) {
+                    <div class="item-tex-loki hover lokitime"
+                      >{{i.micro_ts | moment:'YYYY-MM-DD HH:mm:ss'}} @if (showTs) {
+                      <p
+                      class="timeseconds">{{i.micro_ts}}</p>
+                    }
+                  </div>
+                }
                 <div class="item-tex-loki hover loki-highlight lokimessage"
-                    [innerHTML]="i.custom_1"></div>
-                    </div>
-                    <div class="loki-labels" style="width:100%" [id]="'label-' + idx" style="display:none">
-                        <span>Log labels</span>
-                        <span *ngFor="let tag of i.custom_2 | keyvalue" class="label-line">
-                        <span style="width:150px;">{{tag.key}}</span> <span>{{tag.value}}</span>
-   
-                       </span>  
-                    </div>
-
+                [innerHTML]="i.custom_1"></div>
+              </div>
+              <div class="loki-labels" style="width:100%" [id]="'label-' + idx" style="display:none">
+                <span>Log labels</span>
+                @for (tag of i.custom_2 | keyvalue; track tag) {
+                  <span class="label-line">
+                    <span style="width:150px;">{{tag.key}}</span> <span>{{tag.value}}</span>
+                  </span>
+                }
+              </div>
             </div>
+          }
         </div>
-    </div>
-</div>
+      </div>
+    }
+  </div>

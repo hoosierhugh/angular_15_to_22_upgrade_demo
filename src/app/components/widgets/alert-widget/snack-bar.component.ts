@@ -1,4 +1,4 @@
-import { Component, Inject, ChangeDetectionStrategy } from '@angular/core';
+import { Component, ChangeDetectionStrategy, inject } from '@angular/core';
 import { MAT_SNACK_BAR_DATA } from '@angular/material/snack-bar';
 
 @Component({
@@ -19,11 +19,9 @@ import { MAT_SNACK_BAR_DATA } from '@angular/material/snack-bar';
     standalone: false
 })
 export class SnackBarComponent {
-    constructor(
-        @Inject(MAT_SNACK_BAR_DATA) public data: {
-            alertTextColor: string;
-            alertSuccessColor: string;
-            alertMessage: string;
-        }
-    ) { }
+    data = inject<{
+    alertTextColor: string;
+    alertSuccessColor: string;
+    alertMessage: string;
+}>(MAT_SNACK_BAR_DATA);
 }

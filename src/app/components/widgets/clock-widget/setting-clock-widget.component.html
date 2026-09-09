@@ -14,9 +14,11 @@
   <mat-form-field>
     <mat-label>{{'widgets.clock.settings.timezone' | translate}}</mat-label>
     <mat-select [(value)]="data.desc">
-      <mat-option *ngFor="let timeZone of arrayTimeZones" [value]="timeZone" (click)="onSelectTimeZone(timeZone)">
-        {{timeZone}}
-      </mat-option>
+      @for (timeZone of arrayTimeZones; track timeZone) {
+        <mat-option [value]="timeZone" (click)="onSelectTimeZone(timeZone)">
+          {{timeZone}}
+        </mat-option>
+      }
     </mat-select>
   </mat-form-field>
 </div>
@@ -24,9 +26,11 @@
   <mat-form-field>
     <mat-label>{{'widgets.clock.settings.clockType' | translate}}</mat-label>
     <mat-select [(value)]="data.showAnalog">
-      <mat-option *ngFor="let clockType of arrayClockType" [value]="clockType" (click)="onChange">
-        {{clockType}}
-      </mat-option>
+      @for (clockType of arrayClockType; track clockType) {
+        <mat-option [value]="clockType" (click)="onChange">
+          {{clockType}}
+        </mat-option>
+      }
     </mat-select>
   </mat-form-field>
 </div>

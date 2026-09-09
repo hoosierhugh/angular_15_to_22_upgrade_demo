@@ -1,5 +1,5 @@
 import { WindowService } from '@app/components/controls/modal-resizable/window/window.service';
-import { Component, OnInit, OnDestroy, ChangeDetectionStrategy, ChangeDetectorRef, ElementRef, ViewChild, Input } from '@angular/core';
+import { Component, OnInit, OnDestroy, ChangeDetectionStrategy, ChangeDetectorRef, ElementRef, ViewChild, Input, inject } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { TooltipService, TooltipDetails } from '@app/services/tooltip.service';
 
@@ -12,9 +12,13 @@ import { TooltipService, TooltipDetails } from '@app/services/tooltip.service';
     standalone: false
 })
 export class FlowTooltipComponent implements OnInit, OnDestroy {
+    private windowService = inject(WindowService);
+    private tooltipService = inject(TooltipService);
+    private cdr = inject(ChangeDetectorRef);
+
     private subscription: Subscription;
     isMessage: boolean;
-    messageTable: Array<{ name: string; value: unknown }>;
+    messageTable: { name: string; value: unknown }[];
     messageString: string;
     messageChart:  string;
     type = 'string';
@@ -26,11 +30,6 @@ export class FlowTooltipComponent implements OnInit, OnDestroy {
     isLinkImg: boolean;
     @Input() isForPopup = false;
     @ViewChild('tooltipContainer', { static: true }) tooltipContainer: ElementRef;
-    constructor(
-        private windowService: WindowService,
-        private tooltipService: TooltipService,
-        private cdr: ChangeDetectorRef
-    ) { }
 
     onMouseMove(evt: MouseEvent) {
         const getParentBody = (el: HTMLElement | null): HTMLElement | null => {
@@ -62,7 +61,7 @@ export class FlowTooltipComponent implements OnInit, OnDestroy {
             this.isMessage = !!message;
             if (typeof message === 'string') {
                 this.type = 'string';
-            
+
                 this.messageString = message;
                 this.cdr.detectChanges();
                 return;

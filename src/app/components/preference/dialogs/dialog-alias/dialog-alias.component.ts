@@ -1,4 +1,4 @@
-import { Component, Inject, ChangeDetectionStrategy, ViewChild } from '@angular/core';
+import { Component, ChangeDetectionStrategy, ViewChild, inject } from '@angular/core';
 import { AbstractControl, FormControl, Validators } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { TranslateService } from '@ngx-translate/core'
@@ -22,6 +22,10 @@ interface AliasDialogRecord {
     standalone: false
 })
 export class DialogAliasComponent {
+    dialogRef = inject<MatDialogRef<DialogAliasComponent>>(MatDialogRef);
+    translateService = inject(TranslateService);
+    data = inject<CrudDialogData<AliasDialogRecord>>(MAT_DIALOG_DATA);
+
     @ViewChild('data_view', { static: false }) editor;
     aliasLink = '';
     isNotChanged = false;
@@ -71,10 +75,10 @@ export class DialogAliasComponent {
         Validators.maxLength(100)
     ])
 
-    constructor(
-        public dialogRef: MatDialogRef<DialogAliasComponent>,
-        public translateService: TranslateService,
-        @Inject(MAT_DIALOG_DATA) public data: CrudDialogData<AliasDialogRecord>) {
+    constructor() {
+        const translateService = this.translateService;
+        const data = this.data;
+
         translateService.addLangs(['en'])
         translateService.setDefaultLang('en')
         if (data.isnew) {
@@ -115,7 +119,7 @@ export class DialogAliasComponent {
         if((control.value as string).indexOf(' ') >= 0){
             return {cannotContainSpace: true}
         }
-  
+
         return null;
     }
 
@@ -133,7 +137,7 @@ export class DialogAliasComponent {
                 d.ip = this.ip?.value;
                 d.captureID = this.captureID?.value;
             })(this.data.data);
-           
+
             this.dialogRef.close(this.data);
         } else {
             this.alias.markAsTouched();

@@ -1,4 +1,4 @@
-import { Component, Inject, ChangeDetectionStrategy } from '@angular/core';
+import { Component, ChangeDetectionStrategy, inject } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA} from '@angular/material/dialog';
 import { TranslateService } from '@ngx-translate/core'
 
@@ -10,11 +10,14 @@ import { TranslateService } from '@ngx-translate/core'
     standalone: false
 })
 export class DeleteDialogComponent {
+  dialogRef = inject<MatDialogRef<DeleteDialogComponent>>(MatDialogRef);
+  translateService = inject(TranslateService);
+  data = inject(MAT_DIALOG_DATA);
 
-  constructor(
-    public dialogRef: MatDialogRef<DeleteDialogComponent>,
-      public translateService: TranslateService,
-    @Inject(MAT_DIALOG_DATA) public data: unknown) {
+
+  constructor() {
+       const translateService = this.translateService;
+
        translateService.addLangs(['en'])
         translateService.setDefaultLang('en')
     }

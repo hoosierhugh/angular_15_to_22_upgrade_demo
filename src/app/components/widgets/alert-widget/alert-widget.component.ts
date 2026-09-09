@@ -1,4 +1,4 @@
-import { Component, Input, Output, EventEmitter, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
+import { Component, Input, Output, EventEmitter, ChangeDetectionStrategy, ChangeDetectorRef, OnInit, OnDestroy, inject } from '@angular/core';
 import { Widget, WidgetArrayInstance } from '@app/helpers/widget';
 import { SettingAlertWidgetComponent } from './setting-alert-widget.component';
 import { SnackBarComponent } from './snack-bar.component';
@@ -18,18 +18,18 @@ export interface AlertConfig {
     alertUrl: string;
     audioUrl: string;
     requestType: string;
-    keyList: Array<string>;
+    keyList: string[];
     postData: string;
-    expectedList: Array<string>;
-    comparsionTypeList: Array<string>;
+    expectedList: string[];
+    comparsionTypeList: string[];
     alertMessage: string;
     alertSuccessColor: string;
     alertFailColor: string;
     alertTextColor: string;
     alertDuration: number;
-    alertSuccessColorArray: Array<string>;
-    alertFailColorArray: Array<string>;
-    alertTextColorArray: Array<string>;
+    alertSuccessColorArray: string[];
+    alertFailColorArray: string[];
+    alertTextColorArray: string[];
     comparsionLogic: string;
     showResponse: boolean;
 }
@@ -52,7 +52,13 @@ export interface AlertConfig {
     minWidth: 300
 })
 
-export class AlertWidgetComponent implements IWidget {
+export class AlertWidgetComponent implements IWidget, OnInit, OnDestroy {
+    dialog = inject(MatDialog);
+    private http = inject(HttpClient);
+    private _snackBar = inject(MatSnackBar);
+    private cdr = inject(ChangeDetectorRef);
+    translateService = inject(TranslateService);
+
 
     @Input() config: AlertConfig;
     @Input() id: string;
@@ -63,13 +69,9 @@ export class AlertWidgetComponent implements IWidget {
     _config: AlertConfig;
     isConfig = false;
 
-    constructor(
-        public dialog: MatDialog,
-        private http: HttpClient,
-        private _snackBar: MatSnackBar,
-        private cdr: ChangeDetectorRef,
-        public translateService: TranslateService
-    ) {
+    constructor() {
+        const translateService = this.translateService;
+
         translateService.addLangs(['en']);
         translateService.setDefaultLang('en');
     }

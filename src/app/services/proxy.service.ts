@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { catchError, throwError } from 'rxjs';
 import { Observable } from 'rxjs';
@@ -7,9 +7,9 @@ import { environment } from '@environments/environment';
 @Injectable({ providedIn: 'root' })
 
 export class ProxyService {
-    private url = `${environment.apiUrl}/proxy`;
+    private _http = inject(HttpClient);
 
-    constructor(private _http: HttpClient) { }
+    private url = `${environment.apiUrl}/proxy`;
 
     // Get Folders list
     getProxyGrafanaFolders(): Observable<any> {

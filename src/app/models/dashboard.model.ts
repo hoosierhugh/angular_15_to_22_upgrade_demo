@@ -28,7 +28,7 @@ export interface DashboardData {
 export interface DashboardModel {
     // id: number;
     // username: string;
-    dashboard: Array<DashboardContentModel>;
+    dashboard: DashboardContentModel[];
 
     category: string;
     create_date: string;

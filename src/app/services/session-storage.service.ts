@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { AuthenticationService } from './authentication.service';
 import { BehaviorSubject, Observable } from 'rxjs';
 import  moment from 'moment';
@@ -11,7 +11,7 @@ export interface UserSettings {
     dateTimeRange: {
         title: string;
         timezone: string,
-        dates: Array<moment.Moment | string>
+        dates: (moment.Moment | string)[]
     };
     protosearchSettings: Record<string, StoredProtoSearchConfig>;
     favorites: StoredFavorite[];
@@ -54,6 +54,8 @@ enum TypeForSave {
 })
 
 export class SessionStorageService {
+    private authenticationService = inject(AuthenticationService);
+
 
     static userSettings: UserSettings = {
         updateType: TypeForSave.FULL,
@@ -78,7 +80,7 @@ export class SessionStorageService {
 
     public sessionStorage: Observable<UserSettings>;
 
-    constructor(private authenticationService: AuthenticationService) {
+    constructor() {
         this.updateDataFromLocalStorage();
         setTimeout(() => {
             this.updateDataFromLocalStorage();

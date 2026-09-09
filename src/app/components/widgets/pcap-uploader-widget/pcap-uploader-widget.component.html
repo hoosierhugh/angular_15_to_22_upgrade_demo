@@ -1,34 +1,36 @@
-<app-loading-circle *ngIf="inProgress">
-</app-loading-circle>
+@if (inProgress) {
+  <app-loading-circle>
+  </app-loading-circle>
+}
 <form [hidden]="!!filename"
-    style="height: 100%;">
-    <div class="file-upload-container">
-        <label for="pcap-file-select"
-            [className]="'fileselect' + (idDrugOver ? ' drugOver' : '')"></label>
-        <input placeholder=""
-            value=""
-            type="file"
-            id="pcap-file-select"
-            #fileSelect>
-        <!-- <fa-icon icon="upload"></fa-icon> -->
-    </div>
+  style="height: 100%;">
+  <div class="file-upload-container">
+    <label for="pcap-file-select"
+    [className]="'fileselect' + (idDrugOver ? ' drugOver' : '')"></label>
+    <input placeholder=""
+      value=""
+      type="file"
+      id="pcap-file-select"
+      #fileSelect>
+    <!-- <fa-icon icon="upload"></fa-icon> -->
+  </div>
 </form>
-<ng-container *ngIf="filename && !inProgress">
-    <p>
-        {{ 'widgets.pcapUploader.widget.file' | translate }}<strong>{{ filename }}</strong>
-        <br />
-        {{ 'widgets.pcapUploader.widget.size' | translate }}<strong>{{ filesize }}Kb</strong>
-    </p>
-    <hr />
-    <mat-checkbox color="primary" [(ngModel)]="isDataTimeNow">
-        {{ 'widgets.pcapUploader.widget.setDateTime' | translate }}
-    </mat-checkbox>
-    <hr />
-    <button mat-raised-button
-        (click)="filename = ''"
-        cdkFocusInitial>{{'LINK.buttons.clear' | translate}}</button>
-    <button mat-raised-button
-        color="primary"
-        (click)="onSubmit()"
-        cdkFocusInitial>Upload</button>
-</ng-container>
+@if (filename && !inProgress) {
+  <p>
+    {{ 'widgets.pcapUploader.widget.file' | translate }}<strong>{{ filename }}</strong>
+    <br />
+    {{ 'widgets.pcapUploader.widget.size' | translate }}<strong>{{ filesize }}Kb</strong>
+  </p>
+  <hr />
+  <mat-checkbox color="primary" [(ngModel)]="isDataTimeNow">
+    {{ 'widgets.pcapUploader.widget.setDateTime' | translate }}
+  </mat-checkbox>
+  <hr />
+  <button mat-raised-button
+    (click)="filename = ''"
+  cdkFocusInitial>{{'LINK.buttons.clear' | translate}}</button>
+  <button mat-raised-button
+    color="primary"
+    (click)="onSubmit()"
+  cdkFocusInitial>Upload</button>
+}

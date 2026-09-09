@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { HttpGetBuffer } from '@app/helpers/http-get-buffer';
 import { environment } from '@environments/environment';
 import { lastValueFrom } from 'rxjs';
@@ -21,9 +21,10 @@ interface Loki {
     providedIn: 'root'
 })
 export class ModulesService {
+    private http = inject(HttpGetBuffer);
+
 
     private url = `${environment.apiUrl}`;
-    constructor(private http: HttpGetBuffer) { }
     // HOMER external applications: i.e. Loki, Prometheus, etc.
     getModules(): Promise<Modules> {
         return lastValueFrom(this.http.get<Modules>(`${this.url}/modules/status`, 120 * 1000));

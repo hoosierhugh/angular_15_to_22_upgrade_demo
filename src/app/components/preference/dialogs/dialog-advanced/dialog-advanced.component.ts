@@ -1,4 +1,4 @@
-import { Component, Inject, ChangeDetectionStrategy, ViewChild } from '@angular/core';
+import { Component, ChangeDetectionStrategy, ViewChild, inject } from '@angular/core';
 import { FormControl, Validators } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { Functions } from '@app/helpers/functions';
@@ -21,6 +21,11 @@ interface AdvancedDialogRecord {
     standalone: false
 })
 export class DialogAdvancedComponent {
+    private authService = inject(AuthenticationService);
+    dialogRef = inject<MatDialogRef<DialogAdvancedComponent>>(MatDialogRef);
+    translateService = inject(TranslateService);
+    data = inject<CrudDialogData<AdvancedDialogRecord>>(MAT_DIALOG_DATA);
+
     @ViewChild('data_view', { static: false }) editor;
     isDisabled = false;
     isValidForm = false;
@@ -48,12 +53,11 @@ export class DialogAdvancedComponent {
         Validators.pattern(this.regNum)
     ]);
 
-    constructor(
-        private authService: AuthenticationService,
-        public dialogRef: MatDialogRef<DialogAdvancedComponent>,
-        public translateService: TranslateService,
-        @Inject(MAT_DIALOG_DATA) public data: CrudDialogData<AdvancedDialogRecord>) {
-        
+    constructor() {
+        const translateService = this.translateService;
+        const data = this.data;
+
+
         translateService.addLangs(['en'])
         translateService.setDefaultLang('en')
         if (data.isnew) {

@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, OnDestroy, ChangeDetectionStrategy, ChangeDetectorRef, inject } from '@angular/core';
 import { Subscription } from 'rxjs';
 
 import { AlertService } from './../../../services';
@@ -18,17 +18,19 @@ import { AlertSubject } from '@app/models/alert.model';
 })
 
 export class AlertSourceComponent implements OnInit, OnDestroy {
+    private alertService = inject(AlertService);
+    private cdr = inject(ChangeDetectorRef);
+    translateService = inject(TranslateService);
+    private alertOverlay = inject(AlertOverlayService);
+
     private subscription: Subscription;
     message: AlertSubject;
     timeoutId: ReturnType<typeof setTimeout>;
     isOpen = false;
     dialogRef: AlertOverlayRef;
-    constructor(
-        private alertService: AlertService,
-        private cdr: ChangeDetectorRef,
-        public translateService: TranslateService,
-        private alertOverlay: AlertOverlayService
-    ) {
+    constructor() {
+        const translateService = this.translateService;
+
         translateService.addLangs(['en'])
         translateService.setDefaultLang('en')
     }

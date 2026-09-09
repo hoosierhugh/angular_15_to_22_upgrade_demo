@@ -1,15 +1,4 @@
-import {
-  Input,
-  Output,
-  Component,
-  ViewChild,
-  EventEmitter,
-  AfterViewInit,
-  ChangeDetectorRef,
-  ChangeDetectionStrategy,
-  OnInit,
-  OnDestroy,
-} from '@angular/core';
+import { Input, Output, Component, ViewChild, EventEmitter, AfterViewInit, ChangeDetectorRef, ChangeDetectionStrategy, OnInit, OnDestroy, inject } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { Router } from '@angular/router';
 import { IWidget } from '../IWidget';
@@ -52,6 +41,15 @@ import { TranslateService } from '@ngx-translate/core'
 })
 export class SmartInputWidgetComponent
   implements IWidget, OnInit, AfterViewInit, OnDestroy {
+  dialog = inject(MatDialog);
+  private router = inject(Router);
+  private searchService = inject(SearchService);
+  private _sss = inject(SessionStorageService);
+  private dashboardService = inject(DashboardService);
+  translateService = inject(TranslateService);
+  private cdr = inject(ChangeDetectorRef);
+  private preferenceMappingProtocolService = inject(PreferenceMappingProtocolService);
+
   @Input() id: string;
 
   @Input() config;
@@ -92,24 +90,16 @@ export class SmartInputWidgetComponent
   searchQuery: any;
 
   widgetId: string;
-  widgetResultList: Array<any>;
+  widgetResultList: any[];
   widgetResultListLastSelect: string;
   isConfig = true;
   mapping: any;
   targetResultsContainerValue = new FormControl();
   SmartInputQueryText = '';
   _lastInterval: any;
-  constructor(
-    public dialog: MatDialog,
-    private router: Router,
-    private searchService: SearchService,
-    private _sss: SessionStorageService,
-    private dashboardService: DashboardService,
-    public translateService: TranslateService,
-    private cdr: ChangeDetectorRef,
-    private preferenceMappingProtocolService: PreferenceMappingProtocolService,
+  constructor() {
+    const translateService = this.translateService;
 
-  ) {
     translateService.addLangs(['en'])
     translateService.setDefaultLang('en')
   }
@@ -517,7 +507,7 @@ export class SmartInputWidgetComponent
     requestAnimationFrame(() => this.cdr.detectChanges())
   }
   private autocompliteFiltring(item: any) {
-    const options: Array<any> = item.form_default;
+    const options: any[] = item.form_default;
     const _filter = (value: string): string[] => {
       const filterValue = value.toLowerCase();
       item.value = value;

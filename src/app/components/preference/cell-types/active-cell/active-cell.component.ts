@@ -1,5 +1,5 @@
 
-import { ChangeDetectorRef, Component, Input, OnInit, ViewChild, ChangeDetectionStrategy } from '@angular/core';
+import { ChangeDetectorRef, Component, Input, OnInit, ViewChild, ChangeDetectionStrategy, inject } from '@angular/core';
 import { MatColumnDef, MatTable } from '@angular/material/table';
 import { TranslateService } from '@ngx-translate/core'
 @Component({
@@ -10,6 +10,10 @@ import { TranslateService } from '@ngx-translate/core'
     standalone: false
 })
 export class ActiveCellComponent implements OnInit {
+    table = inject<MatTable<unknown>>(MatTable);
+    private cdr = inject(ChangeDetectorRef);
+    translateService = inject(TranslateService);
+
     @Input() column;
     @Input() columnName = 'Status';
 
@@ -19,9 +23,9 @@ export class ActiveCellComponent implements OnInit {
     };
     @ViewChild(MatColumnDef) columnDef: MatColumnDef;
 
-    constructor(public table: MatTable<unknown>,
-        private cdr: ChangeDetectorRef,
-        public translateService: TranslateService) { 
+    constructor() {
+            const translateService = this.translateService;
+
             translateService.addLangs(['en'])
             translateService.setDefaultLang('en')
     }

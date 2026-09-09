@@ -1,4 +1,4 @@
-import { Component, Inject, ViewChild, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
+import { Component, ViewChild, ChangeDetectionStrategy, ChangeDetectorRef, inject } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA, MatDialog } from '@angular/material/dialog';
 import { FormControl } from '@angular/forms';
 import { MatTable } from '@angular/material/table';
@@ -18,9 +18,9 @@ export interface PeriodicElement {
     buttons: boolean;
     detail?: {
         measurement?: string;
-        counter?: Array<string>;
-        tags?: Array<string>;
-        values?: Array<string>;
+        counter?: string[];
+        tags?: string[];
+        values?: string[];
         sum?: boolean;
         raw?: string;
     };
@@ -35,7 +35,7 @@ export interface SelectList {
     url?: string;
     type?: string;
     isStarred?: boolean;
-    tags?: Array<any>;
+    tags?: any[];
     value: string;
 }
 export interface GroupedSelectList {
@@ -52,6 +52,15 @@ export interface GroupedSelectList {
 })
 
 export class SettingInfluxdbchartWidgetComponent {
+    private _ss = inject(StatisticService);
+    private _dtrs = inject(DateTimeRangeService);
+    private alertService = inject(AlertService);
+    translateService = inject(TranslateService);
+    dialogAlarm = inject(MatDialog);
+    dialogRef = inject<MatDialogRef<SettingInfluxdbchartWidgetComponent>>(MatDialogRef);
+    private cdr = inject(ChangeDetectorRef);
+    data = inject(MAT_DIALOG_DATA);
+
     @ViewChild(MatTable, { static: true }) table: MatTable<any>;
 
     displayedColumns: string[] = ['id', 'panelDataSource', 'database', 'retentionPolicy', 'buttons'];
@@ -93,16 +102,10 @@ export class SettingInfluxdbchartWidgetComponent {
 
     isInvalid: boolean;
 
-    constructor(
-        private _ss: StatisticService,
-        private _dtrs: DateTimeRangeService,
-        private alertService: AlertService,
-        public translateService: TranslateService,
-        public dialogAlarm: MatDialog,
-        public dialogRef: MatDialogRef<SettingInfluxdbchartWidgetComponent>,
-        private cdr: ChangeDetectorRef,
-        @Inject(MAT_DIALOG_DATA) public data: any
-    ) {
+    constructor() {
+        const translateService = this.translateService;
+        const data = this.data;
+
         translateService.addLangs(['en'])
         translateService.setDefaultLang('en')
         if (data.empty) {
@@ -306,7 +309,7 @@ export class SettingInfluxdbchartWidgetComponent {
             }
         });
     }
-    updateResult(firstBoot: boolean = false) {
+    updateResult(firstBoot = false) {
         if (this.selectedEditQuery) {
             this.dataSource[this.dataSource.map(i => i.id).indexOf(this.selectedEditQuery.id)] = this.selectedEditQuery;
         }

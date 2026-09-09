@@ -10,14 +10,14 @@ import {CdkDragDrop, moveItemInArray, transferArrayItem} from '@angular/cdk/drag
 })
 
 export class DragDropListComponent implements OnInit {
-    _list: Array<any>;
-    inactiveList: Array<any> = [];
-    activeList: Array<any> = [];
+    _list: any[];
+    inactiveList: any[] = [];
+    activeList: any[] = [];
 
     @Output() change = new EventEmitter<any> ();
     @Output() order = new EventEmitter<any> ();
-    @Input() sortlistactive: Array<any>;
-    @Input('list') set list(val) {
+    @Input() sortlistactive: any[];
+    @Input() set list(val) {
         this._list = val;
         this.activeList = [];
         this.inactiveList = [];

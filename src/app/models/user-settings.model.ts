@@ -14,9 +14,9 @@ export interface UserSettings {
         selectedItem: string;
         title: string;
         weight: number;
-        widgets: Array<WidgetModel>;
+        widgets: WidgetModel[];
         config: {
-            margins: Array<number>;
+            margins: number[];
             columns: string;
             pushing: boolean;
             draggable: {
@@ -24,7 +24,7 @@ export interface UserSettings {
             };
             resizable: {
                 enabled: boolean;
-                handles: Array<string>;
+                handles: string[];
             }
         }
     }

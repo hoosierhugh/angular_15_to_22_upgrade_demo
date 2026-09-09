@@ -1,4 +1,4 @@
-import { Component, Inject, ChangeDetectionStrategy } from '@angular/core';
+import { Component, ChangeDetectionStrategy, inject } from '@angular/core';
 import { FormControl, Validators } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { AuthenticationService } from '@app/services';
@@ -18,6 +18,11 @@ interface AuthKeyDialogRecord {
     standalone: false
 })
 export class DialogAuthKeyComponent {
+    private authService = inject(AuthenticationService);
+    dialogRef = inject<MatDialogRef<DialogAuthKeyComponent>>(MatDialogRef);
+    translateService = inject(TranslateService);
+    data = inject<CrudDialogData<AuthKeyDialogRecord>>(MAT_DIALOG_DATA);
+
     isValidForm = false;
     isAdmin = false;
     regString = /^[a-zA-Z0-9\-\_\s]+$/;
@@ -27,11 +32,10 @@ export class DialogAuthKeyComponent {
         Validators.maxLength(100),
         Validators.pattern(this.regString)
     ]);
-    constructor(
-        private authService: AuthenticationService,
-        public dialogRef: MatDialogRef<DialogAuthKeyComponent>,
-        public translateService: TranslateService,
-        @Inject(MAT_DIALOG_DATA) public data: CrudDialogData<AuthKeyDialogRecord>) {
+    constructor() {
+        const translateService = this.translateService;
+        const data = this.data;
+
         translateService.addLangs(['en'])
         translateService.setDefaultLang('en')
         if (data.isnew) {

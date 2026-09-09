@@ -9,7 +9,7 @@ export interface PreferenceAuthKey {
     limit_calls: number;
     name: string;
     usage_calls: number;
-    user_object: Object;
+    user_object: object;
     usergroup: string;
     version: number;
 }

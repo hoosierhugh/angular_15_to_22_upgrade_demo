@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import  moment from 'moment';
 import { PreferenceAdvancedService } from './preferences/advanced.service';
 
@@ -13,6 +13,8 @@ export interface DateFormat {
   providedIn: 'root'
 })
 export class TimeFormattingService {
+    private _pas = inject(PreferenceAdvancedService);
+
     _dateFormat;
     get dateFormat(): DateFormat {
         return this._dateFormat;
@@ -20,8 +22,7 @@ export class TimeFormattingService {
     set dateFormat(val) {
         this._dateFormat = val;
     }
-    constructor(
-        private _pas: PreferenceAdvancedService) {
+    constructor() {
             this.getFormat();
         }
 

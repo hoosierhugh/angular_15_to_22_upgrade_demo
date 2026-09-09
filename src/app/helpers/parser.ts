@@ -412,7 +412,7 @@ export class TransactionServiceProcessor {
     return [];
   }
   public pipeDataDtmf(dtmfData: any) {
-    const parseJson = (obj: any, srcData: string | Array<string>): any => {
+    const parseJson = (obj: any, srcData: string | string[]): any => {
       if (srcData instanceof Array) {
         srcData.forEach((i) => {
           try {
@@ -426,7 +426,7 @@ export class TransactionServiceProcessor {
       }
     };
     const parseDTMF = (src: string): any => {
-      let itams: Array<any> = src.split(';').filter((i) => !!i);
+      let itams: any[] = src.split(';').filter((i) => !!i);
       itams = itams.map((row) => {
         const out: any = row.split(',').reduce((a, i) => {
           const [key, value] = i.split(':');
@@ -456,7 +456,7 @@ export class TransactionServiceProcessor {
     // heplog processor
     return logsData;
   }
-  private sdpFormatterToFlowItem(sdp: Array<any>): Array<any> {
+  private sdpFormatterToFlowItem(sdp: any[]): any[] {
     if (!sdp || sdp.length === 0) {
       return [];
     }
@@ -476,7 +476,7 @@ export class TransactionServiceProcessor {
     return outSDP;
   }
 
-  public parseJson(obj: any, srcData: string | Array<string>): any {
+  public parseJson(obj: any, srcData: string | string[]): any {
     if (srcData instanceof Array) {
       srcData.forEach((i) => {
         try {
@@ -490,7 +490,7 @@ export class TransactionServiceProcessor {
     }
   }
   public parseDTMF(src: string): any {
-    let itams: Array<any> = src.split(';').filter((i) => !!i);
+    let itams: any[] = src.split(';').filter((i) => !!i);
     itams = itams.map((row) => {
       const out: any = row.split(',').reduce((a, i) => {
         const [key, value] = i.split(':');
@@ -885,13 +885,13 @@ export class TransactionServiceProcessor {
 
     return raw;
   }
-  public formattingToQosArray(qosData: any): Array<any> {
+  public formattingToQosArray(qosData: any): any[] {
     // console.log('parser.js::formattingToQosArray', { qosData })
     return [].concat(
       ...Object.entries(qosData).map(([type, item]): [any, any] => {
         const { data }: any = item || {};
         return data.map((item: any) => {
-          var i: any = {};
+          const i: any = {};
           // callid: "1248811679-5066-83@BJC.BGI.II.CAD"
           i.callid = item.sid;
           // captid: 2222
@@ -940,7 +940,7 @@ export class TransactionServiceProcessor {
       })
     );
   }
-  public extractQOSitems(qosData: any, messages: Array<any>): Array<any> {
+  public extractQOSitems(qosData: any, messages: any[]): any[] {
     if (qosData?.rtp || qosData?.rtcp) {
       qosData = this.pipeDataQos({
         data: {
@@ -985,14 +985,14 @@ export class TransactionServiceProcessor {
 
     return [...messages, ...qos];
   }
-  private extractDTMFitems(dtmfData: any, messages: Array<any>): Array<any> {
+  private extractDTMFitems(dtmfData: any, messages: any[]): any[] {
     if (!dtmfData) {
       return messages;
     }
 
     const messagesLength = messages.length;
     const inc = 0;
-    const dtmf: Array<any> = [];
+    const dtmf: any[] = [];
     dtmfData.forEach((item) => {
       if (item.DTMF && item.DTMF.length > 0) {
         item.DTMF.forEach((i) => {
@@ -1019,7 +1019,7 @@ export class TransactionServiceProcessor {
 
     return [...messages, ...dtmf];
   }
-  private extractLOGitems(logsData: any, messages: Array<any>): Array<any> {
+  private extractLOGitems(logsData: any, messages: any[]): any[] {
     if (!logsData) {
       return messages;
     }

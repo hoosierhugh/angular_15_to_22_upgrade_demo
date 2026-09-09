@@ -11,7 +11,7 @@ export class ModalService {
     _activeZIndex: Record<string, number> = {};
     draggingId: string | number | null;
     isDiffWindow: typeof IS_DIFF_RIGHT | typeof IS_DIFF_LEFT | null;
-    getOpacity: boolean = false;
+    getOpacity = false;
 
     setDropLayer(bool: boolean, id: string | number, zIndex = 0, isDropLeft = false, isDropRight = false) {
         if (id == IS_DIFF) {
@@ -59,8 +59,8 @@ export class ModalService {
         return this.draggingId != null;
     }
     getPair() {
-        let firstItem = this.draggingId;
-        let [secondItem] = [...Object.keys(this._activeZIndex).filter(i => this.checkZIndex(i))];
+        const firstItem = this.draggingId;
+        const [secondItem] = [...Object.keys(this._activeZIndex).filter(i => this.checkZIndex(i))];
 
         const pair = [firstItem, secondItem];
 

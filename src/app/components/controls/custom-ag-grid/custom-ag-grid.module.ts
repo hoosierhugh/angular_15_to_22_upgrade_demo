@@ -2,7 +2,7 @@ import { DragDropListComponent } from './drag-drop-list/drag-drop-list.component
 import { SettingButtonComponent } from './setting-button';
 import { FormsModule } from '@angular/forms';
 import { AgGridModule } from 'ag-grid-angular';
-import { NgModule, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
+import { NgModule, CUSTOM_ELEMENTS_SCHEMA, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { CustomAgGridComponent } from './custom-ag-grid.component';
 import { DragDropModule } from '@angular/cdk/drag-drop';
@@ -32,7 +32,9 @@ import { MatMenuModule } from '@angular/material/menu';
     exports: [CustomAgGridComponent]
 })
 export class CustomAgGridModule {
-    constructor(library: FaIconLibrary) {
+    constructor() {
+        const library = inject(FaIconLibrary);
+
         library.addIconPacks(fas as IconPack, fab as IconPack, far as IconPack);
     }
 }

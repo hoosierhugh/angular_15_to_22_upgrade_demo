@@ -1,4 +1,4 @@
-import { Component, ViewChild, ViewContainerRef, ChangeDetectionStrategy } from '@angular/core';
+import { Component, ViewChild, ViewContainerRef, ChangeDetectionStrategy, inject } from '@angular/core';
 import {
     IAfterGuiAttachedParams,
     IDoesFilterPassParams,
@@ -22,15 +22,14 @@ interface StatusFilterModel { value: string; }
     standalone: false
 })
 export class StatusFilterComponent implements IFilterAngularComp {
+    private _pmps = inject(PreferenceMappingProtocolService);
+
     private params: FilterParams;
     private valueGetter: valueGetter;
     public text = '';
     private statusMapping;
 
     @ViewChild('input', { read: ViewContainerRef }) public input;
-    constructor(
-        private _pmps: PreferenceMappingProtocolService) {
-    }
     async agInit(params: IFilterParams) {
         const mappings: PreferenceMapping[] = await this._pmps.getMerged().toPromise();
         const ls = Functions.JSON_parse(localStorage.getItem(UserConstValue.SEARCH_QUERY)) ||

@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component, ElementRef, EventEmitter, forwardRef, Input, OnInit, Output, ViewChild, ViewEncapsulation, ChangeDetectionStrategy } from '@angular/core';
+import { ChangeDetectorRef, Component, ElementRef, EventEmitter, forwardRef, Input, OnInit, Output, ViewChild, ViewEncapsulation, ChangeDetectionStrategy, inject } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, NG_VALUE_ACCESSOR, Validators } from '@angular/forms';
 // import { NgxMatDateAdapter } from './date-adapter';
 import { DateAdapter } from '@angular/material/core';
@@ -34,6 +34,16 @@ export enum SideEnum {
     standalone: false
 })
 export class DaterangepickerComponent implements OnInit {
+    private dashboardService = inject(DashboardService);
+    private el = inject(ElementRef);
+    private dateTimeRangeService = inject(DateTimeRangeService);
+    private _ref = inject(ChangeDetectorRef);
+    _dateAdapter = inject<DateAdapter<Date>>(DateAdapter);
+    private cd = inject(ChangeDetectorRef);
+    private formBuilder = inject(FormBuilder);
+    private _localeService = inject(LocaleService);
+    translateService = inject(TranslateService);
+
     private _old: { start: any, end: any } = { start: null, end: null };
     chosenLabel: string;
     calendarVariables: { left: any, right: any } = { left: {}, right: {} };
@@ -74,37 +84,37 @@ export class DaterangepickerComponent implements OnInit {
     @Input()
     maxDate: _moment.Moment = null;
     @Input()
-    autoApply: Boolean = false;
+    autoApply = false;
     @Input()
-    singleDatePicker: Boolean = false;
+    singleDatePicker = false;
     @Input()
-    showDropdowns: Boolean = false;
+    showDropdowns = false;
     @Input()
-    showWeekNumbers: Boolean = false;
+    showWeekNumbers = false;
     @Input()
-    showISOWeekNumbers: Boolean = false;
+    showISOWeekNumbers = false;
     @Input()
-    linkedCalendars: Boolean = false;
+    linkedCalendars = false;
     @Input()
-    autoUpdateInput: Boolean = true;
+    autoUpdateInput = true;
     @Input()
-    alwaysShowCalendars: Boolean = false;
+    alwaysShowCalendars = false;
     @Input()
-    maxSpan: Boolean = false;
+    maxSpan = false;
     @Input()
-    lockStartDate: Boolean = false;
+    lockStartDate = false;
     // timepicker variables
     @Input()
-    timePicker: Boolean = false;
+    timePicker = false;
     @Input()
-    timePicker24Hour: Boolean = true;
+    timePicker24Hour = true;
     @Input()
     timePickerIncrement = 1;
     @Input()
-    timePickerSeconds: Boolean = false;
+    timePickerSeconds = false;
     // end of timepicker variables
     @Input()
-    showClearButton: Boolean = false;
+    showClearButton = false;
     @Input()
     firstMonthDayClass: string = null;
     @Input()
@@ -150,16 +160,16 @@ export class DaterangepickerComponent implements OnInit {
     @Input()
     customRangeDirection = false;
     chosenRange: string;
-    rangesArray: Array<any> = [];
+    rangesArray: any[] = [];
 
     // some state information
-    isShown: Boolean = false;
+    isShown = false;
     inline = false;
     leftCalendar: any = {};
     rightCalendar: any = {};
-    showCalInRanges: Boolean = false;
+    showCalInRanges = false;
     nowHoveredDate = null;
-    pickingDate: boolean = false;
+    pickingDate = false;
 
     LIMIT_TIMES = {
         minHour: 0,
@@ -181,11 +191,11 @@ export class DaterangepickerComponent implements OnInit {
     @Input() opens: string;
     @Input() disabled = false;
     @Input() closeOnAutoApply = false;
-    @Output() choosedDate: EventEmitter<Object>;
-    @Output() rangeClicked: EventEmitter<Object>;
-    @Output() datesUpdated: EventEmitter<Object>;
-    @Output() startDateChanged: EventEmitter<Object>;
-    @Output() endDateChanged: EventEmitter<Object>;
+    @Output() choosedDate: EventEmitter<object>;
+    @Output() rangeClicked: EventEmitter<object>;
+    @Output() datesUpdated: EventEmitter<object>;
+    @Output() startDateChanged: EventEmitter<object>;
+    @Output() endDateChanged: EventEmitter<object>;
     @Input() stepHour: number = this.DEFAULT_STEP;
     @Input() stepMinute: number = this.DEFAULT_STEP;
     @Input() stepSecond: number = this.DEFAULT_STEP;
@@ -195,16 +205,9 @@ export class DaterangepickerComponent implements OnInit {
 
     NUMERIC_REGEX = /[^0-9]/g;
 
-    constructor(
-        private dashboardService: DashboardService,
-        private el: ElementRef,
-        private dateTimeRangeService: DateTimeRangeService,
-        private _ref: ChangeDetectorRef,
-        public _dateAdapter: DateAdapter<Date>,
-        private cd: ChangeDetectorRef, private formBuilder: FormBuilder,
-        private _localeService: LocaleService,
-        public translateService: TranslateService
-    ) {
+    constructor() {
+        const translateService = this.translateService;
+
         translateService.addLangs(['en'])
         translateService.setDefaultLang('en')
         this.choosedDate = new EventEmitter();
@@ -225,7 +228,7 @@ export class DaterangepickerComponent implements OnInit {
     }
 
     ngOnInit() {
-        var timestamp = this.dateTimeRangeService.getDatesForQuery(true);
+        const timestamp = this.dateTimeRangeService.getDatesForQuery(true);
         this.timepickerTimezone = this.dateTimeRangeService.getTimezoneForQuery();
 
         moment.tz.setDefault(this.timepickerTimezone);
@@ -351,33 +354,33 @@ export class DaterangepickerComponent implements OnInit {
 
     /** Hour */
     private get hourleft() {
-        let val = Number(this.form.controls['hourleft'].value);
+        const val = Number(this.form.controls['hourleft'].value);
         return isNaN(val) ? 0 : val;
     };
 
     private get minuteleft() {
-        let val = Number(this.form.controls['minuteleft'].value);
+        const val = Number(this.form.controls['minuteleft'].value);
         return isNaN(val) ? 0 : val;
     };
 
     private get secondleft() {
-        let val = Number(this.form.controls['secondleft'].value);
+        const val = Number(this.form.controls['secondleft'].value);
         return isNaN(val) ? 0 : val;
     };
 
     /** Hour */
     private get hourright() {
-        let val = Number(this.form.controls['hourright'].value);
+        const val = Number(this.form.controls['hourright'].value);
         return isNaN(val) ? 0 : val;
     };
 
     private get minuteright() {
-        let val = Number(this.form.controls['minuteright'].value);
+        const val = Number(this.form.controls['minuteright'].value);
         return isNaN(val) ? 0 : val;
     };
 
     private get secondright() {
-        let val = Number(this.form.controls['secondright'].value);
+        const val = Number(this.form.controls['secondright'].value);
         return isNaN(val) ? 0 : val;
     };
 
@@ -454,7 +457,7 @@ export class DaterangepickerComponent implements OnInit {
             max = this.LIMIT_TIMES.meridian;
         }
 
-        let fullprop = prop + elem;
+        const fullprop = prop + elem;
         let next;
         if (up == null) {
             next = this[fullprop] % (max);
@@ -887,8 +890,8 @@ export class DaterangepickerComponent implements OnInit {
     }
 
     clickApply(e?) {
-        var CurrentDate1 = this.startDate.unix();
-        var CurrentDate2 = this.startDate.format();
+        const CurrentDate1 = this.startDate.unix();
+        const CurrentDate2 = this.startDate.format();
 
         if (!this.singleDatePicker && this.startDate && !this.endDate) {
             this.endDate = this._getDateWithTime(this.startDate, SideEnum.right);
@@ -966,7 +969,7 @@ export class DaterangepickerComponent implements OnInit {
      * @param side left or right
      */
     timeChanged(timeEvent: any, side: SideEnum) {
-        let hour = parseInt(this.timepickerVariables[side].selectedHour, 10);
+        const hour = parseInt(this.timepickerVariables[side].selectedHour, 10);
         const minute = parseInt(this.timepickerVariables[side].selectedMinute, 10);
         const second = this.timePickerSeconds ? parseInt(this.timepickerVariables[side].selectedSecond, 10) : 0;
 
@@ -1429,7 +1432,7 @@ export class DaterangepickerComponent implements OnInit {
      * @param side left or right
      */
     private _getDateWithTime(date, side: SideEnum): _moment.Moment {
-        let hour = parseInt(this.timepickerVariables[side].selectedHour, 10);
+        const hour = parseInt(this.timepickerVariables[side].selectedHour, 10);
         const minute = parseInt(this.timepickerVariables[side].selectedMinute, 10);
         const second = this.timePickerSeconds ? parseInt(this.timepickerVariables[side].selectedSecond, 10) : 0;
         return date.clone().hour(hour).minute(minute).second(second);

@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { Observable } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 import { environment } from '@environments/environment';
@@ -16,9 +16,9 @@ export interface UpdateCheckResponse {
     providedIn: 'root'
 })
 export class UpdateAlertService {
-    private url = `${environment.apiUrl}/version/ui/check/`;
+    private http = inject(HttpClient);
 
-    constructor(private http: HttpClient) { }
+    private url = `${environment.apiUrl}/version/ui/check/`;
 
     check(): Observable<UpdateCheckResponse> {
         // const testVersion = '9.0.1'; // '10.0.1'

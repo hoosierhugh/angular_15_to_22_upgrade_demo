@@ -20,24 +20,28 @@
     <mat-form-field>
       <mat-label>{{ 'widgets.protosearch.settings.mapping' | translate }}</mat-label>
       <mat-select
-          [compareWith]="compareProto"
-          [(ngModel)]="proto"
-          (valueChange)="validate()"
-          (selectionChange)="validate()"
+        [compareWith]="compareProto"
+        [(ngModel)]="proto"
+        (valueChange)="validate()"
+        (selectionChange)="validate()"
         name="hep_alias"
         ngDefaultControl>
-        <mat-option *ngFor="let protoItem of mappingSortedData" [value]="protoItem">
-          {{protoItem.hep_alias}} - {{protoItem.profile}}
-        </mat-option>
+        @for (protoItem of mappingSortedData; track protoItem) {
+          <mat-option [value]="protoItem">
+            {{protoItem.hep_alias}} - {{protoItem.profile}}
+          </mat-option>
+        }
       </mat-select>
     </mat-form-field>
-    <div *ngIf="proto">
-      <app-protosearch-drag-drop-list
-        [sortlistactive]="data.config.fields"
-        [list]="proto.fields_mapping"
-        (change)="onUpdateProto($event)"
-      ></app-protosearch-drag-drop-list>
-    </div>
+    @if (proto) {
+      <div>
+        <app-protosearch-drag-drop-list
+          [sortlistactive]="data.config.fields"
+          [list]="proto.fields_mapping"
+          (change)="onUpdateProto($event)"
+        ></app-protosearch-drag-drop-list>
+      </div>
+    }
   </div>
 </div>
 <div class="action-buttons-setting">

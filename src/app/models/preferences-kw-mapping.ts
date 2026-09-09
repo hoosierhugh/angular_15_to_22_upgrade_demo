@@ -2,7 +2,7 @@ export class PreferencesContentMapping{
 
     constructor(){}
 
-    static get keyWordsOnHeaderMapping():Object {
+    static get keyWordsOnHeaderMapping():object {
         return {
             'ip alias' : "IP Aliases" ,
             'agentsub' : "Agent subscriptions",
@@ -15,7 +15,7 @@ export class PreferencesContentMapping{
     };
 
 
-    static get keyWordsOnPreferencesMapping():Object {
+    static get keyWordsOnPreferencesMapping():object {
         return {
             'ip alias' :'IP ALIASES',
             'agentsub' :  'AGENT SUBSCRIPTIONS',

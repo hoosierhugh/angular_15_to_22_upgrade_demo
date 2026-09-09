@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { environment } from '@environments/environment';
 import { ApiResponse } from '@app/models';
@@ -7,9 +7,9 @@ import { ApiResponse } from '@app/models';
   providedIn: 'root'
 })
 export class HepLogService {
-  private url = `${environment.apiUrl}/call/report/log`;
+  private http = inject(HttpClient);
 
-  constructor(private http: HttpClient) { }
+  private url = `${environment.apiUrl}/call/report/log`;
 
   getLog(data: unknown) {
     return this.http.post<ApiResponse<unknown>>(`${this.url}`, data);

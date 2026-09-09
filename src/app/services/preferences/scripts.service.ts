@@ -1,4 +1,4 @@
-import { Injectable } from "@angular/core";
+import { Injectable, inject } from "@angular/core";
 import { HttpClient } from "@angular/common/http";
 import { environment } from "@environments/environment";
 import { PreferenceScripts } from "@app/models";
@@ -8,7 +8,8 @@ import { Functions } from "@app/helpers/functions";
   providedIn: "root",
 })
 export class PreferenceScriptsService {
-  constructor(private http: HttpClient) {}
+  private http = inject(HttpClient);
+
 
   private url = `${environment.apiUrl}/script`;
 
@@ -23,7 +24,7 @@ export class PreferenceScriptsService {
   }
   update(script: PreferenceScripts) {
     script.version = Date.now();
-    let uuid = script.uuid;
+    const uuid = script.uuid;
     return this.http.put(`${this.url}/${uuid}`, script);
   }
   delete(uuid: string) {

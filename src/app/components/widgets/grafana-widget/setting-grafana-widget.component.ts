@@ -1,4 +1,4 @@
-import { Component, Inject, OnInit, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, ChangeDetectionStrategy, ChangeDetectorRef, inject } from '@angular/core';
 import { ProxyService } from '../../../services/proxy.service';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { SelectList, GroupedSelectList } from '../influxdbchart-widget/setting-influxdbchart-widget.component';
@@ -13,6 +13,12 @@ import { lastValueFrom } from 'rxjs';
     standalone: false
 })
 export class SettingIframeWidgetComponent implements OnInit {
+    dialogRef = inject<MatDialogRef<SettingIframeWidgetComponent>>(MatDialogRef);
+    private _ps = inject(ProxyService);
+    translateService = inject(TranslateService);
+    private cdr = inject(ChangeDetectorRef);
+    data = inject(MAT_DIALOG_DATA);
+
 
     private envUrl = `${environment.apiUrl.replace('/api/v3', '')}`;
     dashboardList: GroupedSelectList[] = [];
@@ -25,13 +31,10 @@ export class SettingIframeWidgetComponent implements OnInit {
     isLoggedIn = true;
     errorMessage: string;
     errorCode: number;
-    isSameOrigin: boolean = false;
-    constructor(
-        public dialogRef: MatDialogRef<SettingIframeWidgetComponent>,
-        private _ps: ProxyService,
-        public translateService: TranslateService,
-        private cdr: ChangeDetectorRef,
-        @Inject(MAT_DIALOG_DATA) public data: any) {
+    isSameOrigin = false;
+    constructor() {
+        const translateService = this.translateService;
+
         translateService.addLangs(['en'])
         translateService.setDefaultLang('en')
     }

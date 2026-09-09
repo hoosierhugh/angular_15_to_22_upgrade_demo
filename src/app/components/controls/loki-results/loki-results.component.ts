@@ -1,14 +1,4 @@
-import {
-    AfterViewInit,
-    ChangeDetectionStrategy,
-    ChangeDetectorRef,
-    Component,
-    EventEmitter,
-    Input,
-    OnInit,
-    Output,
-    ViewEncapsulation
-} from '@angular/core';
+import { AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, EventEmitter, Input, OnInit, Output, ViewEncapsulation, inject } from '@angular/core';
 import { Functions, log } from '@app/helpers/functions';
 import { PreferenceAdvancedService, SearchRemoteService, SearchService } from '@app/services';
 import { DateTimeRangeService } from '@app/services/data-time-range.service';
@@ -23,6 +13,13 @@ import { ModulesService } from '@app/services/modules.service';
     standalone: false
 })
 export class LokiResultsComponent implements OnInit, AfterViewInit {
+    private _pas = inject(PreferenceAdvancedService);
+    private _srs = inject(SearchRemoteService);
+    private _dtrs = inject(DateTimeRangeService);
+    private searchService = inject(SearchService);
+    private modules = inject(ModulesService);
+    private cdr = inject(ChangeDetectorRef);
+
     @Input() id;
     @Input() dataItem: any;
     @Input() isDisplayResult = false;
@@ -51,24 +48,15 @@ export class LokiResultsComponent implements OnInit, AfterViewInit {
     queryStatsNum = [];
     queryStatsText;
     checked: boolean;
-    resultData: Array<any> = [];
+    resultData: any[] = [];
     isFirstSearch = true;
-    labels: Array<any> = [];
+    labels: any[] = [];
     lokiLabels;
     lokiTemplate;
     loading = false;
     resultsFound = true;
     dataError = false;
-    @Output() ready: EventEmitter<any> = new EventEmitter();
-    constructor(
-        private _pas: PreferenceAdvancedService,
-        private _srs: SearchRemoteService,
-        private _dtrs: DateTimeRangeService,
-        private searchService: SearchService,
-        private modules: ModulesService,
-        private cdr: ChangeDetectorRef
-
-    ) { }
+    @Output() ready = new EventEmitter<any>();
 
     ngOnInit() {
         this.customTimeRangeQuery ||= this._dtrs.getDatesForQuery(true);
@@ -169,7 +157,7 @@ export class LokiResultsComponent implements OnInit, AfterViewInit {
 
         await this._srs.getData(this.queryBuilder()).toPromise().then(res => {
 
-            this.resultData = res && res.data ? (res.data as Array<any>) : [];
+            this.resultData = res && res.data ? (res.data as any[]) : [];
 
             if (this.resultData.length > 0) {
                 this.loading = false;
@@ -211,9 +199,9 @@ export class LokiResultsComponent implements OnInit, AfterViewInit {
         return item.micro_ts;
     }
 
-    private highlight(value: string = '') {
+    private highlight(value = '') {
         let data;
-        if (!!this.rxText) {
+        if (this.rxText) {
             const rxText = this.rxText.replace(/\s|(\|=|\|~|!=|!~)|("|`)/g, '')
                 .split('|').sort((a, b) => b.length - a.length).join('|');
             const regex = new RegExp('(' + rxText + ')', 'g');
@@ -229,8 +217,8 @@ export class LokiResultsComponent implements OnInit, AfterViewInit {
         return data;
     }
     showLabel(idx) {
-        let tag = document.getElementById('label-' + idx)
-        let icon = document.getElementById('icon-' + idx)
+        const tag = document.getElementById('label-' + idx)
+        const icon = document.getElementById('icon-' + idx)
         if (tag.style.display === 'none') {
             tag.style.cssText = `
             display:flex;

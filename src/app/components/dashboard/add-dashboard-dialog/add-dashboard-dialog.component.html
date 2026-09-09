@@ -1,70 +1,90 @@
 <mat-toolbar class="dialog-title" color="primary">
-    <div>{{ 'dashboard.addDashboardDialog.title'|translate }}</div>
-    <button mat-icon-button (click)="onNoClick()">
-      <fa-icon icon="times"></fa-icon>
-    </button>
-  </mat-toolbar>
-  <div mat-dialog-content style="display: flex; flex-direction: column">
-    <mat-form-field>
-      <mat-label>{{ 'dashboard.addDashboardDialog.dashboardName' |translate }}</mat-label>
-      <input matInput (input)="validate(nameNewPanel.value)" [formControl]="nameNewPanel" >
+  <div>{{ 'dashboard.addDashboardDialog.title'|translate }}</div>
+  <button mat-icon-button (click)="onNoClick()">
+    <fa-icon icon="times"></fa-icon>
+  </button>
+</mat-toolbar>
+<div mat-dialog-content style="display: flex; flex-direction: column">
+  <mat-form-field>
+    <mat-label>{{ 'dashboard.addDashboardDialog.dashboardName' |translate }}</mat-label>
+    <input matInput (input)="validate(nameNewPanel.value)" [formControl]="nameNewPanel" >
 
-        <mat-error *ngIf="nameNewPanel?.errors?.['required']">{{'validators.required' | translate }}</mat-error>
-        <mat-error *ngIf="nameNewPanel?.errors?.['minlength']">
-          {{ nameNewPanel?.errors?.['minlength']?.requiredLength }} {{'validators.minChars' | translate }}
-        </mat-error>
-        <mat-error *ngIf="nameNewPanel?.errors?.['maxlength']">
-          {{ nameNewPanel?.errors?.['maxlength']?.requiredLength }} {{'validators.maxChars' | translate }}
-        </mat-error>
-        <mat-error *ngIf="nameNewPanel?.errors?.['pattern'] && !nameNewPanel?.errors?.['minlength']">
-          {{'validators.pattern' | translate }} [aA-Zz], [0-9], "-", "_" or space
-        </mat-error>
-        <mat-error *ngIf="nameNewPanel?.errors?.['dashboardNotAvailable']">
-            {{'validators.dashboardName' | translate }}
-        </mat-error>
-    </mat-form-field>
+    @if (nameNewPanel?.errors?.['required']) {
+      <mat-error>{{'validators.required' | translate }}</mat-error>
+    }
+    @if (nameNewPanel?.errors?.['minlength']) {
+      <mat-error>
+        {{ nameNewPanel?.errors?.['minlength']?.requiredLength }} {{'validators.minChars' | translate }}
+      </mat-error>
+    }
+    @if (nameNewPanel?.errors?.['maxlength']) {
+      <mat-error>
+        {{ nameNewPanel?.errors?.['maxlength']?.requiredLength }} {{'validators.maxChars' | translate }}
+      </mat-error>
+    }
+    @if (nameNewPanel?.errors?.['pattern'] && !nameNewPanel?.errors?.['minlength']) {
+      <mat-error>
+        {{'validators.pattern' | translate }} [aA-Zz], [0-9], "-", "_" or space
+      </mat-error>
+    }
+    @if (nameNewPanel?.errors?.['dashboardNotAvailable']) {
+      <mat-error>
+        {{'validators.dashboardName' | translate }}
+      </mat-error>
+    }
+  </mat-form-field>
 
-    <mat-form-field>
-      <mat-label>{{ 'dashboard.addDashboardDialog.type'|translate }}</mat-label>
-      <mat-select [(ngModel)]="data.type" >
-        <mat-option *ngFor="let itemlist of typeList; trackBy: identify" [value]="itemlist.type">{{ itemlist.name }}</mat-option>
-      </mat-select>
-    </mat-form-field>
+  <mat-form-field>
+    <mat-label>{{ 'dashboard.addDashboardDialog.type'|translate }}</mat-label>
+    <mat-select [(ngModel)]="data.type" >
+      @for (itemlist of typeList; track identify($index, itemlist)) {
+        <mat-option [value]="itemlist.type">{{ itemlist.name }}</mat-option>
+      }
+    </mat-select>
+  </mat-form-field>
 
-    <mat-form-field>
-      <mat-label>{{data.type === 2 || data.type === 7 ? ('dashboard.addDashboardDialog.url'|translate) : ('dashboard.addDashboardDialog.param'|translate)}}</mat-label>
-      <input matInput [(ngModel)]="data.param">
-    </mat-form-field>
-    <div *ngIf="data.type === 7" style="display: flex; flex-direction: column">
-        <hr style="width: 100%;">
-        <h4>{{'dashboard.editDialog.grafanaControl.title' | translate}}</h4>
-        <mat-checkbox color="primary" [(ngModel)]="data.grafanaTimestamp">{{'dashboard.editDialog.grafanaControl.grafanaTimestamp' | translate}}</mat-checkbox>
-        <mat-checkbox color="primary" [(ngModel)]="data.grafanaProxy">{{'dashboard.editDialog.grafanaControl.grafanaProxy' | translate}}</mat-checkbox>
-        <div *ngIf="isSameOrigin">
-            <mat-checkbox color="primary"
-                [(ngModel)]="data.hasVariables"
+  <mat-form-field>
+    <mat-label>{{data.type === 2 || data.type === 7 ? ('dashboard.addDashboardDialog.url'|translate) : ('dashboard.addDashboardDialog.param'|translate)}}</mat-label>
+    <input matInput [(ngModel)]="data.param">
+  </mat-form-field>
+  @if (data.type === 7) {
+    <div style="display: flex; flex-direction: column">
+      <hr style="width: 100%;">
+      <h4>{{'dashboard.editDialog.grafanaControl.title' | translate}}</h4>
+      <mat-checkbox color="primary" [(ngModel)]="data.grafanaTimestamp">{{'dashboard.editDialog.grafanaControl.grafanaTimestamp' | translate}}</mat-checkbox>
+      <mat-checkbox color="primary" [(ngModel)]="data.grafanaProxy">{{'dashboard.editDialog.grafanaControl.grafanaProxy' | translate}}</mat-checkbox>
+      @if (isSameOrigin) {
+        <div>
+          <mat-checkbox color="primary"
+            [(ngModel)]="data.hasVariables"
             >
             {{ 'dashboard.editDialog.grafanaControl.hasVariables' | translate }}
-            </mat-checkbox>
+          </mat-checkbox>
         </div>
+      }
     </div>
-    <hr class="hr-or">
-    <form>
-      <div class="file-upload-container">
+  }
+  <hr class="hr-or">
+  <form>
+    <div class="file-upload-container">
       <label for="dashboard-import-file" [className]="'fileselect' + (idDrugOver ? ' drugOver' : '')"></label>
-      <div *ngIf="fileNames" class="file-list">
-        <div *ngFor="let fn of fileNames" class="file-item">
-          {{fn}}
+      @if (fileNames) {
+        <div class="file-list">
+          @for (fn of fileNames; track fn) {
+            <div class="file-item">
+              {{fn}}
+            </div>
+          }
         </div>
-      </div>
-        <input placeholder=""
+      }
+      <input placeholder=""
         (change)="onJsonChange($event)"
         value="" type="file" id="dashboard-import-file" #fileSelect>
 
-      </div>
-    </form>
-  </div>
-  <div mat-dialog-actions style="float: right; margin-bottom: 0rem;">
-    <button mat-raised-button (click)="onNoClick()">{{'LINK.buttons.cancel' | translate}}</button>
-    <button mat-raised-button color="primary"  (click)="onSubmit()" cdkFocusInitial [disabled]='isInvalid'>{{'LINK.buttons.ok' | translate}}</button>
-  </div>
+    </div>
+  </form>
+</div>
+<div mat-dialog-actions style="float: right; margin-bottom: 0rem;">
+  <button mat-raised-button (click)="onNoClick()">{{'LINK.buttons.cancel' | translate}}</button>
+  <button mat-raised-button color="primary"  (click)="onSubmit()" cdkFocusInitial [disabled]='isInvalid'>{{'LINK.buttons.ok' | translate}}</button>
+</div>

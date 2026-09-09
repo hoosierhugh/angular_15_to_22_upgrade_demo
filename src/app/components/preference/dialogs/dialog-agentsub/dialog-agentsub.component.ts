@@ -1,4 +1,4 @@
-import { Component, Inject, ChangeDetectionStrategy, ViewChild } from '@angular/core';
+import { Component, ChangeDetectionStrategy, ViewChild, inject } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { TranslateService } from '@ngx-translate/core'
 import { CrudDialogData } from '@app/models';
@@ -19,14 +19,18 @@ interface AgentSubscriptionDialogRecord {
 })
 
 export class DialogAgentsubComponent {
+    dialogRef = inject<MatDialogRef<DialogAgentsubComponent>>(MatDialogRef);
+    translateService = inject(TranslateService);
+    data = inject<CrudDialogData<AgentSubscriptionDialogRecord>>(MAT_DIALOG_DATA);
+
     @ViewChild('data_view', { static: false }) editor;
     isDisabled = false;
 
 
-    constructor(
-        public dialogRef: MatDialogRef<DialogAgentsubComponent>,
-        public translateService: TranslateService,
-        @Inject(MAT_DIALOG_DATA) public data: CrudDialogData<AgentSubscriptionDialogRecord>) {
+    constructor() {
+        const translateService = this.translateService;
+        const data = this.data;
+
         translateService.addLangs(['en'])
         translateService.setDefaultLang('en')
         if (data.isnew) {

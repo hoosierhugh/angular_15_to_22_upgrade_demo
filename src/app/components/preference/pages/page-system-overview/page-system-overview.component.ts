@@ -1,14 +1,5 @@
 
-import {
-    Component,
-    OnInit,
-    OnDestroy,
-    ChangeDetectionStrategy,
-    ChangeDetectorRef,
-    ViewChild,
-    AfterViewInit,
-    Input,
-} from '@angular/core';
+import { Component, OnInit, OnDestroy, ChangeDetectionStrategy, ChangeDetectorRef, ViewChild, AfterViewInit, Input, inject } from '@angular/core';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { MatPaginator } from '@angular/material/paginator';
@@ -36,6 +27,13 @@ import { TranslateService } from '@ngx-translate/core';
     standalone: false
 })
 export class PageSystemOverviewComponent implements OnInit, AfterViewInit, OnDestroy {
+    private authenticationService = inject(AuthenticationService);
+    private alertService = inject(AlertService);
+    private service = inject(StatisticService);
+    dialog = inject(MatDialog);
+    private cdr = inject(ChangeDetectorRef);
+    private translateService = inject(TranslateService);
+
     isLoading = false;
     isAdmin = false;
     isConfigTab = false;
@@ -56,14 +54,7 @@ export class PageSystemOverviewComponent implements OnInit, AfterViewInit, OnDes
     filter = '';
     dbList = [];
 
-    constructor(
-        private authenticationService: AuthenticationService,
-        private alertService: AlertService,
-        private service: StatisticService,
-        public dialog: MatDialog,
-        private cdr: ChangeDetectorRef,
-        private translateService: TranslateService
-    ) {
+    constructor() {
         const userData = this.authenticationService.currentUserValue;
         this.isAdmin =
         userData &&
@@ -254,9 +245,9 @@ export class PageSystemOverviewComponent implements OnInit, AfterViewInit, OnDes
                         })(result.data);
 
                         this.service.resync(resync).toPromise().then( statsData => {
-                            
-                            this.translateService.get('notifications.success.resync').subscribe(res => { 
-                                this.alertService.success(res);   
+
+                            this.translateService.get('notifications.success.resync').subscribe(res => {
+                                this.alertService.success(res);
                             })
                             this.cdr.detectChanges();
                         });

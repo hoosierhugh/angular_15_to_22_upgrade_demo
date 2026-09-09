@@ -1,4 +1,4 @@
-import { NgModule } from '@angular/core';
+import { NgModule, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { CopyComponent } from './copy.component';
 import { FontAwesomeModule, FaIconLibrary } from '@fortawesome/angular-fontawesome';
@@ -23,7 +23,9 @@ import { Router } from '@angular/router';
     providers: [AlertService]
 })
 export class CopyModule {
-    constructor(library: FaIconLibrary) {
+    constructor() {
+        const library = inject(FaIconLibrary);
+
         library.addIconPacks(fas as IconPack, fab as IconPack, far as IconPack);
     }
 }

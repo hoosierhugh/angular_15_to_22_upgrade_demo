@@ -1,4 +1,4 @@
-import { Component, Inject, ChangeDetectionStrategy } from '@angular/core';
+import { Component, ChangeDetectionStrategy, inject } from '@angular/core';
 import { FormControl, Validators } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 // import 'brace';
@@ -25,6 +25,10 @@ interface ScriptDialogRecord {
 })
 
 export class DialogScriptsComponent {
+    dialogRef = inject<MatDialogRef<DialogScriptsComponent>>(MatDialogRef);
+    translateService = inject(TranslateService);
+    data = inject<CrudDialogData<ScriptDialogRecord>>(MAT_DIALOG_DATA);
+
     isValidForm = false;
     isAdmin = false;
     regNum = /^[0-9]+$/;
@@ -64,11 +68,10 @@ export class DialogScriptsComponent {
         Validators.pattern(this.regString),
     ]);
 
-    constructor(
-        public dialogRef: MatDialogRef<DialogScriptsComponent>,
-        public translateService: TranslateService,
-        @Inject(MAT_DIALOG_DATA) public data: CrudDialogData<ScriptDialogRecord>
-    ) {
+    constructor() {
+        const translateService = this.translateService;
+        const data = this.data;
+
         translateService.addLangs(['en'])
         translateService.setDefaultLang('en')
         if (data.isnew) {

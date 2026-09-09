@@ -1,7 +1,7 @@
 import { HttpGetBuffer } from '@app/helpers/http-get-buffer';
 import { ConstValue } from './../../models/const-value.model';
 import { Observable } from 'rxjs';
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { environment } from '@environments/environment';
 import { ApiResponse, UserSettings } from '@app/models';
@@ -12,12 +12,10 @@ import { map } from 'rxjs/operators';
     providedIn: 'root'
 })
 export class PreferenceUserSettingsService {
-    private url = `${environment.apiUrl}/user/settings`;
+    private http = inject(HttpClient);
+    private httpGetBuffer = inject(HttpGetBuffer);
 
-    constructor(
-        private http: HttpClient,
-        private httpGetBuffer: HttpGetBuffer
-    ) { }
+    private url = `${environment.apiUrl}/user/settings`;
 
     getUserDashboardWidgets(): Promise<unknown> {
         return this.http.get<unknown>(`${environment.apiUrl}/user/dashboard/widgets`).toPromise();
@@ -35,7 +33,7 @@ export class PreferenceUserSettingsService {
                 if (isAdmin) {
                     return response;
                 }
-                
+
                 const { data } = response;
                 const username = Functions.JSON_parse(localStorage.getItem(ConstValue.CURRENT_USER)).user.username;
                 const outData = data?.filter((item) =>

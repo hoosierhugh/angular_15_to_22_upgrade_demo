@@ -1,9 +1,4 @@
-import {
-  Component, OnInit,
-  ChangeDetectorRef,
-  Input,
-  ChangeDetectionStrategy
-} from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef, Input, ChangeDetectionStrategy, inject } from '@angular/core';
 import { ConstValue } from '@app/models';
 import { DialogDeleteAlertComponent } from '../../dialogs';
 import { AlertService, AuthenticationService, DashboardService, PreferenceMappingProtocolService, SessionStorageService } from '@app/services';
@@ -20,6 +15,16 @@ import { ComponentType } from '@angular/cdk/portal';
     standalone: false
 })
 export class PageResetComponent implements OnInit {
+    private authenticationService = inject(AuthenticationService);
+    private alertService = inject(AlertService);
+    private dashboardService = inject(DashboardService);
+    private sessionStorageService = inject(SessionStorageService);
+    private dialog = inject(MatDialog);
+    private cdr = inject(ChangeDetectorRef);
+    private _pmps = inject(PreferenceMappingProtocolService);
+    private translateService = inject(TranslateService);
+    private _httpBuffer = inject(HttpGetBuffer);
+
     isAdmin = false;
     isResetDashboard = true;
     isResetMapping = true;
@@ -29,19 +34,9 @@ export class PageResetComponent implements OnInit {
         success: Record<string, string>;
         error: Record<string, string>;
     };
-    constructor(
-        private authenticationService: AuthenticationService,
-        private alertService: AlertService,
-        private dashboardService: DashboardService,
-        private sessionStorageService: SessionStorageService,
-        private dialog: MatDialog,
-        private cdr: ChangeDetectorRef,
-        private _pmps: PreferenceMappingProtocolService,
-        private translateService: TranslateService,
-        private _httpBuffer: HttpGetBuffer
-        ) { 
-            
-        this.translateService.get('notifications').subscribe(res => { 
+    constructor() {
+
+        this.translateService.get('notifications').subscribe(res => {
             this.localDictionary = res;
         })
         }

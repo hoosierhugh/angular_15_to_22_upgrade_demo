@@ -1,8 +1,5 @@
 import hljs from 'highlight.js';
-import {
-    Component, EventEmitter, Input, OnInit, Output, AfterViewInit,
-    ChangeDetectionStrategy, ChangeDetectorRef, ViewChild, HostListener, ElementRef
-} from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output, AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, ViewChild, HostListener, ElementRef, inject } from '@angular/core';
 import { CodeJarContainer } from 'ngx-codejar';
 
 @Component({
@@ -13,6 +10,8 @@ import { CodeJarContainer } from 'ngx-codejar';
     standalone: false
 })
 export class CodeJarWrapperComponent implements OnInit, AfterViewInit {
+    private cdr = inject(ChangeDetectorRef);
+
     @Input()
     set text(value: string) {
         this.code = value;
@@ -23,7 +22,7 @@ export class CodeJarWrapperComponent implements OnInit, AfterViewInit {
     }
     @Output() textChange = new EventEmitter<string>();
     @Input() mode: string;
-    @Input() jsonValidator: boolean = false;
+    @Input() jsonValidator = false;
     @Input() theme = 'monokai';
     _readOnly = false;
     @Input()
@@ -41,14 +40,11 @@ export class CodeJarWrapperComponent implements OnInit, AfterViewInit {
     @Input() disabled = false;
 
     @Output() ready = new EventEmitter<string>();
-    code: string = '';
+    code = '';
     errorMessage = '';
     isReadyToShow = false;
 
     @ViewChild('codejar') codejar: ElementRef<HTMLDivElement>;
-
-    constructor(private cdr: ChangeDetectorRef) {
-    }
     @HostListener('document:keydown', ['$event'])
     handleReadOnly(event: KeyboardEvent) {
         return;

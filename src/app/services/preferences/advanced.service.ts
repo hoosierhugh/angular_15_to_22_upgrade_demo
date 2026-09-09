@@ -1,5 +1,5 @@
 import { HttpGetBuffer } from '@app/helpers/http-get-buffer';
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { environment } from '@environments/environment';
 import { ApiResponse, PreferenceAdvanced } from '@app/models';
@@ -9,12 +9,10 @@ import { Functions } from '@app/helpers/functions';
     providedIn: 'root',
 })
 export class PreferenceAdvancedService {
-    private url = `${environment.apiUrl}/advanced`;
+    private http = inject(HttpClient);
+    private httpGetBuffer = inject(HttpGetBuffer);
 
-    constructor(
-        private http: HttpClient,
-        private httpGetBuffer: HttpGetBuffer
-    ) { }
+    private url = `${environment.apiUrl}/advanced`;
 
     getAll(delayBuffer = 1000 * 30) {
         return this.httpGetBuffer.get<ApiResponse<PreferenceAdvanced[]>>(this.url, delayBuffer);

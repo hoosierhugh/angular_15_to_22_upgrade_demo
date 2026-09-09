@@ -3,13 +3,13 @@ import { createHomeDashboard, demoUser, sipMapping } from './mock-data';
 export const MOCK_API_BASE = '/__mock_api__/v3';
 export interface MockReply<T = unknown> { status: number; body: T; }
 
-type MockEntity = {
+interface MockEntity {
     guid?: string;
     uuid?: string;
     id?: string | number;
     category?: string;
     [key: string]: unknown;
-};
+}
 
 interface MockDashboard extends MockEntity {
     id: string;

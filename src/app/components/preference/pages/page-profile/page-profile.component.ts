@@ -1,4 +1,4 @@
-import { Component, Input, OnInit, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
+import { Component, Input, OnInit, ChangeDetectionStrategy, ChangeDetectorRef, inject } from '@angular/core';
 import { AbstractControl, FormControl, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { emailValidator } from '@app/helpers/email-validator.directive';
@@ -15,7 +15,14 @@ import { lastValueFrom } from 'rxjs';
     standalone: false
 })
 export class PageProfileComponent implements OnInit {
-  
+  private service = inject(PreferenceUserService);
+  private authenticationService = inject(AuthenticationService);
+  private cdr = inject(ChangeDetectorRef);
+  private userSecurityService = inject(UserSecurityService);
+  private router = inject(Router);
+  private alertService = inject(AlertService);
+
+
   regString = /^[a-zA-Z0-9\-\_\.]+$/;
   regNum = /^[0-9]+$/;
   regDept = /^[a-zA-Z0-9\-\_\.\s]+$/;
@@ -25,7 +32,7 @@ export class PageProfileComponent implements OnInit {
   hasStatistics = false;
   hidePass1 = true;
   idColorHash = Functions.idColorHash
-  groupList: Array<string>;
+  groupList: string[];
   profileColor = ''
   username = new FormControl(
       {value:'', disabled: true},[
@@ -55,7 +62,7 @@ export class PageProfileComponent implements OnInit {
       Validators.required,
       Validators.minLength(6),
       Validators.maxLength(100)
-      
+
   ]);
   password2 = new FormControl('', [
       Validators.required,
@@ -94,16 +101,9 @@ export class PageProfileComponent implements OnInit {
   userProfile: UserProfile
   data!: PreferenceUsers;
   timeout: ReturnType<typeof setTimeout> | undefined;
-  constructor(        
-    private service: PreferenceUserService,
-    private authenticationService: AuthenticationService,
-    private cdr: ChangeDetectorRef,
-    private userSecurityService: UserSecurityService,
-    private router: Router,
-    private alertService: AlertService,
-  ) {
+  constructor() {
     const userData = this.authenticationService.currentUserValue;
-    
+
     this.isAdmin =
     userData &&
     userData.user &&
@@ -160,7 +160,7 @@ export class PageProfileComponent implements OnInit {
       this.hasStatistics = true;
     }
   }
-  
+
   usernameValidator(userControl: AbstractControl): Promise<{ userNameNotAvailable: true } | null> {
     return new Promise(resolve => {
         if (typeof this.timeout !== 'undefined') {
@@ -174,7 +174,7 @@ export class PageProfileComponent implements OnInit {
             });
         }, 500);
     });
-  
+
   }
   isTaken(user: string | null): Promise<boolean> {
     return this.service.getAll().toPromise().then((users) => {
@@ -201,8 +201,8 @@ export class PageProfileComponent implements OnInit {
         !this.lastname?.invalid &&
         !this.department?.invalid
     ) {
-      
-        lastValueFrom(this.service.update(result))        
+
+        lastValueFrom(this.service.update(result))
         .then(() => {
             if (this.data.usergroup !== this.bufferGroup || result.password) {
                 this.userSecurityService.removeUserSettings();

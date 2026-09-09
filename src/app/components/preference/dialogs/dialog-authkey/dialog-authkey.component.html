@@ -7,19 +7,27 @@
 <div mat-dialog-content>
   <div class="authkey-cont">
     <mat-form-field style="padding-right: 1rem;">
-        <mat-label>{{ 'preference.authtoken.dialog.name' | translate }}</mat-label>
-        <input matInput [formControl]="name" autocomplete="off">
-        <mat-error *ngIf="name?.errors?.['required']">{{'validators.required' | translate }}</mat-error>
-        <mat-error *ngIf="name?.errors?.['minlength']">
+      <mat-label>{{ 'preference.authtoken.dialog.name' | translate }}</mat-label>
+      <input matInput [formControl]="name" autocomplete="off">
+      @if (name?.errors?.['required']) {
+        <mat-error>{{'validators.required' | translate }}</mat-error>
+      }
+      @if (name?.errors?.['minlength']) {
+        <mat-error>
           {{ name?.errors?.['minlength']?.requiredLength }} {{'validators.minChars' | translate }}
         </mat-error>
-        <mat-error *ngIf="name?.errors?.['maxlength']">
+      }
+      @if (name?.errors?.['maxlength']) {
+        <mat-error>
           {{ name?.errors?.['maxlength']?.requiredLength }} {{'validators.maxChars' | translate }}
         </mat-error>
-        <mat-error *ngIf="name?.errors?.['pattern'] && !name?.errors?.['minlength']">
+      }
+      @if (name?.errors?.['pattern'] && !name?.errors?.['minlength']) {
+        <mat-error>
           {{'validators.pattern' | translate }} [aA-Zz], [0-9], "-", "_" or space]
         </mat-error>
-      </mat-form-field>
+      }
+    </mat-form-field>
 
     <mat-form-field style="padding-right: 1rem;">
       <mat-label>{{ 'preference.authtoken.dialog.expire' | translate }}</mat-label>
@@ -35,5 +43,5 @@
 <div mat-dialog-actions style="float: right; margin-bottom: 0rem;">
   <button mat-raised-button (click)="onNoClick()">{{'LINK.buttons.cancel' | translate}}</button>
   <button mat-raised-button class="setting-btn-ok" (click)="onSubmit()"
-    cdkFocusInitial>{{'LINK.buttons.save' | translate}}</button>
+  cdkFocusInitial>{{'LINK.buttons.save' | translate}}</button>
 </div>

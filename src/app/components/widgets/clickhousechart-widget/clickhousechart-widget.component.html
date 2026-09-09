@@ -1,41 +1,52 @@
-<div *ngIf="isConfig" class="chart-container">
-    <app-loading-circle *ngIf="!_isLoaded">
-
-    </app-loading-circle>
-    <div *ngIf='_isLoaded' class="legend" [ngClass]="{'hidden': legendHidden}">
+@if (isConfig) {
+  <div class="chart-container">
+    @if (!_isLoaded) {
+      <app-loading-circle>
+      </app-loading-circle>
+    }
+    @if (_isLoaded) {
+      <div class="legend" [ngClass]="{'hidden': legendHidden}">
         <cdk-virtual-scroll-viewport
-            orientation="horizontal"
-            itemSize="100"
-            class="example-viewport"
-            (wheel)=onScroll($event)
-            #virtualScroll
-        >
-            <div *cdkVirtualFor='let item of legendItems' class="legend-item" (click)='hideDataset(item.datasetIndex, $event)'>
-                <div [style.backgroundColor]='item.fillStyle | colorOffset: "0":"0":"0":"1"' [ngClass]="{'crossed': item.hidden}" class="legend-token"></div>
-                <div [ngClass]="{'crossed': item.hidden}" class="legend-text">{{item.text}}</div>
-            </div>
+          orientation="horizontal"
+          itemSize="100"
+          class="example-viewport"
+          (wheel)=onScroll($event)
+          #virtualScroll
+          >
+          <div *cdkVirtualFor='let item of legendItems' class="legend-item" (click)='hideDataset(item.datasetIndex, $event)'>
+            <div [style.backgroundColor]='item.fillStyle | colorOffset: "0":"0":"0":"1"' [ngClass]="{'crossed': item.hidden}" class="legend-token"></div>
+            <div [ngClass]="{'crossed': item.hidden}" class="legend-text">{{item.text}}</div>
+          </div>
         </cdk-virtual-scroll-viewport>
-    </div>
-
-    <div *ngIf="_isLoaded" class="fill-container" [ngClass]="{'hidden': legendHidden}">
-        <h1 *ngIf="noChartData">No Data</h1>
-        <canvas *ngIf="!noChartData" baseChart
+      </div>
+    }
+    @if (_isLoaded) {
+      <div class="fill-container" [ngClass]="{'hidden': legendHidden}">
+        @if (noChartData) {
+          <h1>No Data</h1>
+        }
+        @if (!noChartData) {
+          <canvas baseChart
             [datasets]="chartData"
             [labels]="chartLabels"
             [options]="chartOptions"
             [legend]="false"
             [type]="chartType"
             >
-        </canvas>
-    </div>
-</div>
-<div *ngIf="!isConfig">
+          </canvas>
+        }
+      </div>
+    }
+  </div>
+}
+@if (!isConfig) {
+  <div>
     <button mat-raised-button class="setting-btn-ok"(click)="openDialog()">
-        <fa-icon icon="cog"></fa-icon> {{'LINK.buttons.widgetSettings' | translate}}
+      <fa-icon icon="cog"></fa-icon> {{'LINK.buttons.widgetSettings' | translate}}
     </button>
-    
-</div>
-<!-- <div class="virtual-scrollbar" *ngIf="!isExport" (mousedown)="setScrollTarget('virtualScrollbar')" 
-    (scroll)="onScroll($event)" #virtualScrollbar>
-    <div [style.transform]="getVirtualScrollHeight" [style.padding.px]="1"></div>
+  </div>
+}
+<!-- <div class="virtual-scrollbar" *ngIf="!isExport" (mousedown)="setScrollTarget('virtualScrollbar')"
+(scroll)="onScroll($event)" #virtualScrollbar>
+<div [style.transform]="getVirtualScrollHeight" [style.padding.px]="1"></div>
 </div> -->

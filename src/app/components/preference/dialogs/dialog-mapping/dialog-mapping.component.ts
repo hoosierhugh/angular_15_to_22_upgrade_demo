@@ -1,4 +1,4 @@
-import { Component, Inject, ChangeDetectionStrategy, ViewChild, ChangeDetectorRef } from '@angular/core';
+import { Component, ChangeDetectionStrategy, ViewChild, ChangeDetectorRef, OnInit, AfterViewInit, inject } from '@angular/core';
 import { FormControl, Validators } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { PreferenceScriptsService } from '@app/services';
@@ -31,7 +31,13 @@ interface MappingDialogRecord {
     changeDetection: ChangeDetectionStrategy.OnPush,
     standalone: false
 })
-export class DialogMappingComponent {
+export class DialogMappingComponent implements OnInit, AfterViewInit {
+  dialogRef = inject<MatDialogRef<DialogMappingComponent>>(MatDialogRef);
+  private scriptService = inject(PreferenceScriptsService);
+  translateService = inject(TranslateService);
+  private cdr = inject(ChangeDetectorRef);
+  data = inject<CrudDialogData<MappingDialogRecord>>(MAT_DIALOG_DATA);
+
   @ViewChild('correlation_mapping_view', { static: false }) correlationEditor;
   @ViewChild('fields_mapping_view', { static: false }) mappingEditor;
   @ViewChild('fields_script_view', { static: false }) scriptEditor;
@@ -81,13 +87,10 @@ export class DialogMappingComponent {
     Validators.max(365),
     Validators.pattern(this.regNum)
   ]);
-  constructor(
-    public dialogRef: MatDialogRef<DialogMappingComponent>,
-    private scriptService: PreferenceScriptsService,
-    public translateService: TranslateService,
-    private cdr: ChangeDetectorRef,
-    @Inject(MAT_DIALOG_DATA) public data: CrudDialogData<MappingDialogRecord>
-  ) {
+  constructor() {
+    const translateService = this.translateService;
+    const data = this.data;
+
     translateService.addLangs(['en'])
     translateService.setDefaultLang('en')
     if (data.isnew) {

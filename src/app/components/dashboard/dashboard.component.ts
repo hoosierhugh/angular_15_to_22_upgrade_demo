@@ -1,18 +1,5 @@
 // GRIDSTER & ANGULAR
-import {
-  Component,
-  OnInit,
-  ViewEncapsulation,
-  ViewChildren,
-  QueryList,
-  OnDestroy,
-  AfterViewInit,
-  ViewChild,
-  HostListener,
-  ChangeDetectionStrategy,
-  ChangeDetectorRef,
-  ElementRef
-} from '@angular/core';
+import { Component, OnInit, ViewEncapsulation, ViewChildren, QueryList, OnDestroy, AfterViewInit, ViewChild, HostListener, ChangeDetectionStrategy, ChangeDetectorRef, ElementRef, inject } from '@angular/core';
 import {
   DashboardService,
   PreferenceAdvancedService,
@@ -49,6 +36,18 @@ import { TranslateService } from '@ngx-translate/core'
     standalone: false
 })
 export class DashboardComponent implements OnInit, OnDestroy, AfterViewInit {
+  private _route = inject(ActivatedRoute);
+  dashboardService = inject(DashboardService);
+  private router = inject(Router);
+  private cdr = inject(ChangeDetectorRef);
+  private _dtrs = inject(DateTimeRangeService);
+  private _pas = inject(PreferenceAdvancedService);
+  private userSecurityService = inject(UserSecurityService);
+  private _sss = inject(SessionStorageService);
+  private authenticationService = inject(AuthenticationService);
+  dialog = inject(MatDialog);
+  translateService = inject(TranslateService);
+
 
   private envUrl = `${environment.apiUrl.replace('/api/v3', '')}`;
   gridOptions: GridsterConfig;
@@ -87,8 +86,8 @@ export class DashboardComponent implements OnInit, OnDestroy, AfterViewInit {
   }
   subscription: Subscription;
   isIframe = false;
-  isIframeLoaded: boolean = false;
-  isSameOrigin: boolean = false;
+  isIframeLoaded = false;
+  isSameOrigin = false;
   iframeUrl: string;
   isHome = false;
   postSaveHash: string;
@@ -131,19 +130,9 @@ export class DashboardComponent implements OnInit, OnDestroy, AfterViewInit {
     }
   }
 
-  constructor(
-    private _route: ActivatedRoute,
-    public dashboardService: DashboardService,
-    private router: Router,
-    private cdr: ChangeDetectorRef,
-    private _dtrs: DateTimeRangeService,
-    private _pas: PreferenceAdvancedService,
-    private userSecurityService: UserSecurityService,
-    private _sss: SessionStorageService,
-    private authenticationService: AuthenticationService,
-    public dialog: MatDialog,
-    public translateService: TranslateService
-  ) {
+  constructor() {
+    const translateService = this.translateService;
+
     translateService.addLangs(['en'])
     translateService.setDefaultLang('en')
     const browserLang = translateService.getBrowserLang();
@@ -172,7 +161,7 @@ export class DashboardComponent implements OnInit, OnDestroy, AfterViewInit {
       }
     }
 
-    let widgetList: Array<any>;
+    let widgetList: any[];
     if (ls != null && ls.currentWidgetList !== undefined) {
       widgetList = ls.currentWidgetList;
     } else {
@@ -572,11 +561,11 @@ export class DashboardComponent implements OnInit, OnDestroy, AfterViewInit {
     this.cdr.detectChanges();
 }
   submitCheck() {
-    const submitWidgets: Array<any> = [];
-    const dashboardSubmitWidgets: Array<any> = [];
+    const submitWidgets: any[] = [];
+    const dashboardSubmitWidgets: any[] = [];
     const ls = Functions.JSON_parse(localStorage.getItem(UserConstValue.SQWR)) ||
       Functions.JSON_parse(localStorage.getItem(ConstValue.SQWR));
-    let widgetList: Array<any>;
+    let widgetList: any[];
     if (ls != null && ls.currentWidgetList !== undefined) {
       widgetList = ls.currentWidgetList;
     } else {
@@ -1350,14 +1339,14 @@ export class DashboardComponent implements OnInit, OnDestroy, AfterViewInit {
       this.gridster?.api?.calculateLayout();
     } catch (err) { }
   }
-  // To work on Grafana "Variables" feature you have to have setup with same origin for backend and UI 
+  // To work on Grafana "Variables" feature you have to have setup with same origin for backend and UI
   // or set ---disable-site-isolation-trials flag in chrome, DON'T FORGET TO REMOVE FLAG AFTERWARDS, IT IS UNSAFE
   onLoadIframe() {
     if (this.iframeUrl !== '') {
         this.isIframeLoaded = true;
         if (this.isSameOrigin && this.dashboardCollection.data.config.hasVariables) {
             let isHeader = false
-            let interval = setInterval(() => {
+            const interval = setInterval(() => {
                 isHeader = !!this.frame.nativeElement.contentWindow.document.querySelector('header')
                 if (isHeader) {
                     clearInterval(interval)

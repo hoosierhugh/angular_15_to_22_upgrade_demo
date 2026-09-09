@@ -1,7 +1,4 @@
-import {
-    ChangeDetectionStrategy,
-    ChangeDetectorRef, Component, ElementRef, EventEmitter, HostListener, Input, OnInit, Output, ViewChild
-} from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, EventEmitter, HostListener, Input, OnInit, Output, ViewChild, AfterViewInit, inject } from '@angular/core';
 import { emitWindowResize, saveToFile } from '@app/helpers/windowFunctions';
 import moment from 'moment';
 
@@ -12,20 +9,20 @@ import moment from 'moment';
     changeDetection: ChangeDetectionStrategy.OnPush,
     standalone: false
 })
-export class FullScreenComponent implements OnInit {
+export class FullScreenComponent implements OnInit, AfterViewInit {
+    private cdr = inject(ChangeDetectorRef);
+
     @ViewChild('fileSelect', { static: true }) fileSelect;
     isFullPage = false;
     isDragOver = false;
-    @Input() isReadOnly: boolean = false;
-    @Output() isReadOnlyChange: EventEmitter<boolean> = new EventEmitter();
-    @Input() allowReadOnly: boolean = false;
+    @Input() isReadOnly = false;
+    @Output() isReadOnlyChange = new EventEmitter<boolean>();
+    @Input() allowReadOnly = false;
     @ViewChild('innerContainer') innerContainer: ElementRef<HTMLElement>;
     @ViewChild('content') content: ElementRef<HTMLElement>;
     @Output() fullPage = new EventEmitter<boolean>();
     @Output() import = new EventEmitter<string>();
     @Input() data: { json?: string; title?: string; type?: string };
-    constructor(
-        private cdr: ChangeDetectorRef) { }
 
     ngOnInit() {
     }

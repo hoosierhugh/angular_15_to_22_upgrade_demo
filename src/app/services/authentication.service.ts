@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
@@ -32,15 +32,15 @@ export interface AuthTypeCollection {
 
 @Injectable({ providedIn: 'root' })
 export class AuthenticationService {
+    private http = inject(HttpClient);
+    private preferenceUserSettingsService = inject(PreferenceUserSettingsService);
+    private alertService = inject(AlertService);
+    private translateService = inject(TranslateService);
+
     private currentUserSubject: BehaviorSubject<User>;
     public currentUser: Observable<User>;
 
-    constructor(
-        private http: HttpClient,
-        private preferenceUserSettingsService: PreferenceUserSettingsService,
-        private alertService: AlertService,
-        private translateService: TranslateService
-    ) {
+    constructor() {
         let ls: User | null = null;
         if (MOCK_MODE) {
             localStorage.setItem(ConstValue.CURRENT_USER, JSON.stringify(createMockUser()));

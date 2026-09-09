@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, inject } from '@angular/core';
 import { emitWindowResize } from '@app/helpers/windowFunctions';
 import { ICellRendererAngularComp } from 'ag-grid-angular';
 import { ICellRendererParams } from 'ag-grid-community';
@@ -39,7 +39,7 @@ interface ColumnListItem {
 
 interface ColumnListContainer {
   id: string;
-  data: Array<Pick<ColumnListItem, 'field' | 'selected'>>;
+  data: Pick<ColumnListItem, 'field' | 'selected'>[];
 }
 
 @Component({
@@ -50,6 +50,8 @@ interface ColumnListContainer {
     standalone: false
 })
 export class SettingButtonComponent implements ICellRendererAngularComp {
+  private cdr = inject(ChangeDetectorRef);
+
   public params: SettingButtonParams;
   callid: string;
   isFilterOpened = false;
@@ -57,7 +59,6 @@ export class SettingButtonComponent implements ICellRendererAngularComp {
   apiColumn: GridColumnApi;
   headerName = '';
   @Input() isTab = false;
-  constructor(private cdr: ChangeDetectorRef) { }
 
   agInit(params: ICellRendererParams): void {
     this.params = params as unknown as SettingButtonParams;

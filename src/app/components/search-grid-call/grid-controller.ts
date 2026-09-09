@@ -23,11 +23,11 @@ export class GridController {
     inChartContainer;
     gridApi;
 
-    _columnDefs: Array<ColDef>;
-    set columnDefs(value: Array<ColDef>) {
+    _columnDefs: ColDef[];
+    set columnDefs(value: ColDef[]) {
         this._columnDefs = value;
     }
-    get columnDefs(): Array<ColDef> {
+    get columnDefs(): ColDef[] {
         return this._columnDefs;
     }
 

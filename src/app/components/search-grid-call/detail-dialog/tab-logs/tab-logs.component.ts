@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, ChangeDetectionStrategy, ChangeDetectorRef, EventEmitter, Output, AfterViewInit } from '@angular/core';
+import { Component, OnInit, Input, ChangeDetectionStrategy, ChangeDetectorRef, EventEmitter, Output, AfterViewInit, inject } from '@angular/core';
 import { Functions } from '@app/helpers/functions';
 
 @Component({
@@ -9,12 +9,14 @@ import { Functions } from '@app/helpers/functions';
     standalone: false
 })
 export class TabLogsComponent implements OnInit, AfterViewInit {
+    private cdr = inject(ChangeDetectorRef);
+
     _data: LogEntry[] = [];
 
     get data() {
         return this._data;
     }
-    @Input('data') set data(val: LogEntry[]) {
+    @Input() set data(val: LogEntry[]) {
         if (!val) {
             return;
         }
@@ -41,7 +43,6 @@ export class TabLogsComponent implements OnInit, AfterViewInit {
         this.cdr.detectChanges();
     }
     @Output() ready = new EventEmitter<void>();
-    constructor(private cdr: ChangeDetectorRef) { }
 
     ngOnInit() {
     }

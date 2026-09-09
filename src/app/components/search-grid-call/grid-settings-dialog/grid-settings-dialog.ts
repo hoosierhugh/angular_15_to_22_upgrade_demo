@@ -1,4 +1,4 @@
-import { Component, Inject, ChangeDetectionStrategy } from '@angular/core';
+import { Component, ChangeDetectionStrategy, inject } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { Functions, setStorage } from '@app/helpers/functions';
 import { UserConstValue } from '../../../models/const-value.model';
@@ -20,6 +20,10 @@ export interface DialogData {
     standalone: false
 })
 export class DialogSettingsGridDialog {
+    dialogRef = inject<MatDialogRef<DialogSettingsGridDialog>>(MatDialogRef);
+    translateService = inject(TranslateService);
+    data = inject<DialogData>(MAT_DIALOG_DATA);
+
     public apiColumn: any;
     apiPoint: any;
     id: string;
@@ -44,13 +48,12 @@ export class DialogSettingsGridDialog {
     ];
     selectedType: string;
     agGridSizeControl: any = {};
-    allColumnIds: Array<any> = [];
-    _bufferData: Array<any>;
-    constructor(
-        public dialogRef: MatDialogRef<DialogSettingsGridDialog>,
-        public translateService: TranslateService,
-        @Inject(MAT_DIALOG_DATA) public data: DialogData
-    ) {
+    allColumnIds: any[] = [];
+    _bufferData: any[];
+    constructor() {
+        const translateService = this.translateService;
+        const data = this.data;
+
         translateService.addLangs(['en'])
         translateService.setDefaultLang('en')
         this.apiColumn = data.apicol;
@@ -61,7 +64,7 @@ export class DialogSettingsGridDialog {
             typeof this.apiColumn?.getAllColumns() !== 'undefined' &&
             this.apiColumn.getAllColumns() !== null
         ) {
-            Object.values(this.apiColumn.getAllGridColumns() as Object)
+            Object.values(this.apiColumn.getAllGridColumns() as object)
                 .filter((column) => !['', 'id'].includes(column.colDef.field))
                 .forEach((column, index) =>
                     this.allColumnIds.push({

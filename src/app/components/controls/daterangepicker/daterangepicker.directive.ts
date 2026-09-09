@@ -1,21 +1,4 @@
-import {
-    Directive,
-    ViewContainerRef,
-    ElementRef,
-    HostListener,
-    forwardRef,
-    ChangeDetectorRef,
-    OnInit,
-    OnChanges,
-    SimpleChanges,
-    Input,
-    DoCheck,
-    KeyValueDiffer,
-    KeyValueDiffers,
-    Output,
-    EventEmitter,
-    Renderer2
-  } from '@angular/core';
+import { Directive, ViewContainerRef, ElementRef, HostListener, forwardRef, ChangeDetectorRef, OnInit, OnChanges, SimpleChanges, Input, DoCheck, KeyValueDiffer, KeyValueDiffers, Output, EventEmitter, Renderer2, inject } from '@angular/core';
   import { DaterangepickerComponent } from './daterangepicker.component';
   import { NG_VALUE_ACCESSOR } from '@angular/forms';
   import _moment from 'moment-timezone';
@@ -40,6 +23,14 @@ import {
     standalone: false
 })
   export class DaterangepickerDirective implements OnInit, OnChanges, DoCheck {
+    viewContainerRef = inject(ViewContainerRef);
+    _changeDetectorRef = inject(ChangeDetectorRef);
+    private _el = inject(ElementRef);
+    private _renderer = inject(Renderer2);
+    private differs = inject(KeyValueDiffers);
+    private _localeService = inject(LocaleService);
+    private elementRef = inject(ElementRef);
+
     public picker: DaterangepickerComponent;
     private _onChange = Function.prototype;
     private _onTouched = Function.prototype;
@@ -50,7 +41,7 @@ import {
     @Input()
     maxDate: _moment.Moment
     @Input()
-    autoApply: Boolean = false;
+    autoApply = false;
     @Input()
     alwaysShowCalendars: boolean;
     @Input()
@@ -95,18 +86,18 @@ import {
     @Input()
     showRangeLabelOnInput: boolean;
     @Input()
-    showCancel: boolean = false;
+    showCancel = false;
     @Input()
-    lockStartDate: boolean = false;
+    lockStartDate = false;
     // timepicker variables
     @Input()
-    timePicker: Boolean = false;
+    timePicker = false;
     @Input()
-    timePicker24Hour: Boolean = true;
+    timePicker24Hour = true;
     @Input()
-    timePickerIncrement: number = 1;
+    timePickerIncrement = 1;
     @Input()
-    timePickerSeconds: Boolean = false;
+    timePickerSeconds = false;
     @Input()
     timeInput = true;
     @Input()
@@ -120,8 +111,8 @@ import {
       return this._locale;
     }
     @Input()
-    private _endKey: string = 'endDate';
-    private _startKey: string = 'startDate';
+    private _endKey = 'endDate';
+    private _startKey = 'startDate';
     @Input() set startKey(value) {
       if (value !== null) {
         this._startKey = value;
@@ -136,12 +127,12 @@ import {
         this._endKey = 'endDate';
       }
     }
-    notForChangesProperty: Array<string> = [
+    notForChangesProperty: string[] = [
       'locale',
       'endKey',
       'startKey'
     ];
-  
+
     get value() {
       return this._value || null;
     }
@@ -150,25 +141,19 @@ import {
       this._onChange(val);
       this._changeDetectorRef.markForCheck();
     }
-    @Output('change') onChange: EventEmitter<Object> = new EventEmitter();
-    @Output('rangeClicked') rangeClicked: EventEmitter<Object> = new EventEmitter();
-    @Output('datesUpdated') datesUpdated: EventEmitter<Object> = new EventEmitter();
-    @Output() startDateChanged: EventEmitter<Object> = new EventEmitter();
-    @Output() endDateChanged: EventEmitter<Object> = new EventEmitter();
-    constructor(
-      public viewContainerRef: ViewContainerRef,
-      public _changeDetectorRef: ChangeDetectorRef,
-      private _el: ElementRef,
-      private _renderer: Renderer2,
-      private differs: KeyValueDiffers,
-      private _localeService: LocaleService,
-      private elementRef: ElementRef
-    ) {
+    @Output('change') onChange = new EventEmitter<object>();
+    @Output() rangeClicked = new EventEmitter<object>();
+    @Output() datesUpdated = new EventEmitter<object>();
+    @Output() startDateChanged = new EventEmitter<object>();
+    @Output() endDateChanged = new EventEmitter<object>();
+    constructor() {
+      const viewContainerRef = this.viewContainerRef;
+
       this.drops = 'down';
       this.opens = 'auto';
       viewContainerRef.clear();
       const componentRef = viewContainerRef.createComponent(DaterangepickerComponent);
-      this.picker = (<DaterangepickerComponent>componentRef.instance);
+      this.picker = (componentRef.instance as DaterangepickerComponent);
       this.picker.inline = false; // set inline to false for all directive usage
     }
     ngOnInit() {
@@ -206,7 +191,7 @@ import {
       this.localeDiffer = this.differs.find(this.locale).create();
       this.picker.closeOnAutoApply = this.closeOnAutoApply;
     }
-  
+
     ngOnChanges(changes: SimpleChanges): void  {
       for (const change in changes) {
         if (changes.hasOwnProperty(change)) {
@@ -216,7 +201,7 @@ import {
         }
       }
     }
-  
+
     ngDoCheck() {
       if (this.localeDiffer) {
         const changes = this.localeDiffer.diff(this.locale);
@@ -225,18 +210,18 @@ import {
         }
       }
     }
-  
+
     onBlur() {
       this._onTouched();
     }
-  
+
     open(event?: any) {
       this.picker.show(event);
       setTimeout(() => {
         this.setPosition();
       });
     }
-  
+
     hide(e?) {
       this.picker.hide(e);
     }
@@ -247,11 +232,11 @@ import {
         this.open(e);
       }
     }
-  
+
     clear() {
       this.picker.clear();
     }
-  
+
     writeValue(value) {
       this.setValue(value);
     }
@@ -357,7 +342,7 @@ import {
       this.picker.setStartDate(start);
       this.picker.setEndDate(end);
       this.picker.updateView();
-  
+
     }
     /**
      * For click outside of the calendar's container
@@ -368,11 +353,11 @@ import {
       if (!event.target) {
         return;
       }
-  
+
       if (event.target.classList.contains('ngx-daterangepicker-action')) {
         return;
       }
-  
+
       if (!this.elementRef.nativeElement.contains(event.target)) {
         this.hide();
       }

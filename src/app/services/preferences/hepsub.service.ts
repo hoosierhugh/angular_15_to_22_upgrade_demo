@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { environment } from '@environments/environment';
 import { PreferenceHepsub } from '@app/models';
@@ -8,10 +8,10 @@ import { Functions } from '@app/helpers/functions';
   providedIn: 'root'
 })
 export class PreferenceHepsubService {
+  private http = inject(HttpClient);
+
 
   private url = `${environment.apiUrl}/hepsub/protocol`;
-
-  constructor(private http: HttpClient) { }
 
   getAll() {
       return this.http.get<PreferenceHepsub[]>(`${this.url}`);

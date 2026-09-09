@@ -1,4 +1,4 @@
-import { NgModule } from '@angular/core';
+import { NgModule, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { AlertComponent } from './alert.component';
 import { AlertSourceComponent } from './alert-source.component';
@@ -26,7 +26,9 @@ import { MatTooltipModule } from '@angular/material/tooltip';
     providers: [AlertOverlayService]
 })
 export class AlertModule {
-    constructor(library: FaIconLibrary) {
+    constructor() {
+        const library = inject(FaIconLibrary);
+
         library.addIconPacks(fas as IconPack, fab as IconPack, far as IconPack);
     }
 }

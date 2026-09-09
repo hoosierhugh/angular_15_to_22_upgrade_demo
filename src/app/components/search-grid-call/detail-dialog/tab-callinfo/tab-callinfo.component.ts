@@ -44,9 +44,9 @@ enum TASK_TYPE {
 })
 export class TabCallinfoComponent implements AfterViewInit {
   hostinfo: any;
-  ipAlias: Array<any> = [];
-  callTransaction: Array<any> = [];
-  callDataByCallid: Array<any> = [];
+  ipAlias: any[] = [];
+  callTransaction: any[] = [];
+  callDataByCallid: any[] = [];
   rtpagentReports: any = {};
   transactionProfile: any;
   UAC = '';
@@ -72,7 +72,7 @@ export class TabCallinfoComponent implements AfterViewInit {
     this.initSession(CallReportDataByCallid);
   }
 
-  @Output() ready: EventEmitter<any> = new EventEmitter();
+  @Output() ready = new EventEmitter<any>();
 
   ngAfterViewInit() {
     setTimeout(() => {
@@ -755,8 +755,8 @@ export class TabCallinfoComponent implements AfterViewInit {
   }
 
   public chartConfigurate(data: any) {
-    const chartValue: Array<number> = data.value || [];
-    const chartLabel: Array<number> = data.label || [];
+    const chartValue: number[] = data.value || [];
+    const chartLabel: number[] = data.label || [];
     const arLab = chartLabel.map((label) => ({
       label,
     }));

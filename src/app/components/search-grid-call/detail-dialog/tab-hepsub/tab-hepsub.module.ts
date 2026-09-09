@@ -2,7 +2,7 @@ import { LokiResultsModule } from '@app/components/controls/loki-results/loki-re
 // import { CodeStyleFieldModule } from '@widgets/rsearch-widget/code-style-field/code-style-field.module';
 import { TabLogsComponent } from './../tab-logs/tab-logs.component';
 // import { TabLokiComponent } from './../tab-loki/tab-loki.component';
-import { NgModule, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
+import { NgModule, CUSTOM_ELEMENTS_SCHEMA, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { TabHepsubComponent } from './tab-hepsub.component';
 import { MatTabsModule } from '@angular/material/tabs';
@@ -40,10 +40,12 @@ import { far } from '@fortawesome/free-regular-svg-icons';
   exports: [TabHepsubComponent]
 })
 export class TabHepsubModule {
-  constructor(
-    library: FaIconLibrary,
-    public translateService: TranslateService,
-  ) {
+  translateService = inject(TranslateService);
+
+  constructor() {
+    const library = inject(FaIconLibrary);
+    const translateService = this.translateService;
+
     library.addIconPacks(fas as IconPack, fab as IconPack, far as IconPack);
     translateService.addLangs(['en'])
     translateService.setDefaultLang('en')

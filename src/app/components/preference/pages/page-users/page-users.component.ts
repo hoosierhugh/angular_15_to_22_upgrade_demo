@@ -1,13 +1,4 @@
-import {
-    Component,
-    OnInit,
-    OnDestroy,
-    ChangeDetectionStrategy,
-    ChangeDetectorRef,
-    ViewChild,
-    AfterViewInit,
-    Input,
-} from '@angular/core';
+import { Component, OnInit, OnDestroy, ChangeDetectionStrategy, ChangeDetectorRef, ViewChild, AfterViewInit, Input, inject } from '@angular/core';
 import { Router } from '@angular/router';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
@@ -41,6 +32,14 @@ import { ComponentType } from '@angular/cdk/portal';
 })
 
 export class PageUsersComponent implements OnInit, OnDestroy, AfterViewInit {
+    private authenticationService = inject(AuthenticationService);
+    private router = inject(Router);
+    private alertService = inject(AlertService);
+    private userSecurityService = inject(UserSecurityService);
+    private service = inject(PreferenceUserService);
+    dialog = inject(MatDialog);
+    private cdr = inject(ChangeDetectorRef);
+
     isLoading = false;
     isAdmin = false;
     isErrorResponse = false;
@@ -54,15 +53,7 @@ export class PageUsersComponent implements OnInit, OnDestroy, AfterViewInit {
     isAccess: Record<string, boolean>;
     filter = '';
     username = '';
-    constructor(
-        private authenticationService: AuthenticationService,
-        private router: Router,
-        private alertService: AlertService,
-        private userSecurityService: UserSecurityService,
-        private service: PreferenceUserService,
-        public dialog: MatDialog,
-        private cdr: ChangeDetectorRef,
-    ) {
+    constructor() {
         const userData = this.authenticationService.currentUserValue;
         this.username = userData.user.username;
         this.isAdmin =

@@ -1,9 +1,9 @@
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 import { SessionStorageService, UserSettings } from './session-storage.service';
 import moment from 'moment-timezone';
 
-export type DateRange = Array<moment.Moment | string>;
+export type DateRange = (moment.Moment | string)[];
 
 export interface DateTimeRangeState {
     title: string;
@@ -32,6 +32,8 @@ export interface Timestamp {
     providedIn: 'root'
 })
 export class DateTimeRangeService {
+    private _sss = inject(SessionStorageService);
+
     public static dateTimeRangr: DateTimeRangeState = {
         title: '',
         timezone: '',
@@ -51,9 +53,7 @@ export class DateTimeRangeService {
 
     _interval: ReturnType<typeof setInterval> | undefined;
 
-    constructor(
-        private _sss: SessionStorageService
-    ) {
+    constructor() {
         this.setDelay(this.delayRefresher);
         this._sss.sessionStorage.subscribe((data: UserSettings) => {
             if (data.updateType !== 'proto-search') {

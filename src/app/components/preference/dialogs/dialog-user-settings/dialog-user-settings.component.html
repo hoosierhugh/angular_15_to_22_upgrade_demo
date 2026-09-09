@@ -5,61 +5,85 @@
   </button>
 </mat-toolbar>
 
-<ng-container *ngIf="type !== 'data-preview'; else dataPreview">
-<div mat-dialog-content>
-  <mat-tab-group>
-    <mat-tab [label]="'preference.userSettings.dialog.userData' | translate">
-      <hr />
-      <strong>{{ 'preference.userSettings.dialog.userData' | translate }}</strong>
-      <hr />
-      <div>
-        <mat-form-field style="padding-right: 1rem;">
-          <mat-label>{{ 'preference.userSettings.dialog.username' | translate }}</mat-label>
-          <input matInput [formControl]="username" [placeholder]="currentUser" [matAutocomplete]="auto">
-          <mat-autocomplete #auto="matAutocomplete">
-            <mat-option *ngFor="let user of userList | async" [value]="user">
-              {{user}}
-            </mat-option>
-          </mat-autocomplete>
-          <mat-error *ngIf="username?.errors?.['required']">{{'validators.required' | translate }}</mat-error>
-          <mat-error *ngIf="username?.errors?.['minlength']">
-            {{ username?.errors?.['minlength']?.requiredLength }} {{'validators.minChars' | translate }}
-          </mat-error>
-          <mat-error *ngIf="username?.errors?.['maxlength']">
-            {{ username?.errors?.['maxlength']?.requiredLength }} {{'validators.maxChars' | translate }}
-          </mat-error>
-          <mat-error *ngIf="username?.errors?.['pattern'] && !username?.errors?.['minlength']">
-            {{'validators.pattern' | translate }} [aA-Zz], [0-9], "-" or "_"]
-          </mat-error>
-          <mat-error *ngIf="username?.errors?.['userNameNotAvailable']">
-            Username not available, please select one of list
-          </mat-error>
-        </mat-form-field>
-        <mat-form-field style="padding-right: 1rem;">
-          <mat-label>{{ 'preference.userSettings.dialog.category' | translate }}</mat-label>
-          <input matInput [formControl]="category" autocomplete="off">
-          <mat-error *ngIf="category?.errors?.['required']">{{'validators.required' | translate }}</mat-error>
-          <mat-error *ngIf="category?.errors?.['minlength']">
-            {{ category?.errors?.['minlength']?.requiredLength }} {{'validators.minChars' | translate }}
-          </mat-error>
-          <mat-error *ngIf="category?.errors?.['maxlength']">
-            {{ category?.errors?.['maxlength']?.requiredLength }} {{'validators.maxChars' | translate }}
-          </mat-error>
-          <mat-error *ngIf="category?.errors?.['pattern'] && !category?.errors?.['minlength']">
-            {{'validators.pattern' | translate }} [aA-Zz], [0-9], "-", "_" or "."
-          </mat-error>
-        </mat-form-field>
-      </div>
-      <div>
-        <mat-form-field style="padding-right: 1rem;">
-          <mat-label>{{ 'preference.userSettings.dialog.param' | translate }}</mat-label>
-          <input matInput [formControl]="param" autocomplete="off">
-          <mat-error *ngIf="param?.errors?.['required']">{{'validators.required' | translate }}</mat-error>
-          <mat-error *ngIf="param?.errors?.['minlength']">
-            {{ param?.errors?.['minlength']?.requiredLength }} {{'validators.minChars' | translate }}
-          </mat-error>
-        </mat-form-field>
-        <!-- <mat-form-field style="padding-right: 1rem;">
+@if (type !== 'data-preview') {
+  <div mat-dialog-content>
+    <mat-tab-group>
+      <mat-tab [label]="'preference.userSettings.dialog.userData' | translate">
+        <hr />
+        <strong>{{ 'preference.userSettings.dialog.userData' | translate }}</strong>
+        <hr />
+        <div>
+          <mat-form-field style="padding-right: 1rem;">
+            <mat-label>{{ 'preference.userSettings.dialog.username' | translate }}</mat-label>
+            <input matInput [formControl]="username" [placeholder]="currentUser" [matAutocomplete]="auto">
+            <mat-autocomplete #auto="matAutocomplete">
+              @for (user of userList | async; track user) {
+                <mat-option [value]="user">
+                  {{user}}
+                </mat-option>
+              }
+            </mat-autocomplete>
+            @if (username?.errors?.['required']) {
+              <mat-error>{{'validators.required' | translate }}</mat-error>
+            }
+            @if (username?.errors?.['minlength']) {
+              <mat-error>
+                {{ username?.errors?.['minlength']?.requiredLength }} {{'validators.minChars' | translate }}
+              </mat-error>
+            }
+            @if (username?.errors?.['maxlength']) {
+              <mat-error>
+                {{ username?.errors?.['maxlength']?.requiredLength }} {{'validators.maxChars' | translate }}
+              </mat-error>
+            }
+            @if (username?.errors?.['pattern'] && !username?.errors?.['minlength']) {
+              <mat-error>
+                {{'validators.pattern' | translate }} [aA-Zz], [0-9], "-" or "_"]
+              </mat-error>
+            }
+            @if (username?.errors?.['userNameNotAvailable']) {
+              <mat-error>
+                Username not available, please select one of list
+              </mat-error>
+            }
+          </mat-form-field>
+          <mat-form-field style="padding-right: 1rem;">
+            <mat-label>{{ 'preference.userSettings.dialog.category' | translate }}</mat-label>
+            <input matInput [formControl]="category" autocomplete="off">
+            @if (category?.errors?.['required']) {
+              <mat-error>{{'validators.required' | translate }}</mat-error>
+            }
+            @if (category?.errors?.['minlength']) {
+              <mat-error>
+                {{ category?.errors?.['minlength']?.requiredLength }} {{'validators.minChars' | translate }}
+              </mat-error>
+            }
+            @if (category?.errors?.['maxlength']) {
+              <mat-error>
+                {{ category?.errors?.['maxlength']?.requiredLength }} {{'validators.maxChars' | translate }}
+              </mat-error>
+            }
+            @if (category?.errors?.['pattern'] && !category?.errors?.['minlength']) {
+              <mat-error>
+                {{'validators.pattern' | translate }} [aA-Zz], [0-9], "-", "_" or "."
+              </mat-error>
+            }
+          </mat-form-field>
+        </div>
+        <div>
+          <mat-form-field style="padding-right: 1rem;">
+            <mat-label>{{ 'preference.userSettings.dialog.param' | translate }}</mat-label>
+            <input matInput [formControl]="param" autocomplete="off">
+            @if (param?.errors?.['required']) {
+              <mat-error>{{'validators.required' | translate }}</mat-error>
+            }
+            @if (param?.errors?.['minlength']) {
+              <mat-error>
+                {{ param?.errors?.['minlength']?.requiredLength }} {{'validators.minChars' | translate }}
+              </mat-error>
+            }
+          </mat-form-field>
+          <!-- <mat-form-field style="padding-right: 1rem;">
           <mat-label>{{ 'preference.userSettings.dialog.partition' | translate }}</mat-label>
           <input matInput [formControl]="partid" autocomplete="off">
           <mat-error *ngIf="partid?.errors?.required">{{'validators.required' | translate }}</mat-error>
@@ -74,100 +98,87 @@
       <strong>{{ 'preference.userSettings.dialog.data' | translate }}</strong>
       <hr />
       <full-screen (fullPage)='disableClose($event)'
-                    (import)='import($event, "data")'
-                    [data]='{json:data.data.data, title: data.data.category + " " + data.data.param, type: "json"}'>
+        (import)='import($event, "data")'
+        [data]='{json:data.data.data, title: data.data.category + " " + data.data.param, type: "json"}'>
         <!-- <ace-editor [mode]="'json'" [theme]="'monokai'" [readOnly]="false" [(text)]="data.data.data" #data_view
-          [style.min-height.%]="100" [disabled]="!isAdmin"></ace-editor> -->
-          <app-codejar-wrapper [mode]="'json'" [theme]="'monokai'" [readOnly]="false" [(text)]="data.data.data" #data_view
-            [style.min-height.%]="100" [disabled]="!isAdmin"></app-codejar-wrapper>
-      </full-screen>
-
-
-    </mat-tab>
-    <mat-tab label="Setting">
-      <hr />
-      <strong>Setting</strong>
-      <hr />
-      <full-screen (fullPage)='disableClose($event)'
-                    (import)='import($event,"setting")'
-                    [data]='{json:data.data.setting, title: data.data.category + " " + data.data.param, type: "json"}'>
-
-        <!-- <ace-editor [mode]="'json'" [theme]="'monokai'" [readOnly]="false" [(text)]="data.data.setting" #data_view
-          [style.min-height.%]="100" [disabled]="!isAdmin"></ace-editor> -->
-          <app-codejar-wrapper [mode]="'json'" [theme]="'monokai'" [readOnly]="false" [(text)]="data.data.setting" #data_view
-                [style.min-height.%]="100" [disabled]="!isAdmin"></app-codejar-wrapper>
-      </full-screen>
-
-    </mat-tab>
-  </mat-tab-group>
-
-
-
+      [style.min-height.%]="100" [disabled]="!isAdmin"></ace-editor> -->
+      <app-codejar-wrapper [mode]="'json'" [theme]="'monokai'" [readOnly]="false" [(text)]="data.data.data" #data_view
+      [style.min-height.%]="100" [disabled]="!isAdmin"></app-codejar-wrapper>
+    </full-screen>
+  </mat-tab>
+  <mat-tab label="Setting">
+    <hr />
+    <strong>Setting</strong>
+    <hr />
+    <full-screen (fullPage)='disableClose($event)'
+      (import)='import($event,"setting")'
+      [data]='{json:data.data.setting, title: data.data.category + " " + data.data.param, type: "json"}'>
+      <!-- <ace-editor [mode]="'json'" [theme]="'monokai'" [readOnly]="false" [(text)]="data.data.setting" #data_view
+    [style.min-height.%]="100" [disabled]="!isAdmin"></ace-editor> -->
+    <app-codejar-wrapper [mode]="'json'" [theme]="'monokai'" [readOnly]="false" [(text)]="data.data.setting" #data_view
+    [style.min-height.%]="100" [disabled]="!isAdmin"></app-codejar-wrapper>
+  </full-screen>
+</mat-tab>
+</mat-tab-group>
 </div>
-
-
 <div mat-dialog-actions style="float: right; margin-bottom: 0rem;">
   <button mat-raised-button (click)="onNoClick()">{{'LINK.buttons.cancel' | translate}}</button>
   <button mat-raised-button class="setting-btn-ok" (click)="onSubmit()"
-    cdkFocusInitial>{{'LINK.buttons.save' | translate}}</button>
+  cdkFocusInitial>{{'LINK.buttons.save' | translate}}</button>
 </div>
-</ng-container>
-<ng-template #dataPreview>
-    <div mat-dialog-content>
-        <mat-tab-group>
-          <mat-tab [label]="'preference.userSettings.dialog.userData' | translate">
-            <hr />
-            <strong>{{ 'preference.userSettings.dialog.userData' | translate }}</strong>
-            <hr />
-            <div>
-              <mat-form-field style="padding-right: 1rem;">
-                <mat-label>{{ 'preference.userSettings.dialog.username' | translate }}</mat-label>
-                <input matInput [value]="username.value" [placeholder]="currentUser" disabled>
-                <mat-autocomplete #auto="matAutocomplete">
-                  <mat-option *ngFor="let user of userList | async" [value]="user">
-                    {{user}}
-                  </mat-option>
-                </mat-autocomplete>
-              </mat-form-field>
-              <mat-form-field style="padding-right: 1rem;">
-                <mat-label>{{ 'preference.userSettings.dialog.category' | translate }}</mat-label>
-                <input matInput [value]="category.value" autocomplete="off" disabled>
-              </mat-form-field>
-            </div>
-            <div>
-              <mat-form-field style="padding-right: 1rem;">
-                <mat-label>{{ 'preference.userSettings.dialog.param' | translate }}</mat-label>
-                <input matInput [value]="param.value" autocomplete="off" disabled>
-              </mat-form-field>
-              <mat-form-field style="padding-right: 1rem;">
-                <mat-label>{{ 'preference.userSettings.dialog.partition' | translate }}</mat-label>
-                <input matInput [value]="partid.value" autocomplete="off" disabled>
-              </mat-form-field>
-            </div>
-          </mat-tab>
-          <mat-tab [label]="'preference.userSettings.dialog.data' | translate">
-            <hr />
-            <strong>{{ 'preference.userSettings.dialog.data' | translate }}</strong>
-            <hr />
-            <ngx-json-viewer [json]="json" [expanded]="true"></ngx-json-viewer>
-
-
-          </mat-tab>
-          <mat-tab label="Setting" *ngIf='hasSettings'>
-            <hr />
-            <strong>Setting</strong>
-            <hr />
-            <ngx-json-viewer [json]="settingJSON" [expanded]="false"></ngx-json-viewer>
-          </mat-tab>
-        </mat-tab-group>
-
-
-
-      </div>
-
-
-      <div mat-dialog-actions style="float: right; margin-bottom: 0rem;">
-        <button mat-raised-button class="setting-btn-ok" (click)="onNoClick()"
-          cdkFocusInitial>{{'LINK.buttons.close' | translate}}</button>
-      </div>
-</ng-template>
+} @else {
+  <div mat-dialog-content>
+    <mat-tab-group>
+      <mat-tab [label]="'preference.userSettings.dialog.userData' | translate">
+        <hr />
+        <strong>{{ 'preference.userSettings.dialog.userData' | translate }}</strong>
+        <hr />
+        <div>
+          <mat-form-field style="padding-right: 1rem;">
+            <mat-label>{{ 'preference.userSettings.dialog.username' | translate }}</mat-label>
+            <input matInput [value]="username.value" [placeholder]="currentUser" disabled>
+            <mat-autocomplete #auto="matAutocomplete">
+              @for (user of userList | async; track user) {
+                <mat-option [value]="user">
+                  {{user}}
+                </mat-option>
+              }
+            </mat-autocomplete>
+          </mat-form-field>
+          <mat-form-field style="padding-right: 1rem;">
+            <mat-label>{{ 'preference.userSettings.dialog.category' | translate }}</mat-label>
+            <input matInput [value]="category.value" autocomplete="off" disabled>
+          </mat-form-field>
+        </div>
+        <div>
+          <mat-form-field style="padding-right: 1rem;">
+            <mat-label>{{ 'preference.userSettings.dialog.param' | translate }}</mat-label>
+            <input matInput [value]="param.value" autocomplete="off" disabled>
+          </mat-form-field>
+          <mat-form-field style="padding-right: 1rem;">
+            <mat-label>{{ 'preference.userSettings.dialog.partition' | translate }}</mat-label>
+            <input matInput [value]="partid.value" autocomplete="off" disabled>
+          </mat-form-field>
+        </div>
+      </mat-tab>
+      <mat-tab [label]="'preference.userSettings.dialog.data' | translate">
+        <hr />
+        <strong>{{ 'preference.userSettings.dialog.data' | translate }}</strong>
+        <hr />
+        <ngx-json-viewer [json]="json" [expanded]="true"></ngx-json-viewer>
+      </mat-tab>
+      @if (hasSettings) {
+        <mat-tab label="Setting">
+          <hr />
+          <strong>Setting</strong>
+          <hr />
+          <ngx-json-viewer [json]="settingJSON" [expanded]="false"></ngx-json-viewer>
+        </mat-tab>
+      }
+    </mat-tab-group>
+  </div>
+  <div mat-dialog-actions style="float: right; margin-bottom: 0rem;">
+    <button mat-raised-button class="setting-btn-ok" (click)="onNoClick()"
+    cdkFocusInitial>{{'LINK.buttons.close' | translate}}</button>
+  </div>
+}

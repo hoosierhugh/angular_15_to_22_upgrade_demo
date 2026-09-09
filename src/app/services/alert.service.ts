@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { Router, NavigationStart } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
 import { Observable, Subject } from 'rxjs';
@@ -7,13 +7,17 @@ import { AlertMessage, AlertSubject } from '@app/models/alert.model';
 export { AlertMessage } from '@app/models/alert.model';
 @Injectable({ providedIn: 'root' })
 export class AlertService {
+  private router = inject(Router);
+  translateService = inject(TranslateService);
+
   private subject = new Subject<AlertSubject | null>();
   private keepAfterNavigationChange = false;
   private basePagForRedirectTo = "dashboard/home";
   private baseErrorAfterUnexistingID = "dashboard for the user doesn't exist";
   private waitTimeAfterError = 2000;
-  constructor(private router: Router,
-    public translateService: TranslateService) {
+  constructor() {
+    const router = this.router;
+
     // clear alert message on route change
     router.events.subscribe(event => {
       if (event instanceof NavigationStart) {
@@ -47,7 +51,7 @@ export class AlertService {
     }
     return { message: String(message), fullObject: message };
   }
-  async success(alert: unknown, fullObject: string = '', keepAfterNavigationChange = false) {
+  async success(alert: unknown, fullObject = '', keepAfterNavigationChange = false) {
     const message = this.toTypeAlertMessage(alert);
     if (message.isTranslation) {
       message.message = await this.getTranslation(message.message, message.translationParams);
@@ -56,7 +60,7 @@ export class AlertService {
     this.subject.next({ type: 'success', text: message.message, object: message.fullObject });
   }
 
-  async error(alert: unknown, fullObject: string = '', keepAfterNavigationChange = false) {
+  async error(alert: unknown, fullObject = '', keepAfterNavigationChange = false) {
     const message = this.toTypeAlertMessage(alert);
     if (message.isTranslation) {
       message.message = await this.getTranslation(message.message, message.translationParams);
@@ -68,7 +72,7 @@ export class AlertService {
     }
   }
 
-  async warning(alert: unknown, fullObject: string = '', keepAfterNavigationChange = false) {
+  async warning(alert: unknown, fullObject = '', keepAfterNavigationChange = false) {
     const message = this.toTypeAlertMessage(alert);
     if (message.isTranslation) {
       message.message = await this.getTranslation(message.message, message.translationParams);
@@ -77,7 +81,7 @@ export class AlertService {
     this.subject.next({ type: 'warning', text: message.message, object: message.fullObject });
   }
 
-  async notice(alert: unknown, fullObject: string = '', keepAfterNavigationChange = false) {
+  async notice(alert: unknown, fullObject = '', keepAfterNavigationChange = false) {
     const message = this.toTypeAlertMessage(alert);
     if (message.isTranslation) {
       message.message = await this.getTranslation(message.message, message.translationParams);

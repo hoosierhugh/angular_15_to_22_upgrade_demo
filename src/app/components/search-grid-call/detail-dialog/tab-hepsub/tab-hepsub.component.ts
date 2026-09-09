@@ -1,15 +1,4 @@
-import {
-  AfterViewInit,
-  ChangeDetectionStrategy,
-  ChangeDetectorRef,
-  Component,
-  EventEmitter,
-  Input,
-  OnDestroy,
-  OnInit,
-  Output,
-  ViewChild
-} from '@angular/core';
+import { AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, EventEmitter, Input, OnDestroy, OnInit, Output, ViewChild, inject } from '@angular/core';
 import { AgentsubService } from '@app/services/agentsub.service';
 import { Functions } from '@app/helpers/functions';
 import { MatTabGroup } from '@angular/material/tabs';
@@ -22,6 +11,9 @@ import { MatTabGroup } from '@angular/material/tabs';
     standalone: false
 })
 export class TabHepsubComponent implements OnInit, OnDestroy, AfterViewInit {
+  private cdr = inject(ChangeDetectorRef);
+  private _ass = inject(AgentsubService);
+
   _dataItem: any;
 
   @Input() id: any;
@@ -55,10 +47,10 @@ export class TabHepsubComponent implements OnInit, OnDestroy, AfterViewInit {
   get dataItem(): any {
     return this._dataItem;
   }
-  @Input() dataLogs: Array<any>;
+  @Input() dataLogs: any[];
   @Input() snapShotTimeRange: any;
   @Output() haveData = new EventEmitter();
-  @Output() ready: EventEmitter<any> = new EventEmitter();
+  @Output() ready = new EventEmitter<any>();
   @ViewChild('matTabGroup', { static: false }) matTabGroup: MatTabGroup;
   indexTabPosition = 0;
 
@@ -71,10 +63,6 @@ export class TabHepsubComponent implements OnInit, OnDestroy, AfterViewInit {
   agentNode: string;
   agentUuid: string;
   _interval: any;
-  constructor(
-    private cdr: ChangeDetectorRef,
-    private _ass: AgentsubService
-  ) { }
 
   ngAfterViewInit() {
     setTimeout(() => {

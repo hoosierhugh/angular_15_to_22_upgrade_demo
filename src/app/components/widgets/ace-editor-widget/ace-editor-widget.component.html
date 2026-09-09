@@ -1,9 +1,13 @@
-<markdown *ngIf="isConfig" class="scrollable" [data]="_config.text"></markdown>
-<div *ngIf="!isConfig">
+@if (isConfig) {
+  <markdown class="scrollable" [data]="_config.text"></markdown>
+}
+@if (!isConfig) {
+  <div>
     <button
-        mat-raised-button
-        class="setting-btn-ok no-drag"
-        (pointerdown)="openPlaceholderSettings($event)">
-        <fa-icon icon="cog"></fa-icon> {{'LINK.buttons.widgetSettings' | translate}}
+      mat-raised-button
+      class="setting-btn-ok no-drag"
+      (pointerdown)="openPlaceholderSettings($event)">
+      <fa-icon icon="cog"></fa-icon> {{'LINK.buttons.widgetSettings' | translate}}
     </button>
-</div>
+  </div>
+}

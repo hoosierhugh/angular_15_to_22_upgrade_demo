@@ -92,8 +92,8 @@ class ClickhouseProcessor {
   }
   renderingChart(inData) {
     let chartType = inData.chartType;
-    let data = inData.data;
-    let options = inData.options;
+    const data = inData.data;
+    const options = inData.options;
     let isFill;
     if (chartType === 'area') {
       options.scales.yAxes[0].stacked = true;
@@ -109,7 +109,7 @@ class ClickhouseProcessor {
       .map(item => moment(item.data.t, 'x').format('HH:mm'))
       .sort((a, b) => a - b)
       .filter((item, index, array) => item !== array[index - 1]);
-    const formattedSeries: Array<{ label: string; value: unknown[]; tags: string }> = data.map(item => {
+    const formattedSeries: { label: string; value: unknown[]; tags: string }[] = data.map(item => {
       const array = [];
       for (let i = 0; i < chartLabels.indexOf(moment(item.data.t, 'x').format('HH:mm')); i++) {
         array.push(null);
@@ -139,7 +139,7 @@ class ClickhouseProcessor {
       return a;
 
     }, {})
-    const chartData: Array<Record<string, unknown>> = [];
+    const chartData: Record<string, unknown>[] = [];
     Object.keys(formattedData).forEach(key => {
       const value = formattedData[key];
       const backgroundColor = Functions.getColorByString(value.tags, 50, 50, chartType === 'bar' ? 1 : 0.4)

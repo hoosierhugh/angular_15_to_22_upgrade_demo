@@ -1,4 +1,4 @@
-import { Component, Inject, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
+import { Component, ChangeDetectionStrategy, ChangeDetectorRef, inject } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { WidgetArray, WidgetArrayInstance } from '@app/helpers/widget';
 import { PreferenceAdvancedService } from '@app/services';
@@ -15,6 +15,12 @@ import { PreferenceAdvanced } from '@app/models';
 })
 
 export class AddDialogComponent {
+    private _pas = inject(PreferenceAdvancedService);
+    dialogRef = inject<MatDialogRef<AddDialogComponent>>(MatDialogRef);
+    private cdr = inject(ChangeDetectorRef);
+    private proxy = inject(ProxyService);
+    data = inject(MAT_DIALOG_DATA);
+
 
     isCustomSearch = false;
     widgets = {}
@@ -46,13 +52,7 @@ export class AddDialogComponent {
     }
 
 
-    constructor(
-        private _pas: PreferenceAdvancedService,
-        public dialogRef: MatDialogRef<AddDialogComponent>,
-        private cdr: ChangeDetectorRef,
-        private proxy: ProxyService,
-        @Inject(MAT_DIALOG_DATA) public data: unknown
-    ) {
+    constructor() {
         this.init();
     }
 
@@ -68,7 +68,7 @@ export class AddDialogComponent {
             })
 
 
-        let custom: Array<Pick<PreferenceAdvanced, 'data'>> = advanced.data
+        let custom: Pick<PreferenceAdvanced, 'data'>[] = advanced.data
             .filter((f) => f.category === 'custom-widget');
         if (custom.length === 0) {
             custom = [{
@@ -170,7 +170,7 @@ export class AddDialogComponent {
                 }
             }]
         }
-        const customW = custom.map((d) => (Object.values(d.data) as Array<Record<string, unknown>>))
+        const customW = custom.map((d) => (Object.values(d.data) as Record<string, unknown>[]))
             .map(m => m.filter(f => !!f.active));
         const [firstCustomW = []] = customW || [];
         this.customWidgets = [...firstCustomW];
@@ -204,8 +204,15 @@ export class AddDialogComponent {
         this.cdr.detectChanges();
     }
 
-    identify(index, item) {
-        return item.id;
+    identify(index: number, item: unknown): string | number {
+        if (item && typeof item === 'object') {
+            const metadata = item as Record<string, unknown>;
+            const key = metadata['className'] ?? metadata['title'] ?? metadata['indexName'] ?? metadata['id'];
+            if (typeof key === 'string' || typeof key === 'number') {
+                return key;
+            }
+        }
+        return index;
     }
 
     onNoClick(): void {

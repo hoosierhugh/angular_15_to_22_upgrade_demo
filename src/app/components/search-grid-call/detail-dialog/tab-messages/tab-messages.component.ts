@@ -1,16 +1,7 @@
 import { MatSort } from '@angular/material/sort';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
-import {
-  Component,
-  Input,
-  ChangeDetectionStrategy,
-  ChangeDetectorRef,
-  OnInit,
-  Output,
-  EventEmitter,
-  ViewChild,
-} from '@angular/core';
+import { Component, Input, ChangeDetectionStrategy, ChangeDetectorRef, OnInit, Output, EventEmitter, ViewChild, inject } from '@angular/core';
 import { FlowItemType } from '@app/models/flow-item-type.model';
 import { Functions } from '@app/helpers/functions';
 import { MessageDetailsService, ArrowEventState } from '@app/services/message-details.service';
@@ -28,12 +19,16 @@ import { Subscription } from 'rxjs';
 })
 
 export class TabMessagesComponent implements OnInit, AfterViewInit, OnDestroy {
+  private cdr = inject(ChangeDetectorRef);
+  private messageDetailsService = inject(MessageDetailsService);
+  private transactionFilterService = inject(TransactionFilterService);
+
   isWindow = false;
-  messages: Array<any> = [];
+  messages: any[] = [];
   filterTextValue = '';
   channelIdMessageDetails: string;
   thisWindowId: string;
-  dataSource: MatTableDataSource<Array<any>> = new MatTableDataSource([]);
+  dataSource = new MatTableDataSource<any[]>([]);
   displayedColumns: string[] = [
     'id', 'create_date', 'timeSeconds', 'diff',
     'method', 'Msg_Size', 'srcAlias_srcPort', 'srcPort',
@@ -51,18 +46,13 @@ export class TabMessagesComponent implements OnInit, AfterViewInit, OnDestroy {
     this.updateTableData(this.messages);
     this.cdr.detectChanges();
   }
-  @Output() ready: EventEmitter<any> = new EventEmitter();
+  @Output() ready = new EventEmitter<any>();
 
 
   @ViewChild(MatSort, { static: true }) sort: MatSort;
   @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
 
   filterSubscription: Subscription;
-  constructor(
-    private cdr: ChangeDetectorRef,
-    private messageDetailsService: MessageDetailsService,
-    private transactionFilterService: TransactionFilterService
-  ) { }
   ngAfterViewInit() {
     window.requestAnimationFrame(() => {
       this.ready.emit({});
@@ -121,7 +111,7 @@ export class TabMessagesComponent implements OnInit, AfterViewInit, OnDestroy {
       const { channelId } = data.metadata.data;
       let { itemId } = data.metadata.data;
       if (data && this.channelIdMessageDetails === channelId) {
-        const arrData: Array<any> = this.dataSource.filteredData as Array<any>;
+        const arrData: any[] = this.dataSource.filteredData as any[];
         switch (data.eventType) {
           case ArrowEventState.PREVIOUS:
             itemId--;
@@ -151,7 +141,7 @@ export class TabMessagesComponent implements OnInit, AfterViewInit, OnDestroy {
     // console.log({ id, event, row });
 
     // return;
-    const arrData: Array<any> = this.dataSource.filteredData as Array<any>;
+    const arrData: any[] = this.dataSource.filteredData as any[];
     if (row) {
       id = arrData.findIndex((item: any) => row.uniqueId === item.uniqueId);
     }

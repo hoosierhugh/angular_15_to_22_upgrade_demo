@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, Output, EventEmitter, OnDestroy, AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter, OnDestroy, AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, inject } from '@angular/core';
 import { SettingGeneralIframeWidgetComponent } from './setting-general-iframe-widget.component';
 import { MatDialog } from '@angular/material/dialog';
 import { DateTimeRangeService, DateTimeTick } from '../../../services/data-time-range.service';
@@ -40,7 +40,12 @@ interface GeneralIframeSettingsChange {
     minWidth: 300,
 
 })
-export class GeneralIframeWidgetComponent implements IWidget {
+export class GeneralIframeWidgetComponent implements IWidget, OnInit, OnDestroy {
+    dialog = inject(MatDialog);
+    private _dtrs = inject(DateTimeRangeService);
+    private cdr = inject(ChangeDetectorRef);
+    translateService = inject(TranslateService);
+
     @Input() config: GeneralIframeConfig;
     @Input() id: string;
     @Output() changeSettings = new EventEmitter<GeneralIframeSettingsChange>();
@@ -53,12 +58,9 @@ export class GeneralIframeWidgetComponent implements IWidget {
     subscription: Subscription;
     GeneralIframeLoaded = true;
 
-    constructor(
-        public dialog: MatDialog,
-        private _dtrs: DateTimeRangeService,
-        private cdr: ChangeDetectorRef,
-        public translateService: TranslateService
-    ) {
+    constructor() {
+        const translateService = this.translateService;
+
         translateService.addLangs(['en'])
         translateService.setDefaultLang('en')
     }

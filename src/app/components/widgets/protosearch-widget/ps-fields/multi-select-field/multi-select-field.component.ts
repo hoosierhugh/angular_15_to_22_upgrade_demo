@@ -1,5 +1,5 @@
 import { Functions } from 'src/app/helpers/functions';
-import { AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
+import { AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, EventEmitter, Input, OnInit, Output, ViewChild, inject } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { MatAutocompleteTrigger } from '@angular/material/autocomplete';
 import { Observable } from 'rxjs';
@@ -23,6 +23,8 @@ interface OptionType {
     standalone: false
 })
 export class MultiSelectFieldComponent implements OnInit {
+  private cdr = inject(ChangeDetectorRef);
+
   /** CONST */
   AND = '&&';
   OR = '||';
@@ -43,7 +45,7 @@ export class MultiSelectFieldComponent implements OnInit {
   _listNameValue: any[] | null = null;
   @Input() options: string[] = ['One', 'Two', 'Three'];
   @Input() isFilterLine = true;
-  @Input() placeholder: string = '';
+  @Input() placeholder = '';
 
   @Input() set dataList(data: any) {
     this._listNameValue = data;
@@ -77,7 +79,7 @@ export class MultiSelectFieldComponent implements OnInit {
     }, 10);
   }
 
-  constructor(private cdr: ChangeDetectorRef) {
+  constructor() {
     this.filteredOptions = new Observable<OptionType[]>();
     this.myControl = new FormControl();
   }
@@ -86,10 +88,10 @@ export class MultiSelectFieldComponent implements OnInit {
     this.filteredOptions = this.myControl.valueChanges.pipe(
       startWith(''),
       map(value => this._filter(value).map(value => {
-        return <OptionType>{
+        return {
           checked: false,
           value
-        }
+        } as OptionType
       }))
     );
   }
@@ -148,7 +150,7 @@ export class MultiSelectFieldComponent implements OnInit {
     this.cdr.detectChanges();
   }
 
-  addElement(value: string, type = '', index: number = -1): void {
+  addElement(value: string, type = '', index = -1): void {
     if (type !== '') {
 
       this.collection.push({

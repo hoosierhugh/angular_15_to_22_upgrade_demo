@@ -23,8 +23,8 @@ export interface PreferenceMappingFieldModel {
     // optional fields params
     virtual?:boolean;
     parent?:string;
-    _form_default?:Array<FormDefault>;
-    form_default?: Array<FormDefault> | string;
+    _form_default?:FormDefault[];
+    form_default?: FormDefault[] | string;
     selected?: boolean;
     disabled?: boolean;
     form_api?:string;

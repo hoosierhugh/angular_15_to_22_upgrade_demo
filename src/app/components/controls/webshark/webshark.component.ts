@@ -2,8 +2,8 @@ import { TooltipService } from '@app/services/tooltip.service';
 import { WebsharkDictionaryApiService, IdType } from './webshark-dictionary-api.service';
 import { WebsharkDictionary } from './webshark-dictionary';
 import { Functions, log } from '@app/helpers/functions';
-import { Input, ChangeDetectionStrategy, ChangeDetectorRef, AfterViewInit, Output, EventEmitter } from '@angular/core';
-import { Component, OnInit } from '@angular/core';
+import { Input, ChangeDetectionStrategy, ChangeDetectorRef, AfterViewInit, Output, EventEmitter, inject } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { FlatTreeControl } from '@angular/cdk/tree';
 import { MatTreeFlatDataSource, MatTreeFlattener } from '@angular/material/tree';
 import  moment from 'moment';
@@ -27,7 +27,11 @@ interface FlatNode {
     changeDetection: ChangeDetectionStrategy.OnPush,
     standalone: false
 })
-export class WebsharkComponent implements OnInit, AfterViewInit {
+export class WebsharkComponent implements OnInit, AfterViewInit, OnDestroy {
+    private websharkDictionaryApiService = inject(WebsharkDictionaryApiService);
+    tooltipService = inject(TooltipService);
+    private cdr = inject(ChangeDetectorRef);
+
     _data: any;
     textFilterGrid = '';
     textFilterTree = '';
@@ -96,15 +100,11 @@ export class WebsharkComponent implements OnInit, AfterViewInit {
         return this._data;
     }
 
-    @Output() ready: EventEmitter<any> = new EventEmitter();
-    @Output() dblclick: EventEmitter<any> = new EventEmitter();
+    @Output() ready = new EventEmitter<any>();
+    @Output() dblclick = new EventEmitter<any>();
 
 
-    constructor(
-        private websharkDictionaryApiService: WebsharkDictionaryApiService,
-        public tooltipService: TooltipService,
-        private cdr: ChangeDetectorRef
-    ) {
+    constructor() {
         this.dataSource.data = [{ name: 'Loading...' }];
     }
     private async setData(val) {
@@ -119,8 +119,7 @@ export class WebsharkComponent implements OnInit, AfterViewInit {
         d = this.sortObject(hostKey, d);
         const arrTreeNode: TreeNode[] = [];
 
-        // tslint:disable-next-line: forin
-        for (const [key, val] of Object.entries(d)) {
+               for (const [key, val] of Object.entries(d)) {
             const rxTree = /_tree$/g;
             if (rxTree.test(key)) {
                 continue;

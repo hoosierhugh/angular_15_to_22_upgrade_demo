@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { Observable } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 import { environment } from '@environments/environment';
@@ -24,10 +24,10 @@ export interface DecodedSearchCallResult {
     providedIn: 'root'
 })
 export class SearchCallService {
+    private http = inject(HttpClient);
+
 
     private url = `${environment.apiUrl}/search/call`;
-
-    constructor(private http: HttpClient) { }
 
     // Return search call message
     getMessage(data: unknown): Observable<SearchCallResponse> {

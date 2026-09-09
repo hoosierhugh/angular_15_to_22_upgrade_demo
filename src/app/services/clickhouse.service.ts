@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { Observable, EMPTY } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 import { environment } from '@environments/environment';
@@ -7,10 +7,10 @@ import { environment } from '@environments/environment';
     providedIn: 'root'
 })
 export class ClickhouseSerivce {
+    private http = inject(HttpClient);
+
 
     private url = `${environment.apiUrl}/clickhouse`;
-
-    constructor(private http: HttpClient) { }
 
     getRawQuery(data): Observable<any> {
         if (this.sanitize(data)) {

@@ -1,5 +1,5 @@
 import { HttpEvent, HttpEventType, HttpErrorResponse, HttpResponse } from '@angular/common/http';
-import { Component, Inject, ChangeDetectionStrategy, ViewChild, ElementRef, AfterViewInit, OnInit, ChangeDetectorRef } from '@angular/core';
+import { Component, ChangeDetectionStrategy, ViewChild, ElementRef, AfterViewInit, OnInit, ChangeDetectorRef, inject } from '@angular/core';
 import { FormControl, Validators } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { FileUploadModel } from '@app/components';
@@ -38,6 +38,12 @@ interface UploadFile {
     standalone: false
 })
 export class DialogImportComponent implements AfterViewInit, OnInit {
+    uploadService = inject(UploadService);
+    translateService = inject(TranslateService);
+    dialogRef = inject<MatDialogRef<DialogImportComponent>>(MatDialogRef);
+    private cdr = inject(ChangeDetectorRef);
+    data = inject<ImportDialogData>(MAT_DIALOG_DATA);
+
     @ViewChild('fileUpload', { static: false }) fileUpload: ElementRef<HTMLInputElement>;
     pageId: string;
     isReplace = false;
@@ -48,12 +54,10 @@ export class DialogImportComponent implements AfterViewInit, OnInit {
     uploadInfo = '';
     file: FileUploadModel;
     files: UploadFile[] = [];
-    constructor(
-        public uploadService: UploadService,
-        public translateService: TranslateService,
-        public dialogRef: MatDialogRef<DialogImportComponent>,
-        private cdr: ChangeDetectorRef,
-        @Inject(MAT_DIALOG_DATA) public data: ImportDialogData) {
+    constructor() {
+        const translateService = this.translateService;
+        const data = this.data;
+
         translateService.addLangs(['en'])
         translateService.setDefaultLang('en')
         this.pageId = data.data.pageId;

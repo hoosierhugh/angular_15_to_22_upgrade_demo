@@ -22,26 +22,28 @@
 
   <div class="MY-matMenu"
     [matMenuTriggerFor]="trigger"
-    style="position: absolute; top: 62px;"></div>
+  style="position: absolute; top: 62px;"></div>
 
   <mat-menu #trigger="matMenu">
-    <ng-container *ngIf="!popupList || popupList.length === 0; else menuList">
+    @if (!popupList || popupList.length === 0) {
       <p style="padding: 1rem">
         <i style="color: #ccc;">No history yet</i>
       </p>
-    </ng-container>
-    <ng-template #menuList>
-      <p class="menu-title"
-        *ngIf="menuTitle !== 'History'">{{menuTitle}}</p>
-      <button mat-menu-item
-        class="menu-item-button"
-        *ngFor="let item of popupList"
-        (click)="onMenuMessage(item)"
-        (keyup)="onMenuMessage(item, $event)">
-        <!-- {{ item }} -->
-        <div class="div-field menu-item"
+    } @else {
+      @if (menuTitle !== 'History') {
+        <p class="menu-title"
+        >{{menuTitle}}</p>
+      }
+      @for (item of popupList; track item) {
+        <button mat-menu-item
+          class="menu-item-button"
+          (click)="onMenuMessage(item)"
+          (keyup)="onMenuMessage(item, $event)">
+          <!-- {{ item }} -->
+          <div class="div-field menu-item"
           [innerHTML]="setStyleCodeColors(item)"></div>
-      </button>
-    </ng-template>
+        </button>
+      }
+    }
   </mat-menu>
 </div>

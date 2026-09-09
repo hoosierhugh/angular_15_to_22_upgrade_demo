@@ -14,9 +14,11 @@
   <mat-form-field>
     <mat-label>{{ 'widgets.aceEditor.settings.theme' | translate }}</mat-label>
     <mat-select [(value)]="data.theme" >
-      <mat-option *ngFor="let theme of themeList | keyvalue" [value]="theme.value">
-        {{theme.key}}
-      </mat-option>
+      @for (theme of themeList | keyvalue; track theme) {
+        <mat-option [value]="theme.value">
+          {{theme.key}}
+        </mat-option>
+      }
     </mat-select>
   </mat-form-field>
 </div>

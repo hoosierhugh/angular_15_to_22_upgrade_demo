@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { Observable } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 import { environment } from '@environments/environment';
@@ -11,9 +11,9 @@ import { ApiResponse } from '@app/models';
   providedIn: 'root'
 })
 export class CallReportService {
-    private url = `${environment.apiUrl}/call/report`;
+    private http = inject(HttpClient);
 
-    constructor(private http: HttpClient) { }
+    private url = `${environment.apiUrl}/call/report`;
 
     // Return call report qos
     postQOS(postData: unknown): Observable<unknown> {

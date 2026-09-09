@@ -1,4 +1,4 @@
-import { Component, Inject, ViewChild, OnInit, AfterViewInit, OnDestroy, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
+import { Component, ViewChild, OnInit, AfterViewInit, OnDestroy, ChangeDetectionStrategy, ChangeDetectorRef, inject } from '@angular/core';
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { AuthenticationService, DashboardService } from '@app/services';
 import { Functions } from '@app/helpers/functions';
@@ -16,6 +16,14 @@ import { environment } from '@environments/environment';
 export class AddDashboardDialogComponent
   implements OnInit, AfterViewInit, OnDestroy
 {
+  dialogRef = inject<MatDialogRef<AddDashboardDialogComponent>>(MatDialogRef);
+  private dashboardService = inject(DashboardService);
+  private authenticationService = inject(AuthenticationService);
+  dialog = inject(MatDialog);
+  translateService = inject(TranslateService);
+  private cdr = inject(ChangeDetectorRef);
+  data = inject(MAT_DIALOG_DATA) ?? {};
+
   @ViewChild('fileSelect', { static: true }) fileSelect;
 
   private envUrl = `${environment.apiUrl.replace('/api/v3', '')}`;
@@ -52,7 +60,7 @@ export class AddDashboardDialogComponent
   regString = /^[a-zA-Z0-9\-\_\s]+$/;
   isConfirmed = false;
   fileNames = [];
-  isSameOrigin: boolean = false;
+  isSameOrigin = false;
   nameNewPanel = new FormControl(
     '',
     [
@@ -63,15 +71,9 @@ export class AddDashboardDialogComponent
     ],
     this.dNameValidator.bind(this)
   );
-  constructor(
-    public dialogRef: MatDialogRef<AddDashboardDialogComponent>,
-    private dashboardService: DashboardService,
-    private authenticationService: AuthenticationService,
-    public dialog: MatDialog,
-    public translateService: TranslateService,
-    private cdr: ChangeDetectorRef,
-    @Inject(MAT_DIALOG_DATA) public data: any = {}
-  ) {
+  constructor() {
+    const translateService = this.translateService;
+
     translateService.addLangs(['en']);
     translateService.setDefaultLang('en');
     this.dashboardService

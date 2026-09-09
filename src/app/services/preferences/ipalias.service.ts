@@ -1,5 +1,5 @@
 import { HttpGetBuffer } from '@app/helpers/http-get-buffer';
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { environment } from '@environments/environment';
 import { ApiResponse, PreferenceIpAlias } from '@app/models';
@@ -9,10 +9,11 @@ import { Functions } from '@app/helpers/functions';
     providedIn: 'root',
 })
 export class PreferenceIpAliasService {
+    private http = inject(HttpClient);
+    private httpGetBuffer = inject(HttpGetBuffer);
+
     private url = `${environment.apiUrl}/alias`;
     private aliasesArray: PreferenceIpAlias[] = [];
-
-    constructor(private http: HttpClient, private httpGetBuffer: HttpGetBuffer) { }
     getAll(delayBuffer = 1000 * 60 * 5): Promise<ApiResponse<PreferenceIpAlias[]>> {
         return new Promise<ApiResponse<PreferenceIpAlias[]>>((resolve, reject) => {
             if (this.aliasesArray?.length > 0 && delayBuffer !== 0) {

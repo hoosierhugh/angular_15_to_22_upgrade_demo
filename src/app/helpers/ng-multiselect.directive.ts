@@ -1,14 +1,5 @@
 import { MatFormFieldControl } from '@angular/material/form-field';
-import {
-    Directive,
-    HostBinding,
-    Input,
-    Optional,
-    Self,
-    OnDestroy,
-    DoCheck,
-    ChangeDetectorRef,
-} from '@angular/core';
+import { Directive, HostBinding, Input, OnDestroy, DoCheck, ChangeDetectorRef, OnInit, inject } from '@angular/core';
 import { Subject } from 'rxjs';
 import {
     NgControl,
@@ -40,8 +31,7 @@ export class NgSelectErrorStateMatcher {
 }
 
 @Directive({
-    // tslint:disable-next-line:directive-selector
-    selector: '[ngSelectMulti]',
+       selector: '[ngSelectMulti]',
     providers: [
         {
             provide: MatFormFieldControl,
@@ -51,7 +41,13 @@ export class NgSelectErrorStateMatcher {
     standalone: false
 })
 export class NgSelectFormFieldControlDirective
-    implements MatFormFieldControl<unknown>, OnDestroy, DoCheck {
+    implements MatFormFieldControl<unknown>, OnDestroy, DoCheck, OnInit {
+    private host = inject(NgSelectComponent);
+    private cdr = inject(ChangeDetectorRef);
+    ngControl = inject(NgControl, { optional: true, self: true });
+    private _parentForm = inject(NgForm, { optional: true });
+    private _parentFormGroup = inject(FormGroupDirective, { optional: true });
+
     get empty(): boolean {
 
         return (
@@ -116,13 +112,9 @@ export class NgSelectFormFieldControlDirective
         this.stateChanges.next();
     }
 
-    constructor(
-        private host: NgSelectComponent,
-        private cdr: ChangeDetectorRef,
-        @Optional() @Self() public ngControl: NgControl,
-        @Optional() private _parentForm: NgForm,
-        @Optional() private _parentFormGroup: FormGroupDirective
-    ) {
+    constructor() {
+        const host = this.host;
+
 
         host.focusEvent.subscribe((v) => {
                 this._shouldFloat = true;

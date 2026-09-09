@@ -1,14 +1,5 @@
 
-import {
-  Component,
-  OnInit,
-  OnDestroy,
-  ChangeDetectorRef,
-  ViewChild,
-  AfterViewInit,
-  Input,
-  ChangeDetectionStrategy
-} from '@angular/core';
+import { Component, OnInit, OnDestroy, ChangeDetectorRef, ViewChild, AfterViewInit, Input, ChangeDetectionStrategy, inject } from '@angular/core';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { MatPaginator } from '@angular/material/paginator';
@@ -37,6 +28,13 @@ import { ComponentType } from '@angular/cdk/portal';
     standalone: false
 })
 export class PageApiAuthComponent implements OnInit, AfterViewInit, OnDestroy {
+    private authenticationService = inject(AuthenticationService);
+    private alertService = inject(AlertService);
+    private service = inject(PreferenceAuthKeyService);
+    dialog = inject(MatDialog);
+    private cdr = inject(ChangeDetectorRef);
+    private _tfs = inject(TimeFormattingService);
+
     isLoading = false;
     isAdmin = false;
     isErrorResponse = false;
@@ -51,14 +49,7 @@ export class PageApiAuthComponent implements OnInit, AfterViewInit, OnDestroy {
     filter = '';
     dateFormat: string;
 
-    constructor(
-        private authenticationService: AuthenticationService,
-        private alertService: AlertService,
-        private service: PreferenceAuthKeyService,
-        public dialog: MatDialog,
-        private cdr: ChangeDetectorRef,
-        private _tfs: TimeFormattingService
-    ) {
+    constructor() {
         const userData = this.authenticationService.currentUserValue;
         this.isAdmin =
         userData &&

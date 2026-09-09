@@ -1,8 +1,4 @@
-import {
-    AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, EventEmitter,
-    HostListener, Input,
-    OnDestroy, OnInit, Output, SimpleChanges, ViewChild
-} from '@angular/core';
+import { AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, EventEmitter, HostListener, Input, OnDestroy, OnInit, Output, SimpleChanges, ViewChild, inject } from '@angular/core';
 import { emitWindowResize } from '@app/helpers/windowFunctions';
 import { WindowService } from '@app/services/window.service';
 import moment from 'moment';
@@ -18,11 +14,16 @@ import { IS_DIFF, ModalService } from './modal.service';
     standalone: false
 })
 export class ModalResizableComponent implements OnInit, AfterViewInit, OnDestroy {
+    private messageDetailsService = inject(MessageDetailsService);
+    private cdr = inject(ChangeDetectorRef);
+    private windowService = inject(WindowService);
+    private modalService = inject(ModalService);
+
     static ZIndex = 12;
     _content;
     _arrowMetaData: any = null;
     _noLayout = false;
-    _isNonWindow: boolean = false;
+    _isNonWindow = false;
     @ViewChild('layerZIndex', { static: false }) layerZIndex;
     @ViewChild('containerWindow', { static: false }) containerWindow;
     @ViewChild('inWindow', { static: false }) inWindow;
@@ -110,10 +111,10 @@ export class ModalResizableComponent implements OnInit, AfterViewInit, OnDestroy
         return this._arrowMetaData;
     }
     escTimeout: any;
-    @Output() close: EventEmitter<any> = new EventEmitter();
-    @Output() browserWindow: EventEmitter<any> = new EventEmitter();
-    @Output() refreshButton: EventEmitter<any> = new EventEmitter();
-    @Output() diff: EventEmitter<any> = new EventEmitter();
+    @Output() close = new EventEmitter<any>();
+    @Output() browserWindow = new EventEmitter<any>();
+    @Output() refreshButton = new EventEmitter<any>();
+    @Output() diff = new EventEmitter<any>();
     _coordinates: ModalCoordinates = {
         x: defaultX,
         y: defaultY,
@@ -133,7 +134,7 @@ export class ModalResizableComponent implements OnInit, AfterViewInit, OnDestroy
     get coordinates(): ModalCoordinates {
         return this._coordinates;
     }
-    @Output() coordinatesChange: EventEmitter<ModalCoordinates> = new EventEmitter()
+    @Output() coordinatesChange = new EventEmitter<ModalCoordinates>()
     __isBrowserWindow = false;
     @Input() isFullPage = false;
     isDropLayer = false;
@@ -144,12 +145,7 @@ export class ModalResizableComponent implements OnInit, AfterViewInit, OnDestroy
     winSize: WinSize = null;
     isOpacity = false;
     coordinatesTimeout: any;
-    constructor(
-        private messageDetailsService: MessageDetailsService,
-        private cdr: ChangeDetectorRef,
-        private windowService: WindowService,
-        private modalService: ModalService
-    ) {
+    constructor() {
         this.cdr.detach();
     }
 
@@ -534,7 +530,7 @@ export class ModalResizableComponent implements OnInit, AfterViewInit, OnDestroy
         }, 5);
     }
     isDragging = false;
-    setMouseLayer(bool: boolean = true) {
+    setMouseLayer(bool = true) {
         this.isDragging = bool;
         if (bool) {
             this.modalService.setDraggingId(this.id);

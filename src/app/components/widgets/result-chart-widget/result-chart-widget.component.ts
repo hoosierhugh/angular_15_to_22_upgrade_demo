@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, Output, EventEmitter, OnDestroy, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter, OnDestroy, ChangeDetectionStrategy, ChangeDetectorRef, inject } from '@angular/core';
 import { Widget, WidgetArrayInstance } from '@app/helpers/widget';
 import { IWidget } from '../IWidget';
 import { Functions } from '@app/helpers/functions';
@@ -26,23 +26,22 @@ interface ResultChartConfig {
     className: 'ResultChartWidgetComponent',
     minHeight: 400,
     minWidth: 600,
-    
+
 })
 export class ResultChartWidgetComponent implements IWidget, OnInit, OnDestroy {
+    dialog = inject(MatDialog);
+    private cdr = inject(ChangeDetectorRef);
+
     @Input() id: string;
     @Input() config: ResultChartConfig;
     @Output() changeSettings = new EventEmitter<WidgetSettingsChange<ResultChartConfig>>();
     source = 'widget';
     title: string;
-    constructor(
-        public dialog: MatDialog,
-        private cdr: ChangeDetectorRef
-    ) { }
 
     ngOnInit() {
         if (this.config === null || typeof this.config === 'undefined') {
             this.config = {};
-        } 
+        }
         WidgetArrayInstance[this.id] = this as IWidget;
         this.cdr.detectChanges();
     }

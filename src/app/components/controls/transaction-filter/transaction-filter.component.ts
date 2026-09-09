@@ -1,14 +1,5 @@
 import { ConstValue, UserConstValue } from '@app/models/const-value.model';
-import {
-  Component,
-  ChangeDetectorRef,
-  Input,
-  HostListener,
-  ViewChild,
-  ElementRef,
-  OnInit,
-  ChangeDetectionStrategy
-} from '@angular/core';
+import { Component, ChangeDetectorRef, Input, HostListener, ViewChild, ElementRef, OnInit, ChangeDetectionStrategy, inject } from '@angular/core';
 import { FlowItemType } from '@app/models/flow-item-type.model';
 import { Functions, setStorage } from '@app/helpers/functions';
 import { TransactionFilterService } from './transaction-filter.service';
@@ -26,10 +17,10 @@ export interface FlowFilter {
     isSimplify: boolean;
     isSimplifyPort: boolean;
     isCombineByAlias: boolean;
-    PayloadType: Array<FilterItem>;
-    filterIP: Array<FilterItem>;
-    filterAlias: Array<FilterItem>;
-    CallId: Array<FilterItem>;
+    PayloadType: FilterItem[];
+    filterIP: FilterItem[];
+    filterAlias: FilterItem[];
+    CallId: FilterItem[];
 }
 
 interface StoredFlowFilterState {
@@ -47,6 +38,11 @@ interface StoredFlowFilterState {
     standalone: false
 })
 export class TransactionFilterComponent implements OnInit {
+    private cdr = inject(ChangeDetectorRef);
+    private _pas = inject(PreferenceAdvancedService);
+    private transactionFilterService = inject(TransactionFilterService);
+    private alertService = inject(AlertService);
+
     flowFilters;
     isAdvancedDefaultFilter = false;
     filterSettings: Record<string, unknown> = {};
@@ -73,8 +69,8 @@ export class TransactionFilterComponent implements OnInit {
     };
 
     _type = 'Flow';
-    _channel: string = '';
-    @Input('channel') set channel(val: string) {
+    _channel = '';
+    @Input() set channel(val: string) {
         // console.log('FILTER: channel', val);
         this._channel = val;
     }
@@ -82,7 +78,7 @@ export class TransactionFilterComponent implements OnInit {
         return this._channel;
     }
 
-    @Input('type') set type(val) {
+    @Input() set type(val) {
         this._type = val || this._type;
         if (this.isMediaReportsTab) {
             this.checkboxListFilterPayloadType.forEach((i) => {
@@ -185,14 +181,8 @@ export class TransactionFilterComponent implements OnInit {
         } catch (err) { }
     }
 
-    @Input() callIDColorList: Array<CallIDColor>;
+    @Input() callIDColorList: CallIDColor[];
     @ViewChild('filterContainer', { static: false }) filterContainer: ElementRef;
-    constructor(
-        private cdr: ChangeDetectorRef,
-        private _pas: PreferenceAdvancedService,
-        private transactionFilterService: TransactionFilterService,
-        private alertService: AlertService
-    ) { }
     async ngOnInit() {
         const advanced = await lastValueFrom(this._pas.getAll());
         const filterSettings = advanced?.data?.find(i =>
@@ -301,12 +291,12 @@ export class TransactionFilterComponent implements OnInit {
         });
         localStorage.removeItem(ConstValue.LOCAL_FILTER_STATE);
     }
-    getPayloadFromAdvancedSettings(type: string = 'RTP'): boolean {
+    getPayloadFromAdvancedSettings(type = 'RTP'): boolean {
 
         return !!this.filterSettings[type];
 
     }
-    getPayloadFromLocalStorage(type: string = 'RTP') {
+    getPayloadFromLocalStorage(type = 'RTP') {
         const defaultReturn =
             type === FlowItemType.SIP || type === FlowItemType.SDP;
         const serializedFilterState =

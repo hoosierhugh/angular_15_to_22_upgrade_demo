@@ -1,9 +1,10 @@
-import { Injectable, Inject } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { LOCALE_CONFIG, DefaultLocaleConfig, LocaleConfig } from './daterangepicker.config';
 
 @Injectable()
 export class LocaleService {
-  constructor(@Inject(LOCALE_CONFIG) private _config: LocaleConfig) {}
+  private _config = inject<LocaleConfig>(LOCALE_CONFIG);
+
 
   get config() {
     if (!this._config) {

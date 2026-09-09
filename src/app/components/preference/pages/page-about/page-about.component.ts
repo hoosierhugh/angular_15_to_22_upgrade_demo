@@ -1,4 +1,4 @@
-import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
+import { Component, OnInit, ChangeDetectionStrategy, inject } from '@angular/core';
 
 import { PreferenceVersionService } from '@app/services/preferences/version.service';
 import { VERSION } from 'src/VERSION';
@@ -11,9 +11,10 @@ import { VERSION } from 'src/VERSION';
     standalone: false
 })
 export class PageAboutComponent implements OnInit {
+    private _pvs = inject(PreferenceVersionService);
+
     uiVersion = VERSION;
     apiVersion: Promise<string | undefined>;
-    constructor(private _pvs: PreferenceVersionService) { }
 
     async ngOnInit() {
         this.apiVersion = this._pvs.getApiVersion();

@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { Observable } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 import { environment } from '@environments/environment';
@@ -7,17 +7,17 @@ import { environment } from '@environments/environment';
     providedIn: 'root'
 })
 export class PrometheusService {
+    private http = inject(HttpClient);
+
 
     private url = `${environment.apiUrl}/prometheus`;
-
-    constructor(private http: HttpClient) { }
 
     getLabel(): Observable<string[]> {
         return this.http.get<string[]>(`${this.url}/labels`);
     }
 
-    getLabels(id: string): Observable<Array<Record<string, string>>> {
-        return this.http.get<Array<Record<string, string>>>(`${this.url}/label/${id}`);
+    getLabels(id: string): Observable<Record<string, string>[]> {
+        return this.http.get<Record<string, string>[]>(`${this.url}/label/${id}`);
     }
 
     getValue(data: unknown): Observable<PrometheusQueryResult[]> {
@@ -27,10 +27,10 @@ export class PrometheusService {
 
 export interface PrometheusQueryResult {
     data: {
-        result: Array<{
+        result: {
             metric: Record<string, string> & { __name__?: string };
-            values: Array<[number, string]>;
-        }>;
+            values: [number, string][];
+        }[];
     };
 }
 // /api/v3/prometheus/label/net_contntrack_dialer_conn_failed_total

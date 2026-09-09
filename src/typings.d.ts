@@ -1,4 +1,4 @@
-declare var $ENV: Env;
+declare let $ENV: Env;
 
 interface Env {
   ENVIRONMENT: string;

@@ -1,7 +1,7 @@
 import { SettingInfluxdbchartWidgetComponent } from './setting-influxdbchart-widget.component';
 import { MatDialog } from '@angular/material/dialog';
 import { IWidget } from '../IWidget';
-import { Component, Input, Output, EventEmitter, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
+import { Component, Input, Output, EventEmitter, ChangeDetectionStrategy, ChangeDetectorRef, OnInit, OnDestroy, inject } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
 import { ChartDataset, ChartType } from 'chart.js';
 import { StatisticService } from '../../../services/statistic.service';
@@ -28,7 +28,13 @@ import { Functions } from '@app/helpers/functions';
     minWidth: 300,
 
 })
-export class InfluxdbchartWidgetComponent implements IWidget {
+export class InfluxdbchartWidgetComponent implements IWidget, OnInit, OnDestroy {
+    dialog = inject(MatDialog);
+    private _dtrs = inject(DateTimeRangeService);
+    private cdr = inject(ChangeDetectorRef);
+    private _ss = inject(StatisticService);
+    translateService = inject(TranslateService);
+
     @Input() id: string;
     @Input() config: any;
     @Output() changeSettings = new EventEmitter<any>();
@@ -66,17 +72,13 @@ export class InfluxdbchartWidgetComponent implements IWidget {
 
     requestData: any;
     noChartData = true;
-    multiDataArr: Array<any> = [];
+    multiDataArr: any[] = [];
     isConfig = true;
     private subscription: Subscription;
 
-    constructor(
-        public dialog: MatDialog,
-        private _dtrs: DateTimeRangeService,
-        private cdr: ChangeDetectorRef,
-        private _ss: StatisticService,
-        public translateService: TranslateService
-    ) {
+    constructor() {
+        const translateService = this.translateService;
+
         translateService.addLangs(['en'])
         translateService.setDefaultLang('en')
     }
@@ -120,8 +122,8 @@ export class InfluxdbchartWidgetComponent implements IWidget {
         });
     }
     querybuilder(config: any) {
-        const dataquery: Array<any> = config.dataquery.data;
-        const formattedQuery: Array<any> = [];
+        const dataquery: any[] = config.dataquery.data;
+        const formattedQuery: any[] = [];
         dataquery.forEach((item: any) => {
             formattedQuery.push({
                 main: item.main.value + '', // "cpu",
@@ -157,7 +159,7 @@ export class InfluxdbchartWidgetComponent implements IWidget {
         this.cdr.detectChanges();
 
     }
-    getDataByQuery(requestList: Array<any>, chartType) {
+    getDataByQuery(requestList: any[], chartType) {
         const request = requestList.shift();
         if (requestList.length > 0 || request) {
             this._ss.getStatisticData(request).toPromise().then((res: any) => {

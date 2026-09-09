@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { Observable } from 'rxjs';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { environment } from '@environments/environment';
@@ -16,10 +16,10 @@ export interface ShareLinkResponse {
     providedIn: 'root'
 })
 export class ExportCallService {
+    private http = inject(HttpClient);
+
 
     private url = `${environment.apiUrl}/export/call`;
-
-    constructor(private http: HttpClient) { }
 
     postMessagesFile(data: unknown, type: FileType): Promise<Blob | undefined> {
         const folder = type === 'Report' ? '/transaction/' : '/messages/';

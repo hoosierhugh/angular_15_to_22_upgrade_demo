@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, Output, EventEmitter, OnDestroy, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter, OnDestroy, ChangeDetectionStrategy, ChangeDetectorRef, inject } from '@angular/core';
 import { SettingsAceEditorWidgetComponent } from './settings-ace-editor-widget.component';
 import { MatDialog } from '@angular/material/dialog';
 import { IWidget } from '../IWidget';
@@ -32,7 +32,11 @@ export interface AceEditorConfig {
     minHeight: 300,
     minWidth: 300
 })
-export class AceEditorWidgetComponent implements IWidget {
+export class AceEditorWidgetComponent implements IWidget, OnInit, OnDestroy {
+    dialog = inject(MatDialog);
+    private cdr = inject(ChangeDetectorRef);
+    translateService = inject(TranslateService);
+
     @Input() config: AceEditorConfig;
     @Input() id: string;
     @Output() changeSettings = new EventEmitter<WidgetSettingsChange<AceEditorConfig>>();
@@ -40,10 +44,9 @@ export class AceEditorWidgetComponent implements IWidget {
     isConfig = false;
     _config: AceEditorConfig;
 
-    constructor(public dialog: MatDialog, 
-        private cdr: ChangeDetectorRef,
-        public translateService:TranslateService
-        ) { 
+    constructor() {
+             const translateService = this.translateService;
+
              translateService.addLangs(['en'])
         translateService.setDefaultLang('en')
         }

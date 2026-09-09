@@ -1,5 +1,5 @@
 
-import { Component, Inject, OnInit, OnDestroy, ChangeDetectionStrategy, ChangeDetectorRef, ViewEncapsulation } from '@angular/core';
+import { Component, OnInit, OnDestroy, ChangeDetectionStrategy, ChangeDetectorRef, ViewEncapsulation, inject } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA, MatDialog } from '@angular/material/dialog';
 import { DialogAlarmComponent } from '../dialog-alarm/dialog-alarm.component';
 import { ConstValue } from '@app/models';
@@ -16,6 +16,13 @@ import { TranslateService } from '@ngx-translate/core'
 })
 
 export class SettingProtosearchWidgetComponent implements OnInit, OnDestroy {
+    dialogRef = inject<MatDialogRef<SettingProtosearchWidgetComponent>>(MatDialogRef);
+    dialogAlarm = inject(MatDialog);
+    private cdr = inject(ChangeDetectorRef);
+    translateService = inject(TranslateService);
+    private alertService = inject(AlertService);
+    data = inject(MAT_DIALOG_DATA);
+
     isValidForm = true;
     isInvalid: boolean;
     config: any;
@@ -24,7 +31,7 @@ export class SettingProtosearchWidgetComponent implements OnInit, OnDestroy {
         hep_alias: '',
         fields_mapping: []
     };
-    mappingSortedData: Array<any>;
+    mappingSortedData: any[];
     resultConfig = {
         title: '',
         isButton: true,
@@ -64,14 +71,10 @@ export class SettingProtosearchWidgetComponent implements OnInit, OnDestroy {
         form_default: 'default',
         disabled: false,
     }];
-    constructor(
-        public dialogRef: MatDialogRef<SettingProtosearchWidgetComponent>,
-        public dialogAlarm: MatDialog,
-        private cdr: ChangeDetectorRef,
-        public translateService: TranslateService,
-        private alertService: AlertService,
-        @Inject(MAT_DIALOG_DATA) public data: any
-    ) {
+    constructor() {
+        const translateService = this.translateService;
+        const data = this.data;
+
         translateService.addLangs(['en'])
         translateService.setDefaultLang('en')
         if (!data) {

@@ -1,5 +1,5 @@
 import { Functions } from '@app/helpers/functions';
-import { Component, OnInit, Input, ViewChild, OnDestroy, ChangeDetectionStrategy, ChangeDetectorRef, AfterViewInit, AfterContentInit } from '@angular/core';
+import { Component, OnInit, Input, ViewChild, OnDestroy, ChangeDetectionStrategy, ChangeDetectorRef, AfterViewInit, AfterContentInit, inject } from '@angular/core';
 import { MatTabGroup } from '@angular/material/tabs';
 import moment from 'moment';
 import * as _parsip from 'parsip';
@@ -19,6 +19,11 @@ const parsip = _parsip;
     standalone: false
 })
 export class MessageContentComponent implements OnInit, OnDestroy, AfterViewInit, AfterContentInit {
+  private cdr = inject(ChangeDetectorRef);
+  private _tfs = inject(TimeFormattingService);
+  alertService = inject(AlertService);
+  translateService = inject(TranslateService);
+
   _data: any;
   dateFormat: DateFormat;
   timeLabel: string;
@@ -46,7 +51,7 @@ export class MessageContentComponent implements OnInit, OnDestroy, AfterViewInit
   @Input() set isDecoded(val: boolean) {
     this.cdr.detectChanges()
   }
-  @Input('data') set data(val) {
+  @Input() set data(val) {
     this._data = Functions.cloneObject(val);
     // console.log('this._data', this._data);
     if (val.frame_protocol) {
@@ -158,14 +163,6 @@ export class MessageContentComponent implements OnInit, OnDestroy, AfterViewInit
   }
 
   messageDetailTableData: any;
-
-  constructor(
-    private cdr: ChangeDetectorRef,
-    private _tfs: TimeFormattingService,
-    public alertService: AlertService,
-    public translateService: TranslateService
-
-  ) { }
 
   identify(index, item) {
     return item.name;

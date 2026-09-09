@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { environment } from '@environments/environment';
 import { PreferenceAlias } from '@app/models';
@@ -8,10 +8,10 @@ import { Functions } from '@app/helpers/functions';
   providedIn: 'root'
 })
 export class PreferenceAliasService {
+    private http = inject(HttpClient);
+
 
     private url = `${environment.apiUrl}/alias`;
-
-    constructor(private http: HttpClient) { }
 
     getAll() {
         return this.http.get<PreferenceAlias[]>(`${this.url}`);

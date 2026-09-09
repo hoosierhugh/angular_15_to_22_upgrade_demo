@@ -1,6 +1,6 @@
 import { LokiResultsComponent } from './loki-results.component';
 import { CodeStyleFieldModule } from '@widgets/rsearch-widget/code-style-field/code-style-field.module';
-import { NgModule } from '@angular/core';
+import { NgModule, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCheckboxModule } from '@angular/material/checkbox';
@@ -31,7 +31,9 @@ import { MatIconModule } from '@angular/material/icon';
     exports: [LokiResultsComponent]
 })
 export class LokiResultsModule {
-    constructor(library: FaIconLibrary) {
+    constructor() {
+        const library = inject(FaIconLibrary);
+
         library.addIconPacks(fas as IconPack, fab as IconPack, far as IconPack);
     }
  }

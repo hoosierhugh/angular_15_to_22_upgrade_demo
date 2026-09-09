@@ -1,6 +1,6 @@
 import { Overlay, OverlayConfig, OverlayRef } from "@angular/cdk/overlay";
 import { ComponentPortal } from "@angular/cdk/portal";
-import { ComponentRef, Injectable, Injector, StaticProvider } from "@angular/core";
+import { ComponentRef, Injectable, Injector, StaticProvider, inject } from "@angular/core";
 import { AlertComponent } from "@app/components";
 import { AlertSubject } from "@app/models/alert.model";
 import { AlertOverlayRef } from "./alert-ref";
@@ -19,11 +19,13 @@ const DEFAULT_CONFIG: AlertDialogConfig = {
 };
 @Injectable()
 export class AlertOverlayService {
+    private injector = inject(Injector);
+    private overlay = inject(Overlay);
+
     isOpen = false;
     dialogRef: AlertOverlayRef | null;
     timeoutId;
     overlayComponent: AlertComponent;
-    constructor(private injector: Injector, private overlay: Overlay) {}
 
     open(config: AlertDialogConfig = {}) {
         if (this.dialogRef) {
@@ -38,17 +40,17 @@ export class AlertOverlayService {
 
             // Instantiate remote control
             const dialogRef = new AlertOverlayRef(overlayRef);
-            
+
             this.dialogRef = dialogRef;
-        
+
             const overlayComponent = this.attachDialogContainer(
                 overlayRef,
                 dialogConfig,
                 dialogRef
             );
             this.overlayComponent = overlayComponent
-            overlayComponent.closeAlert.subscribe((_) =>{ 
-                this.dialogRef.close(); 
+            overlayComponent.closeAlert.subscribe((_) =>{
+                this.dialogRef.close();
                 this.dialogRef = null;
             });
             overlayRef.backdropClick().subscribe((_) => dialogRef.close());

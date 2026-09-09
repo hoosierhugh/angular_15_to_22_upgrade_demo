@@ -24,7 +24,7 @@ import { TabEventsModule } from './components/search-grid-call/detail-dialog/tab
 // import { VirtualScrollerModule } from 'ngx-virtual-scroller';
 /* @angular */
 import { HTTP_INTERCEPTORS, HttpClient, provideHttpClient, withInterceptorsFromDi, withJsonpSupport, withXhr } from '@angular/common/http';
-import { NgModule, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
+import { NgModule, CUSTOM_ELEMENTS_SCHEMA, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
@@ -391,7 +391,9 @@ export function HttpLoaderFactory(http: HttpClient) {
     ] })
 
 export class AppModule {
-    constructor(library: FaIconLibrary) {
+    constructor() {
+        const library = inject(FaIconLibrary);
+
         library.addIconPacks(fas as IconPack, fab as IconPack, far as IconPack);
     }
 }

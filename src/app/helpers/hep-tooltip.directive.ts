@@ -1,13 +1,4 @@
-import {
-    Directive,
-    Input,
-    TemplateRef,
-    OnInit,
-    ElementRef,
-    HostListener,
-    ViewContainerRef,
-    Component,
-} from '@angular/core';
+import { Directive, Input, TemplateRef, OnInit, ElementRef, HostListener, ViewContainerRef, Component, inject } from '@angular/core';
 
 import {
     ComponentType,
@@ -26,15 +17,14 @@ import {
     standalone: false
 })
 export class HepTooltipDirective implements OnInit {
+    private overlay = inject(Overlay);
+    private overlayPostionBuilder = inject(OverlayPositionBuilder);
+    private elementRef = inject(ElementRef);
+    private viewContainerRef = inject(ViewContainerRef);
+
     @Input('hepTooltip') tooltipContent: TemplateRef<unknown> | ComponentType<unknown>;
 
     private _overlayRef: OverlayRef;
-    constructor(
-        private overlay: Overlay,
-        private overlayPostionBuilder: OverlayPositionBuilder,
-        private elementRef: ElementRef,
-        private viewContainerRef: ViewContainerRef
-    ) { }
     ngOnInit(): void {
         if (this.tooltipContent) {
             const position = this.overlayPostionBuilder

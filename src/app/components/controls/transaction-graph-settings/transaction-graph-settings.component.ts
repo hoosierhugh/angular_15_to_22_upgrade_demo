@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component, EventEmitter, Input, OnInit, Output, ChangeDetectionStrategy } from '@angular/core';
+import { ChangeDetectorRef, Component, EventEmitter, Input, OnInit, Output, ChangeDetectionStrategy, inject } from '@angular/core';
 import { Functions } from '@app/helpers/functions';
 import { UserConstValue } from '@app/models';
 import { TranslateService } from '@ngx-translate/core';
@@ -11,6 +11,9 @@ import { TranslateService } from '@ngx-translate/core';
     standalone: false
 })
 export class TransactionGraphSettingsComponent implements OnInit {
+    private cdr = inject(ChangeDetectorRef);
+    translateService = inject(TranslateService);
+
     _options;
     maxValue = -50000;
     isRepulsion: boolean;
@@ -40,10 +43,9 @@ export class TransactionGraphSettingsComponent implements OnInit {
 
     @Output() optionsChanged = new EventEmitter();
     isInfoOpened = false;
-    constructor(
-        private cdr: ChangeDetectorRef,
-        public translateService: TranslateService
-        ) {
+    constructor() {
+            const translateService = this.translateService;
+
             translateService.addLangs(['en'])
             translateService.setDefaultLang('en')
          }

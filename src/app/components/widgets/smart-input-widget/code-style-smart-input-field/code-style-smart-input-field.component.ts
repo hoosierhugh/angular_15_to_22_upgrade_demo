@@ -1,14 +1,4 @@
-import {
-  Component,
-  ViewChild,
-  AfterViewInit,
-  Output,
-  EventEmitter,
-  Input,
-  ChangeDetectionStrategy,
-  ChangeDetectorRef,
-  HostListener
-} from '@angular/core';
+import { Component, ViewChild, AfterViewInit, Output, EventEmitter, Input, ChangeDetectionStrategy, ChangeDetectorRef, HostListener, inject } from '@angular/core';
 import { MatMenuTrigger } from '@angular/material/menu';
 import { SmartService } from '@app/services';
 import { lastValueFrom } from 'rxjs';
@@ -23,6 +13,9 @@ import { QueryHistoryService } from '../query-history.service';
 })
 
 export class CodeStyleSmartInputFieldComponent implements AfterViewInit {
+  private smartService = inject(SmartService);
+  private cdr = inject(ChangeDetectorRef);
+
   @Input() set queryText(val: string) {
     if (val === '' && this.editor) {
       this.editor.innerText = '';
@@ -53,18 +46,13 @@ export class CodeStyleSmartInputFieldComponent implements AfterViewInit {
   @Input() hepid = 1;
   // api link? how is it generated. Does it affect on changes?
   @Input() simplefield = false;
-  @Output() updateData: EventEmitter<any> = new EventEmitter();
-  @Output() keyEnter: EventEmitter<any> = new EventEmitter();
+  @Output() updateData = new EventEmitter<any>();
+  @Output() keyEnter = new EventEmitter<any>();
 
   @ViewChild('divContainer', { static: false }) divContainer;
   @ViewChild(MatMenuTrigger, { static: false }) trigger: MatMenuTrigger;
 
-  popupList: Array<string>;
-
-  constructor(
-    private smartService: SmartService,
-    private cdr: ChangeDetectorRef,
-  ) { }
+  popupList: string[];
 
   public setQueryText(value: string) {
     if (!this.editor?.innerText || this.isFocusOnField && !this.simplefield || this._queryText === value) {
@@ -150,7 +138,7 @@ export class CodeStyleSmartInputFieldComponent implements AfterViewInit {
       const fragment = this.getLastFragment(this.editor.innerText);
 
       const labelsData: any = await lastValueFrom(this.smartService.getLabelByUrl(this.apiLink, fragment));
-      let labels: Array<string> = [];
+      let labels: string[] = [];
       if (labelsData && labelsData.data && labelsData.data.data.length > 0) {
         labels = labelsData.data.data.map(i => i.value);
       }
@@ -206,7 +194,7 @@ export class CodeStyleSmartInputFieldComponent implements AfterViewInit {
     }
   }
   onKeyDownDiv(event) {
-    if (!!({ ArrowDown: 1, ArrowUp: 1, Enter: 1 })[event.key]) {
+    if (({ ArrowDown: 1, ArrowUp: 1, Enter: 1 })[event.key]) {
       this.triggerNavMenu(event);
       event.preventDefault();
       // this.editor.innerHTML = this.editor.innerText;
@@ -214,7 +202,7 @@ export class CodeStyleSmartInputFieldComponent implements AfterViewInit {
     }
   }
   onKeyUpDiv(event) {
-    if (!!{ Shift: 1, Control: 1, Alt: 1, Backspace: 1 }[event.key]) {
+    if ({ Shift: 1, Control: 1, Alt: 1, Backspace: 1 }[event.key]) {
       this.trigger.closeMenu();
       return;
     }
@@ -353,7 +341,7 @@ export class CodeStyleSmartInputFieldComponent implements AfterViewInit {
     //   // this.editor?.focus();
     //   return;
     // }
-    var space = document.createElement('div'); // empty element after the text
+    const space = document.createElement('div'); // empty element after the text
     space.innerText = '';
     this.editor.appendChild(space);
 

@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Observable, throwError } from 'rxjs';
 import { environment } from '@environments/environment';
@@ -8,7 +8,7 @@ import { ApiResponse, StatsDb } from '@app/models';
 export interface ResyncData {
     node_src:string;
     node_dst:string;
-    tables:Array<string>
+    tables:string[]
 }
 
 export interface InfluxSeries {
@@ -19,18 +19,19 @@ export interface InfluxSeries {
 
 export interface InfluxResponse {
     data: {
-        Results: Array<{
+        Results: {
             Series: InfluxSeries[];
-        }>;
+        }[];
     };
 }
 
 @Injectable({ providedIn: 'root' })
 
 export class StatisticService {
+    private _http = inject(HttpClient);
+
     private url = `${environment.apiUrl}/statistic`;
     private dbUrl = `${environment.apiUrl}/configdb`;
-    constructor(private _http: HttpClient) {}
 
     // Statistic data
     getStatisticData(data: unknown): Observable<InfluxResponse> {

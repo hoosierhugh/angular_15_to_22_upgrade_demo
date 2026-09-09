@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { environment } from '@environments/environment';
 import { PreferenceAgentsub } from '@app/models';
@@ -15,13 +15,11 @@ interface AgentLookupRequest {
   providedIn: 'root'
 })
 export class PreferenceAgentsubService {
+  private http = inject(HttpClient);
+  private authService = inject(AuthenticationService);
+
 
   private url = `${environment.apiUrl}/agent`;
-
-  constructor(
-    private http: HttpClient,
-    private authService: AuthenticationService
-  ) { }
 
   // get user token
   getToken() {

@@ -1,7 +1,7 @@
 import { BehaviorSubject, Observable } from 'rxjs';
 import { SessionStorageService } from './session-storage.service';
 import { DashboardService } from './dashboard.service';
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { ConstValue, UserConstValue } from '@app/models';
 import { Functions, setStorage } from '@app/helpers/functions';
 
@@ -17,6 +17,12 @@ enum DEFAULT_VALIE {
     providedIn: 'root'
 })
 export class SearchService {
+    private dateTimeRangeService = inject(DateTimeRangeService);
+    private alertService = inject(AlertService);
+    private dashboardService = inject(DashboardService);
+    private sessionStorageService = inject(SessionStorageService);
+    private translateService = inject(TranslateService);
+
     static currentQuery: any;
     isLoki = false;
     location: any;
@@ -24,13 +30,7 @@ export class SearchService {
     search: any;
     target: any;
     private _behavior: BehaviorSubject<any> = new BehaviorSubject<any>({});
-    constructor(
-        private dateTimeRangeService: DateTimeRangeService,
-        private alertService: AlertService,
-        private dashboardService: DashboardService,
-        private sessionStorageService: SessionStorageService,
-        private translateService: TranslateService
-    ) {
+    constructor() {
         this.Init();
     }
 
@@ -81,7 +81,7 @@ export class SearchService {
         } else {
             SearchService.currentQuery.protocol_id = this.protocol || SearchService.currentQuery.protocol_id;
             if (!SearchService.currentQuery.protocol_id) {
-                this.translateService.get('notifications.error.mappingIssue').subscribe(res => { 
+                this.translateService.get('notifications.error.mappingIssue').subscribe(res => {
                     this.alertService.error(res);
                 })
             }

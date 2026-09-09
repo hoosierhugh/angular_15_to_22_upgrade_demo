@@ -1,4 +1,4 @@
-import { Component, Inject, ChangeDetectionStrategy } from '@angular/core';
+import { Component, ChangeDetectionStrategy, AfterContentInit, inject } from '@angular/core';
 import { AbstractControl, FormControl, Validators } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { AuthenticationService, PreferenceUserService } from '@app/services';
@@ -21,7 +21,13 @@ interface UserSettingsDialogValue {
     changeDetection: ChangeDetectionStrategy.OnPush,
     standalone: false
 })
-export class DialogUserSettingsComponent {
+export class DialogUserSettingsComponent implements AfterContentInit {
+    dialogRef = inject<MatDialogRef<DialogUserSettingsComponent>>(MatDialogRef);
+    translateService = inject(TranslateService);
+    private userService = inject(PreferenceUserService);
+    private authService = inject(AuthenticationService);
+    data = inject<CrudDialogData<UserSettingsDialogValue>>(MAT_DIALOG_DATA);
+
     isValidForm = false;
     isAdmin = false;
     regNum = /^[0-9]+$/;
@@ -59,12 +65,10 @@ export class DialogUserSettingsComponent {
         this.usernameIsValid.bind(this)
     );
 
-    constructor(
-        public dialogRef: MatDialogRef<DialogUserSettingsComponent>,
-        public translateService: TranslateService,
-        private userService: PreferenceUserService,
-        private authService: AuthenticationService,
-        @Inject(MAT_DIALOG_DATA) public data: CrudDialogData<UserSettingsDialogValue>) {
+    constructor() {
+        const translateService = this.translateService;
+        const data = this.data;
+
         translateService.addLangs(['en'])
         translateService.setDefaultLang('en')
         if (data.isnew) {

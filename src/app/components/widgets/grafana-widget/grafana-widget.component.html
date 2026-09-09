@@ -1,7 +1,9 @@
 <iframe class="frame-base" [src]="url | safe" (load)="onLoadIframe()" #frame
-    [ngStyle]="{'display' : iframeLoaded ? 'block' : 'none' }"></iframe>
-<div *ngIf="!iframeLoaded">
+[ngStyle]="{'display' : iframeLoaded ? 'block' : 'none' }"></iframe>
+@if (!iframeLoaded) {
+  <div>
     <button mat-raised-button class="setting-btn-ok" (click)="openDialog()">
-        <fa-icon icon="cog"></fa-icon> {{'LINK.buttons.widgetSettings' | translate}}
+      <fa-icon icon="cog"></fa-icon> {{'LINK.buttons.widgetSettings' | translate}}
     </button>
-</div>
+  </div>
+}

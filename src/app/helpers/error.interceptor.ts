@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { HttpRequest, HttpHandler, HttpEvent, HttpInterceptor, HttpErrorResponse } from '@angular/common/http';
 import { Observable, throwError } from 'rxjs';
 import { catchError } from 'rxjs/operators';
@@ -11,13 +11,12 @@ import { TranslateService } from '@ngx-translate/core';
 
 @Injectable()
 export class ErrorInterceptor implements HttpInterceptor {
-    constructor(
-        private authenticationService: AuthenticationService,
-        private alertService: AlertService,
-        private router: Router,
-        private userSecurityService: UserSecurityService,
-        private translateService: TranslateService
-    ) { }
+    private authenticationService = inject(AuthenticationService);
+    private alertService = inject(AlertService);
+    private router = inject(Router);
+    private userSecurityService = inject(UserSecurityService);
+    private translateService = inject(TranslateService);
+
         errMessages = []
     intercept(request: HttpRequest<unknown>, next: HttpHandler): Observable<HttpEvent<unknown>> {
         return next.handle(request).pipe(catchError(err => {

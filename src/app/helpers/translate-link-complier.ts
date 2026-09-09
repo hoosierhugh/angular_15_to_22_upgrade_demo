@@ -58,7 +58,7 @@ export class TranslateLinkCompiler extends TranslateCompiler {
         if (typeof replacementPart === 'undefined' || replacementPart.toString() === '[object Object]') {
             replacementPart = '';
         }
-        let replacementProperty = translation.replace(referenceLink[2], replacementPart);
+        const replacementProperty = translation.replace(referenceLink[2], replacementPart);
         if (!replacementProperty.includes('@LINK.')) {
             return replacementProperty;
         } else {
@@ -71,7 +71,7 @@ export class TranslateLinkCompiler extends TranslateCompiler {
      * and returns the property value of the input objects property
      */
     private getDescendantPropertyValue(obj, desc) {
-        var arr = desc.split(".");
+        const arr = desc.split(".");
         while(arr.length && (obj = obj[arr.shift()]));
         return obj;
     }

@@ -1,4 +1,4 @@
-import { Component, Inject, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
+import { Component, ChangeDetectionStrategy, ChangeDetectorRef, inject } from '@angular/core';
 import { FormControl, Validators } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { AuthenticationService } from '@app/services';
@@ -22,13 +22,19 @@ interface HepSubscriptionDialogRecord {
     standalone: false
 })
 export class DialogHepsubComponent {
+    private authService = inject(AuthenticationService);
+    translateService = inject(TranslateService);
+    dialogRef = inject<MatDialogRef<DialogHepsubComponent>>(MatDialogRef);
+    cdr = inject(ChangeDetectorRef);
+    data = inject<CrudDialogData<HepSubscriptionDialogRecord>>(MAT_DIALOG_DATA);
+
     isValidForm = false;
     isAdmin = false;
     regNum = /^[0-9]+$/;
     regString = /^[a-zA-Z0-9\-\_]+$/;
     type: string;
     json;
-    noChanges = new Observable()    
+    noChanges = new Observable()
     hep_alias = new FormControl('', [
         Validators.required,
         Validators.minLength(1),
@@ -50,13 +56,11 @@ export class DialogHepsubComponent {
         Validators.max(10000),
         Validators.pattern(this.regNum)
     ]);
-    constructor(
-        private authService: AuthenticationService,
-        public translateService: TranslateService,
-        public dialogRef: MatDialogRef<DialogHepsubComponent>,
-        public cdr: ChangeDetectorRef,
-        @Inject(MAT_DIALOG_DATA) public data: CrudDialogData<HepSubscriptionDialogRecord>) {
-        
+    constructor() {
+        const translateService = this.translateService;
+        const data = this.data;
+
+
         translateService.addLangs(['en'])
         translateService.setDefaultLang('en')
         if (data.isnew) {
@@ -97,10 +101,10 @@ export class DialogHepsubComponent {
     onNoClick(): void {
         this.noChanges.subscribe( s => {
             this.cdr.detectChanges()
-           
+
         })
         this.dialogRef.close();
-        
+
     }
     onSubmit() {
         if (!this.hep_alias?.invalid &&

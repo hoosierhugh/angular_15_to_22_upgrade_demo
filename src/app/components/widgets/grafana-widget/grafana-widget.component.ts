@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, Output, EventEmitter, OnDestroy, AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, ElementRef, ViewChild } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter, OnDestroy, AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, ElementRef, ViewChild, inject } from '@angular/core';
 import { SettingIframeWidgetComponent } from './setting-grafana-widget.component';
 import { MatDialog } from '@angular/material/dialog';
 import { DateTimeRangeService, DateTimeTick, Timestamp } from '@app/services/data-time-range.service';
@@ -51,6 +51,13 @@ export interface IframeConfig {
 
 })
 export class IframeWidgetComponent implements IWidget, OnInit, OnDestroy {
+    dialog = inject(MatDialog);
+    private _dtrs = inject(DateTimeRangeService);
+    private cdr = inject(ChangeDetectorRef);
+    private _ps = inject(ProxyService);
+    private auths = inject(AuthenticationService);
+    translateService = inject(TranslateService);
+
     @Input() config: IframeConfig;
     @Input() id: string;
     @Output() changeSettings = new EventEmitter<WidgetSettingsChange<IframeConfig>>();
@@ -70,16 +77,11 @@ export class IframeWidgetComponent implements IWidget, OnInit, OnDestroy {
     timeRange: Timestamp;
     iframeLoaded = true;
 
-    isSameOrigin: boolean = false;
-    grafanaVariables: string = '';
-    constructor(
-        public dialog: MatDialog,
-        private _dtrs: DateTimeRangeService,
-        private cdr: ChangeDetectorRef,
-        private _ps: ProxyService,
-        private auths: AuthenticationService,
-        public translateService: TranslateService
-    ) {
+    isSameOrigin = false;
+    grafanaVariables = '';
+    constructor() {
+        const translateService = this.translateService;
+
         translateService.addLangs(['en'])
         translateService.setDefaultLang('en')
     }
@@ -139,7 +141,7 @@ export class IframeWidgetComponent implements IWidget, OnInit, OnDestroy {
         this.cdr.detectChanges();
     }
 
-    async buildUrl(noCache: boolean = false) {
+    async buildUrl(noCache = false) {
         const currentUser = this.auths.currentUserValue;
         const shortToken = currentUser.token.slice(currentUser.token.length - 15);
         this.url = '';
@@ -161,14 +163,14 @@ export class IframeWidgetComponent implements IWidget, OnInit, OnDestroy {
         this._config.configuredUrl = this.url;
         this.cdr.detectChanges();
     }
-    // To work on Grafana "Variables" feature you have to have setup with same origin for backend and UI 
+    // To work on Grafana "Variables" feature you have to have setup with same origin for backend and UI
     // or set ---disable-site-isolation-trials flag in chrome, DON'T FORGET TO REMOVE FLAG AFTERWARDS, IT IS UNSAFE
     onLoadIframe() {
         if (typeof this._config !== 'undefined' && this._config.url !== 'none') {
             this.iframeLoaded = true;
             if (this.isSameOrigin && this._config.params.hasVariables) {
                 let isHeader = false
-                let interval = setInterval(() => {
+                const interval = setInterval(() => {
                     isHeader = !!this.frame.nativeElement.contentWindow.document.querySelector('header')
                     if (isHeader) {
                         clearInterval(interval)

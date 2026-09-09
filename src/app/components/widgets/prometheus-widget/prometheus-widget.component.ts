@@ -1,5 +1,5 @@
 import { DateTimeRangeService, DateTimeTick, Timestamp } from '@app/services/data-time-range.service';
-import { Component, OnInit, Input, Output, EventEmitter, OnDestroy, AfterViewInit, ChangeDetectionStrategy } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter, OnDestroy, AfterViewInit, ChangeDetectionStrategy, inject } from '@angular/core';
 import { SettingPrometheusWidgetComponent } from './setting-prometheus-widget.component';
 import { PrometheusService } from '@app/services/prometheus.service';
 import { MatDialog } from '@angular/material/dialog';
@@ -27,7 +27,12 @@ import { TranslateService } from '@ngx-translate/core';
     minWidth: 300,
 
 })
-export class PrometheusWidgetComponent implements IWidget {
+export class PrometheusWidgetComponent implements IWidget, OnInit, OnDestroy {
+    dialog = inject(MatDialog);
+    private _dtrs = inject(DateTimeRangeService);
+    private _ps = inject(PrometheusService);
+    translateService = inject(TranslateService);
+
     @Input() id: string;
     @Input() config: any;
     @Output() changeSettings = new EventEmitter<any>();
@@ -64,16 +69,13 @@ export class PrometheusWidgetComponent implements IWidget {
 
     requestData: any;
     noChartData = true;
-    multiDataArr: Array<any> = [];
+    multiDataArr: any[] = [];
     isConfig = true;
     private subscription: Subscription;
 
-    constructor(
-        public dialog: MatDialog,
-        private _dtrs: DateTimeRangeService,
-        private _ps: PrometheusService,
-        public translateService: TranslateService
-    ) {
+    constructor() {
+        const translateService = this.translateService;
+
         translateService.addLangs(['en'])
         translateService.setDefaultLang('en')
     }
@@ -172,8 +174,8 @@ export class PrometheusWidgetComponent implements IWidget {
 
     }
     private querybuilder(config: any) { /** depricated, need use {SearchService} */
-        const dataquery: Array<any> = config.dataquery.data;
-        let formattedQuery: Array<any> = [];
+        const dataquery: any[] = config.dataquery.data;
+        let formattedQuery: any[] = [];
         dataquery.forEach((item: any) => {
             formattedQuery = formattedQuery.concat(item.prometheusLabels.map(i => i + encodeURIComponent(item.prometheusQuries)));
         });

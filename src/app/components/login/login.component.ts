@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewEncapsulation, ChangeDetectorRef, ChangeDetectionStrategy, ViewChild, ElementRef } from '@angular/core';
+import { Component, OnInit, ViewEncapsulation, ChangeDetectorRef, ChangeDetectionStrategy, ViewChild, ElementRef, inject } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { AbstractControl, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { first } from 'rxjs/operators';
@@ -23,6 +23,18 @@ import { TranslateService } from '@ngx-translate/core';
     standalone: false
 })
 export class LoginComponent implements OnInit {
+    private formBuilder = inject(FormBuilder);
+    private route = inject(ActivatedRoute);
+    private router = inject(Router);
+    private authenticationService = inject(AuthenticationService);
+    private alertService = inject(AlertService);
+    private titleService = inject(Title);
+    private cdr = inject(ChangeDetectorRef);
+    private userSecurityService = inject(UserSecurityService);
+    dialog = inject(MatDialog);
+    private _pus = inject(PreferenceUserService);
+    private translateService = inject(TranslateService);
+
     @ViewChild('oAuthButton', { static: false }) oAuthButton;
     loginForm: FormGroup;
     loading = false;
@@ -42,19 +54,9 @@ export class LoginComponent implements OnInit {
     oAuthToken: string;
     isDirect = false;
     // authentication;
-    constructor(
-        private formBuilder: FormBuilder,
-        private route: ActivatedRoute,
-        private router: Router,
-        private authenticationService: AuthenticationService,
-        private alertService: AlertService,
-        private titleService: Title,
-        private cdr: ChangeDetectorRef,
-        private userSecurityService: UserSecurityService,
-        public dialog: MatDialog,
-        private _pus: PreferenceUserService,
-        private translateService: TranslateService
-    ) {
+    constructor() {
+        const translateService = this.translateService;
+
         // redirect to home if already logged in
         if (this.authenticationService?.currentUserValue ) {
             this.router.navigateByUrl('/');

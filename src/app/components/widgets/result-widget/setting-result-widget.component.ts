@@ -1,4 +1,4 @@
-import { Component, Inject, ChangeDetectionStrategy } from '@angular/core';
+import { Component, ChangeDetectionStrategy, inject } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA} from '@angular/material/dialog';
 import { TranslateService } from '@ngx-translate/core'
 @Component({
@@ -9,11 +9,16 @@ import { TranslateService } from '@ngx-translate/core'
     standalone: false
 })
 export class SettingResultWidgetComponent {
-    constructor(
-        public dialogRef: MatDialogRef<SettingResultWidgetComponent>,
-public translateService: TranslateService,
-        @Inject(MAT_DIALOG_DATA) public data: { title: string; isAutoRefrasher: boolean }
-    ) {
+    dialogRef = inject<MatDialogRef<SettingResultWidgetComponent>>(MatDialogRef);
+    translateService = inject(TranslateService);
+    data = inject<{
+    title: string;
+    isAutoRefrasher: boolean;
+}>(MAT_DIALOG_DATA);
+
+    constructor() {
+        const translateService = this.translateService;
+
         translateService.addLangs(['en'])
         translateService.setDefaultLang('en')
     }

@@ -1,5 +1,5 @@
 import { TransactionFilterService } from '@app/components/controls/transaction-filter/transaction-filter.service';
-import { NgModule } from '@angular/core';
+import { NgModule, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { TransactionFilterComponent } from './transaction-filter.component';
 import { MatRadioModule } from '@angular/material/radio';
@@ -29,7 +29,9 @@ import { far } from '@fortawesome/free-regular-svg-icons';
   providers: [TransactionFilterService]
 })
 export class TransactionFilterModule {
-  constructor(library: FaIconLibrary) {
+  constructor() {
+    const library = inject(FaIconLibrary);
+
     library.addIconPacks(fas as IconPack, fab as IconPack, far as IconPack);
   }
 }

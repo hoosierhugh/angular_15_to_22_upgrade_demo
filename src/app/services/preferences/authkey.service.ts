@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { environment } from '@environments/environment';
 import { ApiResponse, PreferenceAuthKey } from '@app/models';
@@ -9,6 +9,8 @@ import { Functions } from '@app/helpers/functions';
     providedIn: 'root'
 })
 export class PreferenceAuthKeyService {
+    private http = inject(HttpClient);
+
     static actualToken: PreferenceAuthKey[];
     static httpObserver: Observable<PreferenceAuthKey[]>;
     private paks = PreferenceAuthKeyService;
@@ -20,7 +22,7 @@ export class PreferenceAuthKeyService {
         return Functions.cloneObject(this.paks.actualToken);
     }
 
-    constructor(private http: HttpClient) {
+    constructor() {
         this.paks.httpObserver = this.paks.httpObserver || new Observable<PreferenceAuthKey[]>(observer => {
             if (!this.actualToken) {
                 this.actualToken = [];

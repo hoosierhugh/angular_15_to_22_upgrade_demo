@@ -29,7 +29,7 @@ export function getUriJson(): unknown {
     }
 }
 export function getUriParams(): string | Record<string, string | null> {
-    if (!!location.hash) {
+    if (location.hash) {
         return location.hash.replace('#', '');
     }
     const lSearch = location.search || '';

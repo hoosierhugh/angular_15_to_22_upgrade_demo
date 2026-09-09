@@ -1,4 +1,4 @@
-import { Component, Inject, OnInit, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, ChangeDetectionStrategy, ChangeDetectorRef, inject } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { Functions } from '@app/helpers/functions';
 import * as XLSX from 'xlsx';
@@ -22,13 +22,18 @@ export interface ExportData {
 })
 
 export class ExportDialogComponent implements OnInit {
+    dialogRef = inject<MatDialogRef<ExportDialogComponent>>(MatDialogRef);
+    private cdr = inject(ChangeDetectorRef);
+    translateService = inject(TranslateService);
+    data = inject<ExportData>(MAT_DIALOG_DATA);
+
     public apiColumn: any;
     apiPoint: any;
     mappings: any;
     id: string;
-    allColumnIds: Array<any> = [];
-    _bufferData: Array<any>;
-    exportColumns: Array<string> = [];
+    allColumnIds: any[] = [];
+    _bufferData: any[];
+    exportColumns: string[] = [];
     protocol: string;
     filename = '';
     params = {
@@ -43,12 +48,10 @@ export class ExportDialogComponent implements OnInit {
             processCellCallback: (param) => this.formatData(param)
         }
     };
-    constructor(
-        public dialogRef: MatDialogRef<ExportDialogComponent>,
-        private cdr: ChangeDetectorRef,
-        public translateService: TranslateService,
-        @Inject(MAT_DIALOG_DATA) public data: ExportData
-    ) {
+    constructor() {
+        const translateService = this.translateService;
+        const data = this.data;
+
         translateService.addLangs(['en'])
         translateService.setDefaultLang('en')
         this.apiColumn = data.apicol;
@@ -57,7 +60,7 @@ export class ExportDialogComponent implements OnInit {
         this.id = data.idParent;
         this.protocol = data.protocol;
         if (typeof this.apiColumn?.getAllColumns() !== 'undefined' && this.apiColumn.getAllColumns() !== null) {
-            Object.values(this.apiColumn.getAllColumns() as Object)
+            Object.values(this.apiColumn.getAllColumns() as object)
                 .filter(column => !['', 'id'].includes(column.colDef.field))
                 .forEach(column => this.allColumnIds.push({
                     name: column.colDef.headerName,

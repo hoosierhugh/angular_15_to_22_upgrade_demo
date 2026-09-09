@@ -1,4 +1,4 @@
-import { Component, Inject, ViewChild, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
+import { Component, ViewChild, ChangeDetectionStrategy, ChangeDetectorRef, inject } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA, MatDialog } from '@angular/material/dialog';
 import { FormControl } from '@angular/forms';
 import { MatTable } from '@angular/material/table';
@@ -20,7 +20,7 @@ export interface ClickhousePeriodicElement {
         timeColumn?: string;
         resolution?: number;
         counter?: string;
-        tags?: Array<string>;
+        tags?: string[];
         operator?: string;
         raw?: string;
         autoMode?: boolean;
@@ -37,6 +37,14 @@ export interface ClickhousePeriodicElement {
 })
 
 export class SettingClickhouseChartWidgetComponent {
+    private _cs = inject(ClickhouseSerivce);
+    private alertService = inject(AlertService);
+    dialogAlarm = inject(MatDialog);
+    translateService = inject(TranslateService);
+    private cdr = inject(ChangeDetectorRef);
+    dialogRef = inject<MatDialogRef<SettingClickhouseChartWidgetComponent>>(MatDialogRef);
+    data = inject(MAT_DIALOG_DATA);
+
     @ViewChild(MatTable, { static: true }) matTable: MatTable<any>;
 
     displayedColumns: string[] = ['id', 'panelDataSource', 'database', 'table', 'buttons'];
@@ -90,16 +98,10 @@ export class SettingClickhouseChartWidgetComponent {
 
     isInvalid: boolean;
 
-    constructor(
-        private _cs: ClickhouseSerivce,
-        // private _dtrs: DateTimeRangeService,
-        private alertService: AlertService,
-        public dialogAlarm: MatDialog,
-public translateService: TranslateService,
-        private cdr: ChangeDetectorRef,
-        public dialogRef: MatDialogRef<SettingClickhouseChartWidgetComponent>,
-        @Inject(MAT_DIALOG_DATA) public data: any
-    ) {
+    constructor() {
+        const translateService = this.translateService;
+        const data = this.data;
+
         translateService.addLangs(['en'])
         translateService.setDefaultLang('en')
         if (data.empty) {
@@ -341,7 +343,7 @@ public translateService: TranslateService,
             }
         });
     }
-    updateResult(firstBoot: boolean = false, event: any = false) {
+    updateResult(firstBoot = false, event: any = false) {
         if (event || event === '') {
             this.validate(event);
         }

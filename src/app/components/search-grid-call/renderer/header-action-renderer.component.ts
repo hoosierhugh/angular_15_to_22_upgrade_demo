@@ -1,4 +1,4 @@
-import { Component, ChangeDetectionStrategy } from '@angular/core';
+import { Component, ChangeDetectionStrategy, inject } from '@angular/core';
 import { IHeaderParams } from 'ag-grid-community';
 import { MatDialog } from '@angular/material/dialog';
 import { DialogSettingsGridDialog } from '../grid-settings-dialog/grid-settings-dialog';
@@ -17,8 +17,10 @@ import { DialogSettingsGridDialog } from '../grid-settings-dialog/grid-settings-
 })
 
 export class HeaderActionRenderer {
+    dialog = inject(MatDialog);
+
     public params: IHeaderParams;
-    constructor(public dialog: MatDialog) {
+    constructor() {
         console.groupEnd();
     }
 

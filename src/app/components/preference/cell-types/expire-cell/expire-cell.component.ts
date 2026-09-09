@@ -1,11 +1,4 @@
-import {
-  ChangeDetectorRef,
-  Component,
-  Input,
-  OnInit,
-  ViewChild,
-  ChangeDetectionStrategy
-} from '@angular/core';
+import { ChangeDetectorRef, Component, Input, OnInit, ViewChild, ChangeDetectionStrategy, inject } from '@angular/core';
 import { MatColumnDef, MatCellDef, MatTable } from '@angular/material/table';
 import  moment from 'moment';
 @Component({
@@ -17,15 +10,14 @@ import  moment from 'moment';
 })
 
 export class ExpireCellComponent implements OnInit {
+  table = inject<MatTable<unknown>>(MatTable);
+  private cdr = inject(ChangeDetectorRef);
+
   @Input() column;
   @Input() timeFormat;
   @ViewChild(MatColumnDef) columnDef: MatColumnDef;
   @ViewChild(MatCellDef) cellDef: MatCellDef;
   dateFormat;
-  constructor(
-    public table: MatTable<unknown>,
-    private cdr: ChangeDetectorRef
-  ) { }
 
   ngOnInit() {
 

@@ -1,5 +1,5 @@
 import { map } from 'rxjs/operators';
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { environment } from '@environments/environment';
 import { HttpClient } from '@angular/common/http';
 
@@ -13,7 +13,7 @@ export class VItem {
     type: string;
     source_value: string;
 
-    constructor(description: string = '', type: string = '') {
+    constructor(description = '', type = '') {
         this.description = description;
         this.type = type;
     }
@@ -27,9 +27,9 @@ export class VItem {
     providedIn: 'root'
 })
 export class WebsharkDictionaryApiService {
-    private url = `${environment.apiUrl}/protocol/search/`;
+    private http = inject(HttpClient);
 
-    constructor(private http: HttpClient) { }
+    private url = `${environment.apiUrl}/protocol/search/`;
 
     get(id: IdType): Promise<any> {
         return new Promise<any>(async (resolve) => {

@@ -26,7 +26,7 @@ export interface TooltipDetails {
 export type TooltipMessage = string | TooltipDetails | null;
 
 interface TooltipModel {
-  dataPoints?: Array<{ index: number; datasetIndex: number }>;
+  dataPoints?: { index: number; datasetIndex: number }[];
 }
 
 interface TooltipSourceItem {
@@ -44,7 +44,7 @@ interface TooltipSourceItem {
 }
 
 interface TooltipDataset {
-  uuids: Array<string | number>;
+  uuids: (string | number)[];
 }
 
 @Injectable({ providedIn: 'root' })

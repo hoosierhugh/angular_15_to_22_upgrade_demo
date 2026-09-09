@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component, EventEmitter, HostListener, Input, OnInit, Output, ChangeDetectionStrategy } from '@angular/core';
+import { ChangeDetectorRef, Component, EventEmitter, HostListener, Input, OnInit, Output, ChangeDetectionStrategy, inject } from '@angular/core';
 import { Functions } from '@app/helpers/functions';
 import { DateFormat } from '@app/services/time-formatting.service';
 import { GridOptions } from 'ag-grid-community';
@@ -12,6 +12,8 @@ import { SettingButtonComponent } from './setting-button';
     standalone: false
 })
 export class CustomAgGridComponent implements OnInit {
+    private cdr = inject(ChangeDetectorRef);
+
     agGridSizeControl = {
         selectedType: 'sizeToFit',
         // pageSize: 100
@@ -19,7 +21,7 @@ export class CustomAgGridComponent implements OnInit {
     agColumnDefs: any[] = [];
     _details = [];
     frameworkComponents: any;
-    gridOptions: GridOptions = <GridOptions>{
+    gridOptions: GridOptions = {
         defaultColDef: {
             sortable: true,
             resizable: true,
@@ -29,7 +31,7 @@ export class CustomAgGridComponent implements OnInit {
         suppressRowClickSelection: true,
         suppressCellSelection: true,
         suppressPaginationPanel: true
-    };
+    } as GridOptions;
     _columns: any[] = [];
     gridApi: any;
     @Input() dateFormat: DateFormat;
@@ -100,7 +102,7 @@ export class CustomAgGridComponent implements OnInit {
     get columns() {
         return this._columns;
     }
-    @Output() rowClick: EventEmitter<any> = new EventEmitter();
+    @Output() rowClick = new EventEmitter<any>();
 
     @HostListener('dblclick')
     onDblClick() {
@@ -124,7 +126,7 @@ export class CustomAgGridComponent implements OnInit {
     onGridReady(params: any) {
         this.gridApi = params.api;
     }
-    constructor(private cdr: ChangeDetectorRef) {
+    constructor() {
         this.frameworkComponents = {
             settings: SettingButtonComponent
         };

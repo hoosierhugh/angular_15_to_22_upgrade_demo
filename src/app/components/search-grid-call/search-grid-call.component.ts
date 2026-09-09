@@ -9,19 +9,7 @@ import { Subscription } from 'rxjs';
 import { Functions, getStorage, log, setStorage } from '@app/helpers/functions';
 import  moment from 'moment';
 import { ConstValue, FormDefault, UserConstValue } from '@app/models';
-import {
-    Component,
-    OnInit,
-    OnDestroy,
-    AfterViewInit,
-    ChangeDetectorRef,
-    Input,
-    HostListener,
-    Output,
-    EventEmitter,
-    ViewChild,
-    ChangeDetectionStrategy
-} from '@angular/core';
+import { Component, OnInit, OnDestroy, AfterViewInit, ChangeDetectorRef, Input, HostListener, Output, EventEmitter, ViewChild, ChangeDetectionStrategy, inject } from '@angular/core';
 import {
     ColumnActionRenderer,
     ColumnCallidRenderer,
@@ -65,6 +53,23 @@ import { DateFormat, TimeFormattingService } from '@app/services/time-formatting
 export class SearchGridCallComponent
     extends GridController
     implements OnInit, OnDestroy, AfterViewInit {
+    dialog = inject(MatDialog);
+    private _puss = inject(PreferenceUserSettingsService);
+    private _scs = inject(SearchCallService);
+    private _srs = inject(SearchRemoteService);
+    private _pmps = inject(PreferenceMappingProtocolService);
+    private _dtrs = inject(DateTimeRangeService);
+    private dashboardService = inject(DashboardService);
+    private _pas = inject(PreferenceAdvancedService);
+    private aliasService = inject(PreferenceIpAliasService);
+    private searchService = inject(SearchService);
+    private fullTransactionService = inject(FullTransactionService);
+    private cdr = inject(ChangeDetectorRef);
+    private messageDetailsService = inject(MessageDetailsService);
+    translateService = inject(TranslateService);
+    private _tfs = inject(TimeFormattingService);
+    private copyService = inject(CopyService);
+
     override gridApi;
     override gridColumnApi;
     columnApi;
@@ -82,19 +87,19 @@ export class SearchGridCallComponent
     }
     @Input() chartConfig: any;
     @Input() isAutoRefrasher = false;
-    @Output() dataReady: EventEmitter<any> = new EventEmitter();
-    @Output() changeSettings: EventEmitter<any> = new EventEmitter();
+    @Output() dataReady = new EventEmitter<any>();
+    @Output() changeSettings = new EventEmitter<any>();
     @ViewChild('searchSlider', { static: false }) searchSlider: any;
-    filterGridValue: string = '';
+    filterGridValue = '';
     defaultColDef: ColDef;
-    override _columnDefs: Array<ColDef>;
-    override set columnDefs(value: Array<ColDef>) {
+    override _columnDefs: ColDef[];
+    override set columnDefs(value: ColDef[]) {
         this._columnDefs = value;
     }
-    override get columnDefs(): Array<ColDef> {
+    override get columnDefs(): ColDef[] {
         return this._columnDefs;
     }
-    myPredefColumns: Array<ColDef>;
+    myPredefColumns: ColDef[];
     rowData: any = [];
     loader = false;
     onlyLoader = false;
@@ -107,9 +112,9 @@ export class SearchGridCallComponent
     title = 'Call Result';
     isLoading = false;
     activeRow = '';
-    arrWindow: Array<any> = [];
-    arrChartWindow: Array<any> = [];
-    arrMessageDetail: Array<any> = [];
+    arrWindow: any[] = [];
+    arrChartWindow: any[] = [];
+    arrMessageDetail: any[] = [];
     searchQueryLoki: any;
     searchSliderFields = [];
     isLokiQuery = false;
@@ -150,7 +155,7 @@ export class SearchGridCallComponent
 
     filterRegex: RegExp;
     filterCleaned: string;
-    override gridOptions: GridOptions = <GridOptions>{
+    override gridOptions: GridOptions = {
         defaultColDef: {
             sortable: true,
             resizable: true,
@@ -161,7 +166,7 @@ export class SearchGridCallComponent
         getRowStyle: this.getBkgColorTable.bind(this),
         suppressCellSelection: true,
         suppressPaginationPanel: true
-    };
+    } as GridOptions;
     totalPages = 1;
     protocol_profile: string;
 
@@ -196,7 +201,7 @@ export class SearchGridCallComponent
     public subscriptionDashboardEvent: Subscription;
     private _latestQuery: string;
     colorList = agGridColors.colors;
-    callIDColorList: Array<CallIDColor> = [];
+    callIDColorList: CallIDColor[] = [];
     private dateFormat: DateFormat;
     copyData: string;
     copyTimeout;
@@ -213,25 +218,10 @@ export class SearchGridCallComponent
 
 
     externalFiltertimeout;
-    constructor(
-        public dialog: MatDialog,
-        private _puss: PreferenceUserSettingsService,
-        private _scs: SearchCallService,
-        private _srs: SearchRemoteService,
-        private _pmps: PreferenceMappingProtocolService,
-        private _dtrs: DateTimeRangeService,
-        private dashboardService: DashboardService,
-        private _pas: PreferenceAdvancedService,
-        private aliasService: PreferenceIpAliasService,
-        private searchService: SearchService,
-        private fullTransactionService: FullTransactionService,
-        private cdr: ChangeDetectorRef,
-        private messageDetailsService: MessageDetailsService,
-        public translateService: TranslateService,
-        private _tfs: TimeFormattingService,
-        private copyService: CopyService
-    ) {
+    constructor() {
         super();
+        const translateService = this.translateService;
+
         // this.cdr.detach();
         translateService.addLangs(['en']);
         translateService.setDefaultLang('en');
@@ -620,7 +610,7 @@ export class SearchGridCallComponent
         const params = Functions.getUriJson();
         setTimeout(() => {
             if (params?.param && this.gridApi) {
-                const sids: Array<string> =
+                const sids: string[] =
                     params.param.search[this.protocol_profile].callid;
                 if (sids?.length > 1) {
                     this.gridApi.forEachLeafNode((node) => {
@@ -648,9 +638,9 @@ export class SearchGridCallComponent
                         const sids =
                             params.param.search[this.protocol_profile]
                                 .callid;
-                        const rowData: Array<any> = Functions.cloneObject(
+                        const rowData: any[] = Functions.cloneObject(
                             this.rowData
-                        ) as Array<any>;
+                        ) as any[];
                         const [rowDataItem] = sids.map((j) =>
                             rowData.find((i) => i.sid === j)
                         );
@@ -669,7 +659,7 @@ export class SearchGridCallComponent
     }
 
     private async getHeaders() {
-        const mappings: Array<any> = await this._pmps.getMerged().toPromise();
+        const mappings: any[] = await this._pmps.getMerged().toPromise();
         let marData = [];
         const { fields_mapping, hepid } = mappings.find(({ hepid, hep_alias, profile }) =>
             (this.isLokiQuery && hepid === 2000 && hep_alias === 'LOKI') ||
@@ -692,7 +682,7 @@ export class SearchGridCallComponent
 
         /* this is normaly not needed - just a workaround to copy from search param */
         for (const item in this.config.param.search) {
-            if ((this.config.param as Object).hasOwnProperty(item)) {
+            if ((this.config.param as object).hasOwnProperty(item)) {
                 const elem = this.config.param.search[item];
                 if (
                     elem.filter((it) => it.name === ConstValue.LIMIT).length > 1
@@ -1279,7 +1269,7 @@ export class SearchGridCallComponent
             isBrowserWindow: arrowMetaData ? !!arrowMetaData.isBrowserWindow : false,
             isDecoded: false
         };
-        let _timestamp = {
+        const _timestamp = {
             from: parseInt(moment(row.data.create_date).format('x'), 10) + this.limitRange.message_from, // - 1sec
             to: parseInt(moment(row.data.create_date).format('x'), 10) + this.limitRange.message_to // + 1sec
         };

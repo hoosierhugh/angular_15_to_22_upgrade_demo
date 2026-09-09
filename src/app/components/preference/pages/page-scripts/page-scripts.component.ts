@@ -1,14 +1,5 @@
 
-import {
-  Component,
-  OnInit,
-  OnDestroy,
-  ChangeDetectorRef,
-  ViewChild,
-  AfterViewInit,
-  Input,
-  ChangeDetectionStrategy
-} from '@angular/core';
+import { Component, OnInit, OnDestroy, ChangeDetectorRef, ViewChild, AfterViewInit, Input, ChangeDetectionStrategy, inject } from '@angular/core';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { MatPaginator } from '@angular/material/paginator';
@@ -38,6 +29,12 @@ import { ComponentType } from '@angular/cdk/portal';
     standalone: false
 })
 export class PageScriptsComponent implements OnInit, AfterViewInit, OnDestroy {
+    private authenticationService = inject(AuthenticationService);
+    private alertService = inject(AlertService);
+    private service = inject(PreferenceScriptsService);
+    dialog = inject(MatDialog);
+    private cdr = inject(ChangeDetectorRef);
+
     isLoading = false;
     isAdmin = false;
     isErrorResponse = false;
@@ -51,13 +48,7 @@ export class PageScriptsComponent implements OnInit, AfterViewInit, OnDestroy {
     isAccess: Record<string, boolean>;
     filter = '';
 
-    constructor(
-        private authenticationService: AuthenticationService,
-        private alertService: AlertService,
-        private service: PreferenceScriptsService,
-        public dialog: MatDialog,
-        private cdr: ChangeDetectorRef,
-    ) {
+    constructor() {
         const userData = this.authenticationService.currentUserValue;
         this.isAdmin =
         userData &&

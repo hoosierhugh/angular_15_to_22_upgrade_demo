@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { Observable } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 import { ConstValue } from '@app/models';
@@ -18,6 +18,8 @@ interface BufferedRequest<T> {
     providedIn: 'root',
 })
 export class HttpGetBuffer {
+    private _http = inject(HttpClient);
+
     static _buffer: BufferedRequest<unknown>[] = [];
     static delay = 1000 * 30; // 30 sec buffering
 
@@ -25,8 +27,6 @@ export class HttpGetBuffer {
         return Functions.JSON_parse(localStorage.getItem(ConstValue.CURRENT_USER))
             .user.username;
     }
-
-    constructor(private _http: HttpClient) { }
 
     private getBufferItem<T>(url: string): Partial<BufferedRequest<T>> {
         const f = (i: BufferedRequest<unknown>) => i.hash === this.hash(url);
@@ -45,7 +45,7 @@ export class HttpGetBuffer {
     private hash(url) {
         return `${this.username}:@:${url}`;
     }
-    
+
     public removeFromBuffer(url: string) {
         HttpGetBuffer._buffer = HttpGetBuffer._buffer.filter(request => request.url !== url)
     }

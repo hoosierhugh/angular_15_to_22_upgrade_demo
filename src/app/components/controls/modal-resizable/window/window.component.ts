@@ -1,17 +1,5 @@
 import { WindowService } from './window.service';
-import {
-  EventEmitter,
-  Component,
-  ViewChild,
-  OnDestroy,
-  OnInit,
-  Output,
-  Input,
-  ChangeDetectionStrategy,
-  ElementRef,
-  ChangeDetectorRef,
-  SimpleChanges
-} from '@angular/core';
+import { EventEmitter, Component, ViewChild, OnDestroy, OnInit, Output, Input, ChangeDetectionStrategy, ElementRef, ChangeDetectorRef, SimpleChanges, OnChanges, inject } from '@angular/core';
 
 type ChildWindow = Window & { objectData?: unknown };
 type WindowWithCollection = Window & {
@@ -24,7 +12,10 @@ type WindowWithCollection = Window & {
     changeDetection: ChangeDetectionStrategy.OnPush,
     standalone: false
 })
-export class WindowComponent implements OnInit, OnDestroy {
+export class WindowComponent implements OnInit, OnDestroy, OnChanges {
+  private windowService = inject(WindowService);
+  private cdr = inject(ChangeDetectorRef);
+
   @ViewChild('content', { static: false }) content: ElementRef<HTMLElement>;
 
   @Input() width = 700;
@@ -52,10 +43,7 @@ export class WindowComponent implements OnInit, OnDestroy {
 
   private externalWindow: ChildWindow | null = null;
 
-  constructor(
-    private windowService: WindowService,
-    private cdr: ChangeDetectorRef
-  ) {
+  constructor() {
     this.winId = `win-id-${Math.random()}`;
   }
   ngOnChanges(change: SimpleChanges) {

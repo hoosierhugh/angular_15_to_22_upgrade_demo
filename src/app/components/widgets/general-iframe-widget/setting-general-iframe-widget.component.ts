@@ -1,4 +1,4 @@
-import { Component, Inject, ChangeDetectionStrategy } from '@angular/core';
+import { Component, ChangeDetectionStrategy, inject } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { SelectList } from '../influxdbchart-widget/setting-influxdbchart-widget.component';
 import { TranslateService } from '@ngx-translate/core'
@@ -18,6 +18,10 @@ interface GeneralIframeSettingsData {
 })
 
 export class SettingGeneralIframeWidgetComponent {
+    dialogRef = inject<MatDialogRef<SettingGeneralIframeWidgetComponent>>(MatDialogRef);
+    translateService = inject(TranslateService);
+    data = inject<GeneralIframeSettingsData>(MAT_DIALOG_DATA);
+
 
     dashboardList: SelectList[] = [];
     panelList: SelectList[] = [];
@@ -25,10 +29,9 @@ export class SettingGeneralIframeWidgetComponent {
     panelListValue: string | null;
 
     isInvalid: boolean;
-    constructor(
-        public dialogRef: MatDialogRef<SettingGeneralIframeWidgetComponent>,
-        public translateService: TranslateService,
-        @Inject(MAT_DIALOG_DATA) public data: GeneralIframeSettingsData) {
+    constructor() {
+        const translateService = this.translateService;
+
         translateService.addLangs(['en'])
         translateService.setDefaultLang('en')
     }

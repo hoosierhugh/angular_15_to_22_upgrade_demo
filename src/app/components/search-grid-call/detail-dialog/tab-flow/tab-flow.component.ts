@@ -1,16 +1,4 @@
-import {
-  Component,
-  Input,
-  OnInit,
-  ViewChild,
-  ElementRef,
-  ChangeDetectionStrategy,
-  ChangeDetectorRef,
-  AfterViewInit,
-  EventEmitter,
-  ViewEncapsulation,
-  Output,
-} from '@angular/core';
+import { Component, Input, OnInit, ViewChild, ElementRef, ChangeDetectionStrategy, ChangeDetectorRef, AfterViewInit, EventEmitter, ViewEncapsulation, Output, inject } from '@angular/core';
 // import { VirtualScrollerComponent } from 'ngx-virtual-scroller';
 import { Functions } from '@app/helpers/functions';
 import * as html2canvas from 'html2canvas';
@@ -51,6 +39,12 @@ export class CustomVirtualScrollStrategy extends FixedSizeVirtualScrollStrategy 
 })
 export class TabFlowComponent
   implements OnInit, AfterViewInit, AfterViewChecked, OnDestroy {
+  private cdr = inject(ChangeDetectorRef);
+  private tooltipService = inject(TooltipService);
+  private messageDetailsService = inject(MessageDetailsService);
+  private copyService = inject(CopyService);
+  private transactionFilterService = inject(TransactionFilterService);
+
   @ViewChild('flowscreen', { static: true }) flowscreen: ElementRef;
   @ViewChild('canvas', { static: true }) canvas: ElementRef;
   @ViewChild('downloadLink', { static: true }) downloadLink: ElementRef;
@@ -58,7 +52,7 @@ export class TabFlowComponent
   @ViewChild('virtualScrollbar') virtualScrollbar: ElementRef;
   @ViewChild('VScrollWrapper') VScrollWrapper: ElementRef;
   @ViewChild('labelContainer') labelContainer: ElementRef;
-  @Input() callIDColorList: Array<CallIDColor>;
+  @Input() callIDColorList: CallIDColor[];
   /**
     *  Detect Safari browser
     */
@@ -66,7 +60,7 @@ export class TabFlowComponent
 
 
   _interval = null;
-  public getVirtualScrollHeight: string = `translateY(1px)`;
+  public getVirtualScrollHeight = `translateY(1px)`;
   public isSimplifyPort = false;
   _isCombineByAlias = false;
   private _dataItem: any;
@@ -74,24 +68,24 @@ export class TabFlowComponent
   private ScrollTarget: string;
   flowGridLines = [];
   isExport = false;
-  hosts: Array<any>;
-  hostsCA: Array<any>;
-  hostsIPs: Array<any>;
-  ipaliases: Array<any> = [];
-  arrayItems: Array<any> = [];
-  arrayItemsVisible: Array<any> = [];
+  hosts: any[];
+  hostsCA: any[];
+  hostsIPs: any[];
+  ipaliases: any[] = [];
+  arrayItems: any[] = [];
+  arrayItemsVisible: any[] = [];
   color_sid: string;
-  labels: Array<any> = [];
+  labels: any[] = [];
   _flagAfterViewInit = false;
   channelIdMessageDetails: string;
   hashDataItem = '';
   hashArrayItems = '';
   hashFilters = '';
   filterSubscription: Subscription;
-  virtualScrollerItemsArray: Array<any> = [];
+  virtualScrollerItemsArray: any[] = [];
   _isSimplify: boolean;
-  hidden: boolean = true;
-  callidPullerPosition: number = 0;
+  hidden = true;
+  callidPullerPosition = 0;
 
   copyTimer: number;
   selected: boolean;
@@ -171,16 +165,8 @@ export class TabFlowComponent
     return (this.isSimplify ? 150 : 200) * this.flowGridLines.length;
   }
 
-  @Output() pngReady: EventEmitter<any> = new EventEmitter();
-  @Output() ready: EventEmitter<any> = new EventEmitter();
-
-  constructor(
-    private cdr: ChangeDetectorRef,
-    private tooltipService: TooltipService,
-    private messageDetailsService: MessageDetailsService,
-    private copyService: CopyService,
-    private transactionFilterService: TransactionFilterService
-  ) { }
+  @Output() pngReady = new EventEmitter<any>();
+  @Output() ready = new EventEmitter<any>();
 
   ngOnInit() {
     this.getVirtualScrollHeight = `translateY(1px)`;
@@ -193,7 +179,7 @@ export class TabFlowComponent
       const { channelId } = data.metadata.data;
       let { itemId } = data.metadata.data;
       if (data && this.channelIdMessageDetails === channelId) {
-        const arrData: Array<any> = this.arrayItemsVisible as Array<any>;
+        const arrData: any[] = this.arrayItemsVisible as any[];
         switch (data.eventType) {
           case ArrowEventState.PREVIOUS:
             itemId--;
@@ -354,7 +340,7 @@ export class TabFlowComponent
       { _step: 'bottom' },
     ];
   }
-  getHostsByMessage(arrayItems: Array<any>, isCombineByAlias, isSimplifyPort) {
+  getHostsByMessage(arrayItems: any[], isCombineByAlias, isSimplifyPort) {
     const hosts = Functions.cloneObject(this.hosts);
 
     const collectH = arrayItems.map((i) => {
@@ -491,7 +477,7 @@ export class TabFlowComponent
   }
 
   onClickMessage(id: any, event = null, sitem = null) {
-    const arrData: Array<any> = this.arrayItemsVisible as Array<any>;
+    const arrData: any[] = this.arrayItemsVisible as any[];
     const index = arrData.findIndex(
       ({ __item__index__ }) => __item__index__ === sitem.__item__index__
     );

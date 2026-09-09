@@ -1,7 +1,7 @@
 import { Functions, log, setStorage } from '@app/helpers/functions';
 import { HttpGetBuffer } from '@app/helpers/http-get-buffer';
 import { ApiResponse, ConstValue, DashboardContentModel, DashboardData, DashboardModel, UserConstValue } from '@app/models';
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable, BehaviorSubject, lastValueFrom } from 'rxjs';
 import { environment } from '@environments/environment';
@@ -67,6 +67,9 @@ interface WidgetResultState {
 })
 
 export class DashboardService {
+  private _http = inject(HttpClient);
+  private _httpBuffer = inject(HttpGetBuffer);
+
   static dbSetting: DashboardEventData = {
     current: '',
     currentDashboardType: null,
@@ -88,10 +91,7 @@ export class DashboardService {
   public dashboardEvent: Observable<DashboardEventData>;
   private url = `${environment.apiUrl}/dashboard`;
   private _eventBuffer = '';
-  constructor(
-    private _http: HttpClient,
-    private _httpBuffer: HttpGetBuffer
-  ) {
+  constructor() {
     this.dbs = Functions.JSON_parse(localStorage.getItem(UserConstValue.SQWR)) ||
       Functions.JSON_parse(localStorage.getItem(ConstValue.SQWR)) || this.dbs;
 
@@ -173,7 +173,7 @@ export class DashboardService {
     this.dbs = JSON.parse(localStorage.getItem(UserConstValue.SQWR)) ||
       JSON.parse(localStorage.getItem(ConstValue.SQWR)) || this.dbs;
     const wList = this.dbs?.resultWidget || {};
-    const result = wList[idWidget] && wList[idWidget][paramName] 
+    const result = wList[idWidget] && wList[idWidget][paramName]
     return result  || typeof result === 'boolean' ? result : null;
   }
 

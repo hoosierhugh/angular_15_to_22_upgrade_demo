@@ -1,15 +1,4 @@
-import {
-    Component,
-    OnInit,
-    OnDestroy,
-    ChangeDetectionStrategy,
-    ChangeDetectorRef,
-    ViewChild,
-    AfterViewInit,
-    ElementRef,
-    QueryList,
-    ViewChildren
-} from '@angular/core';
+import { Component, OnInit, OnDestroy, ChangeDetectionStrategy, ChangeDetectorRef, ViewChild, AfterViewInit, ElementRef, QueryList, ViewChildren, inject } from '@angular/core';
 import { ActivatedRoute, Router, ActivationEnd } from '@angular/router';
 
 import { filter } from 'rxjs/operators';
@@ -32,6 +21,14 @@ import { AdminService } from '@app/services/preferences/admin.service';
 })
 
 export class PreferenceComponent implements OnInit, OnDestroy, AfterViewInit {
+    private authenticationService = inject(AuthenticationService);
+    private router = inject(Router);
+    private _route = inject(ActivatedRoute);
+    dialog = inject(MatDialog);
+    private cdr = inject(ChangeDetectorRef);
+    private translateService = inject(TranslateService);
+    private adminService = inject(AdminService);
+
     isLoading = false;
     isAdmin = false;
     isExternal = false;
@@ -52,7 +49,7 @@ export class PreferenceComponent implements OnInit, OnDestroy, AfterViewInit {
     linkDictionary: Record<string, string> = {};
 
     public pageId: string;
-    public links: Array<string> = [];
+    public links: string[] = [];
 
     @ViewChildren(MatPaginator) paginators !: QueryList<MatPaginator>;
     @ViewChildren(MatSort) sorters !: QueryList<MatSort>;
@@ -69,15 +66,9 @@ export class PreferenceComponent implements OnInit, OnDestroy, AfterViewInit {
         });
     }
 
-    constructor(
-        private authenticationService: AuthenticationService,
-        private router: Router,
-        private _route: ActivatedRoute,
-        public dialog: MatDialog,
-        private cdr: ChangeDetectorRef,
-        private translateService: TranslateService,
-        private adminService: AdminService
-    ) {
+    constructor() {
+        const router = this.router;
+
         const ADMIN = 'admin';
         const userData = this.authenticationService.currentUserValue;
         this.isAdmin = userData?.user?.admin === true;

@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, OnInit, ViewChild, inject } from '@angular/core';
 import { AlertMessage, AlertService } from '@it-app/services';
 import { CopyService } from '@app/services/copy.service';
 
@@ -12,15 +12,14 @@ import { Subscription } from 'rxjs';
     standalone: false
 })
 export class CopyComponent implements OnInit {
+    private copyService = inject(CopyService);
+    private alertService = inject(AlertService);
+    private cdr = inject(ChangeDetectorRef);
+
     private subscription: Subscription;
     copyData: string;
     notification: AlertMessage;
     @ViewChild('copyField', { static: false }) copyField: ElementRef;
-    constructor(    
-        private copyService: CopyService,
-        private alertService: AlertService,
-        private cdr: ChangeDetectorRef
-    ) { }
 
     ngOnInit(): void {
         this.subscription = this.copyService.getData().subscribe(data => {

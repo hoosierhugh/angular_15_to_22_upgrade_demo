@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { environment } from '@environments/environment';
 import { ApiResponse, ConstValue, FormDefault, PreferenceMapping, UserConstValue } from '@app/models';
@@ -11,6 +11,9 @@ import { SessionStorageService } from '../session-storage.service';
     providedIn: 'root'
 })
 export class PreferenceMappingProtocolService {
+    private http = inject(HttpClient);
+    private _sss = inject(SessionStorageService);
+
     static actualMapping: PreferenceMapping[];
     static margedMapping: PreferenceMapping[];
     static httpObserver: Observable<PreferenceMapping[]>;
@@ -26,7 +29,7 @@ export class PreferenceMappingProtocolService {
         return Functions.cloneObject(this.pmps.actualMapping); // internal object can't be modify
     }
 
-    constructor(private http: HttpClient, private _sss: SessionStorageService) {
+    constructor() {
         this.pmps.httpObserver = this.pmps.httpObserver || new Observable<PreferenceMapping[]>(observer => {
             if (!this.actualMapping) {
                 this.actualMapping = [];

@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { environment } from '@environments/environment';
 
@@ -19,10 +19,10 @@ interface AdminActionResponse {
   providedIn: 'root'
 })
 export class AdminService {
+  private http = inject(HttpClient);
+
 
   private url = `${environment.apiUrl}/export/action/`;
-
-  constructor(private http: HttpClient) { }
 
   public getFile() {
     return this.http.get(`${this.url}logs`, {

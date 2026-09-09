@@ -8,7 +8,9 @@
       [cdkDropListConnectedTo]="[activeListView]"
       (cdkDropListDropped)="drop($event)"
       id="inactiveListView">
-        <div class="example-box" *ngFor="let item of inactiveList" cdkDrag>{{item && item.name || '\{skipped on Mapping\}'}}</div>
+      @for (item of inactiveList; track item) {
+        <div class="example-box" cdkDrag>{{item && item.name || '\{skipped on Mapping\}'}}</div>
+      }
     </div>
   </div>
 
@@ -21,7 +23,9 @@
       [cdkDropListConnectedTo]="[inactiveListView]"
       (cdkDropListDropped)="drop($event)"
       id="activeListView">
-        <div class="example-box" *ngFor="let item of activeList" cdkDrag>{{item && item.name || '\{skipped on Mapping\}'}}</div>
+      @for (item of activeList; track item) {
+        <div class="example-box" cdkDrag>{{item && item.name || '\{skipped on Mapping\}'}}</div>
+      }
     </div>
   </div>
 </div>

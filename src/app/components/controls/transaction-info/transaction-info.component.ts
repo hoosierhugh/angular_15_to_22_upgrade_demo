@@ -1,4 +1,4 @@
-import { Component, ChangeDetectorRef, Input, HostListener, ViewChild, ElementRef, OnInit, ChangeDetectionStrategy } from '@angular/core';
+import { Component, ChangeDetectorRef, Input, HostListener, ViewChild, ElementRef, OnInit, ChangeDetectionStrategy, inject } from '@angular/core';
 import { Functions } from '@app/helpers/functions';
 import  moment from 'moment';
 import { TranslateService } from '@ngx-translate/core'
@@ -19,14 +19,17 @@ export interface CallIdData {
 })
 
 export class TransactionInfoComponent implements OnInit {
+    private cdr = inject(ChangeDetectorRef);
+    translateService = inject(TranslateService);
+
 
     isInfoOpened = false;
-    methods: Array<string> = [];
+    methods: string[] = [];
     _sipDataItem;
-    callIdList: Array<CallIdData> = [];
+    callIdList: CallIdData[] = [];
     _type = 'Flow';
     methodTotal = {};
-    @Input('type') set type(val) {
+    @Input() set type(val) {
         this._type = val || this._type;
     }
 
@@ -42,7 +45,7 @@ export class TransactionInfoComponent implements OnInit {
         this._sipDataItem.metadata = { dataType: data.type };
 
         const {callid} = data.data;
-        const methodsSet: Set<string> = new Set(this._sipDataItem?.data?.messages?.map(message => message.method));
+        const methodsSet = new Set<string>(this._sipDataItem?.data?.messages?.map(message => message.method));
         this.methods = this.methods.concat(Array.from(methodsSet.values()));
         this.methods.forEach(method  => {
             const color = Functions.getMethodColor(method);
@@ -83,10 +86,9 @@ export class TransactionInfoComponent implements OnInit {
     }
 
     @ViewChild('filterContainer', { static: false }) filterContainer: ElementRef;
-    constructor(
-        private cdr: ChangeDetectorRef,
-        public translateService: TranslateService
-        ) {
+    constructor() {
+            const translateService = this.translateService;
+
             translateService.addLangs(['en'])
             translateService.setDefaultLang('en')
          }

@@ -1,4 +1,4 @@
-import { Component, ChangeDetectionStrategy, Inject } from '@angular/core';
+import { Component, ChangeDetectionStrategy, OnInit, inject } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { Functions } from '@app/helpers/functions';
 import { PreferenceAdvancedService } from '@app/services';
@@ -29,15 +29,19 @@ interface AlarmDialogData {
     changeDetection: ChangeDetectionStrategy.OnPush,
     standalone: false
 })
-export class DialogAlarmComponent {
+export class DialogAlarmComponent implements OnInit {
+    private _pas = inject(PreferenceAdvancedService);
+    translateService = inject(TranslateService);
+    dialogRef = inject<MatDialogRef<DialogAlarmComponent>>(MatDialogRef);
+    data = inject<AlarmDialogData>(MAT_DIALOG_DATA);
+
     presetList: AlarmPreset[] = [];
     selectedPreset: AlarmPreset;
     isSearch = false;
-    constructor(
-        private _pas: PreferenceAdvancedService,
-        public translateService: TranslateService,
-        public dialogRef: MatDialogRef<DialogAlarmComponent>,
-        @Inject(MAT_DIALOG_DATA) public data: AlarmDialogData) {
+    constructor() {
+        const translateService = this.translateService;
+        const data = this.data;
+
         translateService.addLangs(['en'])
         translateService.setDefaultLang('en')
         this.isSearch = data ? true : false;

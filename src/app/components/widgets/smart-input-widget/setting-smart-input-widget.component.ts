@@ -1,6 +1,6 @@
 import { FormControl } from '@angular/forms';
 
-import { Component, Inject, OnInit, OnDestroy, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, OnDestroy, ChangeDetectionStrategy, ChangeDetectorRef, inject } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA, MatDialog } from '@angular/material/dialog';
 import { DialogAlarmComponent } from '../dialog-alarm/dialog-alarm.component';
 import { ConstValue } from '@app/models';
@@ -16,6 +16,12 @@ import { TranslateService } from '@ngx-translate/core'
 })
 
 export class SettingSmartInputWidgetComponent implements OnInit, OnDestroy {
+  dialogRef = inject<MatDialogRef<SettingSmartInputWidgetComponent>>(MatDialogRef);
+  dialogAlarm = inject(MatDialog);
+  translateService = inject(TranslateService);
+  private cdr = inject(ChangeDetectorRef);
+  data = inject(MAT_DIALOG_DATA);
+
   isValidForm = true;
   isInvalid: boolean;
   _interval: any;
@@ -25,7 +31,7 @@ export class SettingSmartInputWidgetComponent implements OnInit, OnDestroy {
     shown: true
   };
   targetResultsContainerValue = new FormControl();
-  mappingSortedData: Array<any>;
+  mappingSortedData: any[];
 
   resultConfig = {
     title: '',
@@ -42,13 +48,10 @@ export class SettingSmartInputWidgetComponent implements OnInit, OnDestroy {
   field_targetResultsContainer: any;
   field_limit: any;
 
-  constructor(
-    public dialogRef: MatDialogRef<SettingSmartInputWidgetComponent>,
-    public dialogAlarm: MatDialog,
-    public translateService: TranslateService,
-    private cdr: ChangeDetectorRef,
-    @Inject(MAT_DIALOG_DATA) public data: any
-  ) {
+  constructor() {
+    const translateService = this.translateService;
+    const data = this.data;
+
     translateService.addLangs(['en'])
     translateService.setDefaultLang('en')
     if (!data) {

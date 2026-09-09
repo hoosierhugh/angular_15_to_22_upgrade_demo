@@ -1,4 +1,4 @@
-import { Component, Inject, ChangeDetectionStrategy } from '@angular/core';
+import { Component, ChangeDetectionStrategy, inject } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { AlertService } from '@app/services';
 import { TranslateService } from '@ngx-translate/core'
@@ -19,14 +19,18 @@ interface DeleteAlertDialogData {
     standalone: false
 })
 export class DialogDeleteAlertComponent {
+    dialogRef = inject<MatDialogRef<DialogDeleteAlertComponent>>(MatDialogRef);
+    translateService = inject(TranslateService);
+    alertService = inject(AlertService);
+    data = inject<DeleteAlertDialogData>(MAT_DIALOG_DATA);
+
     message: string;
     page: string;
     isToken: boolean;
-    constructor(
-        public dialogRef: MatDialogRef<DialogDeleteAlertComponent>,
-        public translateService: TranslateService,
-        public alertService: AlertService,
-        @Inject(MAT_DIALOG_DATA) public data: DeleteAlertDialogData) {
+    constructor() {
+        const translateService = this.translateService;
+        const data = this.data;
+
         translateService.addLangs(['en'])
         translateService.setDefaultLang('en')
         this.message = data.data.message;

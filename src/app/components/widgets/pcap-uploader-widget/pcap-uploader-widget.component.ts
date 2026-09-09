@@ -1,6 +1,6 @@
 import { AlertService } from '@it-app/services/alert.service';
 import { PcapUploaderService } from './pcap-uploader.service';
-import { Component, Input, Output, EventEmitter, AfterViewInit, ViewChild, ChangeDetectorRef, ElementRef, ChangeDetectionStrategy } from '@angular/core';
+import { Component, Input, Output, EventEmitter, AfterViewInit, ViewChild, ChangeDetectorRef, ElementRef, ChangeDetectionStrategy, OnInit, OnDestroy, inject } from '@angular/core';
 import { Widget } from '@app/helpers/widget';
 import { IWidget } from '../IWidget';
 import { TranslateService } from '@ngx-translate/core'
@@ -22,7 +22,12 @@ import { TranslateService } from '@ngx-translate/core'
     minHeight: 300,
     minWidth: 300
 })
-export class PcapUploaderWidgetComponent implements IWidget, AfterViewInit {
+export class PcapUploaderWidgetComponent implements IWidget, AfterViewInit, OnInit, OnDestroy {
+    private pcapUploaderService = inject(PcapUploaderService);
+    private cdr = inject(ChangeDetectorRef);
+    alertService = inject(AlertService);
+    translateService = inject(TranslateService);
+
     idDrugOver = false;
     data: unknown;
     filename: string;
@@ -38,12 +43,9 @@ export class PcapUploaderWidgetComponent implements IWidget, AfterViewInit {
 
     @ViewChild('fileSelect', { static: true }) fileSelect: ElementRef<HTMLInputElement>;
 
-    constructor(
-        private pcapUploaderService: PcapUploaderService,
-        private cdr: ChangeDetectorRef,
-        public alertService: AlertService,
-       public translateService: TranslateService
-    ) { 
+    constructor() {
+        const translateService = this.translateService;
+
         translateService.addLangs(['en'])
         translateService.setDefaultLang('en')
     }
@@ -84,7 +86,7 @@ export class PcapUploaderWidgetComponent implements IWidget, AfterViewInit {
         this.pcapUploaderService.postFile(this.fileToUpload, this.isDataTimeNow).subscribe(data => {
             this.inProgress = false;
             this.alertService.success({
-                isTranslation: true, 
+                isTranslation: true,
                 message: 'notifications.success.fileUpload'
             });
             this.filename = '';

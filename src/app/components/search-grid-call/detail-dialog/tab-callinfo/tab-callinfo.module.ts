@@ -1,7 +1,7 @@
 import { NgChartsModule } from 'ng2-charts';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
-import { NgModule } from '@angular/core';
+import { NgModule, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { TabCallinfoComponent } from './tab-callinfo.component';
 import { MatTabsModule } from '@angular/material/tabs';
@@ -32,7 +32,9 @@ import { HtmlPipe } from './html.pipe';
   exports: [TabCallinfoComponent],
 })
 export class TabCallinfoModule {
-  constructor(library: FaIconLibrary) {
+  constructor() {
+      const library = inject(FaIconLibrary);
+
       library.addIconPacks(fas as IconPack, fab as IconPack, far as IconPack);
   }
 }

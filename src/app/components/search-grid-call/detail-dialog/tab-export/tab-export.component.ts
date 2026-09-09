@@ -1,14 +1,4 @@
-import {
-  Component,
-  OnInit,
-  Input,
-  Output,
-  EventEmitter,
-  ChangeDetectionStrategy,
-  ChangeDetectorRef,
-  ElementRef,
-  ViewChild
-} from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter, ChangeDetectionStrategy, ChangeDetectorRef, ElementRef, ViewChild, inject } from '@angular/core';
 import { ExportCallService, FileType } from '@app/services/export/call.service';
 import { Functions } from '@app/helpers/functions';
 import { CopyService, PreferenceAdvancedService } from '@app/services';
@@ -25,6 +15,14 @@ import { TranslateService } from '@ngx-translate/core';
     standalone: false
 })
 export class TabExportComponent implements OnInit, AfterViewInit {
+  private _pias = inject(PreferenceIpAliasService);
+  private _pas = inject(PreferenceAdvancedService);
+  private _ecs = inject(ExportCallService);
+  private alertService = inject(AlertService);
+  private cdr = inject(ChangeDetectorRef);
+  translateService = inject(TranslateService);
+  private copyService = inject(CopyService);
+
   @Input() callid;
   @Input() id;
   @Input() dataItem: any;
@@ -41,17 +39,11 @@ export class TabExportComponent implements OnInit, AfterViewInit {
   enableSIPP = false;
   enablePCAPSule = false;
 
-  @Output() exportFlowAsPNG: EventEmitter<any> = new EventEmitter();
-  @Output() ready: EventEmitter<any> = new EventEmitter();
-  constructor(
-    private _pias: PreferenceIpAliasService,
-    private _pas: PreferenceAdvancedService,
-    private _ecs: ExportCallService,
-    private alertService: AlertService,
-    private cdr: ChangeDetectorRef,
-    public translateService: TranslateService,
-    private copyService: CopyService,
-  ) {
+  @Output() exportFlowAsPNG = new EventEmitter<any>();
+  @Output() ready = new EventEmitter<any>();
+  constructor() {
+    const translateService = this.translateService;
+
     translateService.addLangs(['en'])
     translateService.setDefaultLang('en')
   }
@@ -159,7 +151,7 @@ export class TabExportComponent implements OnInit, AfterViewInit {
     let m = a.match(/^(?:\d{1,3}(?:\.|$)){4}/); // IPv4
     if (m) {
       m = m[0].split('.');
-      let sumNet = m.map((octet, index, array) => {
+      const sumNet = m.map((octet, index, array) => {
         return parseInt(octet) * Math.pow(256, (array.length - index - 1));
       }).reduce((prev, curr) => {
         return prev + curr;
@@ -171,8 +163,8 @@ export class TabExportComponent implements OnInit, AfterViewInit {
     // IPv6
     m = a.match(/^((?:[\da-f]{1,4}(?::|)){0,8})(::)?((?:[\da-f]{1,4}(?::|)){0,8})$/);
     if (m) {
-      let ip_string = a.replace(/^:|:$/g, '');
-      let ipv6 = ip_string.split(':');
+      const ip_string = a.replace(/^:|:$/g, '');
+      const ipv6 = ip_string.split(':');
       for (var i = 0; i < ipv6.length; i++) {
         let hex = ipv6[i];
         if (hex != "") {
@@ -182,16 +174,16 @@ export class TabExportComponent implements OnInit, AfterViewInit {
         else {
           // normalize grouped zeros ::
           hex = [];
-          for (var j = ipv6.length; j <= 8; j++) {
+          for (let j = ipv6.length; j <= 8; j++) {
             hex.push('0000');
           }
           ipv6[i] = hex.join(':');
         }
       }
       let hash = 0;
-      var newIPV6 = ipv6.join(':').split(':');
+      const newIPV6 = ipv6.join(':').split(':');
       for (var i = 0; i < newIPV6.length; i += 2) {
-        var bin = parseInt(newIPV6[i].concat(newIPV6[i + 1]), 16);
+        const bin = parseInt(newIPV6[i].concat(newIPV6[i + 1]), 16);
         hash += this.htonl(bin);
       }
       return hash;

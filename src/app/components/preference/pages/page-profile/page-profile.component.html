@@ -1,255 +1,306 @@
 <div class="tab-name">
-    <h3>{{page | titlecase}}</h3>
+  <h3>{{page | titlecase}}</h3>
 </div>
-<app-loading-circle *ngIf='isLoading'></app-loading-circle>
+@if (isLoading) {
+  <app-loading-circle></app-loading-circle>
+}
 <div #content
-class="profile-body mat-elevation-z8"
-[hidden]='isLoading'>
+  class="profile-body mat-elevation-z8"
+  [hidden]='isLoading'>
 
-    <div class="profile-card" [style.background-color]="profileColor + 22">
-        <img *ngIf="userProfile?.avatar !== ''; else noAvatar"
+  <div class="profile-card" [style.background-color]="profileColor + 22">
+    @if (userProfile?.avatar !== '') {
+      <img
         [src]="$safeNavigationMigration(userProfile?.avatar)" alt=""
         (onError)="userProfile.avatar = ''"
         class="profile-icon">
+    } @else {
+      <div [style.background-color]="profileColor" class="profile-icon">
+        {{userProfile?.displayname[0]}}
+      </div>
+    }
 
-        <ng-template #noAvatar>
-            <div [style.background-color]="profileColor" class="profile-icon">
-                {{userProfile?.displayname[0]}}
-            </div>
-        </ng-template>
-        <span class="profile-name">
-            {{userProfile?.displayname}}
-        </span>
-        <span class="profile-username" *ngIf='isExternal'>
-            {{userProfile?.username}}
-        </span>
-        <span class="profile-username" *ngIf='isExternal'>
-            Group: {{userProfile?.group}}
-        </span>
-        <span *ngIf="email.value">
-            {{email.value}}
-        </span>
-        <span
+    <span class="profile-name">
+      {{userProfile?.displayname}}
+    </span>
+    @if (isExternal) {
+      <span class="profile-username">
+        {{userProfile?.username}}
+      </span>
+    }
+    @if (isExternal) {
+      <span class="profile-username">
+        Group: {{userProfile?.group}}
+      </span>
+    }
+    @if (email.value) {
+      <span>
+        {{email.value}}
+      </span>
+    }
+    @if (department.value) {
+      <span
         [style.background-color]="profileColor + 22"
-        *ngIf="department.value"
         class="dept-label"
         >
-            <strong [style.color]="profileColor"
+        <strong [style.color]="profileColor"
+          >
+          {{department.value}}
+        </strong>
+      </span>
+    }
+  </div>
 
-            >
-                {{department.value}}
-            </strong>
-        </span>
+  <!-- if ERROR -->
+  @if (isErrorResponse) {
+    <div class="alert-error alert-danger">
+      <mat-icon>warning</mat-icon>
+      {{'notifications.error.invalidJSON' | translate }}
     </div>
+  }
 
-<!-- if ERROR -->
-    <div *ngIf="isErrorResponse" class="alert-error alert-danger">
-        <mat-icon>warning</mat-icon>
-        {{'notifications.error.invalidJSON' | translate }}
-    </div>
-
-    <div *ngIf='!isExternal'>
-    <mat-tab-group>
+  @if (!isExternal) {
+    <div>
+      <mat-tab-group>
         <mat-tab [label]="'preference.users.dialog.title' | translate:{username: 'User'}">
-<div class="user-settings">
-    <strong>{{ 'preference.users.dialog.personalInfo' | translate }}</strong>
-    <hr />
-    <div style="display: grid; grid-template-columns: repeat(4, 24%); width: calc(100% - 10px); grid-gap: 10px;">
-        <mat-form-field>
-        <mat-label>{{ 'preference.users.dialog.firstName' | translate }}</mat-label>
-        <input matInput
-            autocomplete="off"
-            [formControl]="firstname"
-            required />
-        <mat-error *ngIf="firstname?.errors?.['required']">{{'validators.required' | translate }}</mat-error>
-        <mat-error *ngIf="firstname?.errors?.['minlength']">
-            {{ firstname?.errors?.['minlength']?.requiredLength }} Characters
-            min
-        </mat-error>
-        <mat-error *ngIf="firstname?.errors?.['maxlength']">
-            {{ firstname?.errors?.['maxlength']?.requiredLength }} Characters
-            max
-        </mat-error>
-        <mat-error *ngIf="firstname?.errors?.['pattern'] && !firstname?.errors?.['minlength']">
-            {{'validators.pattern' | translate }} [aA-Zz], [0-9], "-", "_" or "."]
-        </mat-error>
-        </mat-form-field>
-
-        <mat-form-field>
-        <mat-label>{{ 'preference.users.dialog.lastName' | translate }}</mat-label>
-        <input matInput
-            autocomplete="off"
-            [formControl]="lastname"
-            />
-        <mat-error *ngIf="lastname?.errors?.['maxlength']">
-            {{ lastname?.errors?.['maxlength']?.requiredLength }} {{'validators.maxChars' | translate }}
-        </mat-error>
-        <mat-error *ngIf="lastname?.errors?.['pattern'] && !lastname?.errors?.['maxlength']">
-            {{'validators.pattern' | translate }} [aA-Zz], [0-9], "-", "_" or "."]
-        </mat-error>
-        </mat-form-field>
-
-
-
-        <mat-form-field>
-        <mat-label>{{ 'preference.users.dialog.email' | translate }}</mat-label>
-        <input matInput
-            autocomplete="off"
-            [formControl]="email"
-            required />
-        <mat-error *ngIf="email?.invalid">{{
-            getErrorMessage()
-            }}</mat-error>
-        </mat-form-field>
-
-
-        <mat-form-field>
-        <mat-label>{{ 'preference.users.dialog.department' | translate }}</mat-label>
-        <input matInput
-            autocomplete="off"
-            [formControl]="department"
-            required />
-        <mat-error *ngIf="department?.errors?.['required']">{{'validators.required' | translate }}</mat-error>
-        <mat-error *ngIf="department?.errors?.['minlength']">
-            {{ department?.errors?.['minlength']?.requiredLength }} Characters
-            min
-        </mat-error>
-        <mat-error *ngIf="department?.errors?.['maxlength']">
-            {{ department?.errors?.['maxlength']?.requiredLength }} Characters
-            max
-        </mat-error>
-        <mat-error *ngIf="department?.errors?.['pattern'] && !department?.errors?.['minlength']">
-            {{'validators.pattern' | translate }} [aA-Zz], [0-9], "-", "_" , "." or empty space]
-        </mat-error>
-        </mat-form-field>
-
-    </div>
-
-
-<div style="display: grid; grid-template-columns: repeat(4, 24%); width: calc(100% - 10px); grid-gap: 10px; ">
-    <mat-form-field *ngIf="username">
-    <mat-label>{{ 'preference.users.dialog.username' | translate }}</mat-label>
-    <input matInput
-        autocomplete="off"
-        [formControl]="username"
-        required />
-
-    <mat-error *ngIf="username?.errors?.['required']">{{'validators.required' | translate }}</mat-error>
-    <mat-error *ngIf="username?.errors?.['minlength']">
-        {{ username?.errors?.['minlength']?.requiredLength }} {{'validators.minChars' | translate }}
-    </mat-error>
-    <mat-error *ngIf="username?.errors?.['maxlength']">
-        {{ username?.errors?.['maxlength']?.requiredLength }} {{'validators.maxChars' | translate }}
-    </mat-error>
-    <mat-error *ngIf="username?.errors?.['pattern'] && !username?.errors?.['minlength']">
-        {{'validators.pattern' | translate }} [aA-Zz], [0-9], "-", "_" or "."
-    </mat-error>
-    <mat-error *ngIf="username?.errors?.['userNameNotAvailable']">
-        Username not available
-    </mat-error>
-    </mat-form-field>
-
-    <mat-form-field>
-    <mat-label>{{ 'preference.users.dialog.group' | translate }}</mat-label>
-    <mat-select [formControl]="usergroup" required>
-        <mat-option *ngFor="let item of groupList"  [value]='item'>
-                {{item}}
-        </mat-option>
-    </mat-select>
-    <mat-error *ngIf="usergroup?.errors?.['required']">{{'validators.required' | translate }}</mat-error>
-    <mat-error *ngIf="usergroup?.errors?.['minlength']">
-        {{ usergroup?.errors?.['minlength']?.requiredLength }} {{'validators.minChars' | translate }}
-    </mat-error>
-    <mat-error *ngIf="usergroup?.errors?.['maxlength']">
-        {{ usergroup?.errors?.['maxlength']?.requiredLength }} {{'validators.maxChars' | translate }}
-    </mat-error>
-    <mat-error *ngIf="usergroup?.errors?.['pattern'] && !usergroup?.errors?.['minlength']">
-        {{'validators.pattern' | translate }} [aA-Zz], [0-9], "-", "_" or "."]
-    </mat-error>
-    </mat-form-field>
-
-    <mat-form-field>
-    <input matInput
-        autocomplete="new-password"
-        [placeholder]="'preference.users.dialog.password' | translate"
-        [type]="hidePass1 ? 'password' : 'text'"
-        [formControl]="password"
-        required />
-    <mat-error *ngIf="data?.isNew && password?.errors?.['required']">The password {{'validators.required' | translate }}</mat-error>
-    <mat-error *ngIf="password?.errors?.['minlength']">
-        {{ password?.errors?.['minlength']?.requiredLength }} {{'validators.minChars' | translate }}
-    </mat-error>
-    <mat-error *ngIf="password?.errors?.['maxlength']">
-        {{ password?.errors?.['maxlength']?.requiredLength }} {{'validators.maxChars' | translate }}
-    </mat-error>
-
-    <mat-icon matSuffix
-        style="cursor: pointer"
-        (click)="hidePass1 = !hidePass1"
-        [attr.aria-label]="'Hide password'"
-        [attr.aria-pressed]="hidePass1"
-        [matTooltip]="hidePass1 ? 'Show password' : 'Hide password'">
-        {{ hidePass1 ? "visibility_off" : "visibility" }}
-    </mat-icon>
-    </mat-form-field>
-
-    <mat-form-field>
-    <input matInput
-        autocomplete="new-password"
-        [placeholder]="'preference.users.dialog.confirm' | translate"
-        [type]="hidePass1 ? 'password' : 'text'"
-        [formControl]="password2"
-        required />
-    <mat-error *ngIf="password?.value !== password2?.value">
-        The password and its confirmation do not coincide
-    </mat-error>
-    <mat-error *ngIf="password2?.errors?.['minlength']">
-        {{ password2?.errors?.['minlength']?.requiredLength }} {{'validators.minChars' | translate }}
-        min
-    </mat-error>
-    <mat-error *ngIf="password2?.errors?.['maxlength']">
-        {{ password2?.errors?.['maxlength']?.requiredLength }} {{'validators.maxChars' | translate }}
-    </mat-error>
-    </mat-form-field>
-</div>
-<div class="personal-actions">
-    <button mat-raised-button
-        class="setting-btn-ok"
-        (click)="onSubmit()"
-        cdkFocusInitial>
-        {{'LINK.buttons.save' | translate}}
-    </button>
-    </div>
-
-
-</div>
-
-
+          <div class="user-settings">
+            <strong>{{ 'preference.users.dialog.personalInfo' | translate }}</strong>
+            <hr />
+            <div style="display: grid; grid-template-columns: repeat(4, 24%); width: calc(100% - 10px); grid-gap: 10px;">
+              <mat-form-field>
+                <mat-label>{{ 'preference.users.dialog.firstName' | translate }}</mat-label>
+                <input matInput
+                  autocomplete="off"
+                  [formControl]="firstname"
+                  required />
+                @if (firstname?.errors?.['required']) {
+                  <mat-error>{{'validators.required' | translate }}</mat-error>
+                }
+                @if (firstname?.errors?.['minlength']) {
+                  <mat-error>
+                    {{ firstname?.errors?.['minlength']?.requiredLength }} Characters
+                    min
+                  </mat-error>
+                }
+                @if (firstname?.errors?.['maxlength']) {
+                  <mat-error>
+                    {{ firstname?.errors?.['maxlength']?.requiredLength }} Characters
+                    max
+                  </mat-error>
+                }
+                @if (firstname?.errors?.['pattern'] && !firstname?.errors?.['minlength']) {
+                  <mat-error>
+                    {{'validators.pattern' | translate }} [aA-Zz], [0-9], "-", "_" or "."]
+                  </mat-error>
+                }
+              </mat-form-field>
+              <mat-form-field>
+                <mat-label>{{ 'preference.users.dialog.lastName' | translate }}</mat-label>
+                <input matInput
+                  autocomplete="off"
+                  [formControl]="lastname"
+                  />
+                @if (lastname?.errors?.['maxlength']) {
+                  <mat-error>
+                    {{ lastname?.errors?.['maxlength']?.requiredLength }} {{'validators.maxChars' | translate }}
+                  </mat-error>
+                }
+                @if (lastname?.errors?.['pattern'] && !lastname?.errors?.['maxlength']) {
+                  <mat-error>
+                    {{'validators.pattern' | translate }} [aA-Zz], [0-9], "-", "_" or "."]
+                  </mat-error>
+                }
+              </mat-form-field>
+              <mat-form-field>
+                <mat-label>{{ 'preference.users.dialog.email' | translate }}</mat-label>
+                <input matInput
+                  autocomplete="off"
+                  [formControl]="email"
+                  required />
+                @if (email?.invalid) {
+                  <mat-error>{{
+                    getErrorMessage()
+                  }}</mat-error>
+                }
+              </mat-form-field>
+              <mat-form-field>
+                <mat-label>{{ 'preference.users.dialog.department' | translate }}</mat-label>
+                <input matInput
+                  autocomplete="off"
+                  [formControl]="department"
+                  required />
+                @if (department?.errors?.['required']) {
+                  <mat-error>{{'validators.required' | translate }}</mat-error>
+                }
+                @if (department?.errors?.['minlength']) {
+                  <mat-error>
+                    {{ department?.errors?.['minlength']?.requiredLength }} Characters
+                    min
+                  </mat-error>
+                }
+                @if (department?.errors?.['maxlength']) {
+                  <mat-error>
+                    {{ department?.errors?.['maxlength']?.requiredLength }} Characters
+                    max
+                  </mat-error>
+                }
+                @if (department?.errors?.['pattern'] && !department?.errors?.['minlength']) {
+                  <mat-error>
+                    {{'validators.pattern' | translate }} [aA-Zz], [0-9], "-", "_" , "." or empty space]
+                  </mat-error>
+                }
+              </mat-form-field>
+            </div>
+            <div style="display: grid; grid-template-columns: repeat(4, 24%); width: calc(100% - 10px); grid-gap: 10px; ">
+              @if (username) {
+                <mat-form-field>
+                  <mat-label>{{ 'preference.users.dialog.username' | translate }}</mat-label>
+                  <input matInput
+                    autocomplete="off"
+                    [formControl]="username"
+                    required />
+                  @if (username?.errors?.['required']) {
+                    <mat-error>{{'validators.required' | translate }}</mat-error>
+                  }
+                  @if (username?.errors?.['minlength']) {
+                    <mat-error>
+                      {{ username?.errors?.['minlength']?.requiredLength }} {{'validators.minChars' | translate }}
+                    </mat-error>
+                  }
+                  @if (username?.errors?.['maxlength']) {
+                    <mat-error>
+                      {{ username?.errors?.['maxlength']?.requiredLength }} {{'validators.maxChars' | translate }}
+                    </mat-error>
+                  }
+                  @if (username?.errors?.['pattern'] && !username?.errors?.['minlength']) {
+                    <mat-error>
+                      {{'validators.pattern' | translate }} [aA-Zz], [0-9], "-", "_" or "."
+                    </mat-error>
+                  }
+                  @if (username?.errors?.['userNameNotAvailable']) {
+                    <mat-error>
+                      Username not available
+                    </mat-error>
+                  }
+                </mat-form-field>
+              }
+              <mat-form-field>
+                <mat-label>{{ 'preference.users.dialog.group' | translate }}</mat-label>
+                <mat-select [formControl]="usergroup" required>
+                  @for (item of groupList; track item) {
+                    <mat-option  [value]='item'>
+                      {{item}}
+                    </mat-option>
+                  }
+                </mat-select>
+                @if (usergroup?.errors?.['required']) {
+                  <mat-error>{{'validators.required' | translate }}</mat-error>
+                }
+                @if (usergroup?.errors?.['minlength']) {
+                  <mat-error>
+                    {{ usergroup?.errors?.['minlength']?.requiredLength }} {{'validators.minChars' | translate }}
+                  </mat-error>
+                }
+                @if (usergroup?.errors?.['maxlength']) {
+                  <mat-error>
+                    {{ usergroup?.errors?.['maxlength']?.requiredLength }} {{'validators.maxChars' | translate }}
+                  </mat-error>
+                }
+                @if (usergroup?.errors?.['pattern'] && !usergroup?.errors?.['minlength']) {
+                  <mat-error>
+                    {{'validators.pattern' | translate }} [aA-Zz], [0-9], "-", "_" or "."]
+                  </mat-error>
+                }
+              </mat-form-field>
+              <mat-form-field>
+                <input matInput
+                  autocomplete="new-password"
+                  [placeholder]="'preference.users.dialog.password' | translate"
+                  [type]="hidePass1 ? 'password' : 'text'"
+                  [formControl]="password"
+                  required />
+                @if (data?.isNew && password?.errors?.['required']) {
+                  <mat-error>The password {{'validators.required' | translate }}</mat-error>
+                }
+                @if (password?.errors?.['minlength']) {
+                  <mat-error>
+                    {{ password?.errors?.['minlength']?.requiredLength }} {{'validators.minChars' | translate }}
+                  </mat-error>
+                }
+                @if (password?.errors?.['maxlength']) {
+                  <mat-error>
+                    {{ password?.errors?.['maxlength']?.requiredLength }} {{'validators.maxChars' | translate }}
+                  </mat-error>
+                }
+                <mat-icon matSuffix
+                  style="cursor: pointer"
+                  (click)="hidePass1 = !hidePass1"
+                  [attr.aria-label]="'Hide password'"
+                  [attr.aria-pressed]="hidePass1"
+                  [matTooltip]="hidePass1 ? 'Show password' : 'Hide password'">
+                  {{ hidePass1 ? "visibility_off" : "visibility" }}
+                </mat-icon>
+              </mat-form-field>
+              <mat-form-field>
+                <input matInput
+                  autocomplete="new-password"
+                  [placeholder]="'preference.users.dialog.confirm' | translate"
+                  [type]="hidePass1 ? 'password' : 'text'"
+                  [formControl]="password2"
+                  required />
+                @if (password?.value !== password2?.value) {
+                  <mat-error>
+                    The password and its confirmation do not coincide
+                  </mat-error>
+                }
+                @if (password2?.errors?.['minlength']) {
+                  <mat-error>
+                    {{ password2?.errors?.['minlength']?.requiredLength }} {{'validators.minChars' | translate }}
+                    min
+                  </mat-error>
+                }
+                @if (password2?.errors?.['maxlength']) {
+                  <mat-error>
+                    {{ password2?.errors?.['maxlength']?.requiredLength }} {{'validators.maxChars' | translate }}
+                  </mat-error>
+                }
+              </mat-form-field>
+            </div>
+            <div class="personal-actions">
+              <button mat-raised-button
+                class="setting-btn-ok"
+                (click)="onSubmit()"
+                cdkFocusInitial>
+                {{'LINK.buttons.save' | translate}}
+              </button>
+            </div>
+          </div>
         </mat-tab>
-
-
-        <mat-tab [label]="'preference.users.dialog.statistics' | translate" *ngIf="hasStatistics">
+        @if (hasStatistics) {
+          <mat-tab [label]="'preference.users.dialog.statistics' | translate">
             <div style="height: 1rem"></div>
-            <div *ngIf='data?.data?.params?.last_login' class='stats-label'>
+            @if (data?.data?.params?.last_login) {
+              <div class='stats-label'>
                 {{ 'preference.users.dialog.lastLogin' | translate }}
-            </div>
+              </div>
+            }
             <div class='stats-data'>
-                {{lastLogin}}
+              {{lastLogin}}
             </div>
-            <mat-divider *ngIf='data?.data?.params?.last_login && data?.data?.params?.timestamp_change_password'></mat-divider>
-            <div *ngIf='data?.data?.params?.timestamp_change_password' class='stats-label'>
+            @if (data?.data?.params?.last_login && data?.data?.params?.timestamp_change_password) {
+              <mat-divider></mat-divider>
+            }
+            @if (data?.data?.params?.timestamp_change_password) {
+              <div class='stats-label'>
                 {{ 'preference.users.dialog.lastPassowrd' | translate }}
-            </div>
+              </div>
+            }
             <div class='stats-data'>
-                {{lastPasswordChange}}
+              {{lastPasswordChange}}
             </div>
-        </mat-tab>
-
-
-    </mat-tab-group>
-
-
-
-
+          </mat-tab>
+        }
+      </mat-tab-group>
     </div>
+  }
 </div>

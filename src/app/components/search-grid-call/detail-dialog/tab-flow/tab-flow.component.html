@@ -5,15 +5,17 @@
   [style.padding-top.px]="isExport ? 40 : 0"
   [style.width]="isExport ? 'calc(100% + 20px)' : 'calc(100% - 1rem)'"
   #flowscreen
->
-  <ng-container *ngIf="arrayItemsVisible?.length === 0">
+  >
+  @if (arrayItemsVisible?.length === 0) {
     <h1 style="text-align: center; padding: 8rem; color: #aaa">
       {{ "tabCallFlow.item_was_filtered" | translate }}
     </h1>
-  </ng-container>
+  }
 
   <div class="flow-grid-lines" [style.min-width.px]="pageWidth - 16 * 2">
-    <div *ngFor="let title of flowGridLines" class="line"></div>
+    @for (title of flowGridLines; track title) {
+      <div class="line"></div>
+    }
   </div>
 
   <!-- hosts -->
@@ -21,84 +23,82 @@
   <div class="hosts" [style.top.px]="isExport ? 40 : 0">
     <div class="hosts-wrapper">
       <!-- host titles -->
-      <ng-template
-        ngFor
-        let-itemhost
-        [ngForOf]="_isCombineByAlias ? hostsCA : hostsIPs"
-      >
-        <div
-          *ngIf="!itemhost.hidden"
-          [ngClass]="'item-wrapper' + (isSimplify ? ' big' : '')"
-        >
-          <!-- wrapper -->
-
+      @for (itemhost of _isCombineByAlias ? hostsCA : hostsIPs; track itemhost) {
+        @if (!itemhost.hidden) {
           <div
-            class="item"
+            [ngClass]="'item-wrapper' + (isSimplify ? ' big' : '')"
+            >
+            <!-- wrapper -->
+            <div
+              class="item"
             [style.border-color]="
               (itemhost.color && itemhost.color.border) || 'lightgray'
             "
-          >
-            <!-- container -->
-            <div
-              class="aliasfield"
-              (mouseover)="showTooltip(itemhost)"
-              (mouseout)="hideTooltip()"
+              >
+              <!-- container -->
+              <div
+                class="aliasfield"
+                (mouseover)="showTooltip(itemhost)"
+                (mouseout)="hideTooltip()"
               [ngStyle]="{
                 color: itemhost.color ? itemhost.color.font : 'grey',
                 background: itemhost.color
                   ? itemhost.color.background
                   : '#fafafa'
               }"
-            >
-              <ng-template #noAlias>
-                <img
-                  class="defaultaliasimg"
-                  src="./assets/img/gateways/exchange.png"
-                />
-              </ng-template>
-              <div class="alias-img">
-                <img
-                  *ngIf="itemhost.image; else noAlias"
-                  class="aliasimg"
+                >
+                <div class="alias-img">
+                  @if (itemhost.image) {
+                    <img
+                      class="aliasimg"
                   [src]="
                     itemhost.isLinkImg
                       ? itemhost.image
                       : './assets/' + itemhost.image
                   "
-                  height="35px"
-                />
-              </div>
-              <div class="alias-name">
-                {{
+                      height="35px"
+                      />
+                  } @else {
+                    <img
+                      class="defaultaliasimg"
+                      src="./assets/img/gateways/exchange.png"
+                      />
+                  }
+                </div>
+                <div class="alias-name">
+                  {{
                   itemhost.alias && itemhost.alias !== itemhost.ip
-                    ? itemhost.alias
-                    : ""
-                }}
+                  ? itemhost.alias
+                  : ""
+                  }}
+                </div>
               </div>
-            </div>
-            <ng-template #ipArray>
-              <div
-                class="ipfield"
-                [ngClass]="{ multiple: itemhost.ip_array.length > 1 }"
-                *ngFor="let item of itemhost.ip_array"
-                (mouseover)="showTooltip(item.host)"
-                (mouseout)="hideTooltip()"
-              >
-                {{ shortcutIPv6String(item.ip) }}
-              </div>
-              <div
-                class="ipfield dotted"
-                [hidden]="itemhost.ip_array.length === 1"
-              >
-                <span>• • •</span>
-              </div>
-            </ng-template>
-            <div class="ipfield" *ngIf="!itemhost.ip_array; else ipArray">
-              {{ shortcutIPv6String(itemhost.ip) }}
+              @if (!itemhost.ip_array) {
+                <div class="ipfield">
+                  {{ shortcutIPv6String(itemhost.ip) }}
+                </div>
+              } @else {
+                @for (item of itemhost.ip_array; track item) {
+                  <div
+                    class="ipfield"
+                    [ngClass]="{ multiple: itemhost.ip_array.length > 1 }"
+                    (mouseover)="showTooltip(item.host)"
+                    (mouseout)="hideTooltip()"
+                    >
+                    {{ shortcutIPv6String(item.ip) }}
+                  </div>
+                }
+                <div
+                  class="ipfield dotted"
+                  [hidden]="itemhost.ip_array.length === 1"
+                  >
+                  <span>• • •</span>
+                </div>
+              }
             </div>
           </div>
-        </div>
-      </ng-template>
+        }
+      }
     </div>
   </div>
 
@@ -106,83 +106,52 @@
   <!-- REAL TIME FLOW -->
 
   <!-- EXPORT FLOW as PNG -->
-  <div
-    *ngIf="isExport"
-    class="flow-packets-wrapper"
-    [style.margin-right.rem]="0"
-    [style.min-width.px]="pageWidth + 100"
-  >
-    <div style="height: 92px"></div>
-    <app-flow-item
-      *ngFor="let item of arrayItemsVisible; let idx = index"
-      [item]="item"
-      [idx]="idx"
-      [isSimplify]="false"
-    >
-    </app-flow-item>
-    <div style="height: 40px"></div>
-  </div>
-  <!-- </div> -->
-  <div *ngIf="isExport" class="label-callid-container">
+  @if (isExport) {
     <div
-      class="label-callid-wrapper"
-      *ngFor="let itemLabel of labels"
-      [style.color]="itemLabel.color"
-    >
-      * {{ itemLabel.callid }}
+      class="flow-packets-wrapper"
+      [style.margin-right.rem]="0"
+      [style.min-width.px]="pageWidth + 100"
+      >
+      <div style="height: 92px"></div>
+      @for (item of arrayItemsVisible; track item; let idx = $index) {
+        <app-flow-item
+          [item]="item"
+          [idx]="idx"
+          [isSimplify]="false"
+          >
+        </app-flow-item>
+      }
+      <div style="height: 40px"></div>
     </div>
+  }
+<!-- </div> -->
+@if (isExport) {
+  <div class="label-callid-container">
+    @for (itemLabel of labels; track itemLabel) {
+      <div
+        class="label-callid-wrapper"
+        [style.color]="itemLabel.color"
+        >
+        * {{ itemLabel.callid }}
+      </div>
+    }
   </div>
+}
 </div>
 <div class="VS-Container-horizontal">
-  <div
-        *ngIf="isSafari"
-        class="VS-Container"
-        style="overflow: auto !important"
-        (scroll)="onScrollVScrollWrapper($event)"
-    >
-        <div
-            class="VS-Container"
-            style="height: initial; overflow: initial !important;"
-            [style.min-width.px]="pageWidth + 100"
-
-        >
-            <div style="height: 92px"></div>
-            <app-flow-item
-                *ngFor="let item of arrayItems; let idx = index"
-                [item]="item"
-                [idx]="idx"
-                [isGroupByAlias]="_isCombineByAlias"
-                [isSimplify]="isSimplify"
-                [isAbsolute]="false"
-                (itemClick)="onClickMessage($event.idx, $event.event, item)"
-            ></app-flow-item>
-            <div style="height: 60px"></div>
-        </div>
-    </div>
-  <div
-    class="VS-Container"
-    style="overflow-y: hidden !important"
-    (scroll)="onScrollVScrollWrapper($event)"
-    *ngIf="!isExport && !isSafari"
-    #VScrollWrapper
-  >
-    <cdk-virtual-scroll-viewport
-      class="VS-Container hidescroll"
-      (wheel)="cdkWheelScroll($event)"
-      (touchstart)="onEvent($event, 'touchstart')"
-      (touchmove)="onEvent($event, 'touchmove')"
-      [itemSize]="!isSimplify ? 74 : 41"
-      [style.min-width.px]="pageWidth + 100"
-      #virtualScroll
-    >
-      <ng-container
-        *cdkVirtualFor="let item of virtualScrollerItemsArray; let idx = index"
-        [ngSwitch]="item?._step"
+  @if (isSafari) {
+    <div
+      class="VS-Container"
+      style="overflow: auto !important"
+      (scroll)="onScrollVScrollWrapper($event)"
       >
-        <ng-template ngSwitchCase="top">
-          <div style="height: 92px"></div>
-        </ng-template>
-        <ng-template ngSwitchDefault>
+      <div
+        class="VS-Container"
+        style="height: initial; overflow: initial !important;"
+        [style.min-width.px]="pageWidth + 100"
+        >
+        <div style="height: 92px"></div>
+        @for (item of arrayItems; track item; let idx = $index) {
           <app-flow-item
             [item]="item"
             [idx]="idx"
@@ -190,21 +159,60 @@
             [isSimplify]="isSimplify"
             [isAbsolute]="false"
             (itemClick)="onClickMessage($event.idx, $event.event, item)"
+          ></app-flow-item>
+        }
+        <div style="height: 60px"></div>
+      </div>
+    </div>
+  }
+  @if (!isExport && !isSafari) {
+    <div
+      class="VS-Container"
+      style="overflow-y: hidden !important"
+      (scroll)="onScrollVScrollWrapper($event)"
+      #VScrollWrapper
+      >
+      <cdk-virtual-scroll-viewport
+        class="VS-Container hidescroll"
+        (wheel)="cdkWheelScroll($event)"
+        (touchstart)="onEvent($event, 'touchstart')"
+        (touchmove)="onEvent($event, 'touchmove')"
+        [itemSize]="!isSimplify ? 74 : 41"
+        [style.min-width.px]="pageWidth + 100"
+        #virtualScroll
+        >
+        <ng-container
+          *cdkVirtualFor="let item of virtualScrollerItemsArray; let idx = index"
           >
-          </app-flow-item>
-        </ng-template>
-        <ng-template ngSwitchCase="bottom">
-          <div style="height: 60px"></div>
-        </ng-template>
-      </ng-container>
-    </cdk-virtual-scroll-viewport>
-  </div>
+          @switch (item?._step) {
+            @case (top) {
+              <div style="height: 92px"></div>
+            }
+            @default {
+              <app-flow-item
+                [item]="item"
+                [idx]="idx"
+                [isGroupByAlias]="_isCombineByAlias"
+                [isSimplify]="isSimplify"
+                [isAbsolute]="false"
+                (itemClick)="onClickMessage($event.idx, $event.event, item)"
+                >
+              </app-flow-item>
+            }
+            @case (bottom) {
+              <div style="height: 60px"></div>
+            }
+          }
+        </ng-container>
+      </cdk-virtual-scroll-viewport>
+    </div>
+  }
 </div>
 
-<div
-  *ngIf="!isExport"
-  class="label-callid-container"
-  #labelContainer
+@if (!isExport) {
+  <div
+    class="label-callid-container"
+    #labelContainer
   [style.transition.max-height.s]="
     labelWrapper.offsetHeight < 100 / 2 ? 0.5 : 1
   "
@@ -215,54 +223,57 @@
       ? labelWrapper.offsetHeight
       : flowscreen.offsetHeight / 2
   "
->
-  <mat-icon
-    class="label-callid-pull"
-    [style.top.px]="-20"
-    (click)="toggleLegend()"
-    >expand_{{ hidden ? "less" : "more" }}</mat-icon
-  >
-  <div
-    #labelWrapper
-    [style.max-height.px]="flowscreen.offsetHeight / 2"
-    style="overflow-y: auto; padding-top: 3px"
-  >
-    <div
-      class="label-callid-wrapper"
-      *ngFor="let itemLabel of labels"
-      [style.color]="labelColor(itemLabel.callid, itemLabel.selected)"
-      [ngClass]="{ selected: itemLabel.copySelected }"
-      (click)="onClickLabel(itemLabel.callid)"
-      (mousedown)="startCopy()"
-      (mouseup)="copy(itemLabel)"
     >
-      {{ itemLabel.callid }}
+    <mat-icon
+      class="label-callid-pull"
+      [style.top.px]="-20"
+      (click)="toggleLegend()"
+      >expand_{{ hidden ? "less" : "more" }}</mat-icon
+      >
+      <div
+        #labelWrapper
+        [style.max-height.px]="flowscreen.offsetHeight / 2"
+        style="overflow-y: auto; padding-top: 3px"
+        >
+        @for (itemLabel of labels; track itemLabel) {
+          <div
+            class="label-callid-wrapper"
+            [style.color]="labelColor(itemLabel.callid, itemLabel.selected)"
+            [ngClass]="{ selected: itemLabel.copySelected }"
+            (click)="onClickLabel(itemLabel.callid)"
+            (mousedown)="startCopy()"
+            (mouseup)="copy(itemLabel)"
+            >
+            {{ itemLabel.callid }}
+          </div>
+        }
+      </div>
     </div>
-  </div>
-</div>
-<!-- <div *ngIf="!isExport" class="label-callid-container">
-    <div class="label-callid-wrapper" *ngFor="let itemLabel of labels"
+  }
+  <!-- <div *ngIf="!isExport" class="label-callid-container">
+  <div class="label-callid-wrapper" *ngFor="let itemLabel of labels"
     [style.color]="'#fff'"
     [style.background-color]="labelColor(itemLabel.callid, itemLabel.selected)"
     [ngClass]="{'selected': itemLabel.copySelected}"
     (click)="onClickLabel(itemLabel.callid)"
     (mousedown)='startCopy()' (mouseup)='copy(itemLabel)'
-    > {{ itemLabel.callid }} </div>
+  > {{ itemLabel.callid }} </div>
 </div> -->
 <div id="download" style="display: none">
   <img #canvas />
   <a #downloadLink></a>
 </div>
 <!-- <div class="virtual-scrollbar" *ngIf="!isExport" (mousedown)="setScrollTarget('virtualScrollbar')"
-    (scroll)="onScroll($event)" #virtualScrollbar>
-    <div [style.transform]="getVirtualScrollHeight" [style.padding.px]="1"></div>
+(scroll)="onScroll($event)" #virtualScrollbar>
+<div [style.transform]="getVirtualScrollHeight" [style.padding.px]="1"></div>
 </div> -->
-<div
-  class="virtual-scrollbar"
-  *ngIf="!isExport && !isSafari"
-  (mousedown)="setScrollTarget('virtualScrollbar')"
-  (scroll)="setVirtualScrollHeight($event)"
-  #virtualScrollbar
->
-  <div [style.transform]="getVirtualScrollHeight" [style.padding.px]="1"></div>
-</div>
+@if (!isExport && !isSafari) {
+  <div
+    class="virtual-scrollbar"
+    (mousedown)="setScrollTarget('virtualScrollbar')"
+    (scroll)="setVirtualScrollHeight($event)"
+    #virtualScrollbar
+    >
+    <div [style.transform]="getVirtualScrollHeight" [style.padding.px]="1"></div>
+  </div>
+}

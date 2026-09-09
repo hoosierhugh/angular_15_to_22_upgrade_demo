@@ -1,4 +1,4 @@
-import { Component, Inject, ViewChild, ChangeDetectionStrategy } from '@angular/core';
+import { Component, ViewChild, ChangeDetectionStrategy, inject } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA, MatDialog } from '@angular/material/dialog';
 import { FormControl } from '@angular/forms';
 import { MatTable } from '@angular/material/table';
@@ -16,6 +16,13 @@ import { TranslateService } from '@ngx-translate/core'
 })
 
 export class SettingPrometheusWidgetComponent {
+    private _ps = inject(PrometheusService);
+    private alertService = inject(AlertService);
+    translateService = inject(TranslateService);
+    dialogAlarm = inject(MatDialog);
+    dialogRef = inject<MatDialogRef<SettingPrometheusWidgetComponent>>(MatDialogRef);
+    data = inject(MAT_DIALOG_DATA);
+
     @ViewChild(MatTable, { static: true }) table: MatTable<any>;
 
     isInvalid: boolean;
@@ -50,13 +57,10 @@ export class SettingPrometheusWidgetComponent {
 
     outputObject: any = {};
 
-    constructor(
-        private _ps: PrometheusService,
-        private alertService: AlertService,
-        public translateService: TranslateService,
-        public dialogAlarm: MatDialog,
-        public dialogRef: MatDialogRef<SettingPrometheusWidgetComponent>,
-        @Inject(MAT_DIALOG_DATA) public data: any) {
+    constructor() {
+        const translateService = this.translateService;
+        const data = this.data;
+
         translateService.addLangs(['en'])
         translateService.setDefaultLang('en')
         if (data.empty) {
@@ -146,9 +150,9 @@ export class SettingPrometheusWidgetComponent {
             if (!data) {
                 return;
             }
-            this.prometheusLabelList = data as Array<string>;
+            this.prometheusLabelList = data as string[];
 
-            this.prometheus.setValue(this.selecedEditQuery.detail.prometheusLabels as Array<string>);
+            this.prometheus.setValue(this.selecedEditQuery.detail.prometheusLabels as string[]);
             this.updateCss('prometheus');
             this.updateResult();
         });

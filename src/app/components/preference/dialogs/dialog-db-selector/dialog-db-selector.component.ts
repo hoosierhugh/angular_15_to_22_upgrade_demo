@@ -1,4 +1,4 @@
-import { Component, Inject, ChangeDetectionStrategy } from '@angular/core';
+import { Component, ChangeDetectionStrategy, inject } from '@angular/core';
 import { FormControl, Validators } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { AuthenticationService } from '@app/services';
@@ -22,6 +22,11 @@ interface DatabaseSelectionDialogData {
     standalone: false
 })
 export class DialogDBSelectorComponent {
+    private authService = inject(AuthenticationService);
+    translateService = inject(TranslateService);
+    dialogRef = inject<MatDialogRef<DialogDBSelectorComponent>>(MatDialogRef);
+    data = inject<DatabaseSelectionDialogData>(MAT_DIALOG_DATA);
+
     isValidForm = false;
     isAdmin = false;
     canSave = false;
@@ -31,11 +36,10 @@ export class DialogDBSelectorComponent {
     tableSelection: string[] = [];
     nodeSelection: string[] = [];
     dialogData;
-    constructor(
-        private authService: AuthenticationService,
-        public translateService: TranslateService,
-        public dialogRef: MatDialogRef<DialogDBSelectorComponent>,
-        @Inject(MAT_DIALOG_DATA) public data: DatabaseSelectionDialogData) {
+    constructor() {
+        const translateService = this.translateService;
+        const data = this.data;
+
         translateService.addLangs(['en'])
         translateService.setDefaultLang('en')
 

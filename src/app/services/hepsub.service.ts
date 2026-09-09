@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { Observable } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 import { environment } from '@environments/environment';
@@ -8,10 +8,12 @@ import { PreferenceHepsub } from '@app/models';
   providedIn: 'root'
 })
 export class HepsubService {
+  private http = inject(HttpClient);
+
 
   private url = `${environment.apiUrl}/hepsub`;
 
-  constructor(private http: HttpClient) {
+  constructor() {
     console.log("HepsubService:super()");
   }
 

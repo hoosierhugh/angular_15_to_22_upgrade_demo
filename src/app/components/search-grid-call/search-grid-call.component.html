@@ -1,37 +1,38 @@
-<ng-container *ngIf="isLokiQuery; else base">
-    <app-loki-results
-        [isDisplayResult]="true"
-        [isResultPage]="!id"
-        [logQlText]="queryTextLoki"
-    ></app-loki-results>
-</ng-container>
-<ng-template #base>
+@if (isLokiQuery) {
+  <app-loki-results
+    [isDisplayResult]="true"
+    [isResultPage]="!id"
+    [logQlText]="queryTextLoki"
+  ></app-loki-results>
+} @else {
+  @if (!inChartContainer) {
     <div
-        class="regex-container"
-        *ngIf="!inChartContainer"
+      class="regex-container"
         [className]="
             'regex-container' + (source !== 'resultPage' ? '' : ' inContainer')
         "
-    >
+      >
+      @if (showRegex) {
         <input
-            *ngIf="showRegex"
-            class="regex-filter"
-            [ngStyle]="{ width: inChartContainer ? '0px' : '' }"
-            placeholder="Regex Results Filter"
-            type="search"
-            id="regexfilter"
-            [(ngModel)]="filterGridValue"
-            (ngModelChange)="setExternalFilter()"
-        />
-        <button
-            matTooltip="{{ 'searchGridCall.filterResults' | translate }}"
-            class="regex-button"
-            (click)="toggleRegex()"
+          class="regex-filter"
+          [ngStyle]="{ width: inChartContainer ? '0px' : '' }"
+          placeholder="Regex Results Filter"
+          type="search"
+          id="regexfilter"
+          [(ngModel)]="filterGridValue"
+          (ngModelChange)="setExternalFilter()"
+          />
+      }
+      <button
+        matTooltip="{{ 'searchGridCall.filterResults' | translate }}"
+        class="regex-button"
+        (click)="toggleRegex()"
         >
-            <fa-icon icon="search"></fa-icon>
-        </button>
+        <fa-icon icon="search"></fa-icon>
+      </button>
     </div>
-    <!-- <ag-grid-angular
+  }
+  <!-- <ag-grid-angular
         [rowData]="[
             { make: 'Tesla', model: 'Model Y', price: 64950, electric: true },
             { make: 'Ford', model: 'F-Series', price: 33850, electric: false },
@@ -43,8 +44,8 @@
             { field: 'price' },
             { field: 'electric' }
         ]"></ag-grid-angular> -->
-    <ag-grid-angular
-        *ngIf="loader === false"
+@if (loader === false) {
+  <ag-grid-angular
         [ngStyle]="{
             height:
                 source !== 'resultPage'
@@ -53,100 +54,105 @@
             width: '100%',
             display: inChartContainer ? 'none' : 'block'
         }"
-        class="ag-theme-material"
-        [defaultColDef]="defaultColDef"
-        [gridOptions]="gridOptions"
-        [rowData]="rowData"
-        [columnDefs]="columnDefs"
-        [enableRangeSelection]="true"
-        [rowMultiSelectWithClick]="true"
-        [pagination]="true"
-        [context]="context"
-        [enableCellTextSelection]="true"
-        [overlayNoRowsTemplate]="noRowsTemplate"
-        [frameworkComponents]="frameworkComponents"
-        [paginationPageSize]="this.agGridSizeControl.pageSize"
-        [isExternalFilterPresent]="isExternalFilterPresent"
-        [doesExternalFilterPass]="doesExternalFilterPass"
-        [tooltipShowDelay]="50"
-        (cellDoubleClicked)="onCellDoubleClicked($event)"
-        (gridReady)="onGridReady($event)"
-        (sortChanged)="sortChanged($event)"
-        (columnMoved)="sortChanged($event)"
+    class="ag-theme-material"
+    [defaultColDef]="defaultColDef"
+    [gridOptions]="gridOptions"
+    [rowData]="rowData"
+    [columnDefs]="columnDefs"
+    [enableRangeSelection]="true"
+    [rowMultiSelectWithClick]="true"
+    [pagination]="true"
+    [context]="context"
+    [enableCellTextSelection]="true"
+    [overlayNoRowsTemplate]="noRowsTemplate"
+    [frameworkComponents]="frameworkComponents"
+    [paginationPageSize]="this.agGridSizeControl.pageSize"
+    [isExternalFilterPresent]="isExternalFilterPresent"
+    [doesExternalFilterPass]="doesExternalFilterPass"
+    [tooltipShowDelay]="50"
+    (cellDoubleClicked)="onCellDoubleClicked($event)"
+    (gridReady)="onGridReady($event)"
+    (sortChanged)="sortChanged($event)"
+    (columnMoved)="sortChanged($event)"
     >
-    </ag-grid-angular>
-    <mat-paginator
-        class="paginator"
-        [length]="totalPages"
-        [pageSize]="agGridSizeControl.pageSize"
-        [pageSizeOptions]="[25, 50, 100, 200, 500]"
-        (page)="paginationControls($event)"
+  </ag-grid-angular>
+}
+<mat-paginator
+  class="paginator"
+  [length]="totalPages"
+  [pageSize]="agGridSizeControl.pageSize"
+  [pageSizeOptions]="[25, 50, 100, 200, 500]"
+  (page)="paginationControls($event)"
+  >
+</mat-paginator>
+<!-- search slider -->
+@if (source !== 'widget') {
+  <div
+    class="search-slider-footer"
+    [ngStyle]="{ bottom: !isSearchPanel ? '-20rem' : null }"
     >
-    </mat-paginator>
-
-    <!-- search slider -->
-
-    <div
-        *ngIf="source !== 'widget'"
-        class="search-slider-footer"
-        [ngStyle]="{ bottom: !isSearchPanel ? '-20rem' : null }"
-    >
-        <div style="float: right; opacity: 0.7">
-            <button
-                matTooltip="{{ 'searchGridCall.close' | translate }}"
-                (click)="isSearchPanel = false"
-                mat-icon-button
-            >
-                <mat-icon>close</mat-icon>
-            </button>
-        </div>
-        <div class="content">
-            <!-- search slider container -->
-
-            <app-smart-input-widget
-                [onlySmartField]="true"
-                [targetResultId]="id"
-                [fields]="searchSliderFields"
-                [config]="config"
-                [autoline]="true"
-                (dosearch)="isThisSelfQuery = true; update(true)"
-                #searchSlider
-            >
-            </app-smart-input-widget>
-            <mat-label
-                *ngIf="searchSliderFields.length > 0"
+    <div style="float: right; opacity: 0.7">
+      <button
+        matTooltip="{{ 'searchGridCall.close' | translate }}"
+        (click)="isSearchPanel = false"
+        mat-icon-button
+        >
+        <mat-icon>close</mat-icon>
+      </button>
+    </div>
+    <div class="content">
+      <!-- search slider container -->
+      <app-smart-input-widget
+        [onlySmartField]="true"
+        [targetResultId]="id"
+        [fields]="searchSliderFields"
+        [config]="config"
+        [autoline]="true"
+        (dosearch)="isThisSelfQuery = true; update(true)"
+        #searchSlider
+        >
+      </app-smart-input-widget>
+      @if (searchSliderFields.length > 0) {
+        <mat-label
                 style="
                     color: rgba(0, 0, 0, 0.54);
                     font-size: 0.8em;
                     padding-left: 20px;
                 "
-            >
-                {{ "searchGridCall.pressCtrlEnter" | translate }}
-            </mat-label>
-            <div
-                *ngIf="searchSliderFields.length === 0"
-                class="no-smart-warn"
-                [innerHTML]="'searchGridCall.pleaseDoSearch' | translate"
-            ></div>
-        </div>
+          >
+          {{ "searchGridCall.pressCtrlEnter" | translate }}
+        </mat-label>
+      }
+      @if (searchSliderFields.length === 0) {
+        <div
+          class="no-smart-warn"
+          [innerHTML]="'searchGridCall.pleaseDoSearch' | translate"
+        ></div>
+      }
     </div>
-</ng-template>
-<app-loading-circle *ngIf="loader === true"> </app-loading-circle>
-<div class="lds-container onlyLoader" *ngIf="onlyLoader === true">
+  </div>
+}
+}
+@if (loader === true) {
+  <app-loading-circle> </app-loading-circle>
+}
+@if (onlyLoader === true) {
+  <div class="lds-container onlyLoader">
     <h3 style="margin: 0">
-        <div class="lds-ring">
-            <div></div>
-            <div></div>
-            <div></div>
-            <div></div>
-        </div>
+      <div class="lds-ring">
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+      </div>
     </h3>
-</div>
+  </div>
+}
 <!-- ========================== -->
 <!-- TRANSACTION DITAILS DIALOG -->
 
-<app-detail-dialog
-    *ngFor="let item of arrWindow; let idx = index; trackBy: identify"
+@for (item of arrWindow; track identify(idx, item); let idx = $index) {
+  <app-detail-dialog
     [callIDColorList]="callIDColorList"
     [titleId]="item.id"
     [titleName]="item.titleName"
@@ -159,8 +165,9 @@
     [request]="item.request"
     (openMessage)="addWindowMessage($event, null, item)"
     (close)="closeWindow(idx)"
->
-</app-detail-dialog>
+    >
+  </app-detail-dialog>
+}
 
 <!-- (END) TRANSACTION DITAILS DIALOG -->
 <!-- ================================ -->
@@ -168,8 +175,8 @@
 <!-- =============== -->
 <!-- MESSAGE DETAILS -->
 
-<app-modal-resizable
-    *ngFor="let item of arrMessageDetail; let idx = index; trackBy: identify"
+@for (item of arrMessageDetail; track identify(idx, item); let idx = $index) {
+  <app-modal-resizable
     [isOutsideButton]="true"
     [title]="
         ('searchGridCall.messageID' | translate) +
@@ -187,16 +194,20 @@
     [width]="650"
     [height]="400"
     (close)="closeWindowMessage(idx)"
->
-    <app-loading-circle *ngIf="!item.loaded"> </app-loading-circle>
-    <app-message-content
-        *ngIf="item.loaded"
+    >
+    @if (!item.loaded) {
+      <app-loading-circle> </app-loading-circle>
+    }
+    @if (item.loaded) {
+      <app-message-content
         [isDecoded]="item.isDecoded"
         [rowData]="rowData"
         [data]="item.data"
-    >
-    </app-message-content>
-</app-modal-resizable>
+        >
+      </app-message-content>
+    }
+  </app-modal-resizable>
+}
 
 <!-- (END) MESSAGE DETAILS -->
 <!-- ===================== -->
@@ -204,8 +215,10 @@
 <!-- ================= -->
 <!-- grid-chart-dialog -->
 
-<div *ngIf="!inChartContainer && !isLokiQuery">
-    <app-modal-resizable
+@if (!inChartContainer && !isLokiQuery) {
+  <div>
+    @for (item of arrChartWindow; track item; let idx = $index) {
+      <app-modal-resizable
         [isOutsideButton]="false"
         [title]="('searchGridCall.report' | translate) + ': ' + item.id"
         [headerColor]="item.headerColor"
@@ -215,22 +228,24 @@
         [height]="400"
         [minWidth]="600"
         [minHeight]="400"
-        *ngFor="let item of arrChartWindow; let idx = index"
-    >
-        <app-grid-chart-dialog
-            [titleId]="item.id"
-            [mouseEventData]="item.mouseEventData"
-            [gridApiData]="item.gridApiData"
-            [headerColor]="item.headerColor"
-            [isLoaded]="item.loaded"
-            (openMessage)="generateChart($event)"
         >
+        <app-grid-chart-dialog
+          [titleId]="item.id"
+          [mouseEventData]="item.mouseEventData"
+          [gridApiData]="item.gridApiData"
+          [headerColor]="item.headerColor"
+          [isLoaded]="item.loaded"
+          (openMessage)="generateChart($event)"
+          >
         </app-grid-chart-dialog>
-    </app-modal-resizable>
-</div>
-<div *ngIf="inChartContainer && !isLokiQuery" style="height: calc(100% - 2rem)">
-    <app-grid-chart-dialog
-        *ngFor="let item of arrChartWindow; let idx = index"
+      </app-modal-resizable>
+    }
+  </div>
+}
+@if (inChartContainer && !isLokiQuery) {
+  <div style="height: calc(100% - 2rem)">
+    @for (item of arrChartWindow; track item; let idx = $index) {
+      <app-grid-chart-dialog
         [titleId]="item.id"
         [mouseEventData]="item.mouseEventData"
         [gridApiData]="item.gridApiData"
@@ -242,57 +257,63 @@
         (openMessage)="generateChart($event)"
         (changeSettings)="chartChangeSettings($event)"
         style="height: 100%"
-    ></app-grid-chart-dialog>
-</div>
+      ></app-grid-chart-dialog>
+    }
+  </div>
+}
 
 <!-- (END) grid-chart-dialog -->
 <!-- ======================= -->
-<app-loading-circle *ngIf="isLoading"> </app-loading-circle>
+@if (isLoading) {
+  <app-loading-circle> </app-loading-circle>
+}
 
-<div
-    *ngIf="!isLokiQuery && !inChartContainer && !loader"
+@if (!isLokiQuery && !inChartContainer && !loader) {
+  <div
     style="position: absolute; bottom: 0.4rem; left: 0.2rem; opacity: 0.7"
->
-    <button
-        matTooltip="{{ 'searchGridCall.gridSettings' | translate }}"
-        mat-icon-button
-        (click)="onSettingButtonClick()"
-        onclick="this.blur()"
     >
-        <mat-icon>settings_applications</mat-icon>
-    </button>
     <button
-        *ngIf="source !== 'widget'"
+      matTooltip="{{ 'searchGridCall.gridSettings' | translate }}"
+      mat-icon-button
+      (click)="onSettingButtonClick()"
+      onclick="this.blur()"
+      >
+      <mat-icon>settings_applications</mat-icon>
+    </button>
+    @if (source !== 'widget') {
+      <button
         mat-icon-button
         matTooltip="{{ 'searchGridCall.searchConfig' | translate }}"
         (click)="isSearchPanel = !isSearchPanel"
         onclick="this.blur()"
         class="smart-input"
-    >
+        >
         <mat-icon
-            [matBadge]="getSearchSlider()"
-            [matBadgeHidden]="getSearchSlider() === 0"
-            matBadgeColor="accent"
-        >
-            search</mat-icon
-        >
-    </button>
-    <button
+          [matBadge]="getSearchSlider()"
+          [matBadgeHidden]="getSearchSlider() === 0"
+          matBadgeColor="accent"
+          >
+          search</mat-icon
+          >
+        </button>
+      }
+      <button
         mat-icon-button
         matTooltip="{{ 'searchGridCall.exportDataFromGrid' | translate }}"
         (click)="export()"
         onclick="this.blur()"
-    >
+        >
         <mat-icon>get_app</mat-icon>
-    </button>
-
-    <button
-        mat-icon-button
-        matTooltip="{{ 'searchGridCall.gridDataIntoChart' | translate }}"
-        (click)="generateChart($event)"
-        *ngIf="rowData?.length"
-        onclick="this.blur()"
-    >
-        <mat-icon>insert_chart_outlined</mat-icon>
-    </button>
-</div>
+      </button>
+      @if (rowData?.length) {
+        <button
+          mat-icon-button
+          matTooltip="{{ 'searchGridCall.gridDataIntoChart' | translate }}"
+          (click)="generateChart($event)"
+          onclick="this.blur()"
+          >
+          <mat-icon>insert_chart_outlined</mat-icon>
+        </button>
+      }
+    </div>
+  }

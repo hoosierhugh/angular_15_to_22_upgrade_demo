@@ -13,10 +13,10 @@ export interface PreferenceMapping {
     partition_step: number;
     create_index: unknown;
     create_table: string;
-    correlation_mapping: Array<{
+    correlation_mapping: {
         uuid_field?: { profile?: string };
         [key: string]: unknown;
-    }>;
+    }[];
     fields_mapping: PreferenceMappingFieldModel[];
     user_mapping?: PreferenceMappingFieldModel[];
     fields_settings: unknown;

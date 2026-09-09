@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { AuthenticationService } from './authentication.service';
 import { PreferenceUserSettingsService } from './preferences/user-settings.service';
 import { ApiResponse } from '@app/models';
@@ -28,14 +28,14 @@ interface SecurityUserSettings {
     providedIn: 'root'
 })
 export class UserSecurityService {
+    private authenticationService = inject(AuthenticationService);
+    private preferenceUserSettingsService = inject(PreferenceUserSettingsService);
+
 
     private isAdmin = false;
     private userSettings: SecurityUserSettings | undefined;
 
-    constructor(
-        private authenticationService: AuthenticationService,
-        private preferenceUserSettingsService: PreferenceUserSettingsService
-    ) {
+    constructor() {
         this.getAdmin();
     }
     public getAdmin() {

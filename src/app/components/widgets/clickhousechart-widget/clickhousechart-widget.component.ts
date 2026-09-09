@@ -1,7 +1,7 @@
 import { SettingClickhouseChartWidgetComponent } from './setting-clickhousechart-widget.component';
 
 import { CdkVirtualScrollViewport, VIRTUAL_SCROLL_STRATEGY } from '@angular/cdk/scrolling';
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, EventEmitter, Input, OnDestroy, OnInit, Output, ViewChild, ViewEncapsulation } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, EventEmitter, Input, OnDestroy, OnInit, Output, ViewChild, ViewEncapsulation, inject } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { CustomVirtualScrollStrategy } from '@app/components/search-grid-call';
 import { Functions } from '@app/helpers/functions';
@@ -49,6 +49,12 @@ interface ClickhouseChartResult {
 
 })
 export class ClickhouseChartWidgetComponent implements IWidget, OnInit, OnDestroy {
+    dialog = inject(MatDialog);
+    private _dtrs = inject(DateTimeRangeService);
+    private cdr = inject(ChangeDetectorRef);
+    private _cs = inject(ClickhouseSerivce);
+    translateService = inject(TranslateService);
+
     @ViewChild(BaseChartDirective) private _chart: BaseChartDirective;
     @ViewChild('virtualScroll') virtualScroll: CdkVirtualScrollViewport;
     @ViewChild('virtualScrollbar') virtualScrollbar: ElementRef;
@@ -132,13 +138,9 @@ export class ClickhouseChartWidgetComponent implements IWidget, OnInit, OnDestro
             return item.legend.legendItems;
         }
     };
-    constructor(
-        public dialog: MatDialog,
-        private _dtrs: DateTimeRangeService,
-        private cdr: ChangeDetectorRef,
-        private _cs: ClickhouseSerivce,
- public translateService:TranslateService
-    ) {
+    constructor() {
+         const translateService = this.translateService;
+
          translateService.addLangs(['en'])
         translateService.setDefaultLang('en')
     }
@@ -300,8 +302,8 @@ export class ClickhouseChartWidgetComponent implements IWidget, OnInit, OnDestro
         this.cdr.detectChanges();
     }
     querybuilder(config: any) {
-        const dataquery: Array<any> = config.dataquery.data;
-        const formattedQuery: Array<any> = [];
+        const dataquery: any[] = config.dataquery.data;
+        const formattedQuery: any[] = [];
         dataquery.forEach((item: any) => {
             const timeRange = this._dtrs.getDatesForQuery();
             let operator = item.operator;
@@ -348,7 +350,7 @@ export class ClickhouseChartWidgetComponent implements IWidget, OnInit, OnDestro
         });
         return formattedQuery;
     }
-    getDataByQuery(requestList: Array<any>, chartType) {
+    getDataByQuery(requestList: any[], chartType) {
         const request = requestList.shift();
         if (requestList.length > 0 || request) {
             this._cs.getRawQuery({ query: request.query }).toPromise().then(

@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component, Input, OnInit, ViewChild, ChangeDetectionStrategy } from '@angular/core';
+import { ChangeDetectorRef, Component, Input, OnInit, ViewChild, ChangeDetectionStrategy, inject } from '@angular/core';
 import { MatColumnDef, MatTable } from '@angular/material/table';
 
 @Component({
@@ -9,10 +9,11 @@ import { MatColumnDef, MatTable } from '@angular/material/table';
     standalone: false
 })
 export class DbStatsCellComponent implements OnInit {
+    table = inject<MatTable<unknown>>(MatTable);
+    private cdr = inject(ChangeDetectorRef);
+
     @Input() column;
     @ViewChild(MatColumnDef) columnDef: MatColumnDef;
-
-    constructor(public table: MatTable<unknown>,  private cdr: ChangeDetectorRef) { }
 
     ngOnInit() {
         if (this.table) {

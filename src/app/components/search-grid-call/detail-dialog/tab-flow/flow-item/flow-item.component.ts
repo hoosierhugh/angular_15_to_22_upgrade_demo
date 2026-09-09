@@ -1,13 +1,4 @@
-import {
-  Component,
-  OnInit,
-  Input,
-  Output,
-  EventEmitter,
-  ChangeDetectionStrategy,
-  AfterViewChecked,
-  ChangeDetectorRef,
-} from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter, ChangeDetectionStrategy, AfterViewChecked, ChangeDetectorRef, inject } from '@angular/core';
 import { Functions } from '@app/helpers/functions';
 
 @Component({
@@ -18,6 +9,8 @@ import { Functions } from '@app/helpers/functions';
     standalone: false
 })
 export class FlowItemComponent implements AfterViewChecked {
+  private cdr = inject(ChangeDetectorRef);
+
   _item: FlowDisplayItem;
   @Input() set item(val: FlowDisplayItem) {
     this._item = val;
@@ -28,10 +21,8 @@ export class FlowItemComponent implements AfterViewChecked {
   @Input() isSimplify = true;
   @Input() isGroupByAlias = false;
   @Input() idx = 0;
-  @Input() isAbsolute: boolean = false;
+  @Input() isAbsolute = false;
   @Output() itemClick = new EventEmitter<{ idx: number; event: MouseEvent }>();
-
-  constructor(private cdr: ChangeDetectorRef) { }
 
   onClickItem(idx, event) {
     this.itemClick.emit({ idx, event });

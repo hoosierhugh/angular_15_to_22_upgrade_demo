@@ -1,11 +1,11 @@
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { Observable } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 import { environment } from '@environments/environment';
 
 export interface SmartLabelResponse {
     data: {
-        data: Array<{ value: string }>;
+        data: { value: string }[];
     };
 }
 
@@ -13,9 +13,10 @@ export interface SmartLabelResponse {
   providedIn: 'root'
 })
 export class SmartService {
-    constructor(private http: HttpClient) { }
+    private http = inject(HttpClient);
 
-    getLabelByUrl(url: string, text: string = ''): Observable<SmartLabelResponse> {
+
+    getLabelByUrl(url: string, text = ''): Observable<SmartLabelResponse> {
         return this.http.get<SmartLabelResponse>(`${environment.apiUrl}${url}?query=${encodeURIComponent(JSON.stringify({data: text}))}`);
     }
 }

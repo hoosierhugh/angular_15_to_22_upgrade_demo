@@ -1,15 +1,16 @@
 <ng-container [matColumnDef]="column" >
-    <th mat-header-cell *matHeaderCellDef mat-sort-header
-        style="text-align: center;" [style.max-width.px]="100">{{ column }}</th>
-    <td mat-cell 
-    *matCellDef="let item"  
+  <th mat-header-cell *matHeaderCellDef mat-sort-header
+  style="text-align: center;" [style.max-width.px]="100">{{ column }}</th>
+  <td mat-cell
+    *matCellDef="let item"
     [style.max-width.px]="100">
-       <span *ngIf="item[column]; else noItem"
-       [ngClass]="{'expired': expired(item[column])}">{{ formatDate(item[column])}}
-    </span> 
-    <ng-template #noItem>
-        <span> {{ formatDate(item[column])}}
-     </span> 
-    </ng-template>
-    </td>
+    @if (item[column]) {
+      <span
+        [ngClass]="{'expired': expired(item[column])}">{{ formatDate(item[column])}}
+      </span>
+    } @else {
+      <span> {{ formatDate(item[column])}}
+      </span>
+    }
+  </td>
 </ng-container>

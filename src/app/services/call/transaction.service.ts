@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { Observable } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 import { environment } from '@environments/environment';
@@ -11,13 +11,14 @@ import { WorkerCommands } from '@app/models/worker-commands.module';
     providedIn: 'root'
 })
 export class CallTransactionService {
-    private url = `${environment.apiUrl}/call`;
+    private http = inject(HttpClient);
+    private _ipalias = inject(PreferenceIpAliasService);
 
-    constructor(private http: HttpClient, private _ipalias: PreferenceIpAliasService) { }
+    private url = `${environment.apiUrl}/call`;
 
     getTransaction(data: any): Observable<any> {
         return this.http.post<any>(`${this.url}/transaction`, data).pipe(map(async transactionData => {
-            let ipAliasesData: any = null;
+            const ipAliasesData: any = null;
             // try {
             //     ipAliasesData = await this._ipalias.getAll().toPromise();
             // } catch (err) { }

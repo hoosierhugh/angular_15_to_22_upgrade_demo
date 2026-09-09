@@ -1,7 +1,8 @@
 <div class="alertWrapper">
-    <div *ngFor="let message of messages | keyvalue: returnZero">
+  @for (message of messages | keyvalue: returnZero; track message) {
+    <div>
+      @if (message.value.isOpen) {
         <div
-            *ngIf="message.value.isOpen"
             [ngClass]="{
                 'message-object': message.value.isOpen,
                 'alert-success': message.value.type === 'success',
@@ -9,20 +10,21 @@
                 'alert-warning': message.value.type === 'warning',
                 'alert-notice': message.value.type === 'notice'
             }"
-        >
-            <mat-icon
-                style="margin-left: 10px"
-                class="close-message copy"
-                [matTooltip]="'alert.copyFullErrorMessage' | translate"
-                matTooltipPosition="above"
-                (click)="copy(message.key)"
-                >content_copy</mat-icon
+          >
+          <mat-icon
+            style="margin-left: 10px"
+            class="close-message copy"
+            [matTooltip]="'alert.copyFullErrorMessage' | translate"
+            matTooltipPosition="above"
+            (click)="copy(message.key)"
+            >content_copy</mat-icon
             >
             <div class="message-object-text">{{ message.value.object }}</div>
-        </div>
+          </div>
+        }
         <div
-            (mouseover)="resetTimer(message.key)"
-            (mouseout)="clearMessageTimer(message.key)"
+          (mouseover)="resetTimer(message.key)"
+          (mouseout)="clearMessageTimer(message.key)"
             [ngClass]="{
                 alert: message,
                 'alert-success': message.value.type === 'success',
@@ -30,30 +32,36 @@
                 'alert-warning': message.value.type === 'warning',
                 'alert-notice': message.value.type === 'notice'
             }"
-            id="alert"
-        >
-            <div class="alert-type">
-                <div class="circle">
-                    <div [ngSwitch]="message.value.type">
-                        <fa-icon *ngSwitchCase="'error'" icon="times"></fa-icon>
-                        <fa-icon
-                            *ngSwitchCase="'success'"
-                            icon="check"
-                        ></fa-icon>
-                        <fa-icon
-                            *ngSwitchCase="'warning'"
-                            icon="exclamation-triangle"
-                        ></fa-icon>
-                        <fa-icon *ngSwitchCase="'notice'" icon="info"></fa-icon>
-                    </div>
-                </div>
+          id="alert"
+          >
+          <div class="alert-type">
+            <div class="circle">
+              <div>
+                @switch (message.value.type) {
+                  @case ('error') {
+                    <fa-icon icon="times"></fa-icon>
+                  }
+                  @case ('success') {
+                    <fa-icon
+                      icon="check"
+                    ></fa-icon>
+                  }
+                  @case ('warning') {
+                    <fa-icon
+                      icon="exclamation-triangle"
+                    ></fa-icon>
+                  }
+                  @case ('notice') {
+                    <fa-icon icon="info"></fa-icon>
+                  }
+                }
+              </div>
             </div>
-
-            <div class="message-text" id="alert-message">
-                {{ message.value.text }}
-            </div>
-
-            <div
+          </div>
+          <div class="message-text" id="alert-message">
+            {{ message.value.text }}
+          </div>
+          <div
                 style="
                     height: 20px;
                     width: 100px;
@@ -61,11 +69,11 @@
                     justify-content: flex-end;
                 "
             >
-                <mat-icon
-                    style="margin-left: 10px"
-                    class="close-message"
-                    (click)="toggleFull(message.key)"
-                    *ngIf="message.value.object"
+            @if (message.value.object) {
+              <mat-icon
+                style="margin-left: 10px"
+                class="close-message"
+                (click)="toggleFull(message.key)"
                     [matTooltip]="
                         (message.value.isOpen
                             ? ('alert.hide' | translate)
@@ -74,18 +82,20 @@
                         ('alert.fullNotificationMessage' | translate)
                     "
                 >
-                    {{ message.value.isOpen ? "expand_more" : "expand_less" }}
-                </mat-icon>
-                <mat-icon
-                    style="margin-left: 10px"
-                    class="close-message"
-                    (click)="clearMessage(message.key)"
-                    #tooltip="matTooltip"
-                    [matTooltip]="'alert.closeNotification' | translate"
-                >
-                    close
-                </mat-icon>
-            </div>
+                {{ message.value.isOpen ? "expand_more" : "expand_less" }}
+              </mat-icon>
+            }
+            <mat-icon
+              style="margin-left: 10px"
+              class="close-message"
+              (click)="clearMessage(message.key)"
+              #tooltip="matTooltip"
+              [matTooltip]="'alert.closeNotification' | translate"
+              >
+              close
+            </mat-icon>
+          </div>
         </div>
-    </div>
-</div>
+      </div>
+    }
+  </div>

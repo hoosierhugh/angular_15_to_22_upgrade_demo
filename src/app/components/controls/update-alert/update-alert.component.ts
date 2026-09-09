@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, ChangeDetectionStrategy } from '@angular/core';
+import { Component, OnInit, ViewChild, ChangeDetectionStrategy, inject } from '@angular/core';
 import { UpdateAlertService } from './update-alert.service';
 import { TranslateService } from '@ngx-translate/core'
 
@@ -10,12 +10,16 @@ import { TranslateService } from '@ngx-translate/core'
     standalone: false
 })
 export class UpdateAlertComponent implements OnInit {
+    private updateAlertService = inject(UpdateAlertService);
+    translateService = inject(TranslateService);
+
     @ViewChild('refreshForm', { static: true }) refreshForm;
     message = '';
     refreshURL;
     isMessage = false;
-    constructor(private updateAlertService: UpdateAlertService,
-        public translateService: TranslateService) {
+    constructor() {
+        const translateService = this.translateService;
+
         translateService.addLangs(['en']);
         translateService.setDefaultLang('en')
     };

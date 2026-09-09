@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { HttpClient, HttpErrorResponse, HttpHeaders } from '@angular/common/http';
 
 import { environment } from '@environments/environment';
@@ -13,7 +13,8 @@ interface GetUserProfile {
 }
 @Injectable({ providedIn: 'root' })
 export class PreferenceUserService {
-    constructor(private http: HttpClient) { }
+    private http = inject(HttpClient);
+
     private url = `${environment.apiUrl}/users`;
     getAll() {
         return this.http.get<GetAllUsers>(`${this.url}`);

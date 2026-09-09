@@ -1,15 +1,4 @@
-import {
-  Component,
-  Input,
-  Output,
-  EventEmitter,
-  ChangeDetectionStrategy,
-  ChangeDetectorRef,
-  OnInit,
-  OnDestroy,
-  ViewEncapsulation,
-  AfterViewInit,
-} from '@angular/core';
+import { Component, Input, Output, EventEmitter, ChangeDetectionStrategy, ChangeDetectorRef, OnInit, OnDestroy, ViewEncapsulation, AfterViewInit, inject } from '@angular/core';
 
 import { MatDialog } from '@angular/material/dialog';
 import { SettingProtosearchWidgetComponent } from './setting-protosearch-widget.component';
@@ -44,7 +33,7 @@ interface SearchFieldItem {
   name: string;
   profile: string;
   selection: string;
-  selector?: Array<any>;
+  selector?: any[];
   type: string;
   value?: string;
 }
@@ -69,6 +58,19 @@ interface SearchFieldItem {
   minWidth: 300,
 })
 export class ProtosearchWidgetComponent implements IWidget, OnInit, OnDestroy, AfterViewInit {
+  dialog = inject(MatDialog);
+  private router = inject(Router);
+  private searchService = inject(SearchService);
+  private _pas = inject(PreferenceAdvancedService);
+  private _sss = inject(SessionStorageService);
+  private dashboardService = inject(DashboardService);
+  private _ipas = inject(PreferenceIpAliasService);
+  private cdr = inject(ChangeDetectorRef);
+  private preferenceMappingProtocolService = inject(PreferenceMappingProtocolService);
+  private alertService = inject(AlertService);
+  private authenticationService = inject(AuthenticationService);
+  private translateService = inject(TranslateService);
+
 
   @Input() id: string;
   @Input() config: any;
@@ -104,7 +106,7 @@ export class ProtosearchWidgetComponent implements IWidget, OnInit, OnDestroy, A
   profile_fields;
   profileList;
   widgetId: string;
-  widgetResultList: Array<any>;
+  widgetResultList: any[];
   widgetResultListLastSelect: string;
   isConfig = false;
   // status chips config
@@ -125,21 +127,9 @@ export class ProtosearchWidgetComponent implements IWidget, OnInit, OnDestroy, A
   firstWidgetContainer: any;
   noFunctions = false;
   isWidgetInited = false;
-  constructor(
-    public dialog: MatDialog,
-    private router: Router,
-    private searchService: SearchService,
-    private _pas: PreferenceAdvancedService,
-    private _sss: SessionStorageService,
-    private dashboardService: DashboardService,
-    private _ipas: PreferenceIpAliasService,
-    private cdr: ChangeDetectorRef,
+  constructor() {
+    const translateService = this.translateService;
 
-    private preferenceMappingProtocolService: PreferenceMappingProtocolService,
-    private alertService: AlertService,
-    private authenticationService: AuthenticationService,
-    private translateService: TranslateService
-  ) {
     translateService.addLangs(['en'])
     translateService.setDefaultLang('en')
   }
@@ -820,7 +810,7 @@ export class ProtosearchWidgetComponent implements IWidget, OnInit, OnDestroy, A
   }
 
   private autocompliteFiltring(item: any) {
-    const options: Array<any> = item.form_default;
+    const options: any[] = item.form_default;
     const _filter = (value: string): string[] => {
       const filterValue = value.toLowerCase();
       item.value = value;
@@ -855,8 +845,8 @@ export class ProtosearchWidgetComponent implements IWidget, OnInit, OnDestroy, A
       return;
     }
 
-    let protocol = this.config.config.protocol_id.value;
-    let profile = this.config.config.protocol_profile.value;
+    const protocol = this.config.config.protocol_id.value;
+    const profile = this.config.config.protocol_profile.value;
     this.searchQuery = {
       fields: this.fields
         .filter((item: any) => {

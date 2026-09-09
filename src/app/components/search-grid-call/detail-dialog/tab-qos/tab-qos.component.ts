@@ -2,19 +2,7 @@
  * https://github.com/jjppof/chartjs-plugin-zoom-pan-select
  */
 
-import {
-  Component,
-  OnInit,
-  Input,
-  Output,
-  EventEmitter,
-  ViewChild,
-  ChangeDetectionStrategy,
-  ChangeDetectorRef,
-  AfterViewInit,
-  HostListener,
-  ElementRef
-} from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter, ViewChild, ChangeDetectionStrategy, ChangeDetectorRef, AfterViewInit, HostListener, ElementRef, inject } from '@angular/core';
 import { PreferenceAdvancedService } from '@app/services';
 import { Chart, ChartDataset, ChartType } from 'chart.js';
 import { BaseChartDirective } from 'ng2-charts';
@@ -53,6 +41,9 @@ interface QosWorkerResult {
 })
 
 export class TabQosComponent implements OnInit, AfterViewInit {
+  private cdr = inject(ChangeDetectorRef);
+  private _pas = inject(PreferenceAdvancedService);
+
 
   _qosData: any;
   chartWidthRTP = 100;
@@ -74,19 +65,19 @@ export class TabQosComponent implements OnInit, AfterViewInit {
     return this._qosData;
   }
   @Input() id;
-  @Output() ready: EventEmitter<any> = new EventEmitter();
+  @Output() ready = new EventEmitter<any>();
   @Output() haveData = new EventEmitter();
   isError = false;
   errorMessage: any;
   @ViewChild('chartRTP', { static: false }) chartRTP: BaseChartDirective;
   @ViewChild('chartRTCP', { static: false }) chartRTCP: BaseChartDirective;
   color: any;
-  labels: Array<any> = [];
+  labels: any[] = [];
   isRTCP = false;
   isRTP = false;
   isNoDataRTP = false;
   isNoDataRTCP = false;
-  aliases: Array<string>;
+  aliases: string[];
   public chartDataRTP: ChartDataset[] = [];
 
   public chartLabelsRTP: string[] = [];
@@ -133,12 +124,12 @@ export class TabQosComponent implements OnInit, AfterViewInit {
 
   hideLabelsFlag = true;
   hideLabelsFlagRTP = true;
-  streamsRTCP: Array<any> = [];
-  streamsRTP: Array<any> = [];
+  streamsRTCP: any[] = [];
+  streamsRTP: any[] = [];
   worker: WorkerService;
-  _isLoaded: boolean = false;
-  mosFraction: boolean = true;
-  constructor(private cdr: ChangeDetectorRef, private _pas: PreferenceAdvancedService) {
+  _isLoaded = false;
+  mosFraction = true;
+  constructor() {
 
     this._pas.getAll().toPromise().then(advanced => {
       if (advanced && advanced.data) {
@@ -191,7 +182,7 @@ export class TabQosComponent implements OnInit, AfterViewInit {
 
     if (workerCommand === 'init') {
       this.isError = outData.isError as boolean;
-      this.labels = outData.labels as Array<any>;
+      this.labels = outData.labels as any[];
       this.isRTCP = outData.isRTCP as boolean;
       this.isRTP = outData.isRTP as boolean;
       this.isNoDataRTP = outData.isNoDataRTP as boolean;
@@ -205,12 +196,12 @@ export class TabQosComponent implements OnInit, AfterViewInit {
       this.chartLegend = outData.chartLegend as boolean;
 
       this.chartDataRTCP = outData.chartDataRTCP as ChartDataset[];
-      this.listRTP = outData.listRTP as Array<any>;
-      this.listRTCP = outData.listRTCP as Array<any>;
+      this.listRTP = outData.listRTP as any[];
+      this.listRTCP = outData.listRTCP as any[];
       this.hideLabelsFlag = outData.hideLabelsFlag as boolean;
       this.hideLabelsFlagRTP = outData.hideLabelsFlagRTP as boolean;
-      this.streamsRTCP = outData.streamsRTCP as Array<any>;
-      this.streamsRTP = outData.streamsRTP as Array<any>;
+      this.streamsRTCP = outData.streamsRTCP as any[];
+      this.streamsRTP = outData.streamsRTP as any[];
 
       setTimeout(() => {
         this._isLoaded = true;
@@ -229,14 +220,14 @@ export class TabQosComponent implements OnInit, AfterViewInit {
       this.isNoDataRTCP = outData.isNoDataRTCP as boolean;
       this.chartLabelsRTCP = outData.chartLabelsRTCP as string[];
       this.chartDataRTCP = outData.chartDataRTCP as ChartDataset[];
-      this.streamsRTCP = outData.streamsRTCP as Array<any>;
+      this.streamsRTCP = outData.streamsRTCP as any[];
 
       /** for RTP */
       this.isRTP = outData.isRTP as boolean;
       this.isNoDataRTP = outData.isNoDataRTP as boolean;
       this.chartLabelsRTP = outData.chartLabelsRTP as string[];
       this.chartDataRTP = outData.chartDataRTP as ChartDataset[];
-      this.streamsRTP = outData.streamsRTP as Array<any>;
+      this.streamsRTP = outData.streamsRTP as any[];
 
       this._isLoaded = true;
       const t = performance.now();

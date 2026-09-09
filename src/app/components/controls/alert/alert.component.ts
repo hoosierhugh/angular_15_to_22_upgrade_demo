@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, ChangeDetectionStrategy, ChangeDetectorRef, Inject, EventEmitter, Output } from '@angular/core';
+import { Component, OnInit, OnDestroy, ChangeDetectionStrategy, ChangeDetectorRef, EventEmitter, Output, inject } from '@angular/core';
 
 import { CopyService, } from './../../../services';
 import { TranslateService } from '@ngx-translate/core'
@@ -16,16 +16,19 @@ import { AlertProper, AlertSubject, MessageTimer } from '@app/models/alert.model
 })
 
 export class AlertComponent implements OnInit, OnDestroy {
+    translateService = inject(TranslateService);
+    private copyService = inject(CopyService);
+    private cdr = inject(ChangeDetectorRef);
+    message = inject<AlertSubject>(ALERT_OVERLAY);
+
     timeoutId: ReturnType<typeof setTimeout>;
     isOpen = false;
-    messages: Map<string, AlertProper> = new Map();
-    guidArray: Array<string> = [];
-    constructor(
-        public translateService: TranslateService,
-        private copyService: CopyService,
-        private cdr: ChangeDetectorRef,
-        @Inject(ALERT_OVERLAY) public message: AlertSubject
-    ) {
+    messages = new Map<string, AlertProper>();
+    guidArray: string[] = [];
+    constructor() {
+        const translateService = this.translateService;
+        const message = this.message;
+
         this.addNotification(message, true)
         translateService.addLangs(['en'])
         translateService.setDefaultLang('en')
@@ -64,15 +67,15 @@ export class AlertComponent implements OnInit, OnDestroy {
         this.messages.set(guid, message)
         if (message.isOpen) {
             this.resetTimer(guid);
-        } 
+        }
     }
-    addNotification(message: AlertSubject, firstBoot: boolean = false) {
+    addNotification(message: AlertSubject, firstBoot = false) {
         const guid = Functions.newGuid();
         const timeout = setTimeout(() => {
             this.clearMessage(guid);
         }, MessageTimer);
         const messageProper: AlertProper = {...message, timeout, isOpen: false }
-        
+
         if (this.guidArray.length >= 3) {
             const removedGuid = this.guidArray.shift();
             this.messages.delete(removedGuid);

@@ -1,15 +1,4 @@
-import {
-    AfterViewInit,
-    ChangeDetectionStrategy,
-    ChangeDetectorRef,
-    Component,
-    EventEmitter,
-    Input,
-    OnDestroy,
-    OnInit,
-    Output,
-    ViewChild
-} from '@angular/core';
+import { AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, EventEmitter, Input, OnDestroy, OnInit, Output, ViewChild, inject } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { SearchGridCallComponent } from '@app/components/search-grid-call/search-grid-call.component';
 import { Functions } from '@app/helpers/functions';
@@ -41,6 +30,10 @@ interface ResultWidgetConfig {
     minWidth: 650,
 })
 export class ResultWidgetComponent implements IWidget, OnInit, AfterViewInit, OnDestroy {
+    dialog = inject(MatDialog);
+    private dashboardService = inject(DashboardService);
+    private cdr = inject(ChangeDetectorRef);
+
     @Input() id: string;
     @Input() config: ResultWidgetConfig;
     @Output() changeSettings = new EventEmitter<WidgetSettingsChange<ResultWidgetConfig>>();
@@ -53,12 +46,6 @@ export class ResultWidgetComponent implements IWidget, OnInit, AfterViewInit, On
     isLoaded = false;
     dashboard: unknown;
     source = 'widget';
-
-    constructor(
-        public dialog: MatDialog,
-        private dashboardService: DashboardService,
-        private cdr: ChangeDetectorRef
-    ) { }
     ngAfterViewInit(): void {
         // Called after ngAfterContentInit when the component's view has been initialized. Applies to components only.
         // Add 'implements AfterViewInit' to the class.

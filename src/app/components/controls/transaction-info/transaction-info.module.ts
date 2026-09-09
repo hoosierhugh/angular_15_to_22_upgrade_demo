@@ -1,4 +1,4 @@
-import { NgModule } from '@angular/core';
+import { NgModule, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { TransactionInfoComponent } from './transaction-info.component';
 import { MatRadioModule } from '@angular/material/radio';
@@ -37,7 +37,9 @@ import { TranslateModule } from '@ngx-translate/core';
     exports: [TransactionInfoComponent]
 })
 export class TransactionInfoModule {
-    constructor(library: FaIconLibrary) {
+    constructor() {
+        const library = inject(FaIconLibrary);
+
         library.addIconPacks(fas as IconPack, fab as IconPack, far as IconPack);
     }
 }

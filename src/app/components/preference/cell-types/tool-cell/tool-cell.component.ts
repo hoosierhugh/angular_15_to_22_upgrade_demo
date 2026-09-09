@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component, Input, OnInit, Output, ViewChild, EventEmitter, ChangeDetectionStrategy } from '@angular/core';
+import { ChangeDetectorRef, Component, Input, OnInit, Output, ViewChild, EventEmitter, ChangeDetectionStrategy, inject } from '@angular/core';
 import { MatColumnDef, MatTable } from '@angular/material/table';
 import { TranslateService } from '@ngx-translate/core';
 @Component({
@@ -9,6 +9,10 @@ import { TranslateService } from '@ngx-translate/core';
     standalone: false
 })
 export class ToolCellComponent implements OnInit {
+    table = inject<MatTable<unknown>>(MatTable);
+    private cdr = inject(ChangeDetectorRef);
+    translateService = inject(TranslateService);
+
     @Input() column: string;
     @Input() isAccess: Record<string, boolean>;
     @Input() page: string;
@@ -17,11 +21,9 @@ export class ToolCellComponent implements OnInit {
     @Output() resyncDialog = new EventEmitter<unknown>();
     @Output() resetDialog = new EventEmitter<unknown>();
     @Output() deleteDialog = new EventEmitter<unknown>();
-    constructor(
-      public table: MatTable<unknown>,
-      private cdr: ChangeDetectorRef,
-      public translateService: TranslateService
-      ) {
+    constructor() {
+         const translateService = this.translateService;
+
          translateService.addLangs(['en'])
         translateService.setDefaultLang('en')
        }

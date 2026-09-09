@@ -1,6 +1,6 @@
 import { HepLogService } from './hep-log.service';
 import { AgentsubService } from '@app/services/agentsub.service';
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { CallReportService } from '@app/services';
 import { CallTransactionService } from '@app/services';
 import { Observable, lastValueFrom } from 'rxjs';
@@ -16,16 +16,15 @@ import { DateTimeRangeService } from '@services/data-time-range.service';
   providedIn: 'root'
 })
 export class FullTransactionService {
+  private callReportService = inject(CallReportService);
+  private callTransactionService = inject(CallTransactionService);
+  private hepLogService = inject(HepLogService);
+  private agentsubService = inject(AgentsubService);
+  private preferenceHepsubService = inject(PreferenceHepsubService);
+  private _pass = inject(PreferenceAgentsubService);
+  private dateTimeRangeService = inject(DateTimeRangeService);
+
   isReadyAfterCollectData = false;
-  constructor(
-    private callReportService: CallReportService,
-    private callTransactionService: CallTransactionService,
-    private hepLogService: HepLogService,
-    private agentsubService: AgentsubService,
-    private preferenceHepsubService: PreferenceHepsubService,
-    private _pass: PreferenceAgentsubService,
-    private dateTimeRangeService: DateTimeRangeService
-  ) { }
 
   public getTransactionData(requestTransaction, dateFormat): Observable<any> {
     const _worker = async data => await WorkerService.doOnce(WorkerCommands.TRANSACTION_SERVICE_FULL, data);

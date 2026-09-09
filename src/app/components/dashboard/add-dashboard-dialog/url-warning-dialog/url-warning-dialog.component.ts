@@ -1,4 +1,4 @@
-import { Component, Inject, ChangeDetectionStrategy } from '@angular/core';
+import { Component, ChangeDetectionStrategy, inject } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA} from '@angular/material/dialog';
 
 @Component({
@@ -9,10 +9,9 @@ import { MatDialogRef, MAT_DIALOG_DATA} from '@angular/material/dialog';
     standalone: false
 })
 export class UrlWarningDialog {
+    dialogRef = inject<MatDialogRef<UrlWarningDialog>>(MatDialogRef);
+    data = inject(MAT_DIALOG_DATA);
 
-    constructor(
-        public dialogRef: MatDialogRef<UrlWarningDialog>,
-        @Inject(MAT_DIALOG_DATA) public data: unknown) {}
 
     onNoClick(): void {
         this.dialogRef.close();

@@ -1,4 +1,4 @@
-import { NgModule } from '@angular/core';
+import { NgModule, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { CodeStyleFieldComponent } from './code-style-field.component';
 import { MatMenuModule } from '@angular/material/menu';
@@ -21,7 +21,9 @@ import { far } from '@fortawesome/free-regular-svg-icons';
 })
 export class CodeStyleFieldModule {
 
-  constructor(library: FaIconLibrary) {
+  constructor() {
+    const library = inject(FaIconLibrary);
+
     library.addIconPacks(fas as IconPack, fab as IconPack, far as IconPack);
   }
 }
