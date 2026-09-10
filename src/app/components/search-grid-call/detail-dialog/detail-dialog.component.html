@@ -2,7 +2,7 @@
     [headerColor]="headerColor" (closeDialog)="onClose()" [mouseEventData]="mouseEventData" [width]="1400" [height]="670"
     [minWidth]="600" [id]='titleId' [minHeight]="400" [sharedUrl]="'/transaction/' + sharedGUID"
     [objectData]="objectData" (browserWindow)="onBrowserWindow($event)">
-    <tooltip [isForPopup]="true"></tooltip>
+    <app-tooltip [isForPopup]="true"></app-tooltip>
     @if (!isLoaded || exportAsPNG || showLoader) {
         <app-loading-circle></app-loading-circle>
     }

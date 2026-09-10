@@ -78,9 +78,9 @@ export class ExportDialogComponent implements OnInit {
     }
     ngOnInit() {
         if (typeof this.apiColumn?.getAllColumns() !== 'undefined' && this.apiColumn.getAllColumns() !== null) {
-            for (let i = 0; i < this._bufferData.length; i++) {
-                if (this._bufferData[i].selected) {
-                    this.exportColumns.push(this._bufferData[i].field);
+            for (const item of this._bufferData) {
+                if (item.selected) {
+                    this.exportColumns.push(item.field);
                 }
             }
             this.params.gridExport.columnKeys = this.exportColumns;
@@ -93,9 +93,9 @@ export class ExportDialogComponent implements OnInit {
         if (typeof this.apiColumn?.getAllColumns() !== 'undefined' && this.apiColumn.getAllColumns() !== null) {
             this._bufferData = Functions.cloneObject(this.allColumnIds);
             this.exportColumns = [];
-            for (let i = 0; i < this._bufferData.length; i++) {
-                if (this._bufferData[i].selected) {
-                    this.exportColumns.push(this._bufferData[i].field);
+            for (const item of this._bufferData) {
+                if (item.selected) {
+                    this.exportColumns.push(item.field);
                 }
             }
             this.params.gridExport.columnKeys = this.exportColumns;

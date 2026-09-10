@@ -31,7 +31,7 @@ export class NgSelectErrorStateMatcher {
 }
 
 @Directive({
-       selector: '[ngSelectMulti]',
+       selector: '[appNgSelectMulti]',
     providers: [
         {
             provide: MatFormFieldControl,

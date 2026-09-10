@@ -8,7 +8,7 @@ import { SearchGridCellParams } from './search-grid-renderer.types';
         
         <span class='cell-wrapper' (mousedown)='startCopy()' (mouseup)='copy(params.value)'>
             <div class="user-actions">
-                <a (click)="openTransactionPopup($event)"
+                <a tabindex="0" (click)="openTransactionPopup($event)" (keydown)="openTransactionPopup($event)"
                 class="material-icons md-18">open_in_new</a>
             </div>
         </span>

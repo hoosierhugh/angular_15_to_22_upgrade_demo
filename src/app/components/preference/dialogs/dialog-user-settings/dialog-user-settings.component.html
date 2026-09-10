@@ -97,27 +97,27 @@
       <hr />
       <strong>{{ 'preference.userSettings.dialog.data' | translate }}</strong>
       <hr />
-      <full-screen (fullPage)='disableClose($event)'
+      <app-full-screen (fullPage)='disableClose($event)'
         (import)='import($event, "data")'
         [data]='{json:data.data.data, title: data.data.category + " " + data.data.param, type: "json"}'>
         <!-- <ace-editor [mode]="'json'" [theme]="'monokai'" [readOnly]="false" [(text)]="data.data.data" #data_view
       [style.min-height.%]="100" [disabled]="!isAdmin"></ace-editor> -->
       <app-codejar-wrapper [mode]="'json'" [theme]="'monokai'" [readOnly]="false" [(text)]="data.data.data" #data_view
       [style.min-height.%]="100" [disabled]="!isAdmin"></app-codejar-wrapper>
-    </full-screen>
+    </app-full-screen>
   </mat-tab>
   <mat-tab label="Setting">
     <hr />
     <strong>Setting</strong>
     <hr />
-    <full-screen (fullPage)='disableClose($event)'
+    <app-full-screen (fullPage)='disableClose($event)'
       (import)='import($event,"setting")'
       [data]='{json:data.data.setting, title: data.data.category + " " + data.data.param, type: "json"}'>
       <!-- <ace-editor [mode]="'json'" [theme]="'monokai'" [readOnly]="false" [(text)]="data.data.setting" #data_view
     [style.min-height.%]="100" [disabled]="!isAdmin"></ace-editor> -->
     <app-codejar-wrapper [mode]="'json'" [theme]="'monokai'" [readOnly]="false" [(text)]="data.data.setting" #data_view
     [style.min-height.%]="100" [disabled]="!isAdmin"></app-codejar-wrapper>
-  </full-screen>
+  </app-full-screen>
 </mat-tab>
 </mat-tab-group>
 </div>

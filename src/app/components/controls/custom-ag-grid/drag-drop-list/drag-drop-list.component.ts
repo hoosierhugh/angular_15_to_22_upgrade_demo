@@ -14,7 +14,7 @@ export class DragDropListComponent implements OnInit {
     inactiveList: any[] = [];
     activeList: any[] = [];
 
-    @Output() change = new EventEmitter<any> ();
+    @Output() changed = new EventEmitter<any> ();
     @Output() order = new EventEmitter<any> ();
     @Input() sortlistactive: any[];
     @Input() set list(val) {
@@ -69,7 +69,7 @@ export class DragDropListComponent implements OnInit {
         });
         const newProto = [].concat(this.activeList, this.inactiveList);
         const sortedProto = newProto.sort((a, b) => a.idx - b.idx);
-        this.change.emit(newProto);
+        this.changed.emit(newProto);
         this.order.emit({
             sortedProto: sortedProto,
             newProto: newProto,

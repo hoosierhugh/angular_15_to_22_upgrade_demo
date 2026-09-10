@@ -6,7 +6,7 @@ import { SearchGridCellParams } from './search-grid-renderer.types';
     selector: 'app-child-cell',
     template: `
     <span class='cell-wrapper' [ngClass]="{'selected': selected}" (mousedown)='startCopy()' (mouseup)='copy(params.value)'>
-        <a (click)="openTransactionPopup($event)" [matTooltip]='callid' style="overflow: hidden;">{{callid}}</a>
+        <a tabindex="0" (click)="openTransactionPopup($event)" (keydown)="openTransactionPopup($event)" [matTooltip]='callid' style="overflow: hidden;">{{callid}}</a>
     </span>`,
     styles: ['a { user-select: text; color: inherit; text-decoration: unset; overflow: hidden; }', `
     ::-moz-selection {

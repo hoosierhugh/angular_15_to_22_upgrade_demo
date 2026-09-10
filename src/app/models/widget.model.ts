@@ -11,10 +11,10 @@ export interface WidgetModel {
     controllerAs?: string;
     sizeX?: number;
     sizeY?: number;
-    config?: {};
-    edit?: {};
+    config?: Record<string, unknown>;
+    edit?: Record<string, unknown>;
     row?: number;
     col?: number;
-    api?:  {};
+    api?: Record<string, unknown>;
     uuid?:  string;
 }

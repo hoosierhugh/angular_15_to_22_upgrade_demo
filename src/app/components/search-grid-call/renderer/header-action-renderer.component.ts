@@ -6,7 +6,7 @@ import { MatDialog } from '@angular/material/dialog';
 @Component({
     template: `
         <div class="user-actions">
-            <a (click)="onCheckAllClick()" class="material-icons md-18">done_outline</a>
+            <a tabindex="0" (click)="onCheckAllClick()" (keydown)="onCheckAllClick()" class="material-icons md-18">done_outline</a>
         </div>`,
     styles: [
         `.btn { line-height: 0.5 }`

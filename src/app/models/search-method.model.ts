@@ -1,2 +1,1 @@
-export interface SearchMethod {
-}
+export type SearchMethod = object;

@@ -68,14 +68,14 @@
     <strong>{{ 'preference.hepsub.mapping.title' | translate }}</strong>
     <p>{{ 'preference.hepsub.mapping.description' | translate }}</p>
     <hr />
-    <full-screen (fullPage)='disableClose($event)'
+    <app-full-screen (fullPage)='disableClose($event)'
       (import)='import($event)'
       [data]='{json:data.data.mapping, title: "HEPSub" + " " + data.data.hep_alias + " " + data.data.profile, type: "json"}'>
       <!-- <ace-editor [mode]="'json'" [theme]="'monokai'" [readOnly]="false" [(text)]="data.data.mapping" #data_view
     [style.height.%]="100"></ace-editor> -->
     <app-codejar-wrapper [mode]="'json'" [theme]="'monokai'" [readOnly]="false" [(text)]="data.data.mapping" #data_view
     [style.height.%]="100"></app-codejar-wrapper>
-  </full-screen>
+  </app-full-screen>
 </div>
 <div mat-dialog-actions style="float: right; margin-bottom: 0rem;">
   <button mat-raised-button (click)="onNoClick()">{{'LINK.buttons.cancel' | translate}}</button>

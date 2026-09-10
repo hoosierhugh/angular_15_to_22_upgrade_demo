@@ -136,22 +136,21 @@ export class AlertWidgetComponent implements IWidget, OnInit, OnDestroy {
     makeRequest() {
         if (this._config.requestType === 'GET') {
             this.http.get<unknown>(this._config.alertUrl).subscribe(data => {
-                for (let i = 0; i < this._config.expectedList.length; i++) {
-                    if (this._config.expectedList[i] === data) {
+                for (const expected of this._config.expectedList) {
+                    if (expected === data) {
                         this._config.alertState = true;
                     }
                 }
                 this.displayMessage = String(data ?? '');
             })
         } else if (this._config.requestType === 'POST') {
-            let body = {};
             const comparsionResult = [];
             const httpOptions = {
                 headers: new HttpHeaders({
                     'Content-Type': 'application/json'
                 })
             };
-            body = Functions.JSON_parse(this._config.postData);
+            const body = Functions.JSON_parse(this._config.postData);
             this.http.post<unknown>(this._config.alertUrl, body, httpOptions).subscribe(data => {
                 for (let i = 0; i < this._config.keyList.length; i++) {
                     if (data != null) {

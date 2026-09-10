@@ -140,7 +140,7 @@
     </p>
     <small>{{ 'preference.scripts.dialog.jsScriptsDescription' | translate }}</small>
     <hr />
-    <full-screen (fullPage)='disableClose($event)'
+    <app-full-screen (fullPage)='disableClose($event)'
       (import)='import($event)'
       [data]='{json:data.data.data, title: "Script " +  data.data.hep_alias + " " + data.data.profile, type: "js"}'>
       <app-codejar-wrapper [mode]="'javascript'"
@@ -150,7 +150,7 @@
         [style.min-height.%]="100"
         style="padding: 5px"
       ></app-codejar-wrapper>
-    </full-screen>
+    </app-full-screen>
   </mat-tab>
 </mat-tab-group>
 

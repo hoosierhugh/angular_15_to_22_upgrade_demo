@@ -3,7 +3,7 @@ import { emitWindowResize, saveToFile } from '@app/helpers/windowFunctions';
 import moment from 'moment';
 
 @Component({
-    selector: 'full-screen',
+    selector: 'app-full-screen',
     templateUrl: './full-screen.component.html',
     styleUrls: ['./full-screen.component.scss'],
     changeDetection: ChangeDetectionStrategy.OnPush,

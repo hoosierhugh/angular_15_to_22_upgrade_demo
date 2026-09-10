@@ -7,7 +7,7 @@ import { Directive, ViewContainerRef, ElementRef, HostListener, forwardRef, Chan
   const moment = _moment;
 
   @Directive({
-    selector: 'input[ngxDaterangepickerMd]',
+    selector: 'input[appNgxDaterangepickerMd]',
     host: {
         '(keyup.esc)': 'hide()',
         '(blur)': 'onBlur()',
@@ -59,9 +59,9 @@ import { Directive, ViewContainerRef, ElementRef, HostListener, forwardRef, Chan
     @Input()
     showDropdowns: boolean;
     @Input()
-    isInvalidDate: Function;
+    isInvalidDate: (date: any) => boolean;
     @Input()
-    isCustomDate: Function;
+    isCustomDate: (date: any) => boolean;
     @Input()
     showClearButton: boolean;
     @Input()
@@ -141,7 +141,7 @@ import { Directive, ViewContainerRef, ElementRef, HostListener, forwardRef, Chan
       this._onChange(val);
       this._changeDetectorRef.markForCheck();
     }
-    @Output('change') onChange = new EventEmitter<object>();
+    @Output() valueChanged = new EventEmitter<object>();
     @Output() rangeClicked = new EventEmitter<object>();
     @Output() datesUpdated = new EventEmitter<object>();
     @Output() startDateChanged = new EventEmitter<object>();
@@ -175,7 +175,7 @@ import { Directive, ViewContainerRef, ElementRef, HostListener, forwardRef, Chan
           value[this._startKey] = change.startDate;
           value[this._endKey] = change.endDate;
           this.value = value;
-          this.onChange.emit(value);
+          this.valueChanged.emit(value);
           if (typeof change.chosenLabel === 'string') {
             this._el.nativeElement.value = change.chosenLabel;
           }

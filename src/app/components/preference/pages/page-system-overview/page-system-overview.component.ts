@@ -183,7 +183,7 @@ export class PageSystemOverviewComponent implements OnInit, AfterViewInit {
 
         this.openDialog(DialogUsersComponent, item, onOpenDialog, isCopy);
     }
-    async openDialog(dialog, data: any = null, cb: Function = null, isCopy = false) {
+    async openDialog(dialog, data: any = null, cb: (result: any) => void = null, isCopy = false) {
         const result = await this.dialog
             .open(dialog, {
                 width: '800px',

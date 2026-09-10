@@ -35,9 +35,6 @@ export class MessageContentComponent implements OnInit, OnDestroy, AfterViewInit
   private _interval: any;
   _pt: any;
   tableObj = {};
-  get data() {
-    return this._data;
-  }
   get pt(): any {
     return this._pt;
   }
@@ -51,9 +48,11 @@ export class MessageContentComponent implements OnInit, OnDestroy, AfterViewInit
   @Input() set isDecoded(val: boolean) {
     this.cdr.detectChanges()
   }
+  get data() {
+    return this._data;
+  }
   @Input() set data(val) {
     this._data = Functions.cloneObject(val);
-    // console.log('this._data', this._data);
     if (val.frame_protocol) {
       // is web-shark
 

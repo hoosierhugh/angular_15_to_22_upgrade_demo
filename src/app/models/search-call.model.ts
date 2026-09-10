@@ -8,12 +8,12 @@ export interface SearchCallOne {
 
 export interface SearchCallModel {
     param: {
-        transaction: { };
+        transaction: Record<string, unknown>;
         limit: number;
         orlogic: boolean;
         archive: boolean;
-        search?: {},
-        location: { };
+        search?: Record<string, unknown>,
+        location: Record<string, unknown>;
         timezone: {
             value: number;
             name: string;

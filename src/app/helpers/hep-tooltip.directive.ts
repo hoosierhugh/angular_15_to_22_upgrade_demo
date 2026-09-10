@@ -13,7 +13,7 @@ import {
 } from '@angular/cdk/overlay';
 
 @Directive({
-    selector: '[hepTooltip]',
+    selector: '[appHepTooltip]',
     standalone: false
 })
 export class HepTooltipDirective implements OnInit {
@@ -22,7 +22,7 @@ export class HepTooltipDirective implements OnInit {
     private elementRef = inject(ElementRef);
     private viewContainerRef = inject(ViewContainerRef);
 
-    @Input('hepTooltip') tooltipContent: TemplateRef<unknown> | ComponentType<unknown>;
+    @Input('appHepTooltip') tooltipContent: TemplateRef<unknown> | ComponentType<unknown>;
 
     private _overlayRef: OverlayRef;
     ngOnInit(): void {

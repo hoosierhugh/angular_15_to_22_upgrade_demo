@@ -6,7 +6,7 @@ import { SearchGridCellParams } from './search-grid-renderer.types';
     selector: 'app-uuid-cell',
     template: `
     <span class='cell-wrapper' (mousedown)='startCopy()' (mouseup)='copy(uuid)'>
-        <a (click)="openTransactionPopup($event)" [matTooltip]='uuid'>{{uuid}}</a>
+        <a tabindex="0" (click)="openTransactionPopup($event)" (keydown)="openTransactionPopup($event)" [matTooltip]='uuid'>{{uuid}}</a>
     </span>
     `,
     styles: ['a { user-select: text; color: inherit; text-decoration: unset; overflow: hidden; }',

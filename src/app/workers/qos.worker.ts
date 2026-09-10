@@ -731,7 +731,7 @@ class QosProcessor {
       return 'FFA562';
     }
     let hash = 0;
-    let i = 0;
+    let i: number;
 
     for (i = 0; i < str.length; i++) {
       hash = str.charCodeAt(i) + ((hash << 5) - hash);
@@ -764,8 +764,7 @@ class QosProcessor {
 
     const effective_latency = rtt + (jitter * 2) + 10;
 
-    let mos_val = 0;
-    let r_factor = 0;
+    let mos_val: number, r_factor: number;
 
     if (effective_latency < 160) {
       r_factor = 93.2 - (effective_latency / 40);

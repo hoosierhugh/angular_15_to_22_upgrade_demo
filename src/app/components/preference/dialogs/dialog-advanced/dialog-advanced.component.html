@@ -52,14 +52,14 @@
   </div>
   <strong>{{ 'preference.advanced.dialog.data' | translate }}</strong>
   <hr />
-  <full-screen (fullPage)='disableClose($event)'
+  <app-full-screen (fullPage)='disableClose($event)'
     (import)='import($event)'
     [data]='{json:data.data.data, title: data.data.category + " " + data.data.param, type: "json"}' (import)='import($event)'>
     <!-- <ace-editor [mode]="'json'" [theme]="'monokai'" [readOnly]="false" [(text)]="data.data.data"
   (textChanged)="validate()" [durationBeforeCallback]="500" #data_view [style.height.%]="100"></ace-editor> -->
   <app-codejar-wrapper [mode]="'json'" [theme]="'monokai'" [readOnly]="false" [(text)]="data.data.data" [jsonValidator]="true"
   (textChange)="validate()" [durationBeforeCallback]="500" #data_view [style.height.%]="100" id="ace-editor"></app-codejar-wrapper>
-</full-screen>
+</app-full-screen>
 </div>
 <div mat-dialog-actions style="float: right; margin-bottom: 0rem;">
   <button mat-raised-button (click)="onNoClick()">{{'LINK.buttons.cancel' | translate }}</button>

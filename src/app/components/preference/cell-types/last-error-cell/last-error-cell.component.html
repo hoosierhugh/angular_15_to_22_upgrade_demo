@@ -6,7 +6,7 @@
   <td mat-cell *matCellDef="let element" style="text-align: center">
     @if (element.item && element.item.last_error === '') {
       <div class="noError"
-        [hepTooltip]="noError">
+        [appHepTooltip]="noError">
         <fa-icon icon="clipboard-check"></fa-icon>
         <ng-template #noError>
           <p style="text-align: center;">{{'cellTypes.noDatabaseErrors'| translate}}</p>
@@ -15,7 +15,7 @@
     }
     @if (element.item && element.item.last_error !== '') {
       <div class="lastError"
-        [hepTooltip]="lastError">
+        [appHepTooltip]="lastError">
         <fa-icon icon="exclamation-triangle"></fa-icon>
         <ng-template #lastError>
           <div>{{element.item.last_error}}</div>

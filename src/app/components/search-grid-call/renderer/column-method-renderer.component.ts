@@ -8,7 +8,7 @@ import { SearchGridCellParams } from './search-grid-renderer.types';
     <span class='cell-wrapper' [ngClass]="{'selected': selected}" (mousedown)='startCopy()' (mouseup)='copy(method)'>
     
         
-        <a (click)="openMethodPopup($event)">{{method}}</a>
+        <a tabindex="0" (click)="openMethodPopup($event)" (keydown)="openMethodPopup($event)">{{method}}</a>
     </span>
     `,
     styles: ['a { user-select: text; overflow: hidden; }', `

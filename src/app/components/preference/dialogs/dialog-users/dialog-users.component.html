@@ -253,7 +253,7 @@
     <div style="height: 1rem"></div>
     <strong>{{ 'preference.users.dialog.setting' | translate }}</strong>
     <div style="height: 1rem"></div>
-    <full-screen (fullPage)='disableClose($event)'
+    <app-full-screen (fullPage)='disableClose($event)'
       (import)='import($event)'
       [data]='{json:data.data.setting, title: data.data.username, type: "json"}'>
       <!-- <ace-editor [mode]="'json'"
@@ -270,7 +270,7 @@
       [style.min-height.%]="100"
       #data_view
     ></app-codejar-wrapper>
-  </full-screen>
+  </app-full-screen>
 </mat-tab>
 @if (hasStatistics) {
   <mat-tab [label]="'preference.users.dialog.statistics' | translate">

@@ -339,11 +339,11 @@ export class InfluxdbchartWidgetComponent implements IWidget, OnInit, OnDestroy 
         this.cdr.detectChanges();
     }
 
-    public chartClicked({ event, active }: { event: MouseEvent, active: {}[] }): void {
+    public chartClicked({ event, active }: { event: MouseEvent, active: object[] }): void {
         // Chart click hook retained for ng2-charts bindings.
     }
 
-    public chartHovered({ event, active }: { event: MouseEvent, active: {}[] }): void {
+    public chartHovered({ event, active }: { event: MouseEvent, active: object[] }): void {
         // Chart hover hook retained for ng2-charts bindings.
     }
 

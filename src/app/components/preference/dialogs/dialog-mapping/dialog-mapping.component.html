@@ -137,7 +137,7 @@
               <hr />
               <p>{{ "preference.mapping.dialog.definesCross" | translate }}</p>
               <hr />
-              <full-screen
+              <app-full-screen
                 (fullPage)="disableClose($event)"
                 (import)="import($event, 'correlation_mapping')"
                 [data]="{
@@ -171,7 +171,7 @@
                 [disabled]="!isAdmin"
                 >
               </app-codejar-wrapper>
-            </full-screen>
+            </app-full-screen>
           </mat-tab>
           <mat-tab
             [label]="'preference.mapping.dialog.fieldsMapping' | translate"
@@ -182,7 +182,7 @@
                 {{ "preference.mapping.dialog.definesSchema" | translate }}
               </p>
               <hr />
-              <full-screen
+              <app-full-screen
                 (fullPage)="disableClose($event)"
                 (import)="import($event, 'fields_mapping')"
                     [data]="{
@@ -216,7 +216,7 @@
                 [style.min-height.%]="100"
                 [disabled]="!isAdmin"
               ></app-codejar-wrapper>
-            </full-screen>
+            </app-full-screen>
           </ng-template>
         </mat-tab>
 
@@ -227,7 +227,7 @@
             <hr />
             <p>{{ "preference.mapping.dialog.definesScript" | translate }}</p>
             <hr />
-            <full-screen
+            <app-full-screen
               (fullPage)="disableClose($event)"
               (import)="import($event, 'script')"
               (fullPage)="disableClose($event)"
@@ -263,7 +263,7 @@
               [style.min-height.%]="100"
               >
             </app-codejar-wrapper>
-          </full-screen>
+          </app-full-screen>
         </mat-tab>
       }
     </mat-tab-group>

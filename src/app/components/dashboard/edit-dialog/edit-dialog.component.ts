@@ -82,7 +82,7 @@ export class EditDialogComponent implements OnInit {
         Validators.pattern(this.regString)],
         this.validateName.bind(this));
     currentName = '';
-    callBackExport: Function = null;
+    callBackExport: () => void = null;
     dashboards: any;
     isInvalid = false;
     nameBuffer: string;
@@ -156,7 +156,7 @@ export class EditDialogComponent implements OnInit {
             this.callBackExport();
         }
     }
-    export(cb: Function) {
+    export(cb: () => void) {
         // console.log(cb)
         this.callBackExport = cb;
     }

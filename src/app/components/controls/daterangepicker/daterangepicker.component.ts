@@ -18,7 +18,7 @@ export enum SideEnum {
 }
 
 @Component({
-    selector: 'ngx-daterangepicker-material',
+    selector: 'app-ngx-daterangepicker-material',
     styleUrls: ['./daterangepicker.component.scss'],
     templateUrl: './daterangepicker.component.html',
     host: {
@@ -875,7 +875,7 @@ export class DaterangepickerComponent implements OnInit {
         this.updateElement();
     }
 
-    clickApply(e?) {
+    clickApply(e?, rangeLabel?: string) {
         if (!this.singleDatePicker && this.startDate && !this.endDate) {
             this.endDate = this._getDateWithTime(this.startDate, SideEnum.right);
 
@@ -893,6 +893,7 @@ export class DaterangepickerComponent implements OnInit {
                 d.add(1, 'days');
             }
         }
+        const appliedRangeLabel = rangeLabel ?? this.chosenRange;
         if (this.chosenLabel) {
             this.choosedDate.emit({ chosenLabel: this.chosenLabel, startDate: this.startDate, endDate: this.endDate, timezone: this.startDate.tz() });
         }
@@ -909,7 +910,7 @@ export class DaterangepickerComponent implements OnInit {
             startDate: this.startDate,
             endDate: this.endDate,
             timezone: this.startDate.tz(),
-            label: this.chosenRange
+            label: appliedRangeLabel
         });
         if (e || (this.closeOnAutoApply && !e)) {
             this.hide();
@@ -1221,7 +1222,7 @@ export class DaterangepickerComponent implements OnInit {
             }
             this.rangeClicked.emit({ label: label, dates: dates });
             if (!this.keepCalendarOpeningWithRange) {
-                this.clickApply(true);
+                this.clickApply(true, label);
             } else {
                 if (!this.alwaysShowCalendars) {
                     return this.clickApply();
@@ -1551,9 +1552,9 @@ export class DaterangepickerComponent implements OnInit {
                 }
                 // store classes var
                 let cname = '', disabled = false;
-                for (let i = 0; i < classes.length; i++) {
-                    cname += classes[i] + ' ';
-                    if (classes[i] === 'disabled') {
+                for (const cls of classes) {
+                    cname += cls + ' ';
+                    if (cls === 'disabled') {
                         disabled = true;
                     }
                 }

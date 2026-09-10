@@ -66,22 +66,20 @@ export class GridController {
 
         let columnState = getStorage<ColumnState[]>(lsIndexUser) || getStorage<ColumnState[]>(lsIndex);
         if (columnState) {
-            columnState = columnState.map(column =>
-                column = {
-                    aggFunc: undefined,
-                    colId: column.colId,
-                    flex: undefined,
-                    hide: column.hide,
-                    pinned: undefined,
-                    pivot: undefined,
-                    pivotIndex: undefined,
-                    rowGroup: false,
-                    rowGroupIndex: undefined,
-                    sort: column.sort,
-                    sortIndex: null,
-                    width: undefined,
-                }
-            );
+            columnState = columnState.map(column => ({
+                aggFunc: undefined,
+                colId: column.colId,
+                flex: undefined,
+                hide: column.hide,
+                pinned: undefined,
+                pivot: undefined,
+                pivotIndex: undefined,
+                rowGroup: false,
+                rowGroupIndex: undefined,
+                sort: column.sort,
+                sortIndex: null,
+                width: undefined,
+            }));
             // per AG-grid specs undefined as a parameter for attribute means "do not apply this attribute"
             // https://www.ag-grid.com/documentation/angular/column-state/#null-vs-undefined
             this.gridColumnApi?.applyColumnState({

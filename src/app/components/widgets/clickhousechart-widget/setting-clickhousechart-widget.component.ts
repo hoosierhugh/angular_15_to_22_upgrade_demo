@@ -198,7 +198,7 @@ export class SettingClickhouseChartWidgetComponent {
             };
         } else {
             this.timeColumn = this.selectedEditQuery.detail.timeColumn;
-            this.resolution = this.selectedEditQuery.detail.resolution,
+            this.resolution = this.selectedEditQuery.detail.resolution;
             this.tags.setValue(this.selectedEditQuery.detail.tags);
             this.counter = this.selectedEditQuery.detail.counter;
             this.operator = this.selectedEditQuery.detail.operator;

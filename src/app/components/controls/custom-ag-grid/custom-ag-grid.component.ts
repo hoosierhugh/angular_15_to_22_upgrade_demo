@@ -5,7 +5,7 @@ import { GridOptions } from 'ag-grid-community';
 import { SettingButtonComponent } from './setting-button';
 
 @Component({
-    selector: 'custom-ag-grid',
+    selector: 'app-custom-ag-grid',
     templateUrl: './custom-ag-grid.component.html',
     styleUrls: ['./custom-ag-grid.component.scss'],
     changeDetection: ChangeDetectionStrategy.Eager,

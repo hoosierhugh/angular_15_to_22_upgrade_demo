@@ -4,7 +4,7 @@ import { Subscription } from 'rxjs';
 import { TooltipService, TooltipDetails } from '@app/services/tooltip.service';
 
 @Component({
-    selector: 'tooltip',
+    selector: 'app-tooltip',
     templateUrl: './flow-tooltip.component.html',
     styleUrls: ['./flow-tooltip.component.scss'],
     host: { '(document:mousemove)': 'onMouseMove($event)' },

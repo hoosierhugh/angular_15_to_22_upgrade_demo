@@ -2,10 +2,10 @@
 
 <div class="mat-elevation-z8"
   style="position: relative; overflow: auto; display: flex; flex-direction: column; height: 100%;">
-  <custom-ag-grid class="example-table-container"
+  <app-custom-ag-grid class="example-table-container"
     [details]="dataSource.filteredData"
     [columns]="displayedColumns"
-  (rowClick)="onClickMessage($event)"></custom-ag-grid>
+  (rowClick)="onClickMessage($event)"></app-custom-ag-grid>
 
   <div class="footer-panel">
     <mat-form-field style="flex: 1"

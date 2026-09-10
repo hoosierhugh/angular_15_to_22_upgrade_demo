@@ -1044,7 +1044,7 @@ export class SearchGridCallComponent
             };
         }
         const param = Functions.cloneObject(params);
-        let index = 0;
+        let index;
         if (params.rowIndex >= this.colorList.length) {
             index = params.rowIndex % this.colorList.length;
         } else {
