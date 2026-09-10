@@ -26,7 +26,9 @@ export class TabLogsComponent implements AfterViewInit {
         this._data.forEach(i => {
             try {
                 i.payload.raw = Functions.JSON_parse(String(i.payload.raw));
-            } catch (e) { }
+            } catch (e) {
+                // Keep raw payload text when it is not JSON.
+            }
 
             try {
                 const originalPayload = i.payload;
@@ -38,7 +40,9 @@ export class TabLogsComponent implements AfterViewInit {
                 if (isRecord(i.payload.raw)) {
                     delete i.payload.raw.raw;
                 }
-            } catch (e) { }
+            } catch (e) {
+                // Ignore payload normalization failures.
+            }
         });
         this.cdr.detectChanges();
     }

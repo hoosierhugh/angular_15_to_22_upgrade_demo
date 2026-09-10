@@ -178,7 +178,9 @@ export class TransactionFilterComponent implements OnInit {
         this.restoreFiltersFromLocalStorage();
         try {
             this.cdr.detectChanges();
-        } catch (err) { }
+        } catch (err) {
+            // Ignore change detection errors while filters are initializing.
+        }
     }
 
     @Input() callIDColorList: CallIDColor[];
@@ -373,10 +375,10 @@ export class TransactionFilterComponent implements OnInit {
     }
 
     @HostListener('document:click', ['$event.target'])
-    public onClick(targetElement: Node) {
+    public onClick(targetElement: EventTarget) {
         if (this.filterContainer && this.filterContainer.nativeElement) {
             const clickedInside =
-                this.filterContainer.nativeElement.contains(targetElement);
+                this.filterContainer.nativeElement.contains(targetElement as Node);
             if (!clickedInside && this.isFilterOpened) {
                 this.hideFilter();
             }

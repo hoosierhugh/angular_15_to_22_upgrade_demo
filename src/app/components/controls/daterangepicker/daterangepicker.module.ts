@@ -41,7 +41,6 @@ import { MatTooltipModule } from '@angular/material/tooltip';
     ]
 })
 export class NgxDaterangepickerMd {
-  constructor() {}
   static forRoot(config: LocaleConfig = {}): ModuleWithProviders<NgxDaterangepickerMd> {
     return {
       ngModule: NgxDaterangepickerMd,

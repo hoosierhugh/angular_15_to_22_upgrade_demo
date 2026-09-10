@@ -6,7 +6,7 @@
       <button mat-button (click)="backLastToDashboard()" [matTooltip]="('menu.home'|translate)">
 
         <div class="logo-container">
-          <span class="logo-img"><img src="assets/images/homerseven.png" /></span>
+          <span class="logo-img"><img src="assets/images/homerseven.png" alt="" /></span>
           <span class="logo-text">
             homer
           </span> </div>
@@ -20,7 +20,7 @@
       (cdkDropListDropped)="dropFav($event)"  (wheel)='onScroll($event, "favList")' #favList style='overflow-x: scroll;'>
       @for (favorite of favoriteDashboardsList; track favorite) {
         <div class="example-box fav-menu-button" cdkDrag >
-          <span (click)="panelName = favorite.name; dashboardGo(favorite.href)">
+          <span tabindex="0" role="button" (click)="panelName = favorite.name; dashboardGo(favorite.href)" (keydown.enter)="panelName = favorite.name; dashboardGo(favorite.href)">
             {{favorite.name}}
           </span>
           <button (click)="toggleDashboardFavorite(favorite)">
@@ -34,7 +34,7 @@
 
       @for (searchTab of searchTabsList; track searchTab) {
         <div class="example-box fav-menu-button searchtabs" cdkDrag>
-          <span (click)="panelName = searchTab.name; tabGo(searchTab)">
+          <span tabindex="0" role="button" (click)="panelName = searchTab.name; tabGo(searchTab)" (keydown.enter)="panelName = searchTab.name; tabGo(searchTab)">
           {{searchTab.name}}</span>
           <button (click)="deleteSearchTab(searchTab)">
             <mat-icon>close</mat-icon>
@@ -152,7 +152,7 @@
             }
           </button>
           <mat-menu #profileDropdown="matMenu">
-            <div class="profile-menu-card" (click)="$event.preventDefault(); $event.stopPropagation()">
+            <div class="profile-menu-card" tabindex="0" (click)="$event.preventDefault(); $event.stopPropagation()" (keydown)="$event.stopPropagation()">
 
               @if (userProfile?.avatar !== '') {
                 <img [src]="$safeNavigationMigration(userProfile?.avatar)" alt="" class="profile-menu-icon">

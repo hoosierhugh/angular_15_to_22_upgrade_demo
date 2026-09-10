@@ -1,6 +1,6 @@
 import { AlertService } from '@it-app/services/alert.service';
 import { PcapUploaderService } from './pcap-uploader.service';
-import { Component, Input, Output, EventEmitter, AfterViewInit, ViewChild, ChangeDetectorRef, ElementRef, ChangeDetectionStrategy, OnInit, inject } from '@angular/core';
+import { Component, Input, Output, EventEmitter, AfterViewInit, ViewChild, ChangeDetectorRef, ElementRef, ChangeDetectionStrategy, inject } from '@angular/core';
 import { Widget } from '@app/helpers/widget';
 import { IWidget } from '../IWidget';
 import { TranslateService } from '@ngx-translate/core'
@@ -22,7 +22,7 @@ import { TranslateService } from '@ngx-translate/core'
     minHeight: 300,
     minWidth: 300
 })
-export class PcapUploaderWidgetComponent implements IWidget, AfterViewInit, OnInit {
+export class PcapUploaderWidgetComponent implements IWidget, AfterViewInit {
     private pcapUploaderService = inject(PcapUploaderService);
     private cdr = inject(ChangeDetectorRef);
     alertService = inject(AlertService);
@@ -97,8 +97,8 @@ export class PcapUploaderWidgetComponent implements IWidget, AfterViewInit, OnIn
             console.log(error);
         });
     }
-    openDialog(): void { }
-
-    ngOnInit() { }
+    openDialog(): void {
+        // Required by IWidget; this widget has no settings dialog.
+    }
 
 }

@@ -47,7 +47,9 @@ export function emitWindowResize(): void {
     setTimeout(() => {
         try {
             window.dispatchEvent(new Event('resize'));
-        } catch (e) { }
+        } catch (e) {
+            // Ignore resize dispatch failures in non-browser contexts.
+        }
     });
 }
 export function getJsonFileDataByLink(name: string): Promise<unknown> {

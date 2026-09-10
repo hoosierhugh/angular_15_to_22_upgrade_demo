@@ -6,7 +6,10 @@
   <div [style.flex]="item.options.start || 0.0000001"></div>
   <!-- left space -->
   <div class="item-flow-packet"
+    tabindex="0"
+    role="button"
     (click)="onClickItem(idx, $event)"
+    (keydown.enter)="onClickItem(idx, $event)"
     [style.flex]="item.options.middle || 0.0000001"
     [style.text-align]="item.options.direction ? 'right' : 'left'">
 
@@ -48,11 +51,7 @@
         [style.color]="item.options.color">
       </div>
     }
-    <!-- <div *ngIf="item.description !== item.ipDirection"
-    class="call_text-mini"
-    [style.height.px]=" !isSimplify ? 15 : 0 ">
-    {{ item.ipDirection }}
-  </div> -->
+
   @if (!item.options.isLastHost) {
     <div
       [ngClass]="'port-label-' + (item.options.direction ? 'left' : 'right')"

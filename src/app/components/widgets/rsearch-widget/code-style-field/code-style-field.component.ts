@@ -345,7 +345,9 @@ export class CodeStyleFieldComponent implements AfterViewInit, OnChanges {
                         throw new Error(`Unexpected node type: ${node.nodeType}`);
                 }
             });
-        } catch (err) { }
+        } catch (err) {
+            // Ignore unsupported selection nodes.
+        }
         return textSegments;
     }
 
@@ -368,7 +370,9 @@ export class CodeStyleFieldComponent implements AfterViewInit, OnChanges {
 
         try {
             this.editor.innerHTML = this.setStyleCodeColors(textContent); // this.renderText(textContent);
-        } catch (err) { }
+        } catch (err) {
+            // Ignore editor updates before the editable element is ready.
+        }
 
         if (setEnd) {
             this.restoreSelection(this.editor.innerText.length, this.editor.innerText.length);
@@ -413,7 +417,9 @@ export class CodeStyleFieldComponent implements AfterViewInit, OnChanges {
         });
         try {
             sel.setBaseAndExtent(anchorNode, anchorIndex, focusNode, focusIndex);
-        } catch (err) { }
+        } catch (err) {
+            // Ignore invalid selection restoration ranges.
+        }
     }
     private typeInTextarea(str) {
         const sel = window.getSelection() as Selection;

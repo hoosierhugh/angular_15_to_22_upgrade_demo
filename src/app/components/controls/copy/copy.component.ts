@@ -53,6 +53,7 @@ export class CopyComponent implements OnInit {
                     })
                 }
             } catch (err) {
+                // Ignore notification failures after the copy operation.
             }
             this.copyField.nativeElement.blur();
         }

@@ -6,12 +6,14 @@
 <!-- filter -->
 <div class="hidden-back"
   [hidden]="!isInfoOpened"
-(click)="hideInfo()"></div>
+  tabindex="0"
+  role="button"
+  (click)="hideInfo()"
+  (keydown.enter)="hideInfo()"></div>
 <div class="button-icon-right-top info-container"
   [hidden]="!isInfoOpened"
   #filterContainer>
 
-  <!-- <br *ngIf="isFlowTab"> -->
   <div style="margin: 0 -10px 5px -10px;">
     <mat-accordion>
       <mat-expansion-panel [hidden]='callIdList.length <= 1'>

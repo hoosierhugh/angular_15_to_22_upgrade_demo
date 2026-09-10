@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component, EventEmitter, Input, OnInit, Output, ChangeDetectionStrategy, inject } from '@angular/core';
+import { ChangeDetectorRef, Component, EventEmitter, Input, Output, ChangeDetectionStrategy, inject } from '@angular/core';
 import { Functions } from '@app/helpers/functions';
 import { UserConstValue } from '@app/models';
 import { TranslateService } from '@ngx-translate/core';
@@ -10,7 +10,7 @@ import { TranslateService } from '@ngx-translate/core';
     changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false
 })
-export class TransactionGraphSettingsComponent implements OnInit {
+export class TransactionGraphSettingsComponent {
     private cdr = inject(ChangeDetectorRef);
     translateService = inject(TranslateService);
 
@@ -50,10 +50,6 @@ export class TransactionGraphSettingsComponent implements OnInit {
             translateService.setDefaultLang('en')
          }
 
-    ngOnInit(): void {
-
-    }
-
     openInfo() {
         if (this.isInfoOpened) {
             return;
@@ -68,9 +64,9 @@ export class TransactionGraphSettingsComponent implements OnInit {
         this.isInfoOpened = false;
         this.cdr.detectChanges();
     }
-    formatLabel(value: number): number {
+    formatLabel(value: number): string {
         const percent = Math.round(Math.abs(value) / Math.abs(-50000) * 100);
-        return percent;
+        return `${percent}`;
     }
     changeOptions() {
         localStorage.setItem(UserConstValue.GRAPH_SETTINGS, JSON.stringify(this.options))

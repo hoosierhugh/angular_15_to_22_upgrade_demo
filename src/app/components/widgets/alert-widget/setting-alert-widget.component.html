@@ -106,7 +106,10 @@
 
 <div class="color-picker">
   <div class="summary-info"
-    (click)="toggleColors(0)">
+    tabindex="0"
+    role="button"
+    (click)="toggleColors(0)"
+    (keydown.enter)="toggleColors(0)">
     <div class="info">
       <p class="style">{{'alertSetting.successColor' | translate}}</p>
       <p class="style-value">{{ data.alertSuccessColor }}</p>
@@ -132,13 +135,19 @@
       <div class="hex-code">
         <p>{{'alertSetting.customColor' | translate}}</p>
         <div class="circle"
+          tabindex="0"
+          role="button"
           (click)='togglePicker(0)'
+          (keydown.enter)="togglePicker(0)"
           [ngStyle]="{'background': data.alertSuccessColor}">
         @if (showPicker[0]) {
           <div
             class="color-chrome">
             <div class="pickerOverlay"
-            (click)='togglePicker(0); $event.stopPropagation()'></div>
+            tabindex="0"
+            role="button"
+            (click)='togglePicker(0); $event.stopPropagation()'
+            (keydown.enter)="togglePicker(0); $event.stopPropagation()"></div>
             <color-chrome [disableAlpha]="true"
               [color]=data.alertSuccessColor
               (onChange)='changeColorManual($event.color.hex, "success")'
@@ -157,7 +166,10 @@
 </div>
 <div class="color-picker">
   <div class="summary-info"
-    (click)="toggleColors(1)">
+    tabindex="0"
+    role="button"
+    (click)="toggleColors(1)"
+    (keydown.enter)="toggleColors(1)">
     <div class="info">
       <p class="style">{{'alertSetting.failColor' | translate}}</p>
       <p class="style-value">{{ data.alertFailColor }}</p>
@@ -183,13 +195,19 @@
       <div class="hex-code">
         <p>{{'alertSetting.customColor' | translate}}</p>
         <div class="circle"
+          tabindex="0"
+          role="button"
           (click)='togglePicker(1)'
+          (keydown.enter)="togglePicker(1)"
           [ngStyle]="{'background': data.alertFailColor}">
         @if (showPicker[1]) {
           <div
             class="color-chrome">
             <div class="pickerOverlay"
-            (click)='togglePicker(1); $event.stopPropagation()'></div>
+            tabindex="0"
+            role="button"
+            (click)='togglePicker(1); $event.stopPropagation()'
+            (keydown.enter)="togglePicker(1); $event.stopPropagation()"></div>
             <color-chrome [disableAlpha]="true"
               [color]=data.alertFailColor
               (onChange)='changeColorManual($event.color.hex, "fail")'
@@ -208,7 +226,10 @@
 </div>
 <div class="color-picker">
   <div class="summary-info"
+    tabindex="0"
+    role="button"
     (click)="toggleColors(2)"
+    (keydown.enter)="toggleColors(2)"
     [ngStyle]="{'margin-right.px': 0}">
     <div class="info">
       <p class="style">{{'alertSetting.textColor' | translate}}</p>
@@ -235,13 +256,19 @@
       <div class="hex-code">
         <p>{{'alertSetting.customColor' | translate}}</p>
         <div class="circle"
+          tabindex="0"
+          role="button"
           (click)='togglePicker(2)'
+          (keydown.enter)="togglePicker(2)"
           [ngStyle]="{'background': data.alertTextColor}">
         @if (showPicker[2]) {
           <div
             class="color-chrome">
             <div class="pickerOverlay"
-            (click)='togglePicker(2); $event.stopPropagation()'></div>
+            tabindex="0"
+            role="button"
+            (click)='togglePicker(2); $event.stopPropagation()'
+            (keydown.enter)="togglePicker(2); $event.stopPropagation()"></div>
             <!-- <color-chrome disableAlpha="true"
             [color]="data.alertTextColor"
             (onChange)=`changeColorManual($event.color.hex, "text")` (click)="$event.stopPropagation()">

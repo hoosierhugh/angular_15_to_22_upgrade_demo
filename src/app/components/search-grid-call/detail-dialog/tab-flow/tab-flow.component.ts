@@ -100,8 +100,12 @@ export class TabFlowComponent
   @Input() set isSimplify(v: boolean) {
     this._isSimplify = v;
     try {
-      this.virtualScroll._contentWrapper;
-    } catch (e) { }
+      if (this.virtualScroll._contentWrapper) {
+        // Accessing this throws before the virtual-scroll view is ready.
+      }
+    } catch (e) {
+      // Ignore virtual-scroll access before the view is ready.
+    }
     requestAnimationFrame(() => this.cdr.detectChanges());
   }
   get isSimplify(): boolean {
@@ -342,8 +346,8 @@ export class TabFlowComponent
     const hosts = Functions.cloneObject(this.hosts);
 
     const collectH = arrayItems.map((i) => {
-      const source_ipisIPv6 = i.source_ip.match(/\:/g)?.length > 1;
-      const destination_ipisIPv6 = i.destination_ip.match(/\:/g)?.length > 1;
+      const source_ipisIPv6 = i.source_ip.match(/:/g)?.length > 1;
+      const destination_ipisIPv6 = i.destination_ip.match(/:/g)?.length > 1;
       const sIP = source_ipisIPv6 ? `[${i.source_ip}]` : i.source_ip;
       const dIP = destination_ipisIPv6
         ? `[${i.destination_ip}]`
@@ -358,8 +362,7 @@ export class TabFlowComponent
 
     // sort hosts by Items timeline
     const sortHosts = [];
-    for (let i = 0; i < collectH.length; i++) {
-      const [src, dst] = collectH[i];
+    for (const [src, dst] of collectH) {
       // src
       if (!sortHosts.includes(src)) {
         sortHosts.push(src);
@@ -469,7 +472,7 @@ export class TabFlowComponent
     this.tooltipService.hide();
   }
   shortcutIPv6String(str = '') {
-    const regexp = /^\[?([\da-fA-F]+)\:.*\:([\da-fA-F]+)\]?$/g;
+    const regexp = /^\[?([\da-fA-F]+):.*:([\da-fA-F]+)\]?$/g;
     const regfn = (fullstring, start, end) => `${start}:...:${end}`;
     return str.replace(regexp, regfn);
   }
@@ -523,7 +526,7 @@ export class TabFlowComponent
         ];
         row.raw_source = `${item.info_date} ${item.description} ${SDPbuffer}`;
         break;
-      case FlowItemType.DTMF:
+      case FlowItemType.DTMF: {
         const DTMFbuffer = JSON.stringify(item.source_data.DTMFitem);
         row = item.source_data;
         row.raw = [
@@ -533,6 +536,7 @@ export class TabFlowComponent
         ];
         row.raw_source = `${item.info_date} ${item.description} ${DTMFbuffer}`;
         break;
+      }
       case FlowItemType.LOG:
       case 'HEP-LOG':
         SDPbuffer = JSON.stringify(item.source_data);
@@ -581,7 +585,7 @@ export class TabFlowComponent
     }
     if (html2canvas && typeof html2canvas === 'function') {
       this.cdr.detectChanges();
-      const f: Function = html2canvas as Function;
+      const f: (...args: any[]) => Promise<HTMLCanvasElement> = html2canvas as any;
       f(this.flowscreen.nativeElement).then((canvas) => {
         this.canvas.nativeElement.src = canvas.toDataURL();
         this.downloadLink.nativeElement.href = canvas.toDataURL('image/png');
@@ -636,7 +640,9 @@ export class TabFlowComponent
     try {
       const { scrollLeft } = event?.target || {};
       this.flowscreen.nativeElement.style.marginLeft = `${-scrollLeft}px`;
-    } catch (e) { }
+    } catch (e) {
+      // Ignore scroll events before the flow screen is ready.
+    }
   }
 
   cdkWheelScroll(event?: any) {
@@ -768,7 +774,7 @@ export class TabFlowComponent
   __toucheStartX = 0;
   public onEvent(event?: any, type?) {
     const { x: currentX, y: currentY } = Object.values(event?.touches || {})
-      ?.map((i: any) => [i?.clientX, i?.clientY])
+      .map((i: any) => [i?.clientX, i?.clientY])
       .reduce(
         (a, [x, y], k, arr) => {
           a.x += x / arr.length;

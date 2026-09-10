@@ -2,7 +2,7 @@
   <div class="dash-brand">
     <!--company brand-->
     @if (brandSrc) {
-      <img [src]="brandSrc" height="18px" />
+      <img [src]="brandSrc" height="18px" alt="Branding" />
     }
     <!-- <fa-icon color="primary" icon="h-square" *ngIf="!brandSrc"></fa-icon> -->
     <span class="dash-title" style="padding-left: 0.5rem;">{{ dashboardTitle }}</span>
@@ -120,8 +120,11 @@
                 <div cdkDrag
                   class="tab-widgets-item"
                   [id]="item.id"
+                  tabindex="0"
+                  role="button"
                   [ngStyle]="item.id === getActive(itemCollection).id && {'background-color': 'white'}"
-                  (click)="setActive(item, itemCollection)">
+                  (click)="setActive(item, itemCollection)"
+                  (keydown.enter)="setActive(item, itemCollection)">
                   <h3 (dragstart)="dragStartHandler($event)"
                     [matTooltip]="item.config ? item.config.title: item.title || item.id">
                     {{item.config ? item.config.title: item.title || item.id}}
@@ -135,7 +138,10 @@
               }
               <div class="tab-widgets-item"
                 matTooltip="{{'dashboard.widgetTab.add' | translate}}"
+                tabindex="0"
+                role="button"
                 (click)="onDashboardAdd(getActive(itemCollection).tabGroup)"
+                (keydown.enter)="onDashboardAdd(getActive(itemCollection).tabGroup)"
                 style="background-color: transparent; min-width: 35px; opacity: 0.5;">
                 <h3>
                   <fa-icon icon="plus-circle"></fa-icon>

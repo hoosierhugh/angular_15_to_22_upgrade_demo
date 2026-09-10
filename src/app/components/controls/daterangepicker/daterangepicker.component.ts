@@ -395,7 +395,7 @@ export class DaterangepickerComponent implements OnInit {
         return this.form.valid;
     }
 
-    private _onChange: any = () => { };
+    private _onChange: any = () => undefined;
     private _model: Date;
 
     /**

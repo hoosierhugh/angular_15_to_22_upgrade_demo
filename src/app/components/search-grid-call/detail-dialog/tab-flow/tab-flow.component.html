@@ -40,6 +40,8 @@
                 class="aliasfield"
                 (mouseover)="showTooltip(itemhost)"
                 (mouseout)="hideTooltip()"
+                (focus)="showTooltip(itemhost)"
+                (blur)="hideTooltip()"
               [ngStyle]="{
                 color: itemhost.color ? itemhost.color.font : 'grey',
                 background: itemhost.color
@@ -56,12 +58,14 @@
                       ? itemhost.image
                       : './assets/' + itemhost.image
                   "
+                      [alt]="itemhost.alias || itemhost.ip"
                       height="35px"
                       />
                   } @else {
                     <img
                       class="defaultaliasimg"
                       src="./assets/img/gateways/exchange.png"
+                      alt=""
                       />
                   }
                 </div>
@@ -84,6 +88,8 @@
                     [ngClass]="{ multiple: itemhost.ip_array.length > 1 }"
                     (mouseover)="showTooltip(item.host)"
                     (mouseout)="hideTooltip()"
+                    (focus)="showTooltip(item.host)"
+                    (blur)="hideTooltip()"
                     >
                     {{ shortcutIPv6String(item.ip) }}
                   </div>
@@ -240,9 +246,13 @@
             class="label-callid-wrapper"
             [style.color]="labelColor(itemLabel.callid, itemLabel.selected)"
             [ngClass]="{ selected: itemLabel.copySelected }"
+            tabindex="0"
+            role="button"
             (click)="onClickLabel(itemLabel.callid)"
             (mousedown)="startCopy()"
             (mouseup)="copy(itemLabel)"
+            (keydown.enter)="startCopy()"
+            (keyup.enter)="copy(itemLabel)"
             >
             {{ itemLabel.callid }}
           </div>
@@ -250,23 +260,12 @@
       </div>
     </div>
   }
-  <!-- <div *ngIf="!isExport" class="label-callid-container">
-  <div class="label-callid-wrapper" *ngFor="let itemLabel of labels"
-    [style.color]="'#fff'"
-    [style.background-color]="labelColor(itemLabel.callid, itemLabel.selected)"
-    [ngClass]="{'selected': itemLabel.copySelected}"
-    (click)="onClickLabel(itemLabel.callid)"
-    (mousedown)='startCopy()' (mouseup)='copy(itemLabel)'
-  > {{ itemLabel.callid }} </div>
-</div> -->
+
 <div id="download" style="display: none">
-  <img #canvas />
+  <img #canvas alt="" />
   <a #downloadLink></a>
 </div>
-<!-- <div class="virtual-scrollbar" *ngIf="!isExport" (mousedown)="setScrollTarget('virtualScrollbar')"
-(scroll)="onScroll($event)" #virtualScrollbar>
-<div [style.transform]="getVirtualScrollHeight" [style.padding.px]="1"></div>
-</div> -->
+
 @if (!isExport && !isSafari) {
   <div
     class="virtual-scrollbar"

@@ -37,8 +37,6 @@ export class MyWidgetComponent implements IWidget {
     @Input() config: any;
     @Output() changeSettings = new EventEmitter<any> ();
 
-    constructor() { }
-
     ngOnInit() {
         WidgetArrayInstance[this.id] = this as IWidget; // <--- IMPORTANT: SHOULD TO BE
         /* this.config - is JSON config for each widget instance, saves on dashboard  */

@@ -195,7 +195,9 @@ class QosProcessor {
       this.parseRTCP(srcdata.rtcp.data, mosFraction);
       this.parseRTP(srcdata.rtp.data);
       // this.haveData.emit(this.qosData.rtcp.data.length > 0 || this.qosData.rtp.data.length > 0);
-    } catch (err) { }
+    } catch (err) {
+      // Ignore malformed QoS data and leave the processor empty.
+    }
   }
   public onChangeRTP({ streamsRTP }) {
     this.streamsRTP = streamsRTP || [];
@@ -748,7 +750,9 @@ class QosProcessor {
   private cloneObject(src: any): any {
     try {
       return JSON.parse(JSON.stringify(src));
-    } catch (err) { }
+    } catch (err) {
+      // Return the original value when it cannot be JSON-cloned.
+    }
 
     return src;
   }

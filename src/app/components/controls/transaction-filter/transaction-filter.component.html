@@ -6,7 +6,10 @@
 <!-- filter -->
 <div class="hidden-back"
   [hidden]="!isFilterOpened"
-(click)="hideFilter()"></div>
+  tabindex="0"
+  role="button"
+  (click)="hideFilter()"
+  (keydown.enter)="hideFilter()"></div>
 <div class="button-icon-right-top filter-container"
   [hidden]="!isFilterOpened"
   #filterContainer>

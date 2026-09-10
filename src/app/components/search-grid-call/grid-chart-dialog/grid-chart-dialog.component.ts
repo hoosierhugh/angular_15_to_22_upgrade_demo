@@ -76,7 +76,7 @@ export class DialogChartGridDialogComponent
     @Input() titleId: string;
     @Input() headerColor: any;
     @Input() mouseEventData: any;
-    @Input() gridApiData: {};
+    @Input() gridApiData: Record<string, any>;
     @Input() config: GridChartConfig;
     @Input() inChartContainer = false;
     @Input() id: string;
@@ -90,7 +90,7 @@ export class DialogChartGridDialogComponent
 
     @Output() changeSettings = new EventEmitter<any>();
     @Output() openMessage = new EventEmitter<any>();
-    @Output() close = new EventEmitter<any>();
+    @Output() closeDialog = new EventEmitter<any>();
     @ViewChild('filterContainer', { static: false })
     filterContainer: ElementRef;
     dataLogs: any[];
@@ -179,7 +179,7 @@ export class DialogChartGridDialogComponent
             if (
                 this.config &&
                 this.config !== null &&
-                typeof this.config !== undefined
+                typeof this.config !== 'undefined'
             ) {
                 this.axisX = this.config.axisX;
                 this.axisY = this.config.axisY;
@@ -261,7 +261,7 @@ export class DialogChartGridDialogComponent
         if (this.chartType === 'pie') {
             this.apiPoint.forEachNode((node) => {
                 const dataPointKey = node.data[this.axisX];
-                let kValue = rowData.hasOwnProperty(dataPointKey)
+                let kValue = Object.hasOwn(rowData, dataPointKey)
                     ? rowData[dataPointKey]
                     : 0;
                 kValue += node.data.duration;
@@ -291,11 +291,11 @@ export class DialogChartGridDialogComponent
         } else if (this.chartType === 'line') {
             this.apiPoint.forEachNode((node) => {
                 const dataPointKey = node.data.create_date;
-                const kValue = rowData.hasOwnProperty(dataPointKey)
+                const kValue = Object.hasOwn(rowData, dataPointKey)
                     ? rowData[dataPointKey]
                     : {};
                 const axisXKey = node.data[this.axisX];
-                let sValue = kValue.hasOwnProperty(axisXKey)
+                let sValue = Object.hasOwn(kValue, axisXKey)
                     ? kValue[axisXKey]
                     : 0;
                 sValue += node.data.duration;
@@ -333,7 +333,7 @@ export class DialogChartGridDialogComponent
         } else {
             this.apiPoint.forEachNode((node, i) => {
                 const dataPointKey = node.data.create_date;
-                const kValue = rowData.hasOwnProperty(dataPointKey)
+                const kValue = Object.hasOwn(rowData, dataPointKey)
                     ? rowData[dataPointKey]
                     : {};
                 const axisXKey = node.data[this.axisX];
@@ -382,7 +382,7 @@ export class DialogChartGridDialogComponent
         }
         if (
             _keysArray.length !== 0 &&
-            typeof _keysArray !== undefined &&
+            typeof _keysArray !== 'undefined' &&
             _keysArray !== null
         ) {
             this.keysArray = Functions.cloneObject(_keysArray);
@@ -394,7 +394,7 @@ export class DialogChartGridDialogComponent
     }
 
     onClose() {
-        this.close.emit();
+        this.closeDialog.emit();
         this.cdr.detectChanges();
     }
 

@@ -654,7 +654,9 @@ export class SearchGridCallComponent
                         this.cdr.detectChanges();
                     }
                 }
-            } catch (err) { }
+            } catch (err) {
+                // Ignore incomplete persisted grid settings.
+            }
         }
     }
 
@@ -1371,7 +1373,9 @@ export class SearchGridCallComponent
                         this.cdr.detectChanges();
                     }
                 }
-            }, err => { });
+            }, err => {
+                // Ignore decode lookup failures; decoded data is optional.
+            });
             /**
              * END DECODED
              */
@@ -1607,7 +1611,9 @@ export class SearchGridCallComponent
         try {
             const _body: any = window.document.body;
             _body?.removeAllListeners();
-        } catch (e) { }
+        } catch (e) {
+            // Ignore listener cleanup failures in non-Node browser objects.
+        }
 
         clearInterval(this._interval);
     }

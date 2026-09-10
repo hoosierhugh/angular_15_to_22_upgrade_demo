@@ -340,9 +340,11 @@ export class InfluxdbchartWidgetComponent implements IWidget, OnInit, OnDestroy 
     }
 
     public chartClicked({ event, active }: { event: MouseEvent, active: {}[] }): void {
+        // Chart click hook retained for ng2-charts bindings.
     }
 
     public chartHovered({ event, active }: { event: MouseEvent, active: {}[] }): void {
+        // Chart hover hook retained for ng2-charts bindings.
     }
 
     yAxisFormatter(label) {
@@ -351,14 +353,18 @@ export class InfluxdbchartWidgetComponent implements IWidget, OnInit, OnDestroy 
                 return ((num) => {
                     const f = i => Math.pow(1024, i);
                     let n = 4;
-                    while (n-- && !(f(n) < num)) { }
+                    while (n-- && !(f(n) < num)) {
+                        // Find the largest matching unit.
+                    }
                     return (n === 0 ? num : Math.round(num / f(n)) + ('kmb'.split('')[n - 1])) || num.toFixed(2);
                 })(label);
             case 'bytes':
                 return ((num) => {
                     const f = i => Math.pow(1024, i);
                     let n = 6;
-                    while (n-- && !(f(n) < num)) { }
+                    while (n-- && !(f(n) < num)) {
+                        // Find the largest matching unit.
+                    }
                     return ((n === 0 ? num : Math.round(num / f(n)) + ('KMGTP'.split('')[n - 1])) || num.toFixed(0)) + 'b';
                 })(label);
 

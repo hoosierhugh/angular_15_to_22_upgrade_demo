@@ -163,6 +163,6 @@ export class CustomAgGridComponent implements OnInit {
         this.rowClick.emit(event);
     }
     doOpenFilter() {
-
+        // Hook for the filter button; this grid has no custom filter panel.
     }
 }

@@ -101,7 +101,7 @@ export class WebsharkComponent implements AfterViewInit, OnDestroy {
     }
 
     @Output() ready = new EventEmitter<any>();
-    @Output() dblclick = new EventEmitter<any>();
+    @Output() rowDblClick = new EventEmitter<any>();
 
 
     constructor() {
@@ -294,7 +294,7 @@ export class WebsharkComponent implements AfterViewInit, OnDestroy {
          * 'Tcp Analysis Push Bytes Sent'
          */
         return (str + '')
-            .split(/[\._]{1}/g)
+            .split(/[._]{1}/g)
             .map(
                 i => i.replace(/(\w){1}/, (g, a) => ('' + a).toUpperCase()))
             .join(' ');
@@ -345,7 +345,7 @@ export class WebsharkComponent implements AfterViewInit, OnDestroy {
         // console.log(event);
         const data = event?.row?.item;
         data.uniqueId = Functions.md5object(data);
-        this.dblclick.emit({data});
+        this.rowDblClick.emit({data});
     }
     ngOnDestroy() {
         this.tooltipService.hide();

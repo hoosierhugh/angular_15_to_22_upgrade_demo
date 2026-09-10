@@ -125,7 +125,7 @@ export class SettingAlertWidgetComponent implements OnInit {
         this.cdr.detectChanges();
     }
     changeRequestType() {
-        this.data.alertUrl = this.data.alertUrl.replace(/(\?|\&)([^=]+)\=([^&]+)/, '');
+        this.data.alertUrl = this.data.alertUrl.replace(/(\?|&)([^=]+)=([^&]+)/, '');
         this.data.keyList = [''];
         this.data.postData = '{}';
         this.data.expectedList = [''];

@@ -95,7 +95,9 @@ export class TabMessagesComponent implements OnInit, AfterViewInit, OnDestroy {
       this.dataSource.filter = filterData;
       // console.log('this.dataSource', this.dataSource);
       this.cdr.detectChanges();
-    } catch (err) { }
+    } catch (err) {
+      // Ignore malformed message data while building the table filter.
+    }
   }
   applyFilter() {
     this.dataSource.filter = this.filterData;

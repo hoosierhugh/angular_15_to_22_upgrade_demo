@@ -83,7 +83,7 @@ export class TabCallinfoComponent implements AfterViewInit {
     this.callDataByCallid = dataByCallid || [];
     this.callTransaction = [];
     for (const callid in this.callDataByCallid) {
-      if (this.callDataByCallid?.hasOwnProperty(callid)) {
+      if (Object.hasOwn(this.callDataByCallid, callid)) {
         let profile = '';
         if (this.callDataByCallid?.[callid][0]) {
           profile = this.callDataByCallid?.[callid][0]?.profile;

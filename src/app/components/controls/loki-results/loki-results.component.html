@@ -52,7 +52,7 @@
             @for (i of resultData; track identify($index, i); let idx = $index) {
               <div
                 >
-                <div class="loki-body item" (click)="showLabel(idx)">
+                <div class="loki-body item" tabindex="0" role="button" (click)="showLabel(idx)" (keydown.enter)="showLabel(idx)">
                   <span><mat-icon [id]="'icon-'+idx" style="font-size: 12px;height:12px;width:12px">navigate_next</mat-icon></span>
                   @if (showTime) {
                     <div class="item-tex-loki hover lokitime"

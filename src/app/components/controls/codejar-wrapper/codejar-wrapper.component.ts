@@ -1,5 +1,5 @@
 import hljs from 'highlight.js';
-import { Component, EventEmitter, Input, OnInit, Output, AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, ViewChild, HostListener, ElementRef, inject } from '@angular/core';
+import { Component, EventEmitter, Input, Output, AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, ViewChild, HostListener, ElementRef, inject } from '@angular/core';
 import { CodeJarContainer } from 'ngx-codejar';
 
 @Component({
@@ -9,7 +9,7 @@ import { CodeJarContainer } from 'ngx-codejar';
     changeDetection: ChangeDetectionStrategy.OnPush,
     standalone: false
 })
-export class CodeJarWrapperComponent implements OnInit, AfterViewInit {
+export class CodeJarWrapperComponent implements AfterViewInit {
     private cdr = inject(ChangeDetectorRef);
 
     @Input()
@@ -75,9 +75,6 @@ export class CodeJarWrapperComponent implements OnInit, AfterViewInit {
             }
         })
     }
-    ngOnInit(): void {
-    }
-
     private updateContentEditable(): void {
         this.codejar.nativeElement.querySelector('pre')
             ?.setAttribute('contenteditable', String(!this._readOnly));

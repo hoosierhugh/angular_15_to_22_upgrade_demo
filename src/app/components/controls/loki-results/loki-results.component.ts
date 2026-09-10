@@ -32,11 +32,11 @@ export class LokiResultsComponent implements OnInit, AfterViewInit {
         this.isFirstSearch = true;
     }
 
-    @Input() customTimeRangeQuery: any | null = null;
-
     get logQlText() {
         return this._logQlText;
     }
+
+    @Input() customTimeRangeQuery: any | null = null;
 
     queryText: string;
     queryObject: any;
@@ -81,7 +81,7 @@ export class LokiResultsComponent implements OnInit, AfterViewInit {
             labelField: 'callid'
         };
         this.modules.getModules().then(({ data: { loki } }) => {
-            let labels = '';
+            let labels: string;
             if (loki.template) {
 
                 const matchOperator = loki.template.match(/\|=|\|~|!=|!~/);
@@ -89,7 +89,7 @@ export class LokiResultsComponent implements OnInit, AfterViewInit {
                     this.lokiTemplate.lineFilterOperator = matchOperator[0];
                     loki.template = loki.template.replace(matchOperator[0], '')
                 }
-                const matchLabel = loki.template.match(/\s*"\%(.*)\%"/)
+                const matchLabel = loki.template.match(/\s*"%(.*)%"/)
                 if (matchLabel && matchLabel[1]) {
                     this.lokiTemplate.labelField = matchLabel[1];
                     loki.template = loki.template.replace(matchLabel[0], '')
@@ -206,8 +206,8 @@ export class LokiResultsComponent implements OnInit, AfterViewInit {
                 .split('|').sort((a, b) => b.length - a.length).join('|');
             const regex = new RegExp('(' + rxText + ')', 'g');
             data = value
-                .replace(/\</g, '&lt;')
-                .replace(/\>/g, '&gt;')
+                .replace(/</g, '&lt;')
+                .replace(/>/g, '&gt;')
                 .replace(regex, (g, a) => {
                     return `<span>${a}</span>`;
                 });

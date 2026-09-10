@@ -7,8 +7,6 @@ import type { FlowFilter } from './transaction-filter.component';
 })
 export class TransactionFilterService {
     subject = new BehaviorSubject<Partial<FlowFilter>>({});
-    constructor() {
-    }
     get listen(): Observable<Partial<FlowFilter>> {
         return this.subject.asObservable();
     }

@@ -123,7 +123,9 @@ export class MessageContentComponent implements OnInit, OnDestroy, AfterViewInit
           }
         }
       });
-    } catch (e) { }
+    } catch (e) {
+      // Ignore incomplete message metadata.
+    }
     if (val.typeItem === 'HEP-LOG') {
       this.type = 'LOG';
       this.raw_isJSON = false;
@@ -150,7 +152,9 @@ export class MessageContentComponent implements OnInit, OnDestroy, AfterViewInit
             return a;
           }, {});
         }
-      } catch (_) { }
+      } catch (_) {
+        // Leave malformed header text unchanged.
+      }
     }
 
     if (typeof this.raw === 'string') {

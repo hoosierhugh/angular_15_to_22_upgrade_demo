@@ -7,7 +7,10 @@
 @if (options !== undefined) {
   <div class="hidden-back"
     [hidden]="!isInfoOpened"
-  (click)="hideInfo()"></div>
+    tabindex="0"
+    role="button"
+    (click)="hideInfo()"
+    (keydown.enter)="hideInfo()"></div>
 }
 <div class="button-icon-right-top info-container"
   [hidden]="!isInfoOpened"

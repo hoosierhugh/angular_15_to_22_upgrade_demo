@@ -129,10 +129,12 @@ export class SessionStorageService {
         log('this.setting.protosearchSettings', this.setting.protosearchSettings);
         Object.entries(this.setting.protosearchSettings)
             .forEach(([key, widget]) => {
-                if (!widget || widget.hasOwnProperty(ConstValue.serverLoki)) {
+                if (!widget || Object.hasOwn(widget, ConstValue.serverLoki)) {
                     return;
                 }
+
                 const fields = widget.fields;
+
                 if (fields && fields.length === 0) {
                     delete this.setting.protosearchSettings[key];
                 }

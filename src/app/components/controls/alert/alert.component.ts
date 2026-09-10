@@ -8,7 +8,7 @@ import { AlertProper, AlertSubject, MessageTimer } from '@app/models/alert.model
 
 
 @Component({
-    selector: 'alert-overlay',
+    selector: 'app-alert-overlay',
     templateUrl: 'alert.component.html',
     styleUrls: ['./alert.component.scss'],
     changeDetection: ChangeDetectionStrategy.OnPush,

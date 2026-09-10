@@ -327,7 +327,9 @@ export class CodeStyleSmartInputFieldComponent implements AfterViewInit {
             throw new Error(`Unexpected node type: ${node.nodeType}`);
         }
       });
-    } catch (err) { }
+    } catch (err) {
+      // Ignore unsupported selection nodes.
+    }
     return textSegments;
   }
 
@@ -401,7 +403,9 @@ export class CodeStyleSmartInputFieldComponent implements AfterViewInit {
 
     try {
       sel.setBaseAndExtent(anchorNode, anchorIndex, focusNode, focusIndex);
-    } catch (err) { }
+    } catch (err) {
+      // Ignore invalid selection restoration ranges.
+    }
   }
   private typeInTextarea(str, autoClear = false) {
     try {

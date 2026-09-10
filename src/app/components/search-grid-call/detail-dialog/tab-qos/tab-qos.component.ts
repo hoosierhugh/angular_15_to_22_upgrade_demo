@@ -141,7 +141,9 @@ export class TabQosComponent implements OnInit, AfterViewInit {
               this.mosFraction = false;
             }
           }
-        } catch (err) { }
+        } catch (err) {
+          // Ignore malformed QoS configuration values.
+        }
       }
     });
 
@@ -304,7 +306,9 @@ export class TabQosComponent implements OnInit, AfterViewInit {
     return (num => {
       const f = i => Math.pow(1024, i);
       let n = 4;
-      while (n-- && !(f(n) < num)) { }
+      while (n-- && !(f(n) < num)) {
+        // Find the largest matching unit.
+      }
       return (n === 0 ? num : Math.round(num / f(n)) + ('kmb'.split('')[n - 1])) || num.toFixed(2);
     })(label);
   }

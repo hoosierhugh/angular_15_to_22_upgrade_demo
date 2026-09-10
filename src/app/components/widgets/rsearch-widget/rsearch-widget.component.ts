@@ -82,7 +82,7 @@ export class RsearchWidgetComponent implements IWidget, OnInit {
 
   }
   onChangeField(event: unknown) {
-
+    // Template hook retained for the deprecated Loki search widget.
   }
   handleEnterKeyPress(event) {
     const tagName = event.target.tagName.toLowerCase();
@@ -98,6 +98,7 @@ export class RsearchWidgetComponent implements IWidget, OnInit {
     this.limit = 100;
   }
   openDialog(): void {
+    // Required by IWidget; settings are edited inline for this widget.
   }
 
 }

@@ -111,7 +111,7 @@ export class ModalResizableComponent implements OnInit, AfterViewInit, OnDestroy
         return this._arrowMetaData;
     }
     escTimeout: any;
-    @Output() close = new EventEmitter<any>();
+    @Output() closeDialog = new EventEmitter<any>();
     @Output() browserWindow = new EventEmitter<any>();
     @Output() refreshButton = new EventEmitter<any>();
     @Output() diff = new EventEmitter<any>();
@@ -290,7 +290,7 @@ export class ModalResizableComponent implements OnInit, AfterViewInit, OnDestroy
     onClose() {
         if (this.id === this.windowService.currentWindow) {
             this.windowService.close(this.id)
-            this.close.emit({});
+            this.closeDialog.emit({});
             this.cdr.detectChanges();
         }
     }

@@ -5,7 +5,7 @@
     <mat-nav-list>
       @for (link of links; track link) {
         <a mat-list-item routerLinkActive="activated" class="menu-link"
-          id="{{link}}-setting" (click)="preferenceGo(link)">
+          id="{{link}}-setting" tabindex="0" (click)="preferenceGo(link)" (keydown.enter)="preferenceGo(link)">
           {{ i18n(link) | uppercase }}
         </a>
       }

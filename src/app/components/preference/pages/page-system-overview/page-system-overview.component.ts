@@ -204,7 +204,9 @@ export class PageSystemOverviewComponent implements OnInit, AfterViewInit {
             if (typeof data[item] === 'string') {
                 try {
                     data[item] = JSON.parse(data[item]);
-                } catch (e) { }
+                } catch (e) {
+                    // Leave non-JSON strings unchanged.
+                }
             }
         });
         this.cdr.detectChanges();

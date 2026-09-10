@@ -6,6 +6,15 @@ import  moment from 'moment';
 import { FlowItemType } from '@app/models/flow-item-type.model';
 import { WorkerCommands } from '@app/models/worker-commands.module';
 
+const DTMF_EVENT_LABELS: Record<number, string> = {
+  10: '*',
+  11: '#',
+  12: 'A',
+  13: 'B',
+  14: 'C',
+  15: 'D',
+};
+
 class Functions {
   static protoCheck(protocol: number) {
     return (
@@ -103,7 +112,9 @@ class Functions {
   static cloneObject<T>(src: T): T {
     try {
       return JSON.parse(JSON.stringify(src));
-    } catch (err) {}
+    } catch (err) {
+      // Return the original value when it cannot be JSON-cloned.
+    }
 
     return src;
   }
@@ -286,7 +297,9 @@ export class TransactionServiceProcessor {
           if (trans && trans.hasOwnProperty(name)) {
             trans[name] = JSON.parse(trans[name]);
           }
-        } catch (_) {}
+        } catch (_) {
+          // Leave non-JSON transaction fields unchanged.
+        }
       });
     });
     if (environment?.isHomerAPI) {
@@ -388,7 +401,9 @@ export class TransactionServiceProcessor {
               item.isRTCP
                 ? FlowItemType.RTCP
                 : FlowItemType.RTP;
-          } catch (_) {}
+          } catch (_) {
+            // Ignore malformed network report rows.
+          }
         });
         if (uac) {
           uac.forEach((item) => {
@@ -399,7 +414,9 @@ export class TransactionServiceProcessor {
                 item.message.SOURCE && item.message.SOURCE === FlowItemType.RTCP
                   ? FlowItemType.RTCP
                   : FlowItemType.RTP;
-            } catch (_) {}
+            } catch (_) {
+              // Ignore malformed UA report rows.
+            }
           });
           return [...reports, ...uac];
         }
@@ -417,12 +434,16 @@ export class TransactionServiceProcessor {
         srcData.forEach((i) => {
           try {
             obj[i] = JSON.parse(obj[i]);
-          } catch (err) {}
+          } catch (err) {
+            // Leave non-JSON DTMF fields unchanged.
+          }
         });
       } else if (typeof srcData === 'string') {
         try {
           obj[srcData] = JSON.parse(obj[srcData]);
-        } catch (err) {}
+        } catch (err) {
+          // Leave non-JSON DTMF fields unchanged.
+        }
       }
     };
     const parseDTMF = (src: string): any => {
@@ -433,9 +454,7 @@ export class TransactionServiceProcessor {
           a[key] = value * 1;
           return a;
         }, {});
-        out.NUM =
-          [, , , , , , , , , , '*', '#', 'A', 'B', 'C', 'D'][out.e] ||
-          out.e + '';
+        out.NUM = DTMF_EVENT_LABELS[out.e] || out.e + '';
         out.duration = out.d;
         out.create_ts = (out.ts * 1000000 + out.tsu) / 1000;
         return out;
@@ -481,12 +500,16 @@ export class TransactionServiceProcessor {
       srcData.forEach((i) => {
         try {
           obj[i] = JSON.parse(obj[i]);
-        } catch (err) {}
+        } catch (err) {
+          // Leave non-JSON fields unchanged.
+        }
       });
     } else if (typeof srcData === 'string') {
       try {
         obj[srcData] = JSON.parse(obj[srcData]);
-      } catch (err) {}
+      } catch (err) {
+        // Leave non-JSON fields unchanged.
+      }
     }
   }
   public parseDTMF(src: string): any {
@@ -497,8 +520,7 @@ export class TransactionServiceProcessor {
         a[key] = value * 1;
         return a;
       }, {});
-      out.NUM =
-        [, , , , , , , , , , '*', '#', 'A', 'B', 'C', 'D'][out.e] || out.e + '';
+      out.NUM = DTMF_EVENT_LABELS[out.e] || out.e + '';
       out.duration = out.d;
       out.create_ts = (out.ts * 1000000 + out.tsu) / 1000;
       return out;
@@ -537,28 +559,25 @@ export class TransactionServiceProcessor {
   }
 
   public reCheckHost({ messages, hosts, alias }) {
-    const arrIPs = [].concat
-      .apply(
-        [],
-        messages.map((i) => {
-          try {
-            const source_ipisIPv6 = i.source_ip.match(/\:/g)?.length > 1;
-            const destination_ipisIPv6 =
-              i.destination_ip.match(/\:/g)?.length > 1;
-            const sIP = source_ipisIPv6 ? `[${i.source_ip}]` : i.source_ip;
-            const dIP = destination_ipisIPv6
-              ? `[${i.destination_ip}]`
-              : i.destination_ip;
-            return [
-              i.source_port ? `${sIP}:${i.source_port}` : sIP,
-              i.destination_port ? `${dIP}:${i.destination_port}` : dIP,
-            ];
-          } catch (err) {
-            console.log(i, err);
-          }
-          return [];
-        })
-      )
+    const arrIPs = messages
+      .flatMap((i): string[] => {
+        try {
+          const source_ipisIPv6 = i.source_ip.match(/\:/g)?.length > 1;
+          const destination_ipisIPv6 =
+            i.destination_ip.match(/\:/g)?.length > 1;
+          const sIP = source_ipisIPv6 ? `[${i.source_ip}]` : i.source_ip;
+          const dIP = destination_ipisIPv6
+            ? `[${i.destination_ip}]`
+            : i.destination_ip;
+          return [
+            i.source_port ? `${sIP}:${i.source_port}` : sIP,
+            i.destination_port ? `${dIP}:${i.destination_port}` : dIP,
+          ];
+        } catch (err) {
+          console.log(i, err);
+        }
+        return [];
+      })
       .sort()
       .filter((i, k, a) => a[k - 1] !== i);
 
@@ -917,7 +936,9 @@ export class TransactionServiceProcessor {
           // mos: 425
           try {
             i.mos = JSON.parse(item.raw).MOS;
-          } catch (e) {}
+          } catch (e) {
+            // Leave MOS unset when the raw payload is not JSON.
+          }
           i.isRTCP = type === 'rtcp';
           // node: ""
           i.node = item.dbnode;
@@ -1043,8 +1064,6 @@ export class TransactionServiceProcessor {
         micro_ts: item.create_ts || new Date(item.create_date).getTime(),
       };
     });
-    logsData.forEach((item) => {});
-
     return [...messages, ...logs];
   }
 }

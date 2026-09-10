@@ -3,7 +3,7 @@
   <small [ngClass]="{'unshare':!shared}" >Paste link on browser search bar</small>
   @if (!shared) {
     <div>
-      Please set This Dashboard as <span (click)="shareDashboard()" class="shared-btn" title="click to share dashboard">shared</span> to Share QR-Link
+      Please set This Dashboard as <span tabindex="0" role="button" (click)="shareDashboard()" (keydown.enter)="shareDashboard()" class="shared-btn" title="click to share dashboard">shared</span> to Share QR-Link
     </div>
   }
   @if (shared) {
@@ -22,7 +22,7 @@
     </qrcode>
     <div class="image-code"></div>
     <div class="homer-logo">
-      <img src="/assets/images/homer_qr_logo.png" width="75px" class="qr-logo"/>
+      <img src="/assets/images/homer_qr_logo.png" width="75px" class="qr-logo" alt="Homer logo"/>
 
     </div>
 

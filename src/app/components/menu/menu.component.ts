@@ -204,7 +204,7 @@ export class MenuComponent implements OnInit, OnDestroy {
                 if (data.searchTabs && data.searchTabs.length > 0) {
                     const currentUser = this.authenticationService.getUserName() || '';
                     data.searchTabs.forEach(tab => {
-                        if (!tab.hasOwnProperty('owner')) {
+                        if (!Object.hasOwn(tab, 'owner')) {
                             this.deleteSearchTab(tab);
                         }
                     });
@@ -251,7 +251,9 @@ export class MenuComponent implements OnInit, OnDestroy {
                     ({ href }) => href === this.currentDashboardId
                 ).name;
 
-            } catch (e) { }
+            } catch (e) {
+                // Ignore missing dashboard metadata.
+            }
         }
         this.cdr.detectChanges();
     }

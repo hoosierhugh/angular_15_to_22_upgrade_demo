@@ -132,7 +132,7 @@ export class SearchService {
             }
             if (!loadSettings && localData.fields) {
                 localData.fields.forEach(field => {
-                    if (field.hasOwnProperty('func') && field.func !== null) {
+                    if (Object.hasOwn(field, 'func') && field.func !== null && field.func !== undefined) {
                         let func = field.func.value.replace('::field::', field.name);
                         func = func.replace('::value::', field.value);
                         field.value = func;

@@ -8,7 +8,6 @@ import { AlertMessage } from '.';
 export class CopyService {
 
     private subject = new Subject<CopyEvent>();
-    constructor() { }
 
     copy(data: unknown, notification: AlertMessage) {
         this.subject.next({data:data, notification: notification});

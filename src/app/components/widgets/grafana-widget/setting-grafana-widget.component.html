@@ -14,9 +14,9 @@
 
 
     <div>
-      <label>{{ 'widgets.grafana.settings.theme' | translate }} </label>
+      <span id="grafana-theme-radio-label">{{ 'widgets.grafana.settings.theme' | translate }} </span>
       <mat-radio-group
-        aria-labelledby="example-radio-group-label"
+        aria-labelledby="grafana-theme-radio-label"
         class="example-radio-group"
         [(ngModel)]="data.params.theme">
         @for (season of ['light', 'dark']; track season) {
@@ -28,9 +28,9 @@
     </div>
 
     <div>
-      <label>{{ 'widgets.grafana.settings.timeRange' | translate }}</label>
+      <span id="grafana-timerange-radio-label">{{ 'widgets.grafana.settings.timeRange' | translate }}</span>
       <mat-radio-group
-        aria-labelledby="example-radio-group-label"
+        aria-labelledby="grafana-timerange-radio-label"
         class="example-radio-group"
         [(ngModel)]="data.typeDataRange">
         @for (season of [
@@ -84,7 +84,7 @@
           <mat-form-field>
             <mat-label>{{'LINK.dashboard' | translate}}</mat-label>
             <mat-select
-              [disabled]='dashboardList?.length == 0'
+              [disabled]='dashboardList?.length === 0'
               [compareWith]="compareDashboard"
               [(ngModel)]="dashboardSource"
               (selectionChange)="onDashboardChange()">
@@ -106,7 +106,7 @@
             <mat-label>{{ 'widgets.grafana.settings.panel' | translate }}</mat-label>
             <mat-select
               style="max-height: 300px;"
-              [disabled]='dashboardList?.length == 0'
+              [disabled]='dashboardList?.length === 0'
               [compareWith]="comparePanel"
               [(ngModel)]="panelListValue"
               (selectionChange)="onPanelSelect()">

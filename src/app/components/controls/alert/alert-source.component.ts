@@ -10,7 +10,7 @@ import { AlertSubject } from '@app/models/alert.model';
 
 
 @Component({
-    selector: 'alert',
+    selector: 'app-alert',
     template: ``,
     styleUrls: ['./alert.component.scss'],
     changeDetection: ChangeDetectionStrategy.OnPush,

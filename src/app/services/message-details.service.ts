@@ -39,7 +39,7 @@ export interface ParentWindowData {
 })
 export class MessageDetailsService {
     static parentWindow: Record<string, ParentWindowData> = {};
-    constructor() { }
+
     private subject = new Subject<MessageDetailsEvent>();
     private subjectArrows = new Subject<MessageDetailsArrowEvent>();
 

@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, AfterViewInit, Output, EventEmitter, Input, ElementRef, ChangeDetectionStrategy } from '@angular/core';
+import { Component, ViewChild, AfterViewInit, Output, EventEmitter, Input, ElementRef, ChangeDetectionStrategy } from '@angular/core';
 import { MatMenuTrigger } from '@angular/material/menu';
 
 interface TextSegment {
@@ -20,7 +20,7 @@ export interface PrometheusCodeUpdate {
     changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false
 })
-export class CodeStylePrometheusFieldComponent implements OnInit, AfterViewInit {
+export class CodeStylePrometheusFieldComponent implements AfterViewInit {
   divHTML: string;
   divText: string;
   serverLoki: string;
@@ -48,10 +48,6 @@ export class CodeStylePrometheusFieldComponent implements OnInit, AfterViewInit 
   @ViewChild(MatMenuTrigger, { static: false }) trigger: MatMenuTrigger;
 
   popupList: string[];
-
-  constructor() { }
-
-  ngOnInit() { }
 
   ngAfterViewInit() {
     this.editor = this.divContainer.nativeElement;
@@ -312,7 +308,9 @@ export class CodeStylePrometheusFieldComponent implements OnInit, AfterViewInit 
             throw new Error(`Unexpected node type: ${node.nodeType}`);
         }
       });
-    } catch (err) { }
+    } catch (err) {
+      // Ignore unsupported selection nodes.
+    }
     return textSegments;
   }
 
@@ -335,7 +333,9 @@ export class CodeStylePrometheusFieldComponent implements OnInit, AfterViewInit 
 
     try {
       this.editor.innerHTML = this.setStyleCodeColors(textContent); // this.renderText(textContent);
-    } catch (err) { }
+    } catch (err) {
+      // Ignore editor updates before the editable element is ready.
+    }
 
     if (setEnd) {
       this.restoreSelection(this.editor.innerText.length, this.editor.innerText.length);
@@ -377,7 +377,9 @@ export class CodeStylePrometheusFieldComponent implements OnInit, AfterViewInit 
     });
     try {
       sel.setBaseAndExtent(anchorNode, anchorIndex, focusNode, focusIndex);
-    } catch (err) { }
+    } catch (err) {
+      // Ignore invalid selection restoration ranges.
+    }
   }
   private typeInTextarea(str: string) {
     const sel = window.getSelection() as Selection;

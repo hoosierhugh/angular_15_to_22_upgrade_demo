@@ -1,7 +1,4 @@
 export class PreferencesContentMapping{
-
-    constructor(){}
-
     static get keyWordsOnHeaderMapping():object {
         return {
             'ip alias' : "IP Aliases" ,

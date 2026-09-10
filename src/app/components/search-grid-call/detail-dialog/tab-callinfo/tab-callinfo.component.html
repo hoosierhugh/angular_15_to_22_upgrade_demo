@@ -10,7 +10,10 @@
     <div class="panel panel-default padded">
       <div class="panel-heading">
         <div class="toggle-header" [ngStyle]="{ 'border-bottom': '3px solid ' + color(trans.callid) }"
-          (click)="toggleCallInfo(trans.callid)">
+          tabindex="0"
+          role="button"
+          (click)="toggleCallInfo(trans.callid)"
+          (keydown.enter)="toggleCallInfo(trans.callid)">
           <div style="display: flex; align-items: center">
             <mat-icon style="color: #749ad6" id="{{ trans.callid + '-icon' }}">keyboard_arrow_down
             </mat-icon>

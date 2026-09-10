@@ -12,12 +12,12 @@
         <tr>
           @if (item.name === 'image' && isLinkImg) {
             <td colspan="2" style="text-align: center;">
-              <img class="flow-alias-image" [src]="item.value" />
+              <img class="flow-alias-image" [src]="item.value" alt="" />
             </td>
           }
           @if (item.name === 'image' && !isLinkImg) {
             <td colspan="2" style="text-align: center;">
-              <img [src]="'assets/' + item.value" />
+              <img [src]="'assets/' + item.value" alt="" />
             </td>
           }
           @if (item.name !== 'image' && item.name !== 'color' && item.name !== 'isLinkImg') {

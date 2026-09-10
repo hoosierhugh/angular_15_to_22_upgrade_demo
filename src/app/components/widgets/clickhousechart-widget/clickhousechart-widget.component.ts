@@ -307,18 +307,18 @@ export class ClickhouseChartWidgetComponent implements IWidget, OnInit {
                 operator = item.operator.replace('()', `(${item.counter})`);
             }
             const timeDiff = timeRange.to - timeRange.from;
-            if (!item.autoMode) {
-
-            } else if (timeDiff < 60) { // under 1 minute
-                item.resolution = 1; // 1 second resolution
-            } else if (timeDiff < 3600) { // under 1 hour
-                item.resolution = 60; // 1 minute resolution
-            } else if (timeDiff < 86400) { // under 1 day
-                item.resolution = 3600; // 1 hour resolution
-            } else if (timeDiff < 604800) { // under 1 week
-                item.resolution = 21600; // 6 hours resolution
-            } else {
-                item.resolution = 86400; // 1 day resolution
+            if (item.autoMode) {
+                if (timeDiff < 60) { // under 1 minute
+                    item.resolution = 1; // 1 second resolution
+                } else if (timeDiff < 3600) { // under 1 hour
+                    item.resolution = 60; // 1 minute resolution
+                } else if (timeDiff < 86400) { // under 1 day
+                    item.resolution = 3600; // 1 hour resolution
+                } else if (timeDiff < 604800) { // under 1 week
+                    item.resolution = 21600; // 6 hours resolution
+                } else {
+                    item.resolution = 86400; // 1 day resolution
+                }
             }
             if (!/\w/.test(item.raw)) {
                 const query = {
@@ -410,14 +410,18 @@ export class ClickhouseChartWidgetComponent implements IWidget, OnInit {
                 return ((num) => {
                     const f = i => Math.pow(1024, i);
                     let n = 4;
-                    while (n-- && !(f(n) < num)) { }
+                    while (n-- && !(f(n) < num)) {
+                        // Find the largest matching unit.
+                    }
                     return (n === 0 ? num : Math.round(num / f(n)) + ('kmb'.split('')[n - 1])) || num.toFixed(2);
                 })(label);
             case 'bytes':
                 return ((num) => {
                     const f = i => Math.pow(1024, i);
                     let n = 6;
-                    while (n-- && !(f(n) < num)) { }
+                    while (n-- && !(f(n) < num)) {
+                        // Find the largest matching unit.
+                    }
                     return ((n === 0 ? num : Math.round(num / f(n)) + ('KMGTP'.split('')[n - 1])) || num.toFixed(0)) + 'b';
                 })(label);
 

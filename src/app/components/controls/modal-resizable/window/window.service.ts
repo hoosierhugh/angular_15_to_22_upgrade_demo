@@ -6,7 +6,7 @@ import { Injectable } from '@angular/core';
 })
 export class WindowService {
     subject = new Subject<MouseEvent>();
-    constructor() { }
+
     get listen(): Observable<MouseEvent> {
         return this.subject.asObservable();
     }

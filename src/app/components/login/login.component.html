@@ -49,9 +49,10 @@
               <div class="input-group mb-3"
                 >
                 <div class="input-group-prepend">
-                  <label class="input-group-text">{{ 'login.authentication' | translate }}</label>
+                  <label class="input-group-text" for="authentication-type">{{ 'login.authentication' | translate }}</label>
                 </div>
                 <select class="custom-select"
+                  id="authentication-type"
                   formControlName="type"
                   [(value)]="type">
                   @for (type of types; track type) {
@@ -80,7 +81,7 @@
                             <fa-icon [icon]="['fab', type.provider_name]"></fa-icon>
                           }
                           @if (type.provider_image) {
-                            <img [src]="type.provider_image" width="20" height="20">
+                            <img [src]="type.provider_image" width="20" height="20" alt="Provider">
                           }
                         </span>
                         <span class="oauth-label">{{ type.name }}</span>

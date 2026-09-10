@@ -4,7 +4,7 @@ import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { FileUploadModel } from '@app/components';
 import { UploadService } from '@app/services/upload.service';
 import { of } from 'rxjs';
-import { map, tap, last, catchError } from 'rxjs/operators';
+import { map, last, catchError } from 'rxjs/operators';
 import { trigger, state, style, animate, transition } from '@angular/animations';
 import { TranslateService } from '@ngx-translate/core'
 import { ApiResponse } from '@app/models';
@@ -15,6 +15,7 @@ interface ImportDialogData {
 
 interface UploadFile {
     data: File;
+    state: string;
     inProgress: boolean;
     progress: number;
     canRetry: boolean;
@@ -87,7 +88,7 @@ export class DialogImportComponent implements AfterViewInit {
     }
     onImport(files: FileList) {
         Array.from(files).forEach(file => {
-            this.files.push({ data: file, inProgress: false, progress: 0, canRetry: false, canCancel: true });
+            this.files.push({ data: file, state: 'in', inProgress: false, progress: 0, canRetry: false, canCancel: true });
         });
         this.uploadFiles();
     }
@@ -126,7 +127,6 @@ export class DialogImportComponent implements AfterViewInit {
                   }
                   return event;
                 }),
-                tap(message => { }),
                 last(),
                 catchError((error: HttpErrorResponse) => {
                     file.inProgress = false;

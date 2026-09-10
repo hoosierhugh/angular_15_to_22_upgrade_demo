@@ -13,7 +13,7 @@
           (wheel)=onScroll($event)
           #virtualScroll
           >
-          <div *cdkVirtualFor='let item of legendItems' class="legend-item" (click)='hideDataset(item.datasetIndex, $event)'>
+          <div *cdkVirtualFor='let item of legendItems' class="legend-item" tabindex="0" role="button" (click)='hideDataset(item.datasetIndex, $event)' (keydown.enter)='hideDataset(item.datasetIndex, $event)'>
             <div [style.backgroundColor]='item.fillStyle | colorOffset: "0":"0":"0":"1"' [ngClass]="{'crossed': item.hidden}" class="legend-token"></div>
             <div [ngClass]="{'crossed': item.hidden}" class="legend-text">{{item.text}}</div>
           </div>
@@ -46,7 +46,4 @@
     </button>
   </div>
 }
-<!-- <div class="virtual-scrollbar" *ngIf="!isExport" (mousedown)="setScrollTarget('virtualScrollbar')"
-(scroll)="onScroll($event)" #virtualScrollbar>
-<div [style.transform]="getVirtualScrollHeight" [style.padding.px]="1"></div>
-</div> -->
+

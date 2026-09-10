@@ -40,8 +40,6 @@ export class GridController {
     }
     localData;
 
-    constructor() { }
-
     public recoverAgGridSizeControl() {
         /** recover agGridSizeControl settings from localStorage */
         const { selectedType, sizeColumnsToFit, pageSize } =

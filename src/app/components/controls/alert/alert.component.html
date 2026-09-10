@@ -25,6 +25,8 @@
         <div
           (mouseover)="resetTimer(message.key)"
           (mouseout)="clearMessageTimer(message.key)"
+          (focus)="resetTimer(message.key)"
+          (blur)="clearMessageTimer(message.key)"
             [ngClass]="{
                 alert: message,
                 'alert-success': message.value.type === 'success',

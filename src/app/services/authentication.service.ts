@@ -139,7 +139,9 @@ export class AuthenticationService {
                 moment.tz.setDefault(data.name);
                 setStorage(ConstValue.CURRENT_USER, user);
             }
-        } catch (err) { }
+        } catch (err) {
+            // Ignore invalid persisted timezone data.
+        }
     }
     logout() {
         if (MOCK_MODE) { return; }

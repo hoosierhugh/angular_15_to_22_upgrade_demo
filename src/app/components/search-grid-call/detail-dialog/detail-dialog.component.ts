@@ -165,7 +165,7 @@ export class DetailDialogComponent implements OnInit, OnDestroy {
   private dateFormat: string;
 
   @Output() openMessage = new EventEmitter<any>();
-  @Output() close = new EventEmitter<any>();
+  @Output() closeDialog = new EventEmitter<any>();
   updateGraphSettings(e) {
     this.graphSettings = Functions.cloneObject(e);
     this.cdr.detectChanges();
@@ -262,7 +262,7 @@ export class DetailDialogComponent implements OnInit, OnDestroy {
     this.cdr.detectChanges();
   }
   onClose() {
-    this.close.emit();
+    this.closeDialog.emit();
   }
 
   addWindow(data: any) {
@@ -309,7 +309,9 @@ export class DetailDialogComponent implements OnInit, OnDestroy {
             this.cdr.detectChanges();
           }
         }
-      } catch (err) {}
+      } catch (err) {
+        // Ignore invalid persisted tab state.
+      }
     }
   }
   resizeMap() {
@@ -360,7 +362,9 @@ export class DetailDialogComponent implements OnInit, OnDestroy {
       const iagent = agentActiveData.data;
       this.agentsActive = true;
       this.agentsData.data.push(Functions.JSON_parse(iagent));
-    } catch (error) {}
+    } catch (error) {
+      // Ignore invalid agent metadata.
+    }
     return;
   }
   onSelectedTabChange({ tab: { textLabel } }) {

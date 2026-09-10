@@ -27,10 +27,13 @@
                 [hidden]="!treeFilter(node)"
                 (mouseover)="tooltipService.show(node.description)"
                 (mouseout)="tooltipService.hide()"
+                (focus)="tooltipService.show(node.description)"
+                (blur)="tooltipService.hide()"
                 matTreeNodePaddingIndent="20"
                 matTreeNodePadding>
                 <button mat-icon-button
-                    disabled></button>
+                    disabled
+                    aria-hidden="true"></button>
                 <span class="line-html"
                     [innerHTML]=" highlight(node.name) | html "></span>
                 <button mat-icon-button [hidden]="!rowData"
@@ -45,6 +48,8 @@
                 [hidden]="!treeFilter(node)"
                 (mouseover)="tooltipService.show(node.description)"
                 (mouseout)="tooltipService.hide()"
+                (focus)="tooltipService.show(node.description)"
+                (blur)="tooltipService.hide()"
                 matTreeNodePaddingIndent="20"
                 matTreeNodePadding>
                 <button mat-icon-button

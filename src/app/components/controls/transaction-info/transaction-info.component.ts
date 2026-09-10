@@ -6,7 +6,7 @@ export interface CallIdData {
     color: string;
     count: number;
     duration: string;
-    methods: {};
+    methods: Record<string, { count: number; color: string }>;
 }
 
 @Component({
@@ -81,7 +81,9 @@ export class TransactionInfoComponent {
         );
         try {
             this.cdr.detectChanges();
-        } catch (err) { }
+        } catch (err) {
+            // Ignore change detection errors while transaction info initializes.
+        }
     }
 
     @ViewChild('filterContainer', { static: false }) filterContainer: ElementRef;
@@ -104,9 +106,9 @@ export class TransactionInfoComponent {
     }
 
     @HostListener('document:click', ['$event.target'])
-    public onClick(targetElement: Node) {
+    public onClick(targetElement: EventTarget) {
         if (this.filterContainer && this.filterContainer.nativeElement) {
-            const clickedInside = this.filterContainer.nativeElement.contains(targetElement);
+            const clickedInside = this.filterContainer.nativeElement.contains(targetElement as Node);
             if (!clickedInside && this.isInfoOpened) {
                 this.hideInfo();
             }

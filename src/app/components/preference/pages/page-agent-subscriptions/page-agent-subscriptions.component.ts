@@ -154,7 +154,9 @@ export class PageAgentSubscriptionsComponent implements OnInit, AfterViewInit {
                 // data[item] = Functions.JSON_parse(data[item]);
                 try {
                     data[item] = JSON.parse(data[item]);
-                } catch (e) { }
+                } catch (e) {
+                    // Leave non-JSON strings unchanged.
+                }
             }
         });
         this.cdr.detectChanges();

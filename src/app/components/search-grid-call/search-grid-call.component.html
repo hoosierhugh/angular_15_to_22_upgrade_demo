@@ -164,7 +164,7 @@
     [isLoaded]="item.loaded"
     [request]="item.request"
     (openMessage)="addWindowMessage($event, null, item)"
-    (close)="closeWindow(idx)"
+    (closeDialog)="closeWindow(idx)"
     >
   </app-detail-dialog>
 }
@@ -193,7 +193,7 @@
     [isBrowserWindow]="item.isBrowserWindow"
     [width]="650"
     [height]="400"
-    (close)="closeWindowMessage(idx)"
+    (closeDialog)="closeWindowMessage(idx)"
     >
     @if (!item.loaded) {
       <app-loading-circle> </app-loading-circle>
@@ -222,7 +222,7 @@
         [isOutsideButton]="false"
         [title]="('searchGridCall.report' | translate) + ': ' + item.id"
         [headerColor]="item.headerColor"
-        (close)="closeChartWindow(idx)"
+        (closeDialog)="closeChartWindow(idx)"
         [mouseEventData]="item.mouseEventData"
         [width]="1400"
         [height]="400"

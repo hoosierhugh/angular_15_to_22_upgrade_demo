@@ -214,7 +214,9 @@ export class Functions {
   static cloneObject<T>(src: T): T {
     try {
       return JSON.parse(JSON.stringify(src));
-    } catch (err) { }
+    } catch (err) {
+      // Return the original value when it cannot be JSON-cloned.
+    }
 
     return src;
   }

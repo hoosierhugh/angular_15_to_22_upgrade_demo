@@ -162,7 +162,7 @@ export class DashboardComponent implements OnInit, OnDestroy, AfterViewInit {
 
     if (event.key === 'Tab' && event.shiftKey === true) {
       event.preventDefault();
-      let i = 0;
+      let i: number;
       if (currentWidget !== undefined) {
         i = this.submitCheck().findIndex(widget => widget.id === currentWidget.id);
         if (i < this.submitCheck().length - 1) {
@@ -285,13 +285,11 @@ export class DashboardComponent implements OnInit, OnDestroy, AfterViewInit {
       return;
     }
 
-    let columnRes: number;
-    let rowRes: number;
     const isWARNING = this.dashboardCollection.data.config.ignoreMinSize === 'warning';
     const rect = grid.getBoundingClientRect();
 
-    columnRes = rect.width / config.columns;
-    rowRes = rect.height / config.maxrows;
+    const columnRes = rect.width / config.columns;
+    const rowRes = rect.height / config.maxrows;
 
     if (config.ignoreMinSize !== 'ignore' && this.dashboardArray?.length) {
       const widget = this.dashboardArray.find(w => w.id === id);
@@ -563,16 +561,16 @@ export class DashboardComponent implements OnInit, OnDestroy, AfterViewInit {
     } else {
       widgetList = this.dashboardService.dbs.currentWidgetList;
     }
-    for (let i = 0; i < WidgetArray.length; i++) {
-      if (WidgetArray[i].submit) {
-        submitWidgets.push(WidgetArray[i]);
+    for (const widget of WidgetArray) {
+      if (widget.submit) {
+        submitWidgets.push(widget);
       }
     }
 
-    for (let i = 0; i < widgetList.length; i++) {
-      for (let j = 0; j < submitWidgets.length; j++) {
-        if (widgetList[i].strongIndex === submitWidgets[j].strongIndex) {
-          dashboardSubmitWidgets.push(widgetList[i]);
+    for (const widget of widgetList) {
+      for (const submitWidget of submitWidgets) {
+        if (widget.strongIndex === submitWidget.strongIndex) {
+          dashboardSubmitWidgets.push(widget);
         }
       }
     }
@@ -737,7 +735,9 @@ export class DashboardComponent implements OnInit, OnDestroy, AfterViewInit {
 
         await this.onDashboardSave().toPromise();
         this.cdr.detectChanges();
-      } catch (err) { }
+      } catch (err) {
+        // Ignore save failures while applying local dashboard layout changes.
+      }
     });
   }
 
@@ -1253,7 +1253,7 @@ export class DashboardComponent implements OnInit, OnDestroy, AfterViewInit {
     return collectionItem.find(i => i.activeTab) || collectionItem[0];
   }
   dashboardDrop(event, item: any = null) {
-
+    // Hook reserved for dashboard-level drop handling.
   }
   public drop(event, isNewGroupName = false) {
     const getID = el => el?.element?.nativeElement?.id;
@@ -1304,7 +1304,9 @@ export class DashboardComponent implements OnInit, OnDestroy, AfterViewInit {
     }
     try {
       this.gridster?.api?.calculateLayout();
-    } catch (err) { }
+    } catch (err) {
+      // Ignore layout recalculation failures during resize.
+    }
   }
   // To work on Grafana "Variables" feature you have to have setup with same origin for backend and UI
   // or set ---disable-site-isolation-trials flag in chrome, DON'T FORGET TO REMOVE FLAG AFTERWARDS, IT IS UNSAFE

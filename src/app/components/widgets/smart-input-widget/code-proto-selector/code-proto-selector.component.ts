@@ -63,6 +63,7 @@ export class CodeProtoSelectorComponent {
     }
 
     setValue(val) {
+        // API-compatible no-op for selector integrations.
     }
     changeProto($event: ProtocolOption) {
         this.protoSelect = $event;

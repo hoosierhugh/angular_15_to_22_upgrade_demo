@@ -274,7 +274,9 @@ export class ProtosearchWidgetComponent implements IWidget, OnInit, OnDestroy, A
       if (alias?.data) {
         this.aliases = alias.data;
       }
-    } catch (err) { }
+    } catch (err) {
+      // Ignore alias lookup failures; aliases are optional.
+    }
   }
 
   isAliasField(field) {
