@@ -1366,7 +1366,7 @@ export class DaterangepickerComponent implements OnInit {
      */
     updateLocale(locale) {
         for (const key in locale) {
-            if (locale.hasOwnProperty(key)) {
+            if (Object.prototype.hasOwnProperty.call(locale, key)) {
                 this.locale[key] = locale[key];
                 if (key === 'customRangeLabel') {
                     this.renderRanges();

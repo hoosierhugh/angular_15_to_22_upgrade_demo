@@ -23,9 +23,9 @@ export class PageProfileComponent implements OnInit {
   private alertService = inject(AlertService);
 
 
-  regString = /^[a-zA-Z0-9\-\_\.]+$/;
+  regString = /^[a-zA-Z0-9\-_.]+$/;
   regNum = /^[0-9]+$/;
-  regDept = /^[a-zA-Z0-9\-\_\.\s]+$/;
+  regDept = /^[a-zA-Z0-9\-_.\s]+$/;
   lastPasswordChange: string;
   lastLogin: string;
   originalUser = '';

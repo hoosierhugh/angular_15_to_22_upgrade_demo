@@ -348,6 +348,7 @@ class QosProcessor {
       return;
     }
 
+    // eslint-disable-next-line no-control-regex -- strips a literal DLE (0x10) byte that appears in malformed RTCP payloads and breaks JSON.parse
     const uc = /\u0010/;
 
     data.map(m => {

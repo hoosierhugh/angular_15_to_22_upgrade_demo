@@ -114,7 +114,7 @@ export class CodeStylePrometheusFieldComponent implements AfterViewInit {
       if (!labelBlock) {
         return;
       }
-      labelBlock.replace(/[\{\}\s\"]{1}/g, '')
+      labelBlock.replace(/[{}\s"]{1}/g, '')
         .split(',')
         .map(pair => pair.split('='))
         .forEach(([name, value]) => {
@@ -145,7 +145,7 @@ export class CodeStylePrometheusFieldComponent implements AfterViewInit {
   }
   getVariabls(label: string = null) {
     setTimeout(() => {
-      label = label || this.editor.innerText.split(',').pop().replace(/[\=\"\,\{\}]+/g, '');
+      label = label || this.editor.innerText.split(',').pop().replace(/[=",{}]+/g, '');
       this.isLabel = false;
 
       this.popupList = this.gatObjectLabels()[label] || [];
@@ -226,9 +226,9 @@ export class CodeStylePrometheusFieldComponent implements AfterViewInit {
         }
         return i;
       }).join(',')
-      .replace(/\=/g, ':')
+      .replace(/=/g, ':')
       .replace(/[a-zA-Z-]+/g, (a, b) => `"${a}"`)
-      .replace(/\"\"/g, '"')
+      .replace(/""/g, '"')
       .replace(/\s/g, '')
       .replace(/^.*$/g, a => `{${a}}`)
       .replace(',}', '}')
@@ -268,7 +268,7 @@ export class CodeStylePrometheusFieldComponent implements AfterViewInit {
   }
 
   private setStyleCodeColors(str: string): string {
-    const s = str.match(/[\{\}\=, ]{1}|[^\{\}\=, ]+/g);
+    const s = str.match(/[{}=, ]{1}|[^{}=, ]+/g);
     if (!s) {
       return '';
     }
@@ -278,7 +278,7 @@ export class CodeStylePrometheusFieldComponent implements AfterViewInit {
         cssClass = 'Pbracket';
       } else if (i === '=') {
         cssClass = 'Pequally';
-      } else if (i.match(/[\"\'\`]+/g)) {
+      } else if (i.match(/["'`]+/g)) {
         cssClass = 'Pquotes';
       } else if (i.match(/[a-z]+/g)) {
         cssClass = 'Plabel';

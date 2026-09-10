@@ -164,7 +164,7 @@ export class SettingPrometheusWidgetComponent {
         });
     }
 
-    getMetrics(arrLabels: string[], callback: Function, result = []) {
+    getMetrics(arrLabels: string[], callback: (result: string[]) => void, result: string[] = []) {
         if (arrLabels.length > 0) {
             this._ps.getLabels(arrLabels.shift()).subscribe(metrics => {
                 const metricNames = metrics.map(i => {
@@ -190,7 +190,7 @@ export class SettingPrometheusWidgetComponent {
         this.detailShow = true;
     }
     updateFilters() {
-        const arrStr = this.prometheusQuery.replace(/[\{\}\s]{1}/g, '').split(',');
+        const arrStr = this.prometheusQuery.replace(/[{}\s]{1}/g, '').split(',');
         arrStr.forEach(j => {
             this._metricList = Functions.cloneObject(this.metricList.filter(i => i.indexOf(j) !== -1));
         });
@@ -212,7 +212,7 @@ export class SettingPrometheusWidgetComponent {
     }
     onPrometheusQuery(event = null) {
         this.prometheusQuery = event.text;
-        const arrStr = this.prometheusQuery.replace(/[\{\}\s]{1}/g, '').split(',');
+        const arrStr = this.prometheusQuery.replace(/[{}\s]{1}/g, '').split(',');
         arrStr.forEach(j => {
             this._metricList = Functions.cloneObject(this.metricList.filter(i => i.indexOf(j) !== -1));
         });

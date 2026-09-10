@@ -1,3 +1,4 @@
+import { firstValueFrom } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { Injectable, inject } from '@angular/core';
 import { environment } from '@environments/environment';
@@ -5,8 +6,19 @@ import { HttpClient } from '@angular/common/http';
 
 export type IdType = 'sip' | 'rtp' | 'tcp' | 'udp' | 'ip' | 'eth' | 'sdp' | 'http' | 'isup' | 'ssh';
 
+export type VocabularyMap = Record<string, VItem> | [];
+
+interface VocabularyField {
+    fieldname: string;
+    description: string;
+    type: string;
+}
+interface VocabularySearchResponse {
+    data: { data: VocabularyField[] }[];
+}
+
 class Buffer {
-    static data: any = {};
+    static data: Partial<Record<IdType, VocabularyMap>> = {};
 }
 export class VItem {
     description: string;
@@ -31,19 +43,18 @@ export class WebsharkDictionaryApiService {
 
     private url = `${environment.apiUrl}/protocol/search/`;
 
-    get(id: IdType): Promise<any> {
-        return new Promise<any>(async (resolve) => {
-            if (!Buffer.data[id]) {
-                Buffer.data[id] = await this.getVocabularyById(id);
-            }
-            resolve(Buffer.data[id]);
-        });
+    async get(id: IdType): Promise<VocabularyMap> {
+        if (!Buffer.data[id]) {
+            Buffer.data[id] = await this.getVocabularyById(id);
+        }
+        return Buffer.data[id];
     }
-    getVocabularyById(id: IdType): Promise<any> {
-        return this.http.get<any>(this.url + id).pipe(map(data => {
+    getVocabularyById(id: IdType): Promise<VocabularyMap> {
+        return firstValueFrom(this.http.get<VocabularySearchResponse>(this.url + id).pipe(map(data => {
             const out = data;
             const [dataItem] = out?.data || [];
-            const vData: any[] = dataItem?.data;
+            const vData: VocabularyField[] = dataItem?.data;
+
             if (vData) {
                 return vData.reduce((a, { fieldname, description, type }) => {
                     if (fieldname && description) {
@@ -53,7 +64,8 @@ export class WebsharkDictionaryApiService {
                 }, {});
 
             }
+
             return [];
-        })).toPromise();
+        })));
     }
 }

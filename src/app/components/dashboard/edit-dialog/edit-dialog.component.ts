@@ -74,7 +74,7 @@ export class EditDialogComponent implements OnInit {
         'Warning': 'warning',
         'Ignore': 'Ignore'
     };
-    regString = /^[a-zA-Z0-9\-\_]+$/;
+    regString = /^[a-zA-Z0-9\-_]+$/;
     name = new FormControl([
         Validators.required,
         Validators.minLength(3),

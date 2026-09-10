@@ -31,7 +31,7 @@ export class DialogUserSettingsComponent implements AfterContentInit {
     isValidForm = false;
     isAdmin = false;
     regNum = /^[0-9]+$/;
-    regString = /^[a-zA-Z0-9\-\_\.]+$/;
+    regString = /^[a-zA-Z0-9\-_.]+$/;
     currentUser = '';
     userList: Promise<string[]>;
     type: string;

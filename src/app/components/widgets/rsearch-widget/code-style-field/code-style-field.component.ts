@@ -111,7 +111,7 @@ export class CodeStyleFieldComponent implements AfterViewInit, OnChanges {
         // }
     }
     async getVariabls(label: string = null) {
-        label = label || this.editor.innerText.split(',').pop().replace(/[\=\"\,\{\}]+/g, '');
+        label = label || this.editor.innerText.split(',').pop().replace(/[=",{}]+/g, '');
         // try {
         // setTimeout(() => {
             this.isLabel = false;
@@ -260,9 +260,9 @@ export class CodeStyleFieldComponent implements AfterViewInit, OnChanges {
                 }
                 return i;
             }).join(',')
-            .replace(/\=/g, ':')
+            .replace(/=/g, ':')
             .replace(/[a-zA-Z-]+/g, (a, b) => `"${a}"`)
-            .replace(/\"\"/g, '"')
+            .replace(/""/g, '"')
             .replace(/\s/g, '')
             .replace(/^.*$/g, a => `{${a}}`)
             .replace(',}', '}')
@@ -303,7 +303,7 @@ export class CodeStyleFieldComponent implements AfterViewInit, OnChanges {
     }
 
     private setStyleCodeColors(str) {
-        const s = str.match(/[\{\}\=, ]{1}|[^\{\}\=, ]+/g);
+        const s = str.match(/[{}=, ]{1}|[^{}=, ]+/g);
         if (!s) {
             return '';
         }
@@ -313,7 +313,7 @@ export class CodeStyleFieldComponent implements AfterViewInit, OnChanges {
                 cssClass = 'Pbracket';
             } else if (i === '=') {
                 cssClass = 'Pequally';
-            } else if (i.match(/[\"\'\`]+/g)) {
+            } else if (i.match(/["'`]+/g)) {
                 cssClass = 'Pquotes';
             } else if (i.match(/[a-z]+/g)) {
                 cssClass = 'Plabel';

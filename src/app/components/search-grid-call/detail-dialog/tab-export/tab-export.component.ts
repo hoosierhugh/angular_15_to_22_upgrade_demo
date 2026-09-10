@@ -67,7 +67,7 @@ export class TabExportComponent implements OnInit, AfterViewInit {
         const listAliasCIDR = aliases.data;
         if (typeof this.listAdvancedCIDR !== 'undefined') {
           this.listAdvancedCIDR.forEach(host => {
-            if (!this.listIP.some(ip => ip === host.ip) && !host.hasOwnProperty('alias')) {
+            if (!this.listIP.some(ip => ip === host.ip) && !Object.prototype.hasOwnProperty.call(host, 'alias')) {
               const [aliasCIDR] = Functions.cloneObject(listAliasCIDR).filter(alias => alias.ip === host.ip);
               const parsedHost = {
                 ip: host.ip,
@@ -77,7 +77,7 @@ export class TabExportComponent implements OnInit, AfterViewInit {
               if (!host.disabled) {
                 this.whitelistIP.push(parsedHost);
               }
-            } else if (host.hasOwnProperty('alias')) {
+            } else if (Object.prototype.hasOwnProperty.call(host, 'alias')) {
               const [aliasCIDR] = Functions.cloneObject(listAliasCIDR).filter(alias => alias.alias === host.alias);
               if (typeof aliasCIDR !== 'undefined') {
                 const parsedHost = {
@@ -165,7 +165,7 @@ export class TabExportComponent implements OnInit, AfterViewInit {
     if (m) {
       const ip_string = a.replace(/^:|:$/g, '');
       const ipv6 = ip_string.split(':');
-      for (var i = 0; i < ipv6.length; i++) {
+      for (let i = 0; i < ipv6.length; i++) {
         let hex = ipv6[i];
         if (hex != "") {
           // normalize leading zeros
@@ -182,7 +182,7 @@ export class TabExportComponent implements OnInit, AfterViewInit {
       }
       let hash = 0;
       const newIPV6 = ipv6.join(':').split(':');
-      for (var i = 0; i < newIPV6.length; i += 2) {
+      for (let i = 0; i < newIPV6.length; i += 2) {
         const bin = parseInt(newIPV6[i].concat(newIPV6[i + 1]), 16);
         hash += this.htonl(bin);
       }

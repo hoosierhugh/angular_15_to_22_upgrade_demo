@@ -141,7 +141,7 @@
   [height]="height"
   [objectData]="objectData"
   [sharedUrl]="sharedUrl"
-  (close)="onWindowClose($event); onClose()"
+  (closed)="onWindowClose($event); onClose()"
   #nativeWindow
   >
   <div class="out-window" #outWindow></div>

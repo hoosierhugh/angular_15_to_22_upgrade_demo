@@ -194,7 +194,7 @@ import { Directive, ViewContainerRef, ElementRef, HostListener, forwardRef, Chan
 
     ngOnChanges(changes: SimpleChanges): void  {
       for (const change in changes) {
-        if (changes.hasOwnProperty(change)) {
+        if (Object.prototype.hasOwnProperty.call(changes, change)) {
           if (this.notForChangesProperty.indexOf(change) === -1) {
             this.picker[change] = changes[change].currentValue;
           }

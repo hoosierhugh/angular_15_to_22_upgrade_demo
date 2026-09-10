@@ -6,7 +6,7 @@ import { SearchGridCellParams } from './search-grid-renderer.types';
     selector: 'app-child-cell',
     template: `
     <span class='cell-wrapper' [ngClass]="{'selected': selected}" (mousedown)='startCopy()' (mouseup)='copy(country)'>
-        <mat-icon [matTooltip]='country' style='display: flex; justify-content:center; align-items: center;'> <img [src]='imagepath'></mat-icon>
+        <mat-icon [matTooltip]='country' style='display: flex; justify-content:center; align-items: center;'> <img [src]='imagepath' [alt]="country"></mat-icon>
     </span>`,
     styles: [`
         ::-moz-selection { 

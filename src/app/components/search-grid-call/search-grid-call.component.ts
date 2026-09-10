@@ -666,7 +666,7 @@ export class SearchGridCallComponent
         const { fields_mapping, hepid } = mappings.find(({ hepid, hep_alias, profile }) =>
             (this.isLokiQuery && hepid === 2000 && hep_alias === 'LOKI') ||
             (marData.length === 0 &&
-                this.config.param.search?.hasOwnProperty(`${hepid}_${profile}`)
+                this.config.param.search && Object.prototype.hasOwnProperty.call(this.config.param.search, `${hepid}_${profile}`)
             )
         ) || {};
         const condition = JSON.stringify(fields_mapping) === JSON.stringify(this.mappings) && typeof fields_mapping !== 'undefined';
@@ -684,7 +684,7 @@ export class SearchGridCallComponent
 
         /* this is normaly not needed - just a workaround to copy from search param */
         for (const item in this.config.param.search) {
-            if ((this.config.param as object).hasOwnProperty(item)) {
+            if (Object.prototype.hasOwnProperty.call(this.config.param, item)) {
                 const elem = this.config.param.search[item];
                 if (
                     elem.filter((it) => it.name === ConstValue.LIMIT).length > 1
@@ -1462,8 +1462,8 @@ export class SearchGridCallComponent
       const regexHeaders = new RegExp('(.*): ', 'g');
       let color: string;
       raw = raw
-        .replace(/\</g, '&lt;')
-        .replace(/\>/g, '&gt;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
         .replace(regexpCallid, (g, a, c) => {
           color = 'blue';
           return `<span style="font-weight:bold">${a}:</span><span style="color:${color}">${c}</span>`;

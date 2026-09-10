@@ -57,7 +57,7 @@ export class AddDashboardDialogComponent
   };
   dashboards: any;
   isInvalid = false;
-  regString = /^[a-zA-Z0-9\-\_\s]+$/;
+  regString = /^[a-zA-Z0-9\-_\s]+$/;
   isConfirmed = false;
   fileNames = [];
   isSameOrigin = false;

@@ -43,7 +43,7 @@ export class TranslateLinkCompiler extends TranslateCompiler {
         });
     }
     private parseReference(translation, masterLanguageFile) {
-        const regex = /([^@]*)(@LINK\.[a-zA-Z\_\.\-\s\(\)]+@)(.*)/
+        const regex = /([^@]*)(@LINK\.[a-zA-Z_.\-\s()]+@)(.*)/
         const referenceLink = translation.match(regex);
         if (referenceLink === null) {
             return translation

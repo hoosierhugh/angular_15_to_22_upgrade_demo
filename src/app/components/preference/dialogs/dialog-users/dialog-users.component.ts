@@ -30,9 +30,9 @@ export class DialogUsersComponent implements OnInit {
   isAdmin = false;
   pass2: string;
   hidePass1 = true;
-  regString = /^[a-zA-Z0-9\-\_\.]+$/;
+  regString = /^[a-zA-Z0-9\-_.]+$/;
   regNum = /^[0-9]+$/;
-  regDept = /^[a-zA-Z0-9\-\_\.\s]+$/;
+  regDept = /^[a-zA-Z0-9\-_.\s]+$/;
   originalUser = '';
   isCopy = false;
   isNotChanged = true;
@@ -296,7 +296,7 @@ export function passwordValidator(
   characterRequirements: CharacterRequirements
 ): ValidatorFn {
   return (control: AbstractControl): ValidationErrors | null => {
-    const specialCharaterRegex = /[\*\.!@#$%^&(){}[\]:;<>,.?\/~_+-=|\\]/;
+    const specialCharaterRegex = /[*.!@#$%^&(){}[\]:;<>,.?/~_+-=|\\]/;
     const hasSpecial = !characterRequirements.special || specialCharaterRegex.test(control.value);
     const lowercaseRegex = /[a-z]/;
     const hasLowercase = !characterRequirements.lowercase || lowercaseRegex.test(control.value);

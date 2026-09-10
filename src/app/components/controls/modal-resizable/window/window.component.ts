@@ -39,7 +39,7 @@ export class WindowComponent implements OnInit, OnDestroy {
     }
   }
 
-  @Output() close = new EventEmitter<void>();
+  @Output() closed = new EventEmitter<void>();
 
   private externalWindow: ChildWindow | null = null;
 
@@ -80,14 +80,14 @@ export class WindowComponent implements OnInit, OnDestroy {
         setTimeout(() => {
 
           this._isWindow = false;
-          this.close.emit();
+          this.closed.emit();
           this.cdr.detectChanges();
 
         })
       };
     } catch (e) {
       this._isWindow = false;
-      this.close.emit();
+      this.closed.emit();
       this.cdr.detectChanges();
     }
 
@@ -106,7 +106,7 @@ export class WindowComponent implements OnInit, OnDestroy {
           setTimeout(() => {
 
             this._isWindow = false;
-            this.close.emit();
+            this.closed.emit();
             this.cdr.detectChanges();
 
           })
@@ -184,7 +184,7 @@ export class WindowComponent implements OnInit, OnDestroy {
   ngOnDestroy() {
     if (this.externalWindow) {
       this.externalWindow.close();
-      this.close.emit();
+      this.closed.emit();
       this.cdr.detectChanges();
     }
     if (this.watcherInterval) {

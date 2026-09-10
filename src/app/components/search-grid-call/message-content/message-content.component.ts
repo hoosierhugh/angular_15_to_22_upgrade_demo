@@ -172,7 +172,7 @@ export class MessageContentComponent implements OnInit, OnDestroy, AfterViewInit
     return item.name;
   }
   isParsedData(item) {
-    return this.pt.hasOwnProperty(item);
+    return Object.prototype.hasOwnProperty.call(this.pt, item);
   }
   isObject(item) {
     return typeof item === 'object';

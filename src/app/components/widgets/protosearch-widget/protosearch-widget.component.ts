@@ -112,8 +112,8 @@ export class ProtosearchWidgetComponent implements IWidget, OnInit, OnDestroy, A
   mapping: any;
 
   currentProtocol: string;
-  chipsObj: {};
-  aliasObj: {};
+  chipsObj: Record<string, { val: string }[]>;
+  aliasObj: Record<string, unknown>;
   visible = true;
   selectable = true;
   removable = true;
@@ -403,7 +403,7 @@ export class ProtosearchWidgetComponent implements IWidget, OnInit, OnDestroy, A
         }
 
         if (
-          this._cache?.hasOwnProperty(ConstValue.serverLoki)
+          this._cache && Object.prototype.hasOwnProperty.call(this._cache, ConstValue.serverLoki)
         ) {
           this.fields?.forEach((item) => {
             if (item.field_name === ConstValue.LIMIT) {
@@ -422,7 +422,7 @@ export class ProtosearchWidgetComponent implements IWidget, OnInit, OnDestroy, A
               this.chipsObj[item.selection] = [];
             }
             if (
-              item.hasOwnProperty('system_param') && item?.mapping
+              Object.prototype.hasOwnProperty.call(item, 'system_param') && item?.mapping
             ) {
               const [
                 constParam,
@@ -446,7 +446,7 @@ export class ProtosearchWidgetComponent implements IWidget, OnInit, OnDestroy, A
 
                 }
               }
-            } else if (item.hasOwnProperty('profile')) {
+            } else if (Object.prototype.hasOwnProperty.call(item, 'profile')) {
 
               const f_field = this._cache.fields.find(
                 i => i.name === item.field_name
@@ -877,8 +877,8 @@ export class ProtosearchWidgetComponent implements IWidget, OnInit, OnDestroy, A
           }
           return (
             b &&
-            !item.hasOwnProperty('system_param') &&
-            !item.hasOwnProperty('profile')
+            !Object.prototype.hasOwnProperty.call(item, 'system_param') &&
+            !Object.prototype.hasOwnProperty.call(item, 'profile')
           );
         })
         .map((item: any) => ({
@@ -893,7 +893,7 @@ export class ProtosearchWidgetComponent implements IWidget, OnInit, OnDestroy, A
         })),
       protocol_id: protocol + '_' + profile, // 1_call | 1_ default | 1_registration
     };
-    const profile_custom_field = this.fields.find(i => i.hasOwnProperty('profile'));
+    const profile_custom_field = this.fields.find(i => Object.prototype.hasOwnProperty.call(i, 'profile'));
     if (profile_custom_field?.value) {
       this.searchQuery['profile_custom_field'] = profile_custom_field?.value;
     }
@@ -914,7 +914,7 @@ export class ProtosearchWidgetComponent implements IWidget, OnInit, OnDestroy, A
     this.fields.forEach((item: any) => {
       if (
         item.value &&
-        item.hasOwnProperty('system_param') &&
+        Object.prototype.hasOwnProperty.call(item, 'system_param') &&
         item.mapping !== ''
         && item.field_name !== 'nodesgroup'
       ) {

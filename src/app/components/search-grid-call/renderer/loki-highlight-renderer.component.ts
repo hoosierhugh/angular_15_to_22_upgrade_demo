@@ -4,7 +4,7 @@ import { SearchGridCellParams } from './search-grid-renderer.types';
 
 @Component({
     template: `
-        <span class='cell-wrapper' (click)='copy(data)'>
+        <span class='cell-wrapper' tabindex="0" role="button" (click)='copy(data)' (keydown.enter)='copy(data)'>
             <div class="loki-highlight" [innerHTML]="data"></div>
         </span>`,
     changeDetection: ChangeDetectionStrategy.OnPush,
@@ -27,7 +27,7 @@ export class LokiHighlightRenderer implements ICellRendererAngularComp {
         }
     }
     private htmlSpecialChars(s: string) {
-        return s.replace(/\</g, '&lt;').replace(/\>/g, '&gt;');
+        return s.replace(/</g, '&lt;').replace(/>/g, '&gt;');
 
     }
 

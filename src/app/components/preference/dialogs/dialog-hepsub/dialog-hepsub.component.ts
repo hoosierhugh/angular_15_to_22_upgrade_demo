@@ -31,7 +31,7 @@ export class DialogHepsubComponent {
     isValidForm = false;
     isAdmin = false;
     regNum = /^[0-9]+$/;
-    regString = /^[a-zA-Z0-9\-\_]+$/;
+    regString = /^[a-zA-Z0-9\-_]+$/;
     type: string;
     json;
     noChanges = new Observable()

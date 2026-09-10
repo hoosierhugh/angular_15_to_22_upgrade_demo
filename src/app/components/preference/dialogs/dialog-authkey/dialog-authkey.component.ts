@@ -25,7 +25,7 @@ export class DialogAuthKeyComponent {
 
     isValidForm = false;
     isAdmin = false;
-    regString = /^[a-zA-Z0-9\-\_\s]+$/;
+    regString = /^[a-zA-Z0-9\-_\s]+$/;
     name = new FormControl('', [
         Validators.required,
         Validators.minLength(3),

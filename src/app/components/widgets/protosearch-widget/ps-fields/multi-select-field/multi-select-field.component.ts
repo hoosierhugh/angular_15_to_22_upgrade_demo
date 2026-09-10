@@ -1,4 +1,4 @@
-import { Functions } from 'src/app/helpers/functions';
+import { Functions } from '@app/helpers/functions';
 import {  ChangeDetectionStrategy, ChangeDetectorRef, Component, EventEmitter, Input, OnInit, Output, ViewChild, inject } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { MatAutocompleteTrigger } from '@angular/material/autocomplete';
@@ -33,9 +33,9 @@ export class MultiSelectFieldComponent implements OnInit {
   LABEL = 'label';
   BOOL = 'bool';
 
-  rx = /(\|\|)|(\&\&)|(\!\=)|([A-Za-z0-9\.\-_\:])+/ig;
-  rxValue = /([A-Za-z0-9\.\-_\:])+/ig;
-  rxLogic = /(\|\|)|(\&\&)|(\!\=)/ig;
+  rx = /(\|\|)|(&&)|(!=)|([A-Za-z0-9.\-_:])+/ig;
+  rxValue = /([A-Za-z0-9.\-_:])+/ig;
+  rxLogic = /(\|\|)|(&&)|(!=)/ig;
   /** END CONST */
   checkClassCss: any = { '&&': 'and', '||': 'or', '!=': 'not', '==': 'equal' };
   myControl: FormControl;

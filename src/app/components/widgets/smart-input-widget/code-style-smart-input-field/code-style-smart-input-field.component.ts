@@ -208,7 +208,7 @@ export class CodeStyleSmartInputFieldComponent implements AfterViewInit {
 
     if ((
         (this.editor.innerText + '').split('').reverse()[0] === event.key &&
-        event.key.match(/^[a-z0-9\.]{1}$/g)
+        event.key.match(/^[a-z0-9.]{1}$/g)
       ) ||
       event.key === 'ArrowDown' ||
       event.key === 'Backspace'
@@ -236,14 +236,14 @@ export class CodeStyleSmartInputFieldComponent implements AfterViewInit {
     }
   }
   getObject(str: string) {
-    const out = str.split(/\"\s+/g).reduce((a, b) => {
+    const out = str.split(/"\s+/g).reduce((a, b) => {
       if (!b.includes('=')) {
         if (b !== '') {
           a = Object.assign(a, { regexpText: b });
         }
       } else {
         const [key, val] = b.split('=');
-        a = Object.assign(a, { [key]: val.replace(/\"/g, '') });
+        a = Object.assign(a, { [key]: val.replace(/"/g, '') });
       }
       return a;
     }, {});
@@ -282,7 +282,7 @@ export class CodeStyleSmartInputFieldComponent implements AfterViewInit {
   }
 
   public setStyleCodeColors(str) {
-    const s = str.match(/([!@#$%&][\w\d]*[!@#$%&])|([\=\>\<\s]{1,3}[A-Za-z_]+)|(\.[A-Za-z_]+)|([A-Za-z_]+)|(\d+)|([^A-Za-z_])/g);
+    const s = str.match(/([!@#$%&][\w\d]*[!@#$%&])|([=><\s]{1,3}[A-Za-z_]+)|(\.[A-Za-z_]+)|([A-Za-z_]+)|(\d+)|([^A-Za-z_])/g);
     if (!s) {
       return '';
     }
@@ -294,7 +294,7 @@ export class CodeStyleSmartInputFieldComponent implements AfterViewInit {
         cssClass = 'SInumber';
       } else if (i.match(/[!@#$%&][\w\d]+[!@#$%&]/g)) {
         cssClass = 'SIequally';
-      } else if (i.match(/[\=\>\<]{1,3}\s?[a-zA-Z\d_]+/g)) {
+      } else if (i.match(/[=><]{1,3}\s?[a-zA-Z\d_]+/g)) {
         cssClass = 'SIwhite';
       } else if (i.match(/\.[a-zA-Z_]+/g)) {
         cssClass = 'SIquotes';
@@ -430,15 +430,15 @@ export class CodeStyleSmartInputFieldComponent implements AfterViewInit {
     return false;
   }
   getLastFragment(str) {
-    const arr = str.match(/([\w\.]+)|([\W^\.]+)/g) || [];
+    const arr = str.match(/([\w.]+)|([\W^.]+)/g) || [];
     const lastFragment = arr[arr.length - 1] || '';
-    if (lastFragment.match(/^[\w\.]+$/g)) {
+    if (lastFragment.match(/^[\w.]+$/g)) {
       return lastFragment
     }
     return '';
   }
   formattedTextBeforePasteParam(str) {
-    const arr = str.match(/([\w\.]+)|([\W^\.]+)/g) || [];
+    const arr = str.match(/([\w.]+)|([\W^.]+)/g) || [];
     const lastFragment = arr[arr.length - 1];
     if (lastFragment !== ' ') {
       arr[arr.length - 1] = ' ';

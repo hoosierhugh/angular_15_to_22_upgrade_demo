@@ -26,11 +26,9 @@ export class ModalService {
             delete this.items[id];
             this.removeActive(id)
         }
-        let b;
-        b = Object.values(this.items)
-            .reduce((a, b) => a = a || b, false);
+        const hasActiveItem = Object.values(this.items).some(Boolean);
 
-        this.getOpacity = this.draggingId !== IS_DIFF && b;
+        this.getOpacity = this.draggingId !== IS_DIFF && hasActiveItem;
     }
     checkZIndex(id) {
         if (this.draggingId === IS_DIFF) {

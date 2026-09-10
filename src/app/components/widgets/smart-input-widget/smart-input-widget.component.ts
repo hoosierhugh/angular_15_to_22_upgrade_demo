@@ -250,20 +250,7 @@ export class SmartInputWidgetComponent
       this.onlySmartFieldElement.setQueryText(this.onlySmartFieldTEXT);
     }
   }
-  // getFieldColumns() {
-  //   if (this.autoline) {
-  //     this.countFieldColumns = Math.min(4, this.fields.length);
-  //   } else {
-  //     this.countFieldColumns =
-  //       this.config && this.config.countFieldColumns
-  //         ? this.config.countFieldColumns
-  //         : this.countFieldColumns;
-  //   }
-  //   return Array.from(
-  //     { length: this.countFieldColumns },
-  //     (i) => `${100 / this.countFieldColumns}%`
-  //   ).join(' ');
-  // }
+
   getFieldColumns() {
     const shownFields = this.fields.filter(f => f.shown !== false);
     if (this.autoline) {
@@ -289,7 +276,7 @@ export class SmartInputWidgetComponent
       (data: UserSettings) => {
         this._cache = data.protosearchSettings[this.widgetId];
 
-        if (this._cache && this._cache.hasOwnProperty(ConstValue.serverLoki)) {
+        if (this._cache && Object.prototype.hasOwnProperty.call(this._cache, ConstValue.serverLoki)) {
           this.fields.forEach((item) => {
             if (item.field_name === ConstValue.LIMIT) {
               item.value = this._cache.limit;
@@ -301,7 +288,7 @@ export class SmartInputWidgetComponent
         } else if (this._cache && this._cache.fields) {
           const cacheQuery = this.searchService.getLocalStorageQuery();
           this.fields.forEach((item) => {
-            if (item.hasOwnProperty('system_param') && item.mapping) {
+            if (Object.prototype.hasOwnProperty.call(item, 'system_param') && item.mapping) {
               const [
                 constParam,
                 collectionName,
@@ -556,7 +543,7 @@ export class SmartInputWidgetComponent
           } else {
             b = false;
           }
-          return b && !item.hasOwnProperty('system_param');
+          return b && !Object.prototype.hasOwnProperty.call(item, 'system_param');
         })
         .map((item: any) => ({
           name: item.field_name,
@@ -583,7 +570,7 @@ export class SmartInputWidgetComponent
       if (
         item.value &&
         item.value !== '' &&
-        item.hasOwnProperty('system_param') &&
+        Object.prototype.hasOwnProperty.call(item, 'system_param') &&
         item.mapping !== ''
       ) {
         const [constParam, collectionName, propertyName] = item.mapping.split(

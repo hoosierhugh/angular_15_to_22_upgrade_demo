@@ -46,7 +46,7 @@ export class DialogMappingComponent implements AfterViewInit {
   isValidForm = false;
   isAdmin = false;
   regNum = /^[0-9]+$/;
-  regString = /^[a-zA-Z0-9\-\_]+$/;
+  regString = /^[a-zA-Z0-9\-_]+$/;
   // scripts params
   isScript = false;
   scriptUpd = false;

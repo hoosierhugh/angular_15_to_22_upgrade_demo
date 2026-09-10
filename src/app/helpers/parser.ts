@@ -32,7 +32,7 @@ class Functions {
   }
 
   static getMethodColor(str) {
-    let color = 'hsl(0,0%,0%)';
+    let color: string;
     if (str === 'INVITE') {
       color = 'hsl(227.5,82.4%,51%)';
     } else if (str === 'BYE' || str === 'CANCEL') {
@@ -132,12 +132,13 @@ class Functions {
     let r = parseInt(result[1], 16);
     let g = parseInt(result[2], 16);
     let b = parseInt(result[3], 16);
-    (r /= 255), (g /= 255), (b /= 255);
+    r /= 255;
+    g /= 255;
+    b /= 255;
     const max = Math.max(r, g, b),
       min = Math.min(r, g, b);
-    let h,
-      s,
-      l = (max + min) / 2;
+    let h: number, s: number;
+    const l = (max + min) / 2;
     if (max === min) {
       h = s = 0; // achromatic
     } else {
@@ -175,7 +176,7 @@ class Functions {
       return 'FFA562';
     }
     let hash = 0;
-    let i = 0;
+    let i: number;
     str = this.md5(str);
     for (i = 0; i < str.length; i++) {
       hash = str.charCodeAt(i) + ((hash << 5) - hash);
@@ -294,7 +295,7 @@ export class TransactionServiceProcessor {
     transaction?.forEach((trans: object) => {
       ['data', 'vqr_a', 'vqr_b'].forEach((name) => {
         try {
-          if (trans && trans.hasOwnProperty(name)) {
+          if (trans && Object.prototype.hasOwnProperty.call(trans, name)) {
             trans[name] = JSON.parse(trans[name]);
           }
         } catch (_) {
@@ -316,10 +317,10 @@ export class TransactionServiceProcessor {
       }
       const [_ip] = m.host;
 
-      const isIPv4 = _ip.match(/^\d+\.\d+\.\d+\.\d+(\:\d+)?$/g) !== null;
+      const isIPv4 = _ip.match(/^\d+\.\d+\.\d+\.\d+(:\d+)?$/g) !== null;
       let PORT = isIPv4
         ? _ip
-            ?.match(/\:\d+/g)
+            ?.match(/:\d+/g)
             ?.find((j) => !!j)
             .split(':')[1] * 1
         : null;
@@ -328,9 +329,9 @@ export class TransactionServiceProcessor {
         : _ip;
       if (!isIPv4) {
         // do parsing IPv6
-        PORT = _ip.split(/\:/g).pop() * 1;
+        PORT = _ip.split(/:/g).pop() * 1;
         IP = _ip
-          .split(/\:\d+$/g)
+          .split(/:\d+$/g)
           .shift()
           .replace(/\[|\]/g, '');
       }
@@ -562,9 +563,9 @@ export class TransactionServiceProcessor {
     const arrIPs = messages
       .flatMap((i): string[] => {
         try {
-          const source_ipisIPv6 = i.source_ip.match(/\:/g)?.length > 1;
+          const source_ipisIPv6 = i.source_ip.match(/:/g)?.length > 1;
           const destination_ipisIPv6 =
-            i.destination_ip.match(/\:/g)?.length > 1;
+            i.destination_ip.match(/:/g)?.length > 1;
           const sIP = source_ipisIPv6 ? `[${i.source_ip}]` : i.source_ip;
           const dIP = destination_ipisIPv6
             ? `[${i.destination_ip}]`
@@ -585,11 +586,11 @@ export class TransactionServiceProcessor {
     arrIPs
       .filter((_ip) => !hosts.find((i) => i.host === _ip))
       .forEach((_ip) => {
-        const isIPv4 = _ip.match(/^\d+\.\d+\.\d+\.\d+(\:\d+)?$/g) !== null;
+        const isIPv4 = _ip.match(/^\d+\.\d+\.\d+\.\d+(:\d+)?$/g) !== null;
 
         let PORT = isIPv4
           ? _ip
-              ?.match(/\:\d+/g)
+              ?.match(/:\d+/g)
               ?.find((j) => !!j)
               ?.split(':')[1] * 1
           : null;
@@ -598,9 +599,9 @@ export class TransactionServiceProcessor {
           : _ip;
         if (!isIPv4) {
           // do parsing IPv6
-          PORT = _ip.split(/\:/g).pop() * 1;
+          PORT = _ip.split(/:/g).pop() * 1;
           IP = _ip
-            .split(/\:\d+$/g)
+            .split(/:\d+$/g)
             .shift()
             .replace(/\[|\]/g, '');
         }
@@ -623,19 +624,16 @@ export class TransactionServiceProcessor {
     return hosts;
   }
   private getAliasByIp(ip, alias) {
-    const isIPv4 = ip.match(/^\d+\.\d+\.\d+\.\d+(\:\d+)?$/g) !== null;
-    let PORT = isIPv4
-      ? ip
-          ?.match(/\:\d+/g)
-          ?.find((j) => !!j)
-          ?.split(':')[1] * 1
-      : null;
-    let IP = isIPv4 ? ip?.match(/^\d+\.\d+\.\d+\.\d+/g)?.find((j) => !!j) : ip;
+    const isIPv4 = ip.match(/^\d+\.\d+\.\d+\.\d+(:\d+)?$/g) !== null;
+    let PORT: number;
+    let IP: string;
     let IP_PORT = ip;
-    if (!isIPv4) {
-      PORT = ip.split(/\:/g).pop() * 1;
+    if (isIPv4) {
+      IP = ip?.match(/^\d+\.\d+\.\d+\.\d+/g)?.find((j) => !!j);
+    } else {
+      PORT = ip.split(/:/g).pop() * 1;
       IP = ip
-        .split(/\:\d+$/g)
+        .split(/:\d+$/g)
         .shift()
         .replace(/\[|\]/g, '');
       IP_PORT = `[${IP}]:${PORT}`;
@@ -840,8 +838,8 @@ export class TransactionServiceProcessor {
     const regexHeaders = new RegExp('(.*): ', 'g');
     let color: string;
     raw = raw
-      .replace(/\</g, '&lt;')
-      .replace(/\>/g, '&gt;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
       .replace(regexpCallid, (g, a, c) => {
         color = 'blue';
         return `<span style="font-weight:bold">${a}:</span><span style="color:${color}">${c}</span>`;

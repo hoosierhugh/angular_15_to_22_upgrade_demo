@@ -77,7 +77,7 @@ export class Functions {
   }
 
   static colorByMos(mos: number) {
-    let color = '';
+    let color: string;
     if (mos < 200) {
       color = 'red';
     } else if (mos < 300) {
@@ -91,7 +91,7 @@ export class Functions {
   }
 
   static getMethodColor(str) {
-    let color = 'hsl(0,0%,0%)';
+    let color: string;
     const regex = /\s*\(SDP\)\s*/;
     str = str.replace(regex, '');
     if (str === 'INVITE') {
@@ -157,9 +157,12 @@ export class Functions {
     let r = parseInt(result[1], 16);
     let g = parseInt(result[2], 16);
     let b = parseInt(result[3], 16);
-    r /= 255, g /= 255, b /= 255;
+    r /= 255;
+    g /= 255;
+    b /= 255;
     const max = Math.max(r, g, b), min = Math.min(r, g, b);
-    let h, s, l = (max + min) / 2;
+    let h, s;
+    const l = (max + min) / 2;
     if (max === min) {
       h = s = 0; // achromatic
     } else {
@@ -192,7 +195,7 @@ export class Functions {
       return 'FFA562';
     }
     let hash = 0;
-    let i = 0;
+    let i;
     str = this.md5(str);
     for (i = 0; i < str.length; i++) {
       hash = str.charCodeAt(i) + ((hash << 5) - hash);
@@ -351,8 +354,8 @@ export class Functions {
   // Get the alias fields
   // get alias names if its servertype or group
   // get IP value if its alias => IP type
-  static getAliasFields(aliasList: any[]): object {
-    const fields = {};
+  static getAliasFields(aliasList: any[]): Record<string, unknown> {
+    const fields: Record<string, unknown> = {};
     this.amfList.forEach(f => {
       fields[f] = aliasList.map(m => ({
         name: m[this.getAMF(f)],
@@ -419,11 +422,11 @@ export class Functions {
   }
   static idColorHash(str){
     let hash = 0;
-    for (var i = 0; i < str.length; i++) {
+    for (let i = 0; i < str.length; i++) {
         hash = str.charCodeAt(i) + ((hash << 5) - hash);
     }
     let colour = '#';
-    for (var i = 0; i < 3; i++) {
+    for (let i = 0; i < 3; i++) {
         const value = (hash >> (i * 8)) & 0xFF;
         colour += ('00' + value.toString(16)).substr(-2);
     }
