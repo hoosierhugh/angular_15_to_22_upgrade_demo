@@ -12,9 +12,6 @@
 
 @include mat.elevation-classes();
 @include mat.app-background();
-// @import "https://cdnjs.cloudflare.com/ajax/libs/vis/4.21.0/vis.min.css";
-// @import "https://api.mapbox.com/mapbox-gl-js/v1.10.1/mapbox-gl.css";
-@import "./assets/css/mapbox-gl.css";
 @import "highlight.js/styles/github.css";
 // mat icons font
 @font-face {
@@ -632,13 +629,6 @@ h3 {
 .clear-btn {
     background-color: #fafafa;
     color: #8a8a8a;
-}
-
-.mapboxgl-popup-content {
-    p {
-        margin: 0 auto;
-        text-align: center;
-    }
 }
 
 .custom-tooltip {
