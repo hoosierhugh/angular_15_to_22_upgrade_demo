@@ -1,8 +1,16 @@
 # Upgrading Angular from 15 to 22 demo
 I will have separate branches for each version of Angular so that the viewer can see the changes.
-For example: `upgrade/angular-16, upgrade/angular-17, etc`
+For example: `upgrade/angular-16, upgrade/angular-17, etc`. The Angular Team has emphasized that Angular should be upgraded one version at a time.
 
 Starting with the Angular 18 branch, I've decided to refactor all of the type `any` to proper TypeScript types.  `any` is a pet peeve of mine.  I inherited this project from somebody else, otherwise there would NOT be type `any` in the app.  This will be a sizeable refactor.
+
+## HOMER
+
+Homer is an open source telecommunications software, you can learn more about it here: [Homer](https://github.com/sipcapture/homer)
+
+## YouTube
+
+I have a related YouTube video here: [YouTube](https://www.youtube.com/watch?v=0Zgyo_KzD38)
 
 ## Local demo (no backend or login)
 
@@ -31,10 +39,3 @@ are outside that HTTP interception, so this is not a fully offline sandbox.
 an authenticated service. Existing `npm run dev` and production builds retain
 normal authentication and backend behavior; they do not enable demo mode.
 
-## HOMER
-
-Homer is an open source telecommunications software, you can learn more about it here: [Homer](https://github.com/sipcapture/homer)
-
-## YouTube
-
-I have a related YouTube video here: [YouTube](https://www.youtube.com/watch?v=0Zgyo_KzD38)
