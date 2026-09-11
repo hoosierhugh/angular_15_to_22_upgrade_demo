@@ -14,7 +14,7 @@ import type { IconPack } from '@fortawesome/fontawesome-svg-core';
 import { fas } from '@fortawesome/free-solid-svg-icons';
 import { fab } from '@fortawesome/free-brands-svg-icons';
 import { far } from '@fortawesome/free-regular-svg-icons';
-import { TranslateModule } from '@ngx-translate/core'
+import { TranslateDirective, TranslatePipe } from '@ngx-translate/core'
 import { HtmlPipe } from './html.pipe';
 @NgModule({
   imports: [
@@ -26,7 +26,8 @@ import { HtmlPipe } from './html.pipe';
     MatTooltipModule,
     NgxJsonViewerModule,
     FontAwesomeModule,
-    TranslateModule
+    TranslatePipe,
+    TranslateDirective
   ],
   declarations: [TabCallinfoComponent, HtmlPipe],
   exports: [TabCallinfoComponent],

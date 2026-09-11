@@ -45,7 +45,7 @@ export class TabExportComponent implements OnInit, AfterViewInit {
     const translateService = this.translateService;
 
     translateService.addLangs(['en'])
-    translateService.setDefaultLang('en')
+    translateService.setFallbackLang('en')
   }
 
   ngOnInit() {

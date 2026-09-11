@@ -41,7 +41,7 @@ export class DialogDBSelectorComponent {
         const data = this.data;
 
         translateService.addLangs(['en'])
-        translateService.setDefaultLang('en')
+        translateService.setFallbackLang('en')
 
         this.nodeSelection = data.data.db_list;
         this.tableSelection = data.data.table_list;

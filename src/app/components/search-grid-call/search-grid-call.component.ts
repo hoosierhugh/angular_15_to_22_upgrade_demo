@@ -224,7 +224,7 @@ export class SearchGridCallComponent
 
         // this.cdr.detach();
         translateService.addLangs(['en']);
-        translateService.setDefaultLang('en');
+        translateService.setFallbackLang('en');
         this.myPredefColumns = [{
             headerName: '',
             field: '',

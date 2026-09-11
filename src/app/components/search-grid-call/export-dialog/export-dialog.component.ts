@@ -53,7 +53,7 @@ export class ExportDialogComponent implements OnInit {
         const data = this.data;
 
         translateService.addLangs(['en'])
-        translateService.setDefaultLang('en')
+        translateService.setFallbackLang('en')
         this.apiColumn = data.apicol;
         this.apiPoint = data.apipoint;
         this.mappings = data.mappings;

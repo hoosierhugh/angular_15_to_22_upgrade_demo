@@ -21,7 +21,7 @@ export class DataCellComponent implements OnInit {
          const translateService = this.translateService;
 
          translateService.addLangs(['en'])
-        translateService.setDefaultLang('en')
+        translateService.setFallbackLang('en')
        }
 
     ngOnInit() {

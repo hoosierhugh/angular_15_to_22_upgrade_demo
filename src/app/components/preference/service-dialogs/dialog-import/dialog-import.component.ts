@@ -58,7 +58,7 @@ export class DialogImportComponent implements AfterViewInit {
         const data = this.data;
 
         translateService.addLangs(['en'])
-        translateService.setDefaultLang('en')
+        translateService.setFallbackLang('en')
         this.pageId = data.data.pageId;
     }
 

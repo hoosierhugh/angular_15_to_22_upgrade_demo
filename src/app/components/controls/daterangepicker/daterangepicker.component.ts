@@ -209,7 +209,7 @@ export class DaterangepickerComponent implements OnInit {
         const translateService = this.translateService;
 
         translateService.addLangs(['en'])
-        translateService.setDefaultLang('en')
+        translateService.setFallbackLang('en')
         this.choosedDate = new EventEmitter();
         this.rangeClicked = new EventEmitter();
         this.datesUpdated = new EventEmitter();

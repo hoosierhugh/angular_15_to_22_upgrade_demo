@@ -130,7 +130,7 @@ export class ProtosearchWidgetComponent implements IWidget, OnInit, OnDestroy, A
     const translateService = this.translateService;
 
     translateService.addLangs(['en'])
-    translateService.setDefaultLang('en')
+    translateService.setFallbackLang('en')
   }
 
   ngAfterViewInit() {

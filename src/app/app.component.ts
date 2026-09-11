@@ -35,7 +35,7 @@ export class AppComponent {
         });
         window['console2file'] = Functions.console2file;
         // this language will be used as a fallback when a translation isn't found in the current language
-        translateService.setDefaultLang('en');
+        translateService.setFallbackLang('en');
 
          // the lang to use, if the lang isn't available, it will use the current loader to get them
         translateService.use('en').subscribe( data => {

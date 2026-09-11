@@ -101,7 +101,7 @@ export class SmartInputWidgetComponent
     const translateService = this.translateService;
 
     translateService.addLangs(['en'])
-    translateService.setDefaultLang('en')
+    translateService.setFallbackLang('en')
   }
 
   async ngOnInit() {

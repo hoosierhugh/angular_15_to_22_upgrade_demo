@@ -77,7 +77,7 @@ export class PrometheusWidgetComponent implements IWidget, OnInit, OnDestroy {
         const translateService = this.translateService;
 
         translateService.addLangs(['en'])
-        translateService.setDefaultLang('en')
+        translateService.setFallbackLang('en')
     }
 
     ngOnInit() {

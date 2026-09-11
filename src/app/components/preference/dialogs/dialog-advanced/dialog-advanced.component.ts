@@ -58,7 +58,7 @@ export class DialogAdvancedComponent {
 
 
         translateService.addLangs(['en'])
-        translateService.setDefaultLang('en')
+        translateService.setFallbackLang('en')
         if (data.isnew) {
             data.data = {
                 partid: 10,

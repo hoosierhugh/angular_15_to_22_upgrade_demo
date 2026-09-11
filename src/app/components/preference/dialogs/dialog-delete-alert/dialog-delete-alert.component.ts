@@ -32,7 +32,7 @@ export class DialogDeleteAlertComponent {
         const data = this.data;
 
         translateService.addLangs(['en'])
-        translateService.setDefaultLang('en')
+        translateService.setFallbackLang('en')
         this.message = data.data.message;
         this.page = data.data.page;
         this.isToken = data.data.isToken;

@@ -31,7 +31,7 @@ export class AlertComponent {
 
         this.addNotification(message, true)
         translateService.addLangs(['en'])
-        translateService.setDefaultLang('en')
+        translateService.setFallbackLang('en')
     }
     @Output() closeAlert = new EventEmitter();
 

@@ -76,7 +76,7 @@ export class SettingProtosearchWidgetComponent implements OnInit, OnDestroy {
         const data = this.data;
 
         translateService.addLangs(['en'])
-        translateService.setDefaultLang('en')
+        translateService.setFallbackLang('en')
         if (!data) {
             return;
         }

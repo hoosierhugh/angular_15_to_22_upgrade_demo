@@ -3,7 +3,7 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { TabFlowComponent } from './tab-flow.component';
 // import { VirtualScrollerModule } from 'ngx-virtual-scroller';
-import { TranslateModule } from '@ngx-translate/core'
+import { TranslateDirective, TranslatePipe } from '@ngx-translate/core'
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { ScrollingModule } from '@angular/cdk/scrolling';
@@ -13,7 +13,8 @@ import { MatTooltipModule } from '@angular/material/tooltip';
     CommonModule,
     // VirtualScrollerModule,
     ScrollingModule,
-    TranslateModule,
+    TranslatePipe,
+    TranslateDirective,
     MatIconModule,
     MatButtonModule,
     MatTooltipModule

@@ -28,7 +28,7 @@ export class DialogAuthTokenDisplayComponent {
         const data = this.data;
 
         translateService.addLangs(['en'])
-        translateService.setDefaultLang('en')
+        translateService.setFallbackLang('en')
         this.token = data.data.token;
         const userData = this.authService.currentUserValue;
         this.isAdmin = !!userData?.user?.admin;

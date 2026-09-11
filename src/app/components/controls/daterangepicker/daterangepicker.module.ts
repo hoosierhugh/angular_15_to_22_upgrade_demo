@@ -9,7 +9,7 @@ import { LocaleService } from './locale.service';
 import { TimeZonePipe } from './timezone.pipe';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { HomerMaterialModule } from '@app/app.material-module';
-import { TranslateModule } from '@ngx-translate/core';
+import { TranslateDirective, TranslatePipe } from '@ngx-translate/core';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
@@ -32,7 +32,8 @@ import { MatTooltipModule } from '@angular/material/tooltip';
         BrowserAnimationsModule,
         MatTooltipModule,
         HomerMaterialModule,
-        TranslateModule
+        TranslatePipe,
+        TranslateDirective
     ],
     providers: [],
     exports: [

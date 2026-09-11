@@ -33,7 +33,7 @@ export class SettingGeneralIframeWidgetComponent {
         const translateService = this.translateService;
 
         translateService.addLangs(['en'])
-        translateService.setDefaultLang('en')
+        translateService.setFallbackLang('en')
     }
 
     validate(event) {

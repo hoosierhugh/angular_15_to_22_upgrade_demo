@@ -43,7 +43,7 @@ export class DialogAlarmComponent implements OnInit {
         const data = this.data;
 
         translateService.addLangs(['en'])
-        translateService.setDefaultLang('en')
+        translateService.setFallbackLang('en')
         this.isSearch = data ? true : false;
     }
     async ngOnInit() {

@@ -92,7 +92,7 @@ export class EditDialogComponent implements OnInit {
         const translateService = this.translateService;
 
         translateService.addLangs(['en'])
-        translateService.setDefaultLang('en')
+        translateService.setFallbackLang('en')
         this.isSEARCH = this.dashboardService.getCurrentDashBoardId() === 'search';
         this.isHomeOrSearch = this.isSEARCH || this.dashboardService.getCurrentDashBoardId() === 'home';
         ((d: any) => {

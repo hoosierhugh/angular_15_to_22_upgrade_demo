@@ -73,7 +73,7 @@ export class AlertWidgetComponent implements IWidget, OnInit, OnDestroy {
         const translateService = this.translateService;
 
         translateService.addLangs(['en']);
-        translateService.setDefaultLang('en');
+        translateService.setFallbackLang('en');
     }
 
     ngOnInit() {

@@ -48,6 +48,6 @@ export class TabHepsubModule {
 
     library.addIconPacks(fas as IconPack, fab as IconPack, far as IconPack);
     translateService.addLangs(['en'])
-    translateService.setDefaultLang('en')
+    translateService.setFallbackLang('en')
   }
 }

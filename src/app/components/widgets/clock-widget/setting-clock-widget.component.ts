@@ -35,7 +35,7 @@ export class SettingClockWidgetComponent {
         const translateService = this.translateService;
 
         translateService.addLangs(['en'])
-        translateService.setDefaultLang('en')
+        translateService.setFallbackLang('en')
         this.arrayTimeZones = moment.tz.names();
     }
     onSelectTimeZone(timeZone) {

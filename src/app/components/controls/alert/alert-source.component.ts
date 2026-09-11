@@ -32,7 +32,7 @@ export class AlertSourceComponent implements OnInit, OnDestroy {
         const translateService = this.translateService;
 
         translateService.addLangs(['en'])
-        translateService.setDefaultLang('en')
+        translateService.setFallbackLang('en')
     }
     ngOnInit() {
         this.subscription = this.alertService.getMessage().subscribe((message: AlertSubject | null) => {

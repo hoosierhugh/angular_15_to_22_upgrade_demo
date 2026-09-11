@@ -136,7 +136,7 @@ export class MenuComponent implements OnInit, OnDestroy {
         const translateService = this.translateService;
 
         translateService.addLangs(['en'])
-        translateService.setDefaultLang('en')
+        translateService.setFallbackLang('en')
         if (environment.environment !== '') {
             document.title += ' ' + environment.environment;
         }

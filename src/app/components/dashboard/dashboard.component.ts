@@ -134,7 +134,7 @@ export class DashboardComponent implements OnInit, OnDestroy, AfterViewInit {
     const translateService = this.translateService;
 
     translateService.addLangs(['en'])
-    translateService.setDefaultLang('en')
+    translateService.setFallbackLang('en')
   }
 
   @HostListener('document:keydown', ['$event']) onKeydownHandler(event: KeyboardEvent) {

@@ -37,7 +37,7 @@ export class DialogAuthKeyComponent {
         const data = this.data;
 
         translateService.addLangs(['en'])
-        translateService.setDefaultLang('en')
+        translateService.setFallbackLang('en')
         if (data.isnew) {
             data.data = {
                 name: '',

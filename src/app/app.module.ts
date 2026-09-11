@@ -23,7 +23,7 @@ import { TabCallinfoModule } from './components/search-grid-call/detail-dialog/t
 import { TabEventsModule } from './components/search-grid-call/detail-dialog/tab-events/tab-events.module';
 // import { VirtualScrollerModule } from 'ngx-virtual-scroller';
 /* @angular */
-import { HTTP_INTERCEPTORS, HttpClient, provideHttpClient, withInterceptorsFromDi, withJsonpSupport, withXhr } from '@angular/common/http';
+import { HTTP_INTERCEPTORS, provideHttpClient, withInterceptorsFromDi, withJsonpSupport, withXhr } from '@angular/common/http';
 import { NgModule, CUSTOM_ELEMENTS_SCHEMA, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { BrowserModule } from '@angular/platform-browser';
@@ -190,8 +190,8 @@ import {
 } from './components/preference/cell-types';
 import { SettingButtonComponent } from './components/preference/setting-button/setting-button.component';
 import { LoadingCircleComponent } from './components/controls/loading-circle/loading-circle.component';
-import { TranslateModule, TranslateLoader, TranslateCompiler } from '@ngx-translate/core';
-import { TranslateHttpLoader } from '@ngx-translate/http-loader';
+import { provideTranslateCompiler, provideTranslateService, TranslateDirective, TranslatePipe } from '@ngx-translate/core';
+import { provideTranslateHttpLoader } from '@ngx-translate/http-loader';
 import { TranslateLinkCompiler } from './helpers/translate-link-complier';
 import { TransactionGraphSettingsComponent } from './components/controls/transaction-graph-settings/transaction-graph-settings.component';
 import { CopyModule } from './components/controls/copy/copy.module';
@@ -199,9 +199,6 @@ import { CodeProtoSelectorComponent } from './components/widgets/smart-input-wid
 import { PageProfileComponent } from './components/preference/pages/page-profile/page-profile.component';
 import { ExpireCellComponent } from './components/preference/cell-types/expire-cell/expire-cell.component';
 import { NgxCodejarModule } from 'ngx-codejar';
-export function HttpLoaderFactory(http: HttpClient) {
-    return new TranslateHttpLoader(http, 'assets/i18n/', '.json');
-}
 
 @NgModule({ declarations: [
         AppComponent,
@@ -366,17 +363,8 @@ export function HttpLoaderFactory(http: HttpClient) {
         CustomAgGridModule,
         ColorOffsetModule,
         TabQosModule,
-        TranslateModule.forRoot({
-            loader: {
-                provide: TranslateLoader,
-                useFactory: HttpLoaderFactory,
-                deps: [HttpClient]
-            },
-            compiler: {
-                useClass: TranslateLinkCompiler,
-                provide: TranslateCompiler
-            }
-        }),
+        TranslatePipe,
+        TranslateDirective,
         // ColorChromeModule
         NgxCodejarModule], providers: [
         ...MOCK_PROVIDERS,
@@ -386,6 +374,16 @@ export function HttpLoaderFactory(http: HttpClient) {
         { provide: PreferencesContentMapping, useClass: PreferencesContentMapping },
         { provide: APP_BASE_HREF, useValue: window['base-href'] },
         TransactionFilterService,
+        provideTranslateService({
+            loader: provideTranslateHttpLoader({
+                prefix: 'assets/i18n/',
+                suffix: '.json',
+                useHttpBackend: true
+            }),
+            compiler: provideTranslateCompiler(TranslateLinkCompiler),
+            fallbackLang: 'en',
+            lang: 'en'
+        }),
         provideHttpClient(withXhr(), withInterceptorsFromDi(), withJsonpSupport())
     ] })
 

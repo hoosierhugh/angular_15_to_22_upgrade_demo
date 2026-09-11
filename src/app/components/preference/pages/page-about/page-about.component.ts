@@ -1,7 +1,7 @@
 import { Component, OnInit, ChangeDetectionStrategy, inject } from '@angular/core';
 
 import { PreferenceVersionService } from '@app/services/preferences/version.service';
-import { VERSION } from 'src/VERSION';
+import { VERSION } from '../../../../../VERSION';
 
 @Component({
     selector: 'app-page-about',

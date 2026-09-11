@@ -62,7 +62,7 @@ export class SettingPrometheusWidgetComponent {
         const data = this.data;
 
         translateService.addLangs(['en'])
-        translateService.setDefaultLang('en')
+        translateService.setFallbackLang('en')
         if (data.empty) {
             return;
         }

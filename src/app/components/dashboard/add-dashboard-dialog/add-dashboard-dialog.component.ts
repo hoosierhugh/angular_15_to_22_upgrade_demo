@@ -75,7 +75,7 @@ export class AddDashboardDialogComponent
     const translateService = this.translateService;
 
     translateService.addLangs(['en']);
-    translateService.setDefaultLang('en');
+    translateService.setFallbackLang('en');
     this.dashboardService
       .getDashboardInfo()
       .toPromise()

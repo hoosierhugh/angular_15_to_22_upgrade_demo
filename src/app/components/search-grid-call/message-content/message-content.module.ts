@@ -7,7 +7,7 @@ import { MatTabsModule } from '@angular/material/tabs';
 import { NgxJsonViewerModule } from 'ngx-json-viewer';
 import { MatTableModule } from '@angular/material/table';
 import { MatIconModule } from '@angular/material/icon';
-import { TranslateModule } from '@ngx-translate/core';
+import { TranslateDirective, TranslatePipe } from '@ngx-translate/core';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { AlertModule } from '@app/components/controls/alert/alert.module';
 
@@ -20,7 +20,8 @@ import { AlertModule } from '@app/components/controls/alert/alert.module';
         MatTableModule,
         WebsharkModule,
         MatIconModule,
-        TranslateModule,
+        TranslatePipe,
+        TranslateDirective,
         MatTooltipModule,
         AlertModule
     ],

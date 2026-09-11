@@ -15,7 +15,7 @@ import { fas } from '@fortawesome/free-solid-svg-icons';
 import { fab } from '@fortawesome/free-brands-svg-icons';
 import { far } from '@fortawesome/free-regular-svg-icons';
 import { ColorOffsetModule } from '@app/pipes/colorOffset.module';
-import { TranslateModule } from '@ngx-translate/core';
+import { TranslateDirective, TranslatePipe } from '@ngx-translate/core';
 @NgModule({
     imports: [
         CommonModule,
@@ -29,7 +29,8 @@ import { TranslateModule } from '@ngx-translate/core';
         MatTooltipModule,
         FormsModule,
         ColorOffsetModule,
-        TranslateModule
+        TranslatePipe,
+        TranslateDirective
     ],
     declarations: [
         TransactionInfoComponent

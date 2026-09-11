@@ -55,7 +55,7 @@ export class RsearchWidgetComponent implements IWidget, OnInit {
     const translateService = this.translateService;
 
     translateService.addLangs(['en'])
-    translateService.setDefaultLang('en')
+    translateService.setFallbackLang('en')
   }
 
   ngOnInit() {

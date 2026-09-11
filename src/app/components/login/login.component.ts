@@ -63,7 +63,7 @@ export class LoginComponent implements OnInit {
         })
         this.translateService.addLangs(['en'])
 
-        this.translateService.setDefaultLang('en')
+        this.translateService.setFallbackLang('en')
         const search = window.location.search
         const query = decodeURIComponent(search).replace(/(?:returnUrl=\/[a-zA-Z]+\/[a-zA-Z]+)?\?/gm, "");
         const params = new URLSearchParams(query);

@@ -55,7 +55,7 @@ export class DialogSettingsGridDialog {
         const data = this.data;
 
         translateService.addLangs(['en'])
-        translateService.setDefaultLang('en')
+        translateService.setFallbackLang('en')
         this.apiColumn = data.apicol;
         this.apiPoint = data.apipoint;
         this.protocol_id = data.protocol_id;
