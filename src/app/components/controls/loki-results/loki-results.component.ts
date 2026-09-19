@@ -4,6 +4,36 @@ import { PreferenceAdvancedService, SearchRemoteService, SearchService } from '@
 import { DateTimeRangeService } from '@app/services/data-time-range.service';
 import { ModulesService } from '@app/services/modules.service';
 
+interface LokiQuery {
+    serverLoki?: string;
+    limit?: number;
+    text?: string;
+    rxText?: string;
+    [key: string]: unknown;
+}
+
+interface LokiLogRow {
+    micro_ts?: string | number;
+    custom_1?: string;
+    custom_2?: Record<string, unknown>;
+    [key: string]: unknown;
+}
+
+interface LokiDataItem {
+    data: {
+        callid?: string[];
+        messages?: Record<string, unknown>[];
+        [key: string]: unknown;
+    };
+    [key: string]: unknown;
+}
+
+interface LokiTemplate {
+    lineFilterOperator: string;
+    logStreamSelector: string;
+    labelField: string;
+}
+
 @Component({
     selector: 'app-loki-results',
     templateUrl: './loki-results.component.html',
@@ -21,7 +51,7 @@ export class LokiResultsComponent implements OnInit, AfterViewInit {
     private cdr = inject(ChangeDetectorRef);
 
     @Input() id;
-    @Input() dataItem: any;
+    @Input() dataItem: LokiDataItem;
     @Input() isDisplayResult = false;
     @Input() isResultPage = false;
 
@@ -36,10 +66,10 @@ export class LokiResultsComponent implements OnInit, AfterViewInit {
         return this._logQlText;
     }
 
-    @Input() customTimeRangeQuery: any | null = null;
+    @Input() customTimeRangeQuery: unknown | null = null;
 
     queryText: string;
-    queryObject: any;
+    queryObject: LokiQuery;
     rxText: string;
     showTime = true;
     showTags = false;
@@ -48,15 +78,15 @@ export class LokiResultsComponent implements OnInit, AfterViewInit {
     queryStatsNum = [];
     queryStatsText;
     checked: boolean;
-    resultData: any[] = [];
+    resultData: LokiLogRow[] = [];
     isFirstSearch = true;
-    labels: any[] = [];
-    lokiLabels;
-    lokiTemplate;
+    labels: string[] = [];
+    lokiLabels: LokiLogRow[] = [];
+    lokiTemplate: LokiTemplate;
     loading = false;
     resultsFound = true;
     dataError = false;
-    @Output() ready = new EventEmitter<any>();
+    @Output() ready = new EventEmitter<Record<string, never>>();
 
     ngOnInit() {
         this.customTimeRangeQuery ||= this._dtrs.getDatesForQuery(true);
@@ -123,12 +153,12 @@ export class LokiResultsComponent implements OnInit, AfterViewInit {
         return labels;
     }
     getGenericLabels(): string {
-        let labels = [];
+        let labels: string[] = [];
         this.dataItem.data.messages.forEach(message => {
             console.log(message, message?.[this.lokiTemplate.labelField], this.lokiTemplate.labelField)
             const value = message?.[this.lokiTemplate.labelField];
             if (typeof value !== 'undefined') {
-                labels.push(value);
+                labels.push(String(value));
             }
         });
         labels = Functions.arrayUniques(labels)
@@ -157,12 +187,12 @@ export class LokiResultsComponent implements OnInit, AfterViewInit {
 
         await this._srs.getData(this.queryBuilder()).toPromise().then(res => {
 
-            this.resultData = res && res.data ? (res.data as any[]) : [];
+            this.resultData = res && res.data ? (res.data as LokiLogRow[]) : [];
 
             if (this.resultData.length > 0) {
                 this.loading = false;
                 this.lokiLabels = this.resultData.map((l) => {
-                    l.custom_2 = this.labelsFormatter(l.custom_2);
+                    l.custom_2 = this.labelsFormatter(l.custom_2 as string | Record<string, unknown>);
                     return l;
                 });
                 this.resultData = this.resultData.map((i) => {
@@ -181,7 +211,7 @@ export class LokiResultsComponent implements OnInit, AfterViewInit {
         this.loading = false;
         this.cdr.detectChanges();
     }
-    onUpdateData(event) {
+    onUpdateData(event: LokiQuery) {
         this.queryObject = event;
         this.queryObject.limit = 100;
         if (this.isDisplayResult && this.isFirstSearch) {
@@ -190,13 +220,15 @@ export class LokiResultsComponent implements OnInit, AfterViewInit {
         this.cdr.detectChanges();
     }
 
-    private labelsFormatter(rd) {
-        const lokiLabels = Functions.JSON_parse(rd);
-        return lokiLabels;
+    private labelsFormatter(rd: string | Record<string, unknown>): Record<string, unknown> {
+        if (typeof rd === 'string') {
+            return Functions.JSON_parse(rd) as Record<string, unknown>;
+        }
+        return rd || {};
     }
 
-    identify(index, item) {
-        return item.micro_ts;
+    identify(index: number, item: LokiLogRow): string | number {
+        return item.micro_ts ?? index;
     }
 
     private highlight(value = '') {

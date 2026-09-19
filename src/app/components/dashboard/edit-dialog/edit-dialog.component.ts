@@ -1,11 +1,14 @@
 import { Component, ChangeDetectionStrategy, ChangeDetectorRef, OnInit, EventEmitter, inject } from '@angular/core';
 import { AbstractControl, FormControl, Validators } from '@angular/forms';
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { ApiResponse } from '@app/models';
 import { AuthenticationService } from '@app/services/authentication.service';
-import { DashboardService } from '@app/services/dashboard.service';
+import { DashboardInfo, DashboardService } from '@app/services/dashboard.service';
 import { DeleteDialogComponent } from '../delete-dialog/delete-dialog.component';
 import { TranslateService } from '@ngx-translate/core'
 import { environment } from '@environments/environment';
+
+type DashboardInfoResponse = ApiResponse<DashboardInfo[]>;
 export interface DashboardConfig {
     name: string;
     type: number;
@@ -75,15 +78,19 @@ export class EditDialogComponent implements OnInit {
         'Ignore': 'Ignore'
     };
     regString = /^[a-zA-Z0-9\-_]+$/;
-    name = new FormControl([
-        Validators.required,
-        Validators.minLength(3),
-        Validators.maxLength(100),
-        Validators.pattern(this.regString)],
-        this.validateName.bind(this));
+    name = new FormControl(
+        '',
+        [
+            Validators.required,
+            Validators.minLength(3),
+            Validators.maxLength(100),
+            Validators.pattern(this.regString)
+        ],
+        this.validateName.bind(this)
+    );
     currentName = '';
     callBackExport: () => void = null;
-    dashboards: any;
+    dashboards: string[] = [];
     isInvalid = false;
     nameBuffer: string;
     dashboardTypesDictionary;
@@ -95,11 +102,9 @@ export class EditDialogComponent implements OnInit {
         translateService.setFallbackLang('en')
         this.isSEARCH = this.dashboardService.getCurrentDashBoardId() === 'search';
         this.isHomeOrSearch = this.isSEARCH || this.dashboardService.getCurrentDashBoardId() === 'home';
-        ((d: any) => {
-            this.name.setValue(d.name);
-            this.currentName = d.name;
-        })(this.data);
-        this.dashboardService.getDashboardInfo().toPromise().then((list: any) => {
+        this.name.setValue(this.data.name);
+        this.currentName = this.data.name;
+        this.dashboardService.getDashboardInfo().toPromise().then((list: DashboardInfoResponse) => {
             if (list && list.data && list.data.length > 0) {
                 this.typeBoolean.HOME.isActive = !list.data.find(i => i.id === 'home');
                 if (!this.isSEARCH) {
@@ -128,12 +133,13 @@ export class EditDialogComponent implements OnInit {
     }
     async ngOnInit() {
         this.isSameOrigin = this.envUrl === `${window.location.protocol}//${window.location.host}`;
-        const resData: any = await this.dashboardService.getDashboardInfo(0).toPromise();
+        const resData = await this.dashboardService.getDashboardInfo(0).toPromise() as DashboardInfoResponse;
         const currentUser = this.authenticationService.getUserName();
         if (resData?.data) {
-            this.dashboards = resData.data.sort((...aa: any[]) => {
-                const [a, b] = aa.map(({ name }: { name: string }) => name.charCodeAt(0));
-                return a < b ? -1 : a > b ? 1 : 0;
+            this.dashboards = resData.data.sort((a, b) => {
+                const aCode = (a.name ?? '').charCodeAt(0);
+                const bCode = (b.name ?? '').charCodeAt(0);
+                return aCode < bCode ? -1 : aCode > bCode ? 1 : 0;
             })
                 .filter(item => item.shared === false || item.owner === currentUser)
                 .map(dashboard => dashboard.name.replace(/\s+/, ' ').toLowerCase().trim());
@@ -201,9 +207,7 @@ export class EditDialogComponent implements OnInit {
         if (
             !this.name?.invalid
         ) {
-            ((d: any) => {
-                d.name = this.name?.value;
-            })(this.data);
+            this.data.name = this.name?.value;
             this.dialogRef.close(this.data);
         } else {
             this.name.markAsTouched();
