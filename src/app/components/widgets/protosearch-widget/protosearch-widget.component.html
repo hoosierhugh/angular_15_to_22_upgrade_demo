@@ -719,14 +719,14 @@
         class="action-buttons"
         [className]="buttonState ? 'show' : 'hide'"
         >
-        <button mat-raised-button class="clear-btn" (click)="onTogleOrButton()">
+        <button mat-raised-button type="button" class="clear-btn" (click)="onTogleOrButton()">
           <span>{{
             orLogic
             ? ("LINK.buttons.or" | translate)
             : ("LINK.buttons.and" | translate)
           }}</span>
         </button>
-        <button mat-raised-button class="clear-btn" (click)="onClearFields()">
+        <button mat-raised-button type="button" class="clear-btn" (click)="onClearFields()">
           {{ "LINK.buttons.clear" | translate }}
         </button>
         <!-- <span style='display: flex;'
@@ -756,16 +756,18 @@
       <span style="display: flex; width: 170px" class="in-widget">
         <button
           mat-raised-button
+          type="button"
           class="search-btn"
           color="primary"
           (click)="doSearchResult(lastUsedSearchType)"
           >
           {{ "LINK.buttons.search" | translate }}
         </button>
-        <button mat-raised-button class="search-btn search-select" color="primary">
+        <button mat-raised-button type="button" class="search-btn search-select" color="primary">
           <button
             class="search-menu-trigger"
             mat-button
+            type="button"
             [matMenuTriggerFor]="searchSelect"
             >
             <svg
@@ -781,6 +783,7 @@
             <div class="function-menu-wrapper" style="padding-left: 1rem; padding-right: 0rem; ">
               <button
                 mat-raised-button
+                type="button"
                 class="search-btn in-select"
                 (click)="doSearchResult('searchTab')"
                 style="margin-bottom: 0.5rem;"
@@ -789,6 +792,7 @@
               </button>
               <button
                 mat-raised-button
+                type="button"
                 class="search-btn in-select"
                 (click)="doSearchResult('tab')"
                 >

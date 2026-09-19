@@ -100,7 +100,7 @@
       class="gridster-cont"
       id="gridster"
       #gridster>
-      @for (itemCollection of dashboardArrayTabs; track itemCollection[0]?.id || $index; let i = $index) {
+      @for (itemCollection of dashboardArrayTabs; track (itemCollection[0]?.id || 'group') + ':' + $index; let i = $index) {
         <gridster-item class="widget-item"
           [item]="getLayerIndex(itemCollection[0])"
           (mouseenter)="changeCurrent(itemCollection[0].id)"
@@ -116,7 +116,7 @@
               (cdkDropListDropped)="drop($event)"
               [id]="itemCollection[0].tabGroup">
               <!-- cdkDrag -->
-              @for (item of itemCollection; track item.id || $index) {
+              @for (item of itemCollection; track (item.id || 'item') + ':' + $index) {
                 <div cdkDrag
                   class="tab-widgets-item"
                   [id]="item.id"
@@ -166,7 +166,7 @@
               </div>
             </div>
           </div>
-          @for (item of itemCollection; track item.id || $index) {
+          @for (item of itemCollection; track (item.id || 'item') + ':' + $index) {
             <div
               [hidden]="item.id !== getActive(itemCollection).id"
               class="widget-data-container"

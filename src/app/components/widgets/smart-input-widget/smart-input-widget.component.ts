@@ -343,7 +343,8 @@ export class SmartInputWidgetComponent
               cacheQuery.location &&
               cacheQuery.location.mapping &&
               item.field_name === cacheQuery.location.mapping &&
-              item.form_default
+              item.form_default &&
+              Array.isArray(cacheQuery.location.value)
             ) {
               item.value = cacheQuery.location.value.map(
                 (i) => item.form_default.find((j) => j.value === i).name

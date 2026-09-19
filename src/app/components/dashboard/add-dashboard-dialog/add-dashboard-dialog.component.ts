@@ -1,11 +1,22 @@
 import { Component, ViewChild, OnInit, AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, inject } from '@angular/core';
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { AuthenticationService, DashboardService } from '@app/services';
+import { ApiResponse } from '@app/models';
+import { AuthenticationService, DashboardInfo, DashboardService } from '@app/services';
 import { Functions } from '@app/helpers/functions';
 import { AbstractControl, FormControl, Validators } from '@angular/forms';
 import { UrlWarningDialog } from './url-warning-dialog/url-warning-dialog.component';
 import { TranslateService } from '@ngx-translate/core'
 import { environment } from '@environments/environment';
+
+type DashboardInfoResponse = ApiResponse<DashboardInfo[]>;
+
+interface ImportedDashboard {
+  name?: string;
+  data?: ImportedDashboard;
+  type?: number;
+  param?: unknown;
+  [key: string]: unknown;
+}
 @Component({
     selector: 'app-add-dashboard-dialog',
     templateUrl: './add-dashboard-dialog.component.html',
@@ -55,7 +66,7 @@ export class AddDashboardDialogComponent
       type: 7, // not an error, workaround because "Search TAB" is type 6
     },
   };
-  dashboards: any;
+  dashboards: string[] = [];
   isInvalid = false;
   regString = /^[a-zA-Z0-9\-_\s]+$/;
   isConfirmed = false;
@@ -79,7 +90,7 @@ export class AddDashboardDialogComponent
     this.dashboardService
       .getDashboardInfo()
       .toPromise()
-      .then((list: any) => {
+      .then((list: DashboardInfoResponse) => {
         if (list?.data?.length > 0) {
           this.typeBoolean.HOME.isActive = !!list.data.find(
             (i) => i.id === 'home'
@@ -99,17 +110,16 @@ export class AddDashboardDialogComponent
   async ngOnInit() {
     this.isSameOrigin =
       this.envUrl === `${window.location.protocol}//${window.location.host}`;
-    const resData: any = await this.dashboardService
+    const resData = await this.dashboardService
       .getDashboardInfo(0)
-      .toPromise();
+      .toPromise() as DashboardInfoResponse;
     const currentUser = this.authenticationService.getUserName();
     if (resData?.data) {
       this.dashboards = resData.data
-        .sort((...aa: any[]) => {
-          const [a, b] = aa.map(({ name }: { name: string }) =>
-            name.charCodeAt(0)
-          );
-          return a < b ? -1 : a > b ? 1 : 0;
+        .sort((a, b) => {
+          const aCode = (a.name ?? '').charCodeAt(0);
+          const bCode = (b.name ?? '').charCodeAt(0);
+          return aCode < bCode ? -1 : aCode > bCode ? 1 : 0;
         })
         .filter((item) => item.shared === false || item.owner === currentUser)
         .map((dashboard) =>
@@ -147,15 +157,13 @@ export class AddDashboardDialogComponent
       );
     });
   }
-  private async handlerUpload(file: any) {
+  private async handlerUpload(file: File) {
     if (!this.data) {
       this.data = {};
     }
     const text = (await file?.text()) || '{}';
-      let dashboard = Functions.JSON_parse(text);
-      if (dashboard.data) {
-          dashboard = dashboard.data;
-      }
+      const parsedDashboard = Functions.JSON_parse(text) as ImportedDashboard;
+      const dashboard = parsedDashboard?.data ?? parsedDashboard;
       this.nameNewPanel.setValue(dashboard?.name);
       this.data.type = dashboard?.type || 1;
       this.data.param = dashboard?.param || '';
@@ -187,9 +195,6 @@ export class AddDashboardDialogComponent
  }
   onNoClick(): void {
     this.dialogRef.close();
-  }
-  identify(index, item) {
-    return item.index;
   }
   validate(event) {
     if (event === '' || !event) {

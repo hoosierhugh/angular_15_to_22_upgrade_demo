@@ -160,9 +160,6 @@ export class EditDialogComponent implements OnInit {
         // console.log(cb)
         this.callBackExport = cb;
     }
-    identify(index, item) {
-        return item.id;
-    }
     validate(event) {
         event = event?.toLowerCase().trim();
         if (

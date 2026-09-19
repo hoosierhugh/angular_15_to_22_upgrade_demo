@@ -1,6 +1,21 @@
 import { Component, Input, Output, EventEmitter, OnInit, ChangeDetectionStrategy } from '@angular/core';
 import {CdkDragDrop, moveItemInArray, transferArrayItem} from '@angular/cdk/drag-drop';
 
+interface DragDropItem {
+    id?: string | number;
+    field?: string;
+    field_name?: string;
+    name?: string;
+    selected?: boolean;
+    idx?: number;
+}
+
+interface DragDropOrderEvent {
+    sortedProto: DragDropItem[];
+    newProto: DragDropItem[];
+    event: CdkDragDrop<DragDropItem[]>;
+}
+
 @Component({
     selector: 'app-protosearch-drag-drop-list',
     templateUrl: './drag-drop-list.component.html',
@@ -10,18 +25,18 @@ import {CdkDragDrop, moveItemInArray, transferArrayItem} from '@angular/cdk/drag
 })
 
 export class DragDropListComponent implements OnInit {
-    _list: any[];
-    inactiveList: any[] = [];
-    activeList: any[] = [];
+    _list: DragDropItem[] = [];
+    inactiveList: DragDropItem[] = [];
+    activeList: DragDropItem[] = [];
 
-    @Output() changed = new EventEmitter<any> ();
-    @Output() order = new EventEmitter<any> ();
-    @Input() sortlistactive: any[];
-    @Input() set list(val) {
+    @Output() changed = new EventEmitter<DragDropItem[]> ();
+    @Output() order = new EventEmitter<DragDropOrderEvent> ();
+    @Input() sortlistactive: DragDropItem[] = [];
+    @Input() set list(val: DragDropItem[]) {
         this._list = val;
         this.activeList = [];
         this.inactiveList = [];
-        this.list.forEach((item: any) => {
+        this.list.forEach((item: DragDropItem) => {
             if (item.selected) {
                 this.activeList.push(item);
             } else {
@@ -37,7 +52,7 @@ export class DragDropListComponent implements OnInit {
     ngOnInit () {
         if (this.sortlistactive && this.sortlistactive.length > 0) {
             const _activeList = [];
-            this.sortlistactive.forEach((item: any) => {
+            this.sortlistactive.forEach((item: DragDropItem) => {
                 _activeList.push(this.activeList.find(i => i.id === item.field_name));
 
             });
@@ -45,7 +60,7 @@ export class DragDropListComponent implements OnInit {
         }
     }
 
-    drop(event: CdkDragDrop<string[]>) {
+    drop(event: CdkDragDrop<DragDropItem[]>) {
         if (event.previousContainer === event.container) {
             moveItemInArray(
                 event.container.data,
@@ -60,15 +75,15 @@ export class DragDropListComponent implements OnInit {
                 event.currentIndex
             );
         }
-        this.inactiveList.forEach((item: any) => {
+        this.inactiveList.forEach((item: DragDropItem) => {
             item.selected = false;
         });
 
-        this.activeList.forEach((item: any) => {
+        this.activeList.forEach((item: DragDropItem) => {
             item.selected = true;
         });
-        const newProto = [].concat(this.activeList, this.inactiveList);
-        const sortedProto = newProto.sort((a, b) => a.idx - b.idx);
+        const newProto = this.activeList.concat(this.inactiveList);
+        const sortedProto = newProto.sort((a, b) => (a.idx ?? 0) - (b.idx ?? 0));
         this.changed.emit(newProto);
         this.order.emit({
             sortedProto: sortedProto,

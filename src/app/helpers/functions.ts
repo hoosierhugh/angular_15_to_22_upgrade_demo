@@ -354,7 +354,7 @@ export class Functions {
   // Get the alias fields
   // get alias names if its servertype or group
   // get IP value if its alias => IP type
-  static getAliasFields(aliasList: any[]): Record<string, unknown> {
+  static getAliasFields(aliasList: Record<string, unknown>[]): Record<string, unknown> {
     const fields: Record<string, unknown> = {};
     this.amfList.forEach(f => {
       fields[f] = aliasList.map(m => ({
@@ -381,7 +381,7 @@ export class Functions {
     }
     return null;
   }
-  static getJsonFileDataByLink(name: string): Promise<any> {
+  static getJsonFileDataByLink(name: string): Promise<unknown> {
     return new Promise((resolve) => {
       resolve(window[`file__json_data_${name}`] || {});
     });

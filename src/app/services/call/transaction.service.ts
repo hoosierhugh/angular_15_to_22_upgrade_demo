@@ -18,7 +18,7 @@ export class CallTransactionService {
 
     getTransaction(data: any): Observable<any> {
         return this.http.post<any>(`${this.url}/transaction`, data).pipe(map(async transactionData => {
-            const ipAliasesData: any = null;
+            const ipAliasesData: { data?: { ipobject: unknown }[] } = {};
             // try {
             //     ipAliasesData = await this._ipalias.getAll().toPromise();
             // } catch (err) { }

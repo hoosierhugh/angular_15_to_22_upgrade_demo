@@ -5,7 +5,7 @@ import { Router } from '@angular/router';
 // import { SearchGridCallComponent } from '@app/components/search-grid-call/search-grid-call.component';
 import { Widget, WidgetArrayInstance } from '@app/helpers/widget';
 import { ConstValue, UserConstValue } from '@app/models';
-import { SearchService } from '@app/services';
+import { SearchField, SearchService } from '@app/services';
 import { Functions } from '@app/helpers/functions';
 import { TranslateService } from '@ngx-translate/core'
 import { LokiCodeData } from './code-style-field/code-style-field.component';
@@ -15,7 +15,7 @@ interface LokiSearchQuery {
   rxText?: string;
   limit: number;
   protocol_id: string;
-  fields: unknown[];
+  fields: SearchField[];
   [key: string]: unknown;
 }
 @Component({

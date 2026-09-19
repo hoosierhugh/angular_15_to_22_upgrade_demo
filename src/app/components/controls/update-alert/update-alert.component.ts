@@ -1,4 +1,4 @@
-import { Component, ViewChild, ChangeDetectionStrategy, inject } from '@angular/core';
+import { Component, ChangeDetectionStrategy, inject } from '@angular/core';
 import { UpdateAlertService } from './update-alert.service';
 import { TranslateService } from '@ngx-translate/core'
 
@@ -13,7 +13,6 @@ export class UpdateAlertComponent {
     private updateAlertService = inject(UpdateAlertService);
     translateService = inject(TranslateService);
 
-    @ViewChild('refreshForm', { static: true }) refreshForm;
     message = '';
     refreshURL;
     isMessage = false;

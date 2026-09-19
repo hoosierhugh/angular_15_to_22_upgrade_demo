@@ -37,7 +37,7 @@
   <mat-form-field>
     <mat-label>{{ 'dashboard.addDashboardDialog.type'|translate }}</mat-label>
     <mat-select [(ngModel)]="data.type" >
-      @for (itemlist of typeList; track identify($index, itemlist)) {
+      @for (itemlist of typeList; track itemlist.type ?? $index) {
         <mat-option [value]="itemlist.type">{{ itemlist.name }}</mat-option>
       }
     </mat-select>

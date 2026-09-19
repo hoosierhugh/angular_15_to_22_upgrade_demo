@@ -13,6 +13,28 @@ enum DEFAULT_VALIE {
     protocol_id = '60_call_h20'
 }
 
+export interface SearchField {
+    name?: string;
+    value?: string | string[] | number | boolean;
+    func?: {
+        value: string;
+    };
+    [key: string]: unknown;
+}
+
+interface SearchLocation {
+    mapping?: string;
+    value?: string | string[];
+    [key: string]: unknown;
+}
+
+interface SearchQuery {
+    protocol_id?: string;
+    location?: SearchLocation;
+    fields?: SearchField[];
+    [key: string]: unknown;
+}
+
 @Injectable({
     providedIn: 'root'
 })
@@ -23,13 +45,13 @@ export class SearchService {
     private sessionStorageService = inject(SessionStorageService);
     private translateService = inject(TranslateService);
 
-    static currentQuery: any;
+    static currentQuery: SearchQuery;
     isLoki = false;
-    location: any;
-    protocol: any;
-    search: any;
-    target: any;
-    private _behavior: BehaviorSubject<any> = new BehaviorSubject<any>({});
+    location: SearchLocation;
+    protocol: string;
+    search: unknown;
+    target: unknown;
+    private _behavior = new BehaviorSubject<Record<string, never>>({});
     constructor() {
         this.Init();
     }
@@ -46,7 +68,7 @@ export class SearchService {
             this.location = SearchService.currentQuery.location = params.param.location;
             if (params && params.timestamp) {
                 const { from, to } = params.timestamp;
-                const format = d => new Date(d).toLocaleString().split(',').map(i => i.replace(/\./g, '/')).join('');
+                const format = (d: string | number | Date) => new Date(d).toLocaleString().split(',').map(i => i.replace(/\./g, '/')).join('');
                 this.dateTimeRangeService.updateDataRange({
                     title: [
                         format(from),
@@ -63,7 +85,7 @@ export class SearchService {
             this.location = SearchService.currentQuery.location || this.location;
         }
     }
-    public setLocalStorageQuery(query: any = null) {
+    public setLocalStorageQuery(query: SearchQuery | null = null) {
         if (!query && !SearchService.currentQuery) {
             console.error(new Error('setLocalStorageQuery'));
             return;
@@ -91,7 +113,7 @@ export class SearchService {
         setStorage(UserConstValue.SEARCH_QUERY, SearchService.currentQuery);
         localStorage.removeItem(ConstValue.SEARCH_QUERY);
     }
-    filterStatus(item) {
+    filterStatus(item: SearchField) {
         if (item.name === 'status') {
             if (item.value !== 0 && item.value !== '0' && typeof item.value !== 'undefined' && item.value !== '' && item.value !== 'undefined') {
                 return true;
@@ -114,7 +136,7 @@ export class SearchService {
         this.Init();
     }
     public getLocalStorageQuery(loadSettings?: boolean) {
-        let localStorageData = '';
+        let localStorageData: SearchQuery | '' = '';
         try {
             localStorageData = Functions.JSON_parse(localStorage.getItem(UserConstValue.SEARCH_QUERY)) ||
             Functions.JSON_parse(localStorage.getItem(ConstValue.SEARCH_QUERY));
@@ -134,7 +156,7 @@ export class SearchService {
                 localData.fields.forEach(field => {
                     if (Object.hasOwn(field, 'func') && field.func !== null && field.func !== undefined) {
                         let func = field.func.value.replace('::field::', field.name);
-                        func = func.replace('::value::', field.value);
+                        func = func.replace('::value::', String(field.value ?? ''));
                         field.value = func;
                         delete field.func;
                     }
@@ -154,7 +176,7 @@ export class SearchService {
         this.isLoki = bool;
     }
 
-    public setQueryLocation(location: any) {
+    public setQueryLocation(location: SearchLocation) {
         SearchService.currentQuery.location = location;
     }
 
@@ -162,7 +184,7 @@ export class SearchService {
         return SearchService.currentQuery.location;
     }
 
-    public setQueryProtocolId(protocol_id: any) {
+    public setQueryProtocolId(protocol_id: string) {
         SearchService.currentQuery.protocol_id = protocol_id;
     }
 
@@ -170,11 +192,11 @@ export class SearchService {
         return SearchService.currentQuery.protocol_id;
     }
 
-    public setQuerySearch(search: any) {
+    public setQuerySearch(search: unknown) {
         this.search = search;
     }
 
-    public setTargetContainer(target) {
+    public setTargetContainer(target: unknown) {
         this.target = target;
     }
 
@@ -194,7 +216,7 @@ export class SearchService {
         };
     }
 
-    private getLocation(): any {
+    private getLocation(): Record<string, unknown> {
         const localData = SearchService.currentQuery;
 
         const locationArray = {};
@@ -248,7 +270,7 @@ export class SearchService {
             timestamp: this.dateTimeRangeService.getDatesForQuery(true),
             param: {
                 search: search,
-                location: this.getLocation() as any,
+                location: this.getLocation(),
                 transaction: this.getTransactionFlags(),
                 id: {},
                 timezone: this.getTimeZoneLocal(),
@@ -257,7 +279,7 @@ export class SearchService {
         };
     }
 
-    public get event(): Observable<any> {
+    public get event(): Observable<Record<string, never>> {
         return this._behavior.asObservable();
     }
 }
