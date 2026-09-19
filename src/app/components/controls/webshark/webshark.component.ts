@@ -63,7 +63,8 @@ export class WebsharkComponent implements AfterViewInit, OnDestroy {
         this._rowData = v;
         const getId = o => +o.frame?.['frame.number'];
         this.detailsTable = v?.map(i => {
-            const frame = i.frame || (Functions.JSON_parse(i.raw_source) || {}).frame || {};
+            const parsedSource = Functions.JSON_parse<{ frame?: Record<string, unknown> }>(i.raw_source);
+            const frame = i.frame || parsedSource?.frame || {};
             let time = frame['frame.time_epoch'] || '';
             const arr = time.replace('.', '').split('').reverse();
             arr.splice(6, 0, '.');

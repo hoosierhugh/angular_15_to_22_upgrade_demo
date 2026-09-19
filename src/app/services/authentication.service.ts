@@ -69,7 +69,7 @@ export class AuthenticationService {
         return this.currentUserSubject.value;
     }
     getUserName(): string {
-        return Functions.JSON_parse(localStorage.getItem(ConstValue.CURRENT_USER))?.user?.username;
+        return Functions.JSON_parse<{ user?: { username?: string } }>(localStorage.getItem(ConstValue.CURRENT_USER))?.user?.username || '';
     }
     getAuthList() {
         return this.http.get<ApiResponse<AuthTypeCollection>>(`${environment.apiUrl}/auth/type/list`);

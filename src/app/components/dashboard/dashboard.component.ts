@@ -26,6 +26,15 @@ import { AuthenticationService } from '@app/services/authentication.service';
 import { environment } from '@environments/environment';
 import { TranslateService } from '@ngx-translate/core'
 
+interface StoredDashboardState {
+  currentWidgetList?: DashboardContentModel[];
+  currentWidget?: Partial<DashboardContentModel> | '';
+}
+
+interface StoredUserSettings {
+  protosearchSettings?: Record<string, unknown>;
+}
+
 
 @Component({
     selector: 'app-dashboard',
@@ -553,8 +562,8 @@ export class DashboardComponent implements OnInit, OnDestroy, AfterViewInit {
   submitCheck() {
     const submitWidgets: any[] = [];
     const dashboardSubmitWidgets: any[] = [];
-    const ls = Functions.JSON_parse(localStorage.getItem(UserConstValue.SQWR)) ||
-      Functions.JSON_parse(localStorage.getItem(ConstValue.SQWR));
+    const ls = Functions.JSON_parse<StoredDashboardState>(localStorage.getItem(UserConstValue.SQWR)) ||
+      Functions.JSON_parse<StoredDashboardState>(localStorage.getItem(ConstValue.SQWR));
     let widgetList: any[];
     if (ls != null && ls.currentWidgetList !== undefined) {
       widgetList = ls.currentWidgetList;
@@ -577,8 +586,8 @@ export class DashboardComponent implements OnInit, OnDestroy, AfterViewInit {
     return dashboardSubmitWidgets;
   }
   changeCurrent(id: string) {
-    const ls = Functions.JSON_parse(localStorage.getItem(UserConstValue.SQWR)) ||
-      Functions.JSON_parse(localStorage.getItem(ConstValue.SQWR));
+    const ls = Functions.JSON_parse<StoredDashboardState>(localStorage.getItem(UserConstValue.SQWR)) ||
+      Functions.JSON_parse<StoredDashboardState>(localStorage.getItem(ConstValue.SQWR));
     let currentWidget: any;
     if (ls != null && ls.currentWidget !== undefined && ls.currentWidget !== '') {
       currentWidget = ls.currentWidget;
@@ -772,7 +781,7 @@ export class DashboardComponent implements OnInit, OnDestroy, AfterViewInit {
     widget.openDialog();
   }
   deleteAllWidgets() {
-    const ls = Functions.JSON_parse(localStorage.getItem(UserConstValue.USER_SETTINGS));
+    const ls = Functions.JSON_parse<StoredUserSettings>(localStorage.getItem(UserConstValue.USER_SETTINGS));
     this.dashboardArray?.forEach(widget => {
       if (widget.strongIndex === 'ResultWidgetComponent') {
         const lsIndexUser = UserConstValue.RESULT_STATE;
@@ -861,7 +870,7 @@ export class DashboardComponent implements OnInit, OnDestroy, AfterViewInit {
             const lsIndexUser = UserConstValue.RESULT_STATE;
             localStorage.removeItem(`${lsIndexUser}-${widget.id}`);
           } else if (widget.strongIndex === 'ProtosearchWidgetComponent') {
-            const ls = Functions.JSON_parse(localStorage.getItem(UserConstValue.USER_SETTINGS));
+            const ls = Functions.JSON_parse<StoredUserSettings>(localStorage.getItem(UserConstValue.USER_SETTINGS));
             if (ls !== null) {
               delete ls.protosearchSettings[widget.id];
               setStorage(UserConstValue.USER_SETTINGS, ls);

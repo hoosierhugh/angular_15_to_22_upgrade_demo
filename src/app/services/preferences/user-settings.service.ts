@@ -25,7 +25,7 @@ export class PreferenceUserSettingsService {
         return this.httpGetBuffer.get<ApiResponse<T[]>>(this.url, delayBuffer)
             .pipe(map((response) => {
                 const localdata = localStorage.getItem(ConstValue.CURRENT_USER);
-                const { user } = Functions.JSON_parse(localdata);
+                const { user } = Functions.JSON_parse<{ user?: { admin?: boolean; username?: string } }>(localdata) || {};
                 /**
                  * TODO: admin || shred === true
                  */
@@ -35,7 +35,7 @@ export class PreferenceUserSettingsService {
                 }
 
                 const { data } = response;
-                const username = Functions.JSON_parse(localStorage.getItem(ConstValue.CURRENT_USER)).user.username;
+                const username = Functions.JSON_parse<{ user?: { username?: string } }>(localStorage.getItem(ConstValue.CURRENT_USER))?.user?.username || '';
                 const outData = data?.filter((item) =>
                     typeof item === 'object' && item !== null &&
                     'username' in item && item.username === username

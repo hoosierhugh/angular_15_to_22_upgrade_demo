@@ -32,8 +32,8 @@ export class StatusFilterComponent implements IFilterAngularComp {
     @ViewChild('input', { read: ViewContainerRef }) public input;
     async agInit(params: IFilterParams) {
         const mappings: PreferenceMapping[] = await this._pmps.getMerged().toPromise();
-        const ls = Functions.JSON_parse(localStorage.getItem(UserConstValue.SEARCH_QUERY)) ||
-            Functions.JSON_parse(localStorage.getItem(ConstValue.SEARCH_QUERY));
+        const ls = Functions.JSON_parse<{ protocol_id?: string }>(localStorage.getItem(UserConstValue.SEARCH_QUERY)) ||
+            Functions.JSON_parse<{ protocol_id?: string }>(localStorage.getItem(ConstValue.SEARCH_QUERY));
 
         const { fields_mapping } = mappings.find(({ hepid, profile }) =>
                 `${hepid}_${profile}` === (ls?.protocol_id || '60_call_h20')) || {};

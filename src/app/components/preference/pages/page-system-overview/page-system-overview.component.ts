@@ -1,5 +1,5 @@
 
-import { Component, OnInit, ChangeDetectionStrategy, ChangeDetectorRef, ViewChild, AfterViewInit, Input, inject } from '@angular/core';
+import { Component, OnInit, ChangeDetectionStrategy, ChangeDetectorRef, ViewChild, AfterViewInit, Input, Type, inject } from '@angular/core';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { MatPaginator } from '@angular/material/paginator';
@@ -18,6 +18,12 @@ import {
 import { AlertService, AuthenticationService } from '@app/services';
 import { PreferencesComponentMapping } from '@app/models/preferences-component-mapping';
 import { TranslateService } from '@ngx-translate/core';
+
+interface OverviewDialogResult {
+    isnew?: boolean;
+    isCopy?: boolean;
+    data?: Record<string, unknown>;
+}
 
 @Component({
     selector: 'app-page-system-overview',
@@ -38,8 +44,8 @@ export class PageSystemOverviewComponent implements OnInit, AfterViewInit {
     isAdmin = false;
     isConfigTab = false;
     isErrorResponse = false;
-    dataSource = new MatTableDataSource([{}]);
-    configSource = new MatTableDataSource([{}]);
+    dataSource = new MatTableDataSource<Record<string, unknown>>([{}]);
+    configSource = new MatTableDataSource<Record<string, unknown>>([{}]);
     @Input() page: string;
     @Input() pageID: string;
     @ViewChild('dataSorter', { static: false }) sorter: MatSort;
@@ -49,10 +55,10 @@ export class PageSystemOverviewComponent implements OnInit, AfterViewInit {
     columns = [];
     configColumns = [];
     specialColumns = [];
-    isAccess: any;
-    isAccessConfig: any;
+    isAccess: Record<string, boolean>;
+    isAccessConfig: Record<string, boolean>;
     filter = '';
-    dbList = [];
+    dbList: StatsDb[] = [];
 
     constructor() {
         const userData = this.authenticationService.currentUserValue;
@@ -120,7 +126,7 @@ export class PageSystemOverviewComponent implements OnInit, AfterViewInit {
         }
         try {
             configResponse = await this.service.getConfigStats().toPromise();
-            const configRes = Object.values(configResponse.data);
+            const configRes = Object.values(configResponse.data) as StatsDb[];
             this.dbList = [...configRes];
             if (configRes) {
                 this.isConfigTab = true;
@@ -164,9 +170,9 @@ export class PageSystemOverviewComponent implements OnInit, AfterViewInit {
         this.filter = '';
         this.applyFilter();
     }
-    settingDialog(item: any = null, type?: string) {
+    settingDialog(item: Record<string, unknown> | null = null, type?: string) {
         const isCopy = type === 'copy';
-        const onOpenDialog = (result) => {
+        const onOpenDialog = (result: OverviewDialogResult) => {
             if (!result) {
                 return;
             }
@@ -183,7 +189,12 @@ export class PageSystemOverviewComponent implements OnInit, AfterViewInit {
 
         this.openDialog(DialogUsersComponent, item, onOpenDialog, isCopy);
     }
-    async openDialog(dialog, data: any = null, cb: (result: any) => void = null, isCopy = false) {
+    async openDialog(
+        dialog: Type<unknown>,
+        data: Record<string, unknown> | null = null,
+        cb?: (result: OverviewDialogResult) => void,
+        isCopy = false
+    ) {
         const result = await this.dialog
             .open(dialog, {
                 width: '800px',
@@ -199,7 +210,7 @@ export class PageSystemOverviewComponent implements OnInit, AfterViewInit {
             this.cdr.detectChanges();
         }
     }
-    private jsonValidateAndForrmatted(data) {
+    private jsonValidateAndForrmatted(data: Record<string, unknown>): Record<string, unknown> {
         Object.keys(data).forEach((item) => {
             if (typeof data[item] === 'string') {
                 try {
@@ -212,8 +223,8 @@ export class PageSystemOverviewComponent implements OnInit, AfterViewInit {
         this.cdr.detectChanges();
         return data;
     }
-    onResync(item: any) {
-        let tableList = [];
+    onResync(item: Pick<StatsDb, 'database_name'>) {
+        let tableList: string[] = [];
         this.service.getTableList().toPromise().then( data => {
             tableList = data.data;
             const dbList = this.dbList.map(m => m.database_name);
@@ -229,17 +240,17 @@ export class PageSystemOverviewComponent implements OnInit, AfterViewInit {
                 syncData,
                 (result) => {
                     if (result.data) {
-                        const resync = {
-                            node_src : '',
+                        const resync: { node_src: string; node_dst: string; tables: string[] } = {
+                            node_src: '',
                             node_dst: '',
                             tables: []
-                            };
-
-                        (d => {
-                            resync.node_src = d.node_src;
-                            resync.node_dst = d.node_dst;
-                            resync.tables = d.tables;
-                        })(result.data);
+                        };
+                        const dialogData = result.data;
+                        resync.node_src = typeof dialogData.node_src === 'string' ? dialogData.node_src : '';
+                        resync.node_dst = typeof dialogData.node_dst === 'string' ? dialogData.node_dst : '';
+                        resync.tables = Array.isArray(dialogData.tables)
+                            ? dialogData.tables.filter((table): table is string => typeof table === 'string')
+                            : [];
 
                         this.service.resync(resync).toPromise().then( statsData => {
 

@@ -610,8 +610,10 @@ export class SearchGridCallComponent
         const params = Functions.getUriJson();
         setTimeout(() => {
             if (params?.param && this.gridApi) {
-                const sids: string[] =
-                    params.param.search[this.protocol_profile].callid;
+                const callIds = params.param.search?.[this.protocol_profile]?.callid;
+                const sids = Array.isArray(callIds)
+                    ? callIds.filter((callId): callId is string => typeof callId === 'string')
+                    : typeof callIds === 'string' ? [callIds] : [];
                 if (sids?.length > 1) {
                     this.gridApi.forEachLeafNode((node) => {
                         if (sids.indexOf(node.data.sid) !== -1) {
@@ -635,9 +637,10 @@ export class SearchGridCallComponent
                         (i) => i.category === 'export' && i.param === 'transaction'
                     );
                     if (setting?.data?.openwindow === true) {
-                        const sids =
-                            params.param.search[this.protocol_profile]
-                                .callid;
+                        const callIds = params.param.search?.[this.protocol_profile]?.callid;
+                        const sids = Array.isArray(callIds)
+                            ? callIds.filter((callId): callId is string => typeof callId === 'string')
+                            : typeof callIds === 'string' ? [callIds] : [];
                         const rowData: any[] = Functions.cloneObject(
                             this.rowData
                         ) as any[];

@@ -60,8 +60,8 @@ export class RsearchWidgetComponent implements IWidget, OnInit {
 
   ngOnInit() {
     WidgetArrayInstance[this.id] = this as IWidget;
-    const data = Functions.JSON_parse(localStorage.getItem(UserConstValue.SEARCH_QUERY_LOKI)) ||
-      Functions.JSON_parse(localStorage.getItem(ConstValue.SEARCH_QUERY_LOKI));
+    const data = Functions.JSON_parse<Partial<LokiSearchQuery>>(localStorage.getItem(UserConstValue.SEARCH_QUERY_LOKI)) ||
+      Functions.JSON_parse<Partial<LokiSearchQuery>>(localStorage.getItem(ConstValue.SEARCH_QUERY_LOKI));
     if (data) {
       this.queryText = data.text;
       this.limit = data.limit * 1 || 100;

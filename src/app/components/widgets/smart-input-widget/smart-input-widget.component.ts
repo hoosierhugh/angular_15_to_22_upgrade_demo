@@ -559,10 +559,10 @@ export class SmartInputWidgetComponent
         this.config.config.protocol_profile.value, // 1_call | 1_ default | 1_registration
     };
     if (this.onlySmartField) {
-      this.searchQuery.protocol_id = Functions.JSON_parse(
+      this.searchQuery.protocol_id = Functions.JSON_parse<{ protocol_id?: string }>(
         localStorage.getItem(UserConstValue.SEARCH_QUERY)
       ).protocol_id ||
-        Functions.JSON_parse(
+        Functions.JSON_parse<{ protocol_id?: string }>(
           localStorage.getItem(ConstValue.SEARCH_QUERY)
         ).protocol_id;
     }

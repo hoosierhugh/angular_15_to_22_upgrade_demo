@@ -40,7 +40,7 @@ export class CustomTableComponent implements AfterViewInit {
         this.dataSource.data = this._details;
         this.dataSource.filterPredicate = (data: TableRow, filtersJson: string) => {
             const matchFilter = [];
-            const filters = Functions.JSON_parse(filtersJson);
+            const filters = Functions.JSON_parse<TableFilter[]>(filtersJson) || [];
 
             filters.forEach(filter => {
                 const value = data[filter.id] === null ? '' : data[filter.id] + '';

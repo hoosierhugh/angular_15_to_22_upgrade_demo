@@ -1,8 +1,10 @@
 import { ChangeDetectorRef, Component, EventEmitter, HostListener, Input, OnInit, Output, ChangeDetectionStrategy, inject } from '@angular/core';
 import { Functions } from '@app/helpers/functions';
 import { DateFormat } from '@app/services/time-formatting.service';
-import { GridOptions } from 'ag-grid-community';
+import { CellClickedEvent, ColDef, GridApi, GridOptions, GridReadyEvent, RowClassParams } from 'ag-grid-community';
 import { SettingButtonComponent } from './setting-button';
+
+type GridRow = Record<string, unknown>;
 
 @Component({
     selector: 'app-custom-ag-grid',
@@ -18,10 +20,10 @@ export class CustomAgGridComponent implements OnInit {
         selectedType: 'sizeToFit',
         // pageSize: 100
     };
-    agColumnDefs: any[] = [];
-    _details = [];
-    frameworkComponents: any;
-    gridOptions: GridOptions = {
+    agColumnDefs: ColDef<GridRow>[] = [];
+    _details: GridRow[] = [];
+    frameworkComponents: Record<string, unknown>;
+    gridOptions: GridOptions<GridRow> = {
         defaultColDef: {
             sortable: true,
             resizable: true,
@@ -29,11 +31,10 @@ export class CustomAgGridComponent implements OnInit {
         rowHeight: 38,
         rowSelection: 'multiple',
         suppressRowClickSelection: true,
-        suppressCellSelection: true,
         suppressPaginationPanel: true
-    } as GridOptions;
-    _columns: any[] = [];
-    gridApi: any;
+    };
+    _columns: ColDef<GridRow>[] = [];
+    gridApi: GridApi<GridRow>;
     @Input() dateFormat: DateFormat;
     @Input() customTimeParser: (columnType: string, value: string) => string;
     @Input() set details(val) {
@@ -43,19 +44,20 @@ export class CustomAgGridComponent implements OnInit {
     get details() {
         return this._details;
     }
-    @Input() set columns(val: string[]) {
+    @Input() set columns(val: string[] | ColDef<GridRow>[]) {
         if (!val) {
             return;
         }
+        const visibleColumns = val.filter((column): column is string => typeof column === 'string');
         const isDetailsReady = () => {
             if (this.details?.length) {
                 const [firstItemOfDetails] = this.details;
 
                 this._columns = Object.entries(firstItemOfDetails)
-                    .filter(([key, value]: any) => typeof value !== 'object' || value instanceof Array)
-                    .map(([column]: any) => {
+                    .filter(([, value]: [string, unknown]) => typeof value !== 'object' || value instanceof Array)
+                    .map(([column]: [string, unknown]) => {
 
-                        const aliasFromKey = {
+                        const aliasFromKey: Record<string, string> = {
                             'srcAlias_srcPort': 'SRC IP with Port',
                             'dstAlias_dstPort': 'DST IP with Port',
                             'diff': 'Delta',
@@ -74,7 +76,7 @@ export class CustomAgGridComponent implements OnInit {
                         return {
                             field: column,
                             headerName: aliasFromKey[column] || column,
-                            hide: !val.includes(column),
+                            hide: !visibleColumns.includes(column),
                             valueFormatter: !!dateTimeField[column] && this.customTimeParser ? ({value}) => this.customTimeParser(dateTimeField[column], value) : null
                         }
                     });
@@ -99,10 +101,10 @@ export class CustomAgGridComponent implements OnInit {
         };
         isDetailsReady();
     }
-    get columns() {
+    get columns(): ColDef<GridRow>[] {
         return this._columns;
     }
-    @Output() rowClick = new EventEmitter<any>();
+    @Output() rowClick = new EventEmitter<CellClickedEvent<GridRow>>();
 
     @HostListener('dblclick')
     onDblClick() {
@@ -123,7 +125,7 @@ export class CustomAgGridComponent implements OnInit {
             }
         });
     }
-    onGridReady(params: any) {
+    onGridReady(params: GridReadyEvent<GridRow>) {
         this.gridApi = params.api;
     }
     constructor() {
@@ -146,8 +148,8 @@ export class CustomAgGridComponent implements OnInit {
         }, 100);
     }
 
-    public getRowStyle(params) {
-        const _style: any = {
+    public getRowStyle(params: RowClassParams<GridRow>): Record<string, string> {
+        const _style: Record<string, string> = {
             'border-bottom': '1px solid rgba(0,0,0,0.1)',
             'cursor': 'pointer'
         }
@@ -159,7 +161,7 @@ export class CustomAgGridComponent implements OnInit {
     sortChanged(event) {
         this.cdr.detectChanges();
     }
-    cellClicked(event) {
+    cellClicked(event: CellClickedEvent<GridRow>) {
         this.rowClick.emit(event);
     }
     doOpenFilter() {

@@ -11,6 +11,50 @@ import { DateFormat, TimeFormattingService } from '@app/services/time-formatting
 
 const parsip = _parsip;
 // const moment = _moment;
+
+interface MessageDetail {
+  name: string;
+  value: unknown;
+}
+
+interface SipHeader {
+  raw?: string;
+}
+
+interface SipData extends Record<string, unknown> {
+  body?: string;
+  headers?: Record<string, SipHeader[]>;
+}
+
+interface ParsedMessage extends Record<string, unknown> {
+  sip?: SipData;
+  sdp?: unknown;
+  vqr?: unknown;
+  jwt?: unknown;
+  xrtp?: unknown;
+}
+
+interface MessageData extends Record<string, unknown> {
+  frame_protocol?: unknown;
+  raw_source?: string;
+  message?: string;
+  typeItem?: string;
+  type?: string;
+  raw?: unknown;
+  item?: { raw?: unknown };
+  messageDetailTableData?: MessageDetail[];
+  create_ts?: string | number | Date;
+  srcId?: string;
+  dstId?: string;
+  srcIp?: string;
+  srcPort?: string | number;
+  dstIp?: string;
+  dstPort?: string | number;
+  id?: string;
+  tabType?: string;
+  decoded?: unknown;
+}
+
 @Component({
     selector: 'app-message-content',
     templateUrl: './message-content.component.html',
@@ -24,34 +68,34 @@ export class MessageContentComponent implements OnInit, OnDestroy, AfterViewInit
   alertService = inject(AlertService);
   translateService = inject(TranslateService);
 
-  _data: any;
+  _data: MessageData = {};
   dateFormat: DateFormat;
   timeLabel: string;
-  raw;
-  raw_hep_log;
-  type;
+  raw: unknown;
+  raw_hep_log = '';
+  type = '';
   raw_isJSON = false;
   labelList = {};
-  private _interval: any;
-  _pt: any;
+  private _interval: ReturnType<typeof setInterval> | undefined;
+  _pt: ParsedMessage = {};
   tableObj = {};
-  get pt(): any {
+  get pt(): ParsedMessage {
     return this._pt;
   }
-  set pt(v: any) {
+  set pt(v: ParsedMessage) {
     this._pt = v;
   }
 
 
   @ViewChild('matTabGroup', { static: false }) matTabGroup: MatTabGroup;
-  @Input() rowData: any;
+  @Input() rowData: MessageData;
   @Input() set isDecoded(val: boolean) {
     this.cdr.detectChanges()
   }
   get data() {
     return this._data;
   }
-  @Input() set data(val) {
+  @Input() set data(val: MessageData) {
     this._data = Functions.cloneObject(val);
     if (val.frame_protocol) {
       // is web-shark
@@ -74,7 +118,7 @@ export class MessageContentComponent implements OnInit, OnDestroy, AfterViewInit
 
         /** parse SIP */
         this.pt.sip = _parsip.getSIP(this._data.raw_source);
-        const sipData: any = { ...this.pt.sip };
+        const sipData: SipData = { ...(this.pt.sip || {}) };
         if ((sipData?.headers?.['Content-Type']?.[0]?.raw)?.toLowerCase() === 'application/sdp'
           && sipData?.body) {
           /**parse SDP  */
@@ -128,7 +172,10 @@ export class MessageContentComponent implements OnInit, OnDestroy, AfterViewInit
     if (val.typeItem === 'HEP-LOG') {
       this.type = 'LOG';
       this.raw_isJSON = false;
-      this.raw_hep_log = val.raw[2].raw_source;
+      const logData = Array.isArray(val.raw) ? val.raw[2] : undefined;
+      this.raw_hep_log = typeof logData === 'object' && logData !== null && 'raw_source' in logData
+        ? String(logData.raw_source)
+        : '';
       this.cdr.detectChanges();
       return;
     } else {
@@ -138,13 +185,13 @@ export class MessageContentComponent implements OnInit, OnDestroy, AfterViewInit
     if (this._data.tabType === 'UAReport') {
       // the parcing for RTP User Agent packets
       try {
-        if (!this.raw.match(';')) {
+        if (typeof this.raw === 'string' && !this.raw.match(';')) {
           this.raw = this.raw.split(',').reduce((a, b) => {
             const [k, v] = b.split('=');
             a[k] = v;
             return a;
           }, {});
-        } else {
+        } else if (typeof this.raw === 'string') {
           this.raw = this.raw.split(';').reduce((a, b) => {
             const [key, v] = b.split('=');
             a[key] = v.match(',') ? v.split(',') : v;
@@ -165,15 +212,15 @@ export class MessageContentComponent implements OnInit, OnDestroy, AfterViewInit
     this.cdr.detectChanges();
   }
 
-  messageDetailTableData: any;
+  messageDetailTableData: MessageDetail[] = [];
 
-  identify(index, item) {
+  identify(index: number, item: MessageDetail): string {
     return item.name;
   }
-  isParsedData(item) {
+  isParsedData(item: string): boolean {
     return Object.prototype.hasOwnProperty.call(this.pt, item);
   }
-  isObject(item) {
+  isObject(item: unknown): boolean {
     return typeof item === 'object';
   }
   ngOnInit() {
@@ -199,7 +246,7 @@ export class MessageContentComponent implements OnInit, OnDestroy, AfterViewInit
   onSelectedTab() {
     // Kept as a template callback for compatibility; tab changes require no action.
   }
-  objString(s) {
+  objString(s: unknown): string {
     return JSON.stringify(s, null, 4);
   }
 

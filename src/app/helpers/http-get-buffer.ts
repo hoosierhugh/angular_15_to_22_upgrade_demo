@@ -24,8 +24,8 @@ export class HttpGetBuffer {
     static delay = 1000 * 30; // 30 sec buffering
 
     get username() {
-        return Functions.JSON_parse(localStorage.getItem(ConstValue.CURRENT_USER))
-            .user.username;
+        return Functions.JSON_parse<{ user?: { username?: string } }>(localStorage.getItem(ConstValue.CURRENT_USER))
+            ?.user?.username || '';
     }
 
     private getBufferItem<T>(url: string): Partial<BufferedRequest<T>> {

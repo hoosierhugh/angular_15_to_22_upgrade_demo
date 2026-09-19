@@ -23,7 +23,7 @@ export const ConstValue = {
 };
 export class UserConstValue {
     static get USER_PREFIX() {
-        return `${PREFIX}${Functions.JSON_parse(localStorage.getItem(ConstValue.CURRENT_USER))?.user?.username}-`;
+        return `${PREFIX}${Functions.JSON_parse<{ user?: { username?: string } }>(localStorage.getItem(ConstValue.CURRENT_USER))?.user?.username || ''}-`;
     }
     static get SEARCH_QUERY_LOKI() {
         return `${this.USER_PREFIX}searchQueryLoki`;

@@ -1,6 +1,28 @@
 import  moment from 'moment';
 import { Md5 } from 'ts-md5/dist/md5';
 import { KeyValue } from '@angular/common';
+
+export interface UriLocation {
+  mapping?: string;
+  value?: string | string[];
+  [key: string]: unknown;
+}
+
+export interface UriParam {
+  location?: UriLocation;
+  search?: Record<string, Record<string, unknown>>;
+  [key: string]: unknown;
+}
+
+export interface UriJson {
+  param?: UriParam;
+  timestamp?: {
+    from: string | number;
+    to: string | number;
+  };
+  [key: string]: unknown;
+}
+
 export class Functions {
   static _colorBufer = {};
   static logTime = 0;
@@ -223,7 +245,7 @@ export class Functions {
 
     return src;
   }
-  static getUriParams(): any {
+  static getUriParams(): string | Record<string, string | null> {
     if (window.location.hash) {
       return window.location.hash.replace('#', '');
     }
@@ -231,7 +253,7 @@ export class Functions {
     return lsearch ? lsearch.split('&').map(i => i.replace('?', '').split('='))
       .reduce((a, b) => (a[b[0]] = b[1], a), {}) : { callid: null, from: null, to: null, uuid: null };
   }
-  static getUriJson(): any {
+  static getUriJson(): UriJson | null {
     if (window.location.search) {
       try {
         return JSON.parse(decodeURIComponent(window.location.search.slice(1, -1)));
@@ -310,7 +332,7 @@ export class Functions {
     this.saveToFile(data, filename, 'txt/json');
 
   }
-  static JSON_parse(jsonString: string): any {
+  static JSON_parse<T = unknown>(jsonString: string | null): T | null {
     try {
       return JSON.parse(jsonString);
     } catch (e) {
