@@ -2,7 +2,7 @@ import { Component, ViewChild, ChangeDetectionStrategy, ChangeDetectorRef, injec
 import { MatDialogRef, MAT_DIALOG_DATA, MatDialog } from '@angular/material/dialog';
 import { FormControl } from '@angular/forms';
 import { MatTable } from '@angular/material/table';
-import { ClickhouseSerivce } from '@app/services/clickhouse.service';
+import { ClickhouseListItem, ClickhouseSerivce } from '@app/services/clickhouse.service';
 import { AlertService } from '@app/services/alert.service';
 import { Functions } from '@app/helpers/functions';
 import { DialogAlarmComponent } from '../dialog-alarm/dialog-alarm.component';
@@ -54,12 +54,12 @@ export class SettingClickhouseChartWidgetComponent {
         'doughnut', 'polarArea', 'area', 'pie'
     ];
 
-    databaseList: SelectList[] = [];
-    tableList: SelectList[] = [];
-    timeColumnList: SelectList[] = [];
-    counterList: SelectList[] = [];
-    tagsList: SelectList[] = [];
-    columnList: SelectList[] = [];
+    databaseList: ClickhouseListItem[] = [];
+    tableList: ClickhouseListItem[] = [];
+    timeColumnList: ClickhouseListItem[] = [];
+    counterList: ClickhouseListItem[] = [];
+    tagsList: ClickhouseListItem[] = [];
+    columnList: ClickhouseListItem[] = [];
     operatorList: SelectList[] = [
         { name: 'Count', value: 'count()' },
         { name: 'Average', value: 'avg()' },
