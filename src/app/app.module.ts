@@ -295,7 +295,6 @@ import { NgxCodejarModule } from 'ngx-codejar';
         LastErrorCellComponent,
         DbStatsCellComponent,
         ExpireCellComponent,
-        SettingButtonComponent,
         PageUsersComponent,
         PageUserSettingsComponent,
         PageAdvancedSettingsComponent,
@@ -309,7 +308,6 @@ import { NgxCodejarModule } from 'ngx-codejar';
         PageAdminComponent,
         PageAliasComponent,
         PageApiDocComponent,
-        LoadingCircleComponent,
         PageSystemOverviewComponent,
         TransactionGraphSettingsComponent,
         AlertWidgetComponent,
@@ -366,7 +364,9 @@ import { NgxCodejarModule } from 'ngx-codejar';
         TranslatePipe,
         TranslateDirective,
         // ColorChromeModule
-        NgxCodejarModule], providers: [
+        NgxCodejarModule,
+        LoadingCircleComponent,
+        SettingButtonComponent], providers: [
         ...MOCK_PROVIDERS,
         { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true },
         { provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true },

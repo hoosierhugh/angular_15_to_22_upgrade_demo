@@ -5,7 +5,7 @@ import { Component, ChangeDetectionStrategy } from '@angular/core';
     templateUrl: './loading-circle.component.html',
     styleUrls: ['./loading-circle.component.scss'],
     changeDetection: ChangeDetectionStrategy.Eager,
-    standalone: false
+    standalone: true
 })
 export class LoadingCircleComponent {
 
