@@ -4,7 +4,7 @@ import { MatTabGroup } from '@angular/material/tabs';
 import moment from 'moment';
 import * as _parsip from 'parsip';
 
-import jwt_decode from 'jwt-decode';
+import { jwtDecode } from 'jwt-decode';
 import { AlertService } from '@app/services/alert.service';
 import { TranslateService } from '@ngx-translate/core';
 import { DateFormat, TimeFormattingService } from '@app/services/time-formatting.service';
@@ -139,7 +139,7 @@ export class MessageContentComponent implements OnInit, OnDestroy, AfterViewInit
 
         if (sipData?.headers?.Identity?.[0]?.raw) {
           /** parse jwt */
-          this.pt.jwt = jwt_decode(sipData?.headers?.Identity[0].raw);
+          this.pt.jwt = jwtDecode(sipData?.headers?.Identity[0].raw);
 
         }
       }

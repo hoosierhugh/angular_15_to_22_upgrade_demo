@@ -1,5 +1,5 @@
 import  moment from 'moment';
-import { Md5 } from 'ts-md5/dist/md5';
+import { Md5 } from 'ts-md5';
 import { KeyValue } from '@angular/common';
 
 export interface UriLocation {

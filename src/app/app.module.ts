@@ -161,7 +161,7 @@ import { NgxJsonViewerModule } from 'ngx-json-viewer';
 import { Gridster, GridsterItem } from 'angular-gridster2';
 import { QRCodeComponent } from 'angularx-qrcode';
 import { DynamicModule } from 'ng-dynamic-component';
-import { NgChartsModule } from 'ng2-charts';
+import { BaseChartDirective, provideCharts, withDefaultRegisterables } from 'ng2-charts';
 import { MarkdownModule } from 'ngx-markdown';
 import { NgxDaterangepickerMd } from './components/controls/daterangepicker';
 import { MultiSelectFieldModule } from './components/widgets/protosearch-widget/ps-fields/multi-select-field/multi-select-field.module';
@@ -198,7 +198,7 @@ import { CopyModule } from './components/controls/copy/copy.module';
 import { CodeProtoSelectorComponent } from './components/widgets/smart-input-widget/code-proto-selector/code-proto-selector.component';
 import { PageProfileComponent } from './components/preference/pages/page-profile/page-profile.component';
 import { ExpireCellComponent } from './components/preference/cell-types/expire-cell/expire-cell.component';
-import { NgxCodejarModule } from 'ngx-codejar';
+import { NgxCodeJarComponent } from 'ngx-codejar';
 
 @NgModule({ declarations: [
         AppComponent,
@@ -321,7 +321,7 @@ import { NgxCodejarModule } from 'ngx-codejar';
         ReactiveFormsModule,
         Gridster,
         GridsterItem,
-        NgChartsModule,
+        BaseChartDirective,
         DynamicModule,
         routing,
         AppRoutingModule,
@@ -364,10 +364,11 @@ import { NgxCodejarModule } from 'ngx-codejar';
         TranslatePipe,
         TranslateDirective,
         // ColorChromeModule
-        NgxCodejarModule,
+        NgxCodeJarComponent,
         LoadingCircleComponent,
         SettingButtonComponent], providers: [
         ...MOCK_PROVIDERS,
+        provideCharts(withDefaultRegisterables()),
         { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true },
         { provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true },
         // { provide: ACE_CONFIG, useValue: DEFAULT_ACE_CONFIG },

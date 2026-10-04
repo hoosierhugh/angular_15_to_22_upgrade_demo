@@ -1,5 +1,5 @@
 import { environment } from '@environments/environment';
-import { Md5 } from 'ts-md5/dist/md5';
+import { Md5 } from 'ts-md5';
 
 import 'moment-timezone';
 import  moment from 'moment';

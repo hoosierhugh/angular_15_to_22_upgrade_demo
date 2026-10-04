@@ -1,4 +1,4 @@
-import { NgChartsModule } from 'ng2-charts';
+import { BaseChartDirective } from 'ng2-charts';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { NgModule, inject } from '@angular/core';
@@ -22,7 +22,7 @@ import { HtmlPipe } from './html.pipe';
     MatTabsModule,
     MatButtonModule,
     MatIconModule,
-    NgChartsModule,
+    BaseChartDirective,
     MatTooltipModule,
     NgxJsonViewerModule,
     FontAwesomeModule,

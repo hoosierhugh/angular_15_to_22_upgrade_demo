@@ -11,7 +11,7 @@ import { ConstValue } from '../models/const-value.model';
 import { AlertService } from './alert.service';
 import { Functions, setStorage } from '@app/helpers/functions';
 import { TranslateService } from '@ngx-translate/core';
-import jwt_decode from 'jwt-decode';
+import { jwtDecode } from 'jwt-decode';
 import { MOCK_MODE, createMockUser } from '../runtime-mode';
 
 export interface AuthType {
@@ -48,7 +48,7 @@ export class AuthenticationService {
         try {
             ls = JSON.parse(localStorage.getItem(ConstValue.CURRENT_USER)) as User | null;
             if (ls) {
-                const decodedToken = jwt_decode<UserJWT>(ls.token);
+                const decodedToken = jwtDecode<UserJWT>(ls.token);
                 if (moment().unix() > decodedToken?.exp) {
                     throw new Error('Expired JWT');
                 }

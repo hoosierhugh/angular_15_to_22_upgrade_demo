@@ -2,17 +2,13 @@ import { Component, ViewChild, ViewContainerRef, ChangeDetectionStrategy, inject
 import {
     IAfterGuiAttachedParams,
     IDoesFilterPassParams,
-    IFilterParams,
-    IRowNode,
-    ValueGetterParams
+    IFilterParams
 } from 'ag-grid-community';
 import { IFilterAngularComp } from 'ag-grid-angular';
 import { PreferenceMappingProtocolService } from '@app/services';
 import { Functions } from '@app/helpers/functions';
 import { ConstValue, PreferenceMapping, UserConstValue } from '@app/models';
 
-type valueGetter = (rowNode: IRowNode | ValueGetterParams) => unknown
-type FilterParams = Omit<IFilterParams, 'valueGetter'> & { valueGetter: valueGetter };
 interface StatusFilterModel { value: string; }
 @Component({
     selector: 'app-status-filter',
@@ -24,8 +20,7 @@ interface StatusFilterModel { value: string; }
 export class StatusFilterComponent implements IFilterAngularComp {
     private _pmps = inject(PreferenceMappingProtocolService);
 
-    private params: FilterParams;
-    private valueGetter: valueGetter;
+    private params: IFilterParams;
     public text = '';
     private statusMapping;
 
@@ -40,7 +35,6 @@ export class StatusFilterComponent implements IFilterAngularComp {
 
         this.statusMapping = fields_mapping.find(field => field.id === 'status').form_default;
         this.params = params;
-        this.valueGetter = params.valueGetter;
     }
 
     isFilterActive(): boolean {
@@ -54,7 +48,7 @@ export class StatusFilterComponent implements IFilterAngularComp {
                 || status.value === parseInt(this.text, 10);
         });
         if (typeof mappingName !== 'undefined') {
-            return mappingName.value === this.valueGetter(params.node);
+            return mappingName.value === this.params.getValue(params.node);
       }
       return false;
     }
