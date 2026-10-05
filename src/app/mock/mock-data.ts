@@ -23,7 +23,7 @@ export function createHomeDashboard() {
                     id: 'demo-clock', name: 'clock', strongIndex: 'ClockWidgetComponent',
                     x: 22, y: 0, cols: 11, rows: 22, minWidth: 300, minHeight: 300,
                     config: { title: 'UTC clock', location: { desc: 'UTC', name: 'UTC', offset: '+0' },
-                        showAnalog: 'Digital', showDate: true, showseconds: true }
+                        showAnalog: 'Digital', showDate: true, showSeconds: true }
                 }
             ]
         }

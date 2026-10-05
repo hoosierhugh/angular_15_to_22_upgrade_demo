@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, Output, EventEmitter, ElementRef, ViewChild, ChangeDetectionStrategy, ChangeDetectorRef, inject } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter, ElementRef, ViewChild, ChangeDetectionStrategy, ChangeDetectorRef, inject, signal } from '@angular/core';
 import { Widget, WidgetArrayInstance } from '@app/helpers/widget';
 import { SettingClockWidgetComponent } from './setting-clock-widget.component';
 import { MatDialog } from '@angular/material/dialog';
@@ -19,7 +19,7 @@ export interface TimeZone {
 export interface ClockConfig {
     id?: string;
     datePattern: string;
-    showseconds: boolean;
+    showSeconds: boolean;
     timePattern: string;
     title: string;
     location: TimeZone;
@@ -59,8 +59,10 @@ export class ClockWidgetComponent implements IWidget, OnInit {
 
     desc: string;
     name: string;
-    objDate: string;
-    objTime: string;
+    // objDate: string;
+    objDate = signal('');
+    // objTime: string;
+    objTime = signal('');
     _config: ClockConfig;
     location_value: number;
     private _interval: ReturnType<typeof setInterval> | undefined;
@@ -78,7 +80,7 @@ export class ClockWidgetComponent implements IWidget, OnInit {
                 name: 'Europe/Amsterdam',
                 offset: '+2'
             },
-            showseconds: false,
+            showSeconds: false,
             timePattern: ConstTime.TIME_PATTERN,
             title: 'Home Clock',
             showDate: true,
@@ -92,7 +94,7 @@ export class ClockWidgetComponent implements IWidget, OnInit {
             this._config.title = this.config.title || 'Clock Widget';
             this._config.datePattern = this.config.datePattern || ConstTime.DATA_PATTERN;
             this._config.timePattern = this.config.timePattern || ConstTime.TIME_PATTERN;
-            this._config.showseconds = this.config.showseconds || false;
+            this._config.showSeconds = this.config.showSeconds || false;
             this._config.showDate = this.config.showDate || true;
             this._config.fontSizeClock = this.config.fontSizeClock || 20;
             this._config.fontSizeDate = this.config.fontSizeDate || 20;
@@ -122,8 +124,10 @@ export class ClockWidgetComponent implements IWidget, OnInit {
         }
 
         this._interval = setInterval(() => {
-            this.objDate = moment().tz(this.name).format('YYYY-MM-DD');
-            this.objTime = moment().tz(this.name).format('HH:mm:ss');
+            // this.objDate = moment().tz(this.name).format('YYYY-MM-DD');
+            this.objDate.set(moment().tz(this.name).format('YYYY-MM-DD'));
+            // this.objTime = moment().tz(this.name).format('HH:mm:ss');
+            this.objTime.set(moment().tz(this.name).format('HH:mm:ss'));
             this.animateAnalogClock();
             this.resizeClock();
             this.cdr.detectChanges();

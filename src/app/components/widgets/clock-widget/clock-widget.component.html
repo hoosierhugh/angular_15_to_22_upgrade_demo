@@ -1,10 +1,12 @@
 <div class="box clock-widget" #clockWidget>
   <h5>{{ desc }}</h5>
   @if (this._config.showDate) {
-    <h2 [style.fontSize.px]="this._config.fontSizeDate">{{ objDate }}</h2>
+    <!-- <h2 [style.fontSize.px]="this._config.fontSizeDate">{{ objDate }}</h2> -->
+    <h2 [style.fontSize.px]="this._config.fontSizeDate">{{ objDate() }}</h2>
   }
   @if (this._config.showAnalog !== 'Analog') {
-    <h2  [style.fontSize.px]="this._config.fontSizeClock">{{ objTime }}</h2>
+    <!-- <h2  [style.fontSize.px]="this._config.fontSizeClock">{{ objTime }}</h2> -->
+    <h2  [style.fontSize.px]="this._config.fontSizeClock">{{ objTime() }}</h2>
   }
   @if (this._config.showAnalog !== 'Digital') {
     <div class="analog-clock" [style.width.px]="this._config.radius" [style.height.px]="this._config.radius">
