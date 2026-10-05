@@ -901,7 +901,13 @@ export class SearchGridCallComponent
         } else {
             await this.getHeaders();
             if (!this.mappings) {
-                return
+                this.rowData = [];
+                this.totalPages = 0;
+                this.loader = false;
+                this.onlyLoader = false;
+                this.dataReady.emit({});
+                this.cdr.detectChanges();
+                return;
             }
             this.loader = true;
             this.getQueryData();
@@ -961,9 +967,12 @@ export class SearchGridCallComponent
             this._scs.getData(this.config).toPromise().then((result) => {
                 if (!result || !result.data) {
                     this.rowData = [];
+                    this.loader = false;
+                    this.onlyLoader = false;
                     checkNoData(!!this.rowData?.length);
                     this.dataReady.emit({});
                     console.error(new Error('Search call returned no data.'), result);
+                    this.cdr.detectChanges();
                     return;
                 }
                 this.rowData = result.data;
@@ -984,8 +993,11 @@ export class SearchGridCallComponent
 
             }, err => {
                 this.rowData = [];
+                this.loader = false;
+                this.onlyLoader = false;
                 checkNoData(false);
                 this.dataReady.emit({});
+                this.cdr.detectChanges();
             });
         }
     }
@@ -1539,7 +1551,7 @@ export class SearchGridCallComponent
             width: '500px',
             data: {
                 agGridSizeControl: this.agGridSizeControl,
-                apicol: this.gridColumnApi,
+                apicol: this.gridApi,
                 apipoint: this.gridApi,
                 columns: this.context.componentParent.columnDefs,
                 idParent: this.context.componentParent.id,

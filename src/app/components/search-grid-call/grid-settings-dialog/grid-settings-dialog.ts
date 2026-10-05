@@ -2,13 +2,26 @@ import { Component, ChangeDetectionStrategy, inject } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { Functions, setStorage } from '@app/helpers/functions';
 import { UserConstValue } from '../../../models/const-value.model';
-import { TranslateService } from '@ngx-translate/core'
+import { TranslateService } from '@ngx-translate/core';
+import type { ColDef, ColumnState, GridApi } from 'ag-grid-community';
+import type { DragDropItem, DragDropOrderEvent } from '@app/components/controls/custom-ag-grid/drag-drop-list/drag-drop-list.component';
+import type { GridSizeSettings } from '../grid-controller';
+
+type GridSettingsSizeOption = 'sizeToFit' | 'sizeToFitContinuos' | 'sizeColumnsToFit';
+
+interface GridSettingsColumn {
+    name: string;
+    field: string;
+    selected: boolean;
+    idx: number;
+}
+
 export interface DialogData {
-    apicol: any;
-    apipoint: any;
-    columns: any;
+    apicol: GridApi<unknown>;
+    apipoint: GridApi<unknown>;
+    columns: ColDef<unknown>[];
     idParent?: string;
-    agGridSizeControl?: any;
+    agGridSizeControl: GridSizeSettings;
     protocol_id?: string;
 }
 
@@ -24,8 +37,8 @@ export class DialogSettingsGridDialog {
     translateService = inject(TranslateService);
     data = inject<DialogData>(MAT_DIALOG_DATA);
 
-    public apiColumn: any;
-    apiPoint: any;
+    public apiColumn: GridApi<unknown>;
+    apiPoint: GridApi<unknown>;
     id: string;
     protocol_id;
     public radioSizeType = [
@@ -47,9 +60,9 @@ export class DialogSettingsGridDialog {
         }
     ];
     selectedType: string;
-    agGridSizeControl: any = {};
-    allColumnIds: any[] = [];
-    _bufferData: any[];
+    agGridSizeControl: GridSizeSettings;
+    allColumnIds: GridSettingsColumn[] = [];
+    _bufferData: GridSettingsColumn[] = [];
     constructor() {
         const translateService = this.translateService;
         const data = this.data;
@@ -60,43 +73,45 @@ export class DialogSettingsGridDialog {
         this.apiPoint = data.apipoint;
         this.protocol_id = data.protocol_id;
         this.id = data.idParent;
-        if (
-            typeof this.apiColumn?.getAllColumns() !== 'undefined' &&
-            this.apiColumn.getAllColumns() !== null
-        ) {
-            Object.values(this.apiColumn.getAllGridColumns() as object)
-                .filter((column) => !['', 'id'].includes(column.colDef.field))
-                .forEach((column, index) =>
-                    this.allColumnIds.push({
-                        name: column.colDef.headerName,
-                        field: column.colDef.field,
-                        selected: column.visible,
-                        idx: index
-                    })
-                );
-            this.allColumnIds = this.allColumnIds
-                .map((i) => JSON.stringify(i))
-                .filter((i, k, arr) => i !== arr[k - 1])
-                .map((i) => JSON.parse(i))
-                .sort((a, b) => a.idx - b.idx);
-
-            this._bufferData = Functions.cloneObject(this.allColumnIds);
-        }
+        this.agGridSizeControl = data.agGridSizeControl;
+        this.allColumnIds = this.apiColumn.getAllGridColumns()
+            .flatMap((column, index): GridSettingsColumn[] => {
+                const field = column.getColDef().field;
+                if (typeof field !== 'string' || field === '' || field === 'id') {
+                    return [];
+                }
+                return [{
+                    name: column.getColDef().headerName ?? field,
+                    field,
+                    selected: column.isVisible(),
+                    idx: index
+                }];
+            });
+        this._bufferData = Functions.cloneObject(this.allColumnIds);
     }
-    onUpdateProto({ event: { container } }: any) {
-        if (this.apiColumn.getAllColumns()) {
+    get hasColumns(): boolean {
+        return this.apiColumn.getAllGridColumns().length > 0;
+    }
+
+    onUpdateProto({ event: { container } }: DragDropOrderEvent): void {
+        if (this.hasColumns) {
             const activeListView = container.id === 'activeListView' ? container : null;
             const inactiveListView = container.id === 'inactiveListView' ? container : null;
-            const columnState = this.apiColumn.getColumnState();
-            const setVisible = (fName, bool) => {
-                if (columnState.find(({ colId }) => colId === fName)?.hide === bool) {
-                    this.apiColumn.setColumnVisible(fName, bool);
+            const columnState: ColumnState[] = this.apiColumn.getColumnState();
+            const setVisible = (fName: string | undefined, visible: boolean | undefined): void => {
+                if (!fName || visible === undefined) {
+                    return;
+                }
+                if (columnState.find(({ colId }) => colId === fName)?.hide === visible) {
+                    this.apiColumn.setColumnsVisible([fName], visible);
                 }
             };
-            inactiveListView?.data.forEach(({ field, selected }) => setVisible(field, selected));
-            activeListView?.data.forEach(({ field, selected }, key) => {
+            inactiveListView?.data.forEach(({ field, selected }: DragDropItem) => setVisible(field, selected));
+            activeListView?.data.forEach(({ field, selected }: DragDropItem, key: number) => {
                 setVisible(field, selected);
-                this.apiColumn.moveColumn(field, key + 1);
+                if (field) {
+                    this.apiColumn.moveColumns([field], key + 1);
+                }
             });
 
             const id = (this.id ? `-${this.id}` : '') + `-${this.protocol_id}`;
@@ -107,25 +122,20 @@ export class DialogSettingsGridDialog {
         }
     }
 
-    onChangeSizeToFit(event, type?) {
+    onChangeSizeToFit(event: boolean, type: GridSettingsSizeOption): void {
         this.agGridSizeControl[type] = event;
-        // console.log(event, type);
-        if (this.agGridSizeControl.sizeToFit) {
+        if (this.agGridSizeControl[type] && type === 'sizeToFit') {
             this.apiPoint.sizeColumnsToFit();
         }
-        if (this.agGridSizeControl.sizeColumnsToFit) {
+        if (this.agGridSizeControl[type] && type === 'sizeColumnsToFit') {
             this.autoSizeAll(true);
         }
     }
-    private autoSizeAll(skipHeader) {
-        const allColumnIds = [];
-        this.apiColumn.getAllColumns().forEach(function (column) {
-            allColumnIds.push(column.colId);
-        });
+    private autoSizeAll(skipHeader: boolean): void {
+        const allColumnIds = this.apiColumn.getAllGridColumns().map(column => column.getColId());
         this.apiColumn.autoSizeColumns(allColumnIds, skipHeader);
     }
     onNoClick(): void {
         this.dialogRef.close();
     }
 }
-

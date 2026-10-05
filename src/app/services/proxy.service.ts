@@ -4,6 +4,42 @@ import { catchError, throwError } from 'rxjs';
 import { Observable } from 'rxjs';
 import { environment } from '@environments/environment';
 
+export interface GrafanaProxyErrorResponse {
+    errorcode: number;
+    data?: { message?: string };
+}
+
+export interface GrafanaDashboardOption {
+    title: string;
+    uid: string;
+    id?: number | string;
+    type?: string;
+}
+
+export interface GrafanaFolder {
+    id: number | string;
+    title: string;
+    type: string;
+    uid?: string;
+}
+
+export interface GrafanaDashboardDetail {
+    dashboard: {
+        uid: string;
+        panels: { title: string; id: number }[];
+    };
+}
+
+export interface GrafanaPanelOption {
+    title: string;
+    pid: number;
+    uid: string;
+}
+
+export interface GrafanaStatusResponse {
+    data: { enable: boolean };
+}
+
 @Injectable({ providedIn: 'root' })
 
 export class ProxyService {
@@ -12,33 +48,33 @@ export class ProxyService {
     private url = `${environment.apiUrl}/proxy`;
 
     // Get Folders list
-    getProxyGrafanaFolders(): Observable<any> {
-        return this._http.get<any>(`${this.url}/grafana/folders`);
+    getProxyGrafanaFolders(): Observable<GrafanaFolder[] | GrafanaProxyErrorResponse> {
+        return this._http.get<GrafanaFolder[] | GrafanaProxyErrorResponse>(`${this.url}/grafana/folders`);
     }
-    getProxyGrafanaSearch(uid: string): Observable<any> {
-        return this._http.get<any>(`${this.url}/grafana/search/` + uid);
+    getProxyGrafanaSearch(uid: string): Observable<GrafanaDashboardOption[]> {
+        return this._http.get<GrafanaDashboardOption[]>(`${this.url}/grafana/search/` + uid);
     }
     // Get Dashboard list
-    getProxyGrafanaDashboards(folder: string): Observable<any> {
-        return this._http.get<any>(`${this.url}/grafana/dashboards/uid/` + folder);
+    getProxyGrafanaDashboards(folder: string): Observable<GrafanaDashboardDetail> {
+        return this._http.get<GrafanaDashboardDetail>(`${this.url}/grafana/dashboards/uid/` + folder);
     }
 
     // Get Grafana URL
-    getProxyGrafanaUrl(): Observable<any> {
-        return this._http.get<any>(`${this.url}/grafana/url`);
+    getProxyGrafanaUrl(): Observable<{ data: string } | GrafanaProxyErrorResponse> {
+        return this._http.get<{ data: string } | GrafanaProxyErrorResponse>(`${this.url}/grafana/url`);
     }
-    getProxyGrafanaPath(): Observable<any> {
-        return this._http.get<any>(`${this.url}/grafana/path`);
+    getProxyGrafanaPath(): Observable<{ data: string }> {
+        return this._http.get<{ data: string }>(`${this.url}/grafana/path`);
     }
     // Get Grafana OrgID
-    getProxyGrafanaOrg(): Observable<any> {
-        return this._http.get<any>(`${this.url}/grafana/org`);
+    getProxyGrafanaOrg(): Observable<{ id: number } | GrafanaProxyErrorResponse> {
+        return this._http.get<{ id: number } | GrafanaProxyErrorResponse>(`${this.url}/grafana/org`);
     }
-    getProxyGrafanaStatus(): Observable<any> {
-        return this._http.get<any>(`${this.url}/grafana/status`).pipe(catchError(this.handleError));
+    getProxyGrafanaStatus(): Observable<GrafanaStatusResponse> {
+        return this._http.get<GrafanaStatusResponse>(`${this.url}/grafana/status`).pipe(catchError(this.handleError));
     }
-    handleError(error: HttpErrorResponse) {
+    handleError(error: HttpErrorResponse): Observable<never> {
 
-        return throwError(error);
+        return throwError(() => error);
     }
 }

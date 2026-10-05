@@ -26,6 +26,7 @@ export interface IframeConfig {
         refresh?: string;
         orgId: number;
         panelId: number;
+        viewPanel?: number;
         theme: string;
         rand?: string;
         hasVariables?: boolean;

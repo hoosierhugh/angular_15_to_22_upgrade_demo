@@ -16,13 +16,13 @@
 
   <hr />
 
-  @if (apiColumn.getAllColumns() !== 'undefined' && this.apiColumn.getAllColumns() !== null) {
+  @if (hasColumns) {
     <app-drag-drop-list
       [list]="allColumnIds"
       (order)="onUpdateProto($event)"
     ></app-drag-drop-list>
   }
-  @if (apiColumn.getAllColumns() === 'undefined' || this.apiColumn.getAllColumns() === null) {
+  @if (!hasColumns) {
     <div>
       Please make a search to access settings
     </div>
@@ -31,5 +31,5 @@
 
 <div mat-dialog-actions style="float: right; margin-bottom: 0rem;">
   <!-- <button  mat-raised-button (click)="onNoClick()">{{'LINK.buttons.cancel' | translate}}</button> -->
-  <button mat-raised-button color=primary [mat-dialog-close]="data" cdkFocusInitial [disabled]="apiColumn.getAllColumns() === 'undefined' || this.apiColumn.getAllColumns() === null">{{'LINK.buttons.save' | translate}}</button>
+  <button mat-raised-button color=primary [mat-dialog-close]="data" cdkFocusInitial [disabled]="!hasColumns">{{'LINK.buttons.save' | translate}}</button>
 </div>

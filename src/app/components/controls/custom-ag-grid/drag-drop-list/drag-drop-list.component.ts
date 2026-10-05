@@ -1,7 +1,7 @@
 import { Component, Input, Output, EventEmitter, OnInit, ChangeDetectionStrategy } from '@angular/core';
 import {CdkDragDrop, moveItemInArray, transferArrayItem} from '@angular/cdk/drag-drop';
 
-interface DragDropItem {
+export interface DragDropItem {
     id?: string | number;
     field?: string;
     field_name?: string;
@@ -10,7 +10,7 @@ interface DragDropItem {
     idx?: number;
 }
 
-interface DragDropOrderEvent {
+export interface DragDropOrderEvent {
     sortedProto: DragDropItem[];
     newProto: DragDropItem[];
     event: CdkDragDrop<DragDropItem[]>;

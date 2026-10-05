@@ -5,6 +5,8 @@ import { ConstValue, UserConstValue } from './../../models/const-value.model';
 
 export interface GridSizeSettings {
     selectedType?: string;
+    sizeToFit?: boolean;
+    sizeToFitContinuos?: boolean;
     sizeColumnsToFit?: boolean;
     pageSize?: number;
 }

@@ -1,10 +1,29 @@
 import { Component, OnInit, ChangeDetectionStrategy, ChangeDetectorRef, inject } from '@angular/core';
-import { ProxyService } from '../../../services/proxy.service';
+import {
+    GrafanaDashboardOption,
+    GrafanaFolder,
+    GrafanaPanelOption,
+    GrafanaProxyErrorResponse,
+    ProxyService
+} from '../../../services/proxy.service';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { SelectList, GroupedSelectList } from '../influxdbchart-widget/setting-influxdbchart-widget.component';
 import { TranslateService } from '@ngx-translate/core'
 import { environment } from '@environments/environment';
 import { lastValueFrom } from 'rxjs';
+import type { IframeConfig } from './grafana-widget.component';
+
+interface GroupedGrafanaDashboards {
+    group: string;
+    list: GrafanaDashboardOption[];
+}
+
+function isGrafanaProxyError<T extends object>(response: T | GrafanaProxyErrorResponse): response is GrafanaProxyErrorResponse {
+    return 'errorcode' in response && typeof response.errorcode === 'number';
+}
+
+function hasDashboardUid(dashboard: GrafanaFolder): dashboard is GrafanaFolder & { uid: string } {
+    return typeof dashboard.uid === 'string';
+}
 @Component({
     selector: 'app-grafana-rsearch-widget-component',
     templateUrl: 'setting-grafana-widget.component.html',
@@ -17,16 +36,16 @@ export class SettingIframeWidgetComponent implements OnInit {
     private _ps = inject(ProxyService);
     translateService = inject(TranslateService);
     private cdr = inject(ChangeDetectorRef);
-    data = inject(MAT_DIALOG_DATA);
+    data = inject<IframeConfig>(MAT_DIALOG_DATA);
 
 
     private envUrl = `${environment.apiUrl.replace('/api/v3', '')}`;
-    dashboardList: GroupedSelectList[] = [];
-    panelList: SelectList[] = [];
-    folderList: GroupedSelectList[] = [];
-    unGroupedDashboardList: SelectList[] = [];
-    dashboardSource: any;
-    panelListValue: any;
+    dashboardList: GroupedGrafanaDashboards[] = [];
+    panelList: GrafanaPanelOption[] = [];
+    folderList: GroupedGrafanaDashboards[] = [];
+    unGroupedDashboardList: GrafanaDashboardOption[] = [];
+    dashboardSource: GrafanaDashboardOption | undefined;
+    panelListValue: GrafanaPanelOption | undefined;
     isInvalid: boolean;
     isLoggedIn = true;
     errorMessage: string;
@@ -50,9 +69,9 @@ export class SettingIframeWidgetComponent implements OnInit {
     }
 
     async onGetGrafanaUrl() {
-        const res: any = await lastValueFrom(this._ps.getProxyGrafanaUrl());
-        if (!Array.isArray(res) && res?.errorcode || res === null) {
-            this.errorCode = res?.errorcode || 123;
+        const res = await lastValueFrom(this._ps.getProxyGrafanaUrl());
+        if (isGrafanaProxyError(res)) {
+            this.errorCode = res.errorcode || 123;
             this.isLoggedIn = false;
             this.errorMessage = res?.data?.message || '';
         } else {
@@ -68,9 +87,9 @@ export class SettingIframeWidgetComponent implements OnInit {
     }
 
     async onGetGrafanaOrg() {
-        const res: any = await lastValueFrom(this._ps.getProxyGrafanaOrg());
-        if (!Array.isArray(res) && res?.errorcode) {
-            this.errorCode = res?.errorcode;
+        const res = await lastValueFrom(this._ps.getProxyGrafanaOrg());
+        if (isGrafanaProxyError(res)) {
+            this.errorCode = res.errorcode;
             this.isLoggedIn = false;
             this.errorMessage = res?.data?.message;
         } else {
@@ -81,18 +100,20 @@ export class SettingIframeWidgetComponent implements OnInit {
     }
 
     async onSyncDashboard() {
-        const res: any = await lastValueFrom(this._ps.getProxyGrafanaFolders());
-        if (!Array.isArray(res) && res?.errorcode) {
-            this.errorCode = res?.errorcode;
+        const res = await lastValueFrom(this._ps.getProxyGrafanaFolders());
+        if (!Array.isArray(res)) {
+            this.errorCode = res.errorcode;
             this.isLoggedIn = false;
             this.errorMessage = res?.data?.message;
         } else {
             this.isLoggedIn = true;
-            const localDashboardList = [];
+            const localDashboardList: GrafanaDashboardOption[] = [];
             res.forEach(unit => {
                 if (unit.type === 'dash-db') {
-                    this.unGroupedDashboardList.push(unit);
-                    localDashboardList.push(unit);
+                    if (hasDashboardUid(unit)) {
+                        this.unGroupedDashboardList.push(unit);
+                        localDashboardList.push(unit);
+                    }
                 } else {
                     this.getFolderContent(unit.title, unit.id);
                 }
@@ -108,8 +129,8 @@ export class SettingIframeWidgetComponent implements OnInit {
         }
         this.cdr.detectChanges();
     }
-    async getFolderContent(title: string, uid: string) {
-        const res = await lastValueFrom(this._ps.getProxyGrafanaSearch(uid));
+    async getFolderContent(title: string, uid: string | number) {
+        const res = await lastValueFrom(this._ps.getProxyGrafanaSearch(String(uid)));
 
         const folder = {
             group: title,
@@ -128,7 +149,7 @@ export class SettingIframeWidgetComponent implements OnInit {
     async onDashboardChange() {
         this.data.dashboardSource = this.dashboardSource.uid;
         const res = await lastValueFrom(this._ps.getProxyGrafanaDashboards(this.data.dashboardSource));
-        const localPanelList = [];
+        const localPanelList: GrafanaPanelOption[] = [];
         res.dashboard.panels.forEach(panelId => {
             localPanelList.push({ title: panelId.title, pid: panelId.id, uid: res.dashboard.uid });
         });
@@ -145,15 +166,15 @@ export class SettingIframeWidgetComponent implements OnInit {
         this.cdr.detectChanges();
     }
 
-    compareDashboard(a: any, b: any) {
+    compareDashboard(a: GrafanaDashboardOption | null | undefined, b: GrafanaDashboardOption | null | undefined) {
         // data.dashboardSource
         // this.data.panelListValue
         return a?.uid === b?.uid && a?.id === b?.id;
     }
 
-    comparePanel(a: any, b: any) {
+    comparePanel(a: GrafanaPanelOption | null | undefined, b: GrafanaPanelOption | null | undefined) {
         // data.panelListValue
-        return a.title === b.title;
+        return a?.title === b?.title;
     }
     validate(event) {
         event = event.trim();
