@@ -418,7 +418,6 @@ export class DialogChartGridDialogComponent
         this.setOptionsForChart();
 
         this.options = {
-            autoSize: true,
             data: this.gridData,
             title: {
                 text: this.chartTitle,
@@ -487,32 +486,36 @@ export class DialogChartGridDialogComponent
     }
 
     setOptionsForChart() {
-        if (this.chartType === 'column') {
-            this.chartSideX = 'Horizontal';
-            this.chartSideY = 'Vertical';
+        if (this.chartType === 'column' || this.chartType === 'bar') {
+            const isColumn = this.chartType === 'column';
+            const isStacked = this.chartSubType.includes('_stacked');
+            const isGrouped = this.chartSubType.includes('_grouped');
+            const normalizedTo = this.chartSubType.endsWith('_100') ? 100 : undefined;
+            this.chartSideX = isColumn ? 'Horizontal' : 'Vertical';
+            this.chartSideY = isColumn ? 'Vertical' : 'Horizontal';
 
-            this.chartSeries = [
-                {
-                    type: this.chartType,
-                    grouped: false,
-                    xKey: this.axisX,
-                    yKeys: this.keysArray,
-                    yNames: this.labelsArray,
-                    fills: this.fillsArray,
-                    strokes: this.strokesArray,
-                    tooltipRenderer: params => {
-                        return `<div class="ag-chart-tooltip-title" style="background-color:
-                        ${params.color}">
+            this.chartSeries = this.keysArray.map((key, index) => ({
+                type: 'bar',
+                direction: isColumn ? 'vertical' : 'horizontal',
+                xKey: this.axisX,
+                yKey: key,
+                yName: this.labelsArray[index],
+                fill: this.fillsArray[index],
+                stroke: this.strokesArray[index],
+                grouped: isGrouped ? true : undefined,
+                stacked: isStacked,
+                ...(normalizedTo ? { normalizedTo } : {}),
+                tooltip: {
+                    renderer: params => `<div class="ag-chart-tooltip-title">
                         ${params.yName}</div><div class="ag-chart-tooltip-content">
-                        ${params.datum.value}
-                        </div>`;
-                    },
+                        ${params.datum[params.yKey]}
+                        </div>`,
                 },
-            ];
+            }));
             this.chartAxes = [
                 {
-                    type: 'category',
-                    position: 'bottom',
+                    type: isColumn ? 'category' : this.axisTypeX,
+                    position: isColumn ? 'bottom' : 'left',
                     title: { text: this.axisLabelX },
                     label: {
                         formatter: params => {
@@ -528,8 +531,8 @@ export class DialogChartGridDialogComponent
                     }
                 },
                 {
-                    type: 'number',
-                    position: 'left',
+                    type: isColumn ? 'number' : this.axisTypeY,
+                    position: isColumn ? 'left' : 'bottom',
                     title: { text: this.axisLabelY },
                     label: {
                         formatter: (params) => {
@@ -542,59 +545,15 @@ export class DialogChartGridDialogComponent
                     },
                 },
             ];
-        } else if (this.chartType === 'bar') {
-            this.chartSideX = 'Vertical';
-            this.chartSideY = 'Horizontal';
-
-            this.chartSeries = [
-                {
-                    type: this.chartType,
-                    grouped: false,
-                    xKey: this.axisX,
-                    yKeys: this.keysArray,
-                    yNames: this.labelsArray,
-                    fills: this.fillsArray,
-                    strokes: this.strokesArray,
-                },
-            ];
-            this.chartAxes = [
-                {
-                    type: this.axisTypeX,
-                    position: 'left',
-                    title: { text: this.axisLabelX },
-                    label: {
-                        formatter: params => {
-                            if (this.keysArray.length > 10) {
-                                return ''
-                            }
-                            if (typeof params.value === 'string') {
-                                return params.value.split('_!')[0];
-                            } else {
-                                return params.value;
-                            }
-                        }
-                    }
-                },
-                {
-                    type: this.axisTypeY,
-                    position: 'bottom',
-                    title: { text: this.axisLabelY },
-                    label: {
-                        formatter: function (params) {
-                            return (params.value / 60).toFixed(2) + ' min';
-                        },
-                    },
-                },
-            ];
         } else if (this.chartType === 'pie') {
             this.chartSeries = [
                 {
                     data: this.gridData,
-                    type: this.chartType,
-                    labelKey: this.labelKey,
+                    type: 'pie',
+                    calloutLabelKey: this.labelKey,
                     angleKey: this.angelKey,
-                    label: { minAngle: 0 },
-                    callout: { strokeWidth: 2 },
+                    calloutLabel: { minAngle: 0 },
+                    calloutLine: { strokeWidth: 2 },
                     fills: this.fillsArray,
                     strokes: this.strokesArray,
                 },
@@ -625,7 +584,6 @@ export class DialogChartGridDialogComponent
     }
     updateTitle() {
         this.options = {
-            autoSize: true,
             data: this.gridData,
             title: {
                 text: this.chartTitle,

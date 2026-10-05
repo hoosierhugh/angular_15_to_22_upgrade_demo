@@ -283,17 +283,15 @@
       <button
         mat-icon-button
         matTooltip="{{ 'searchGridCall.searchConfig' | translate }}"
+        aria-label="Search configuration"
+        [matBadge]="getSearchSlider()"
+        [matBadgeHidden]="getSearchSlider() === 0"
+        matBadgeColor="accent"
         (click)="isSearchPanel = !isSearchPanel"
         onclick="this.blur()"
         class="smart-input"
         >
-        <mat-icon
-          [matBadge]="getSearchSlider()"
-          [matBadgeHidden]="getSearchSlider() === 0"
-          matBadgeColor="accent"
-          >
-          search</mat-icon
-          >
+        <mat-icon aria-hidden="true">search</mat-icon>
         </button>
       }
       <button

@@ -1,7 +1,7 @@
 import { Component, Input, OnInit, ViewChild, ElementRef, ChangeDetectionStrategy, ChangeDetectorRef, AfterViewInit, EventEmitter, ViewEncapsulation, Output, inject } from '@angular/core';
 // import { VirtualScrollerComponent } from 'ngx-virtual-scroller';
 import { Functions } from '@app/helpers/functions';
-import * as html2canvas from 'html2canvas';
+import html2canvas from 'html2canvas';
 import { FlowItemType } from '@app/models/flow-item-type.model';
 import { TooltipService } from '@app/services/tooltip.service';
 import {
@@ -18,6 +18,7 @@ import { Subscription } from 'rxjs';
 import { CallIDColor } from '@app/models/CallIDColor.model';
 import { CopyService } from '@app/services';
 import { FlowFilter } from '@app/components/controls/transaction-filter/transaction-filter.component';
+import { CdkVirtualScrollViewport } from '@angular/cdk/scrolling';
 
 export class CustomVirtualScrollStrategy extends FixedSizeVirtualScrollStrategy {
   constructor() {
@@ -47,7 +48,7 @@ export class TabFlowComponent
   @ViewChild('flowscreen', { static: true }) flowscreen: ElementRef;
   @ViewChild('canvas', { static: true }) canvas: ElementRef;
   @ViewChild('downloadLink', { static: true }) downloadLink: ElementRef;
-  @ViewChild('virtualScroll') virtualScroll: any;
+  @ViewChild('virtualScroll') virtualScroll: CdkVirtualScrollViewport;
   @ViewChild('virtualScrollbar') virtualScrollbar: ElementRef;
   @ViewChild('VScrollWrapper') VScrollWrapper: ElementRef;
   @ViewChild('labelContainer') labelContainer: ElementRef;
@@ -89,7 +90,7 @@ export class TabFlowComponent
   copyTimer: number;
   selected: boolean;
   timeout;
-  @Input() callid: any;
+  @Input() callid: string;
 
   outEventDelayOff = 0;
 
@@ -168,8 +169,8 @@ export class TabFlowComponent
     return (this.isSimplify ? 150 : 200) * this.flowGridLines.length;
   }
 
-  @Output() pngReady = new EventEmitter<any>();
-  @Output() ready = new EventEmitter<any>();
+  @Output() pngReady = new EventEmitter<void>();
+  @Output() ready = new EventEmitter<void>();
 
   ngOnInit() {
     this.getVirtualScrollHeight = `translateY(1px)`;
@@ -445,7 +446,7 @@ export class TabFlowComponent
   }
   ngAfterViewInit() {
     requestAnimationFrame(() => {
-      this.ready.emit({});
+      this.ready.emit();
       this.updateDOMScroller();
     });
   }
@@ -585,14 +586,13 @@ export class TabFlowComponent
     }
     if (html2canvas && typeof html2canvas === 'function') {
       this.cdr.detectChanges();
-      const f: (...args: any[]) => Promise<HTMLCanvasElement> = html2canvas as any;
-      f(this.flowscreen.nativeElement).then((canvas) => {
+      html2canvas(this.flowscreen.nativeElement).then((canvas) => {
         this.canvas.nativeElement.src = canvas.toDataURL();
         this.downloadLink.nativeElement.href = canvas.toDataURL('image/png');
         this.downloadLink.nativeElement.download = `${this.callid}.png`;
         this.downloadLink.nativeElement.click();
         setTimeout(() => {
-          this.pngReady.emit({});
+          this.pngReady.emit();
         });
       });
     }

@@ -765,7 +765,6 @@ export class TabCallinfoComponent implements AfterViewInit {
       legend: {
         enabled: false,
       },
-      autoSize: true,
       width: 300,
       height: 300,
       title: {
@@ -776,15 +775,15 @@ export class TabCallinfoComponent implements AfterViewInit {
         {
           type: 'pie',
           angleKey: 'value',
-          labelKey: 'label',
+          calloutLabelKey: 'label',
+          calloutLabel: {
+            enabled: false,
+            fontSize: 8,
+            minAngle: 0,
+          },
           outerRadiusOffset: -80,
         },
       ],
-      label: {
-        enable: false,
-        fontSize: 8,
-        minAngle: 0,
-      },
     };
   }
 
